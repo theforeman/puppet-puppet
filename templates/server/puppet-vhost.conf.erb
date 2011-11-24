@@ -1,0 +1,33 @@
+Listen 8140
+<VirtualHost *:8140>
+
+	SSLEngine on
+	SSLCipherSuite SSLv2:-LOW:-EXPORT:RC4+RSA
+	SSLCertificateFile      <%= scope.lookupvar("puppet::params::ssl_dir") %>/certs/<%= fqdn %>.pem
+	SSLCertificateKeyFile   <%= scope.lookupvar("puppet::params::ssl_dir") %>/private_keys/<%= fqdn %>.pem
+<% unless scope.lookupvar("puppet::params::ca") %> -%>
+	SSLCACertificateFile    <%= scope.lookupvar("puppet::params::ssl_dir") %>/certs/ca.pem
+<% else -%>
+	SSLCertificateChainFile <%= scope.lookupvar("puppet::params::ssl_dir") %>/ca/ca_crt.pem
+	SSLCACertificateFile    <%= scope.lookupvar("puppet::params::ssl_dir") %>/ca/ca_crt.pem
+	# CRL checking should be enabled; if you have problems with Apache complaining about the CRL, disable the next line
+#	SSLCARevocationFile     <%= scope.lookupvar("puppet::params::ssl_dir") %>/ca/ca_crl.pem
+<% end -%>
+	SSLVerifyClient optional
+	SSLVerifyDepth  1
+	SSLOptions +StdEnvVars
+
+	# The following client headers allow the same configuration to work with Pound.
+	RequestHeader set X-SSL-Subject %{SSL_CLIENT_S_DN}e
+	RequestHeader set X-Client-DN %{SSL_CLIENT_S_DN}e
+	RequestHeader set X-Client-Verify %{SSL_CLIENT_VERIFY}e
+
+	RackAutoDetect On
+  DocumentRoot <%= scope.lookupvar("puppet::params::app_root") %>/public/
+  <Directory <%= scope.lookupvar("puppet::params::app_root") %>>
+		Options None
+		AllowOverride None
+		Order allow,deny
+		allow from all
+	</Directory>
+</VirtualHost>
