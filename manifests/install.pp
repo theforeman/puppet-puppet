@@ -1,3 +1,3 @@
 class puppet::install {
- package { "puppet": ensure => installed }
+  package { 'puppet': ensure => installed }
 }
