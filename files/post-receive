@@ -56,6 +56,8 @@ $stdin.each_line do |line|
       Dir.chdir environment_path
       %x{git fetch --all}
       %x{git reset --hard "origin/#{branchname}"}
+      %x{git submodule init}
+      %x{git submodule update}
     else
       # Instantiate a new environment from the current repository.
 
