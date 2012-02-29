@@ -37,6 +37,10 @@ class puppet::server::config inherits puppet::config {
       require => Git::Repo['puppet_repo'],
     }
 
+    user { $puppet::params::user:
+      shell => '/usr/bin/git-shell',
+    }
+
   }
 
 }
