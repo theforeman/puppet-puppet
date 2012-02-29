@@ -14,7 +14,7 @@ class puppet::server::passenger {
     refreshonly => true,
     cwd         => $puppet::params::app_root,
     path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-    require     => Class['puppet::server::install']
+    require     => [Class['puppet::server::install'],File["${puppet::params::app_root}/tmp"]],
   }
 
   file {
