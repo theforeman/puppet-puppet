@@ -24,14 +24,14 @@ class puppet::server::config inherits puppet::config {
 
     git::repo { 'puppet_repo':
       bare    => true,
-      target  => "${puppet::params::envs_dir}/.git",
+      target  => $puppet::params::git_repo_path,
       user    => $puppet::params::user,
       require => File[$puppet::params::envs_dir],
     }
 
     # git post hook to auto generate an environment per branch
-    file { "${puppet::params::envs_dir}/.git/hooks/post-receive":
-      source  => 'puppet:///modules/puppet/post-receive',
+    file { "${puppet::params::git_repo_path}/hooks/post-receive":
+      content => template('puppet/server/post-receive.erb'),
       owner   => $puppet::params::user,
       mode    => '0555',
       require => Git::Repo['puppet_repo'],
