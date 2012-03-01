@@ -56,8 +56,18 @@ $stdin.each_line do |line|
       Dir.chdir environment_path
       %x{git fetch --all}
       %x{git reset --hard "origin/#{branchname}"}
-      %x{git submodule init}
-      %x{git submodule update}
+      if File.exists? "#{environment_path}/.gitmodules"
+        # hacky way to handle git submodules deletions
+        %x{git status --short}.split("\n").each do |file|
+          # ?? old_submodule/
+          if file =~ /\s*\?{2}\s*(\S*)/
+            puts "Found a few unknown files.. deleting #{$1}"
+            FileUtils.rm_rf $1, :secure => true
+          end
+        end
+        %x{git submodule init}
+        %x{git submodule update}
+      end
     else
       # Instantiate a new environment from the current repository.
 
