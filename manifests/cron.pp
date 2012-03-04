@@ -6,7 +6,7 @@ class puppet::cron inherits puppet::service {
   }
 
   cron {'puppet':
-    command => "/usr/sbin/puppetd --config ${puppet::params::dir}/puppet.conf -o",
+    command => "sleep $((RANDOM%59)) && /usr/sbin/puppetd --config ${puppet::params::dir}/puppet.conf -o",
     user    => root,
     minute  => ip_to_cron($puppet::params::cron_interval, $puppet::params::cron_range),
   }
