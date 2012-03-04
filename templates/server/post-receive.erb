@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-# Puppet Labs is a ruby shop, so why not do the post-receive hook in ruby?
 require 'fileutils'
 
 # Set this to where you want to keep your environments
@@ -10,8 +9,15 @@ ENVIRONMENT_BASEDIR = "<%= scope.lookupvar("puppet::params::envs_dir") %>"
 # such as git@git.host:puppet.git
 SOURCE_REPOSITORY = File.expand_path(ENV['GIT_DIR'])
 
+# Mapping of branches to directories.  In many cases, the master branch is
+# checked out to the 'development' environment.
+BRANCH_MAP = {
+  # This will clone/pull the master branch into the development puppet environment
+  # "master" => "development",
+}
+
 # The git_dir environment variable will override the --git-dir, so we remove it
-# to allow us to create new repositories cleanly.
+# to allow us to create new directories cleanly.
 ENV.delete('GIT_DIR')
 
 # Ensure that we have the underlying directories, otherwise the later commands
@@ -27,20 +33,26 @@ $stdin.each_line do |line|
   oldrev, newrev, refname = line.split(" ")
 
   # Determine the branch name from the refspec we're received, which is in the
-  # format refs/heads/, and make sure that it doesn't have any possibly
+  # format refs/heads/<branch>, and make sure that it doesn't have any possibly
   # dangerous characters
   branchname = refname.sub(%r{^refs/heads/(.*$)}) { $1 }
-  if branchname =~ /[\W-]/
-    puts %Q{Branch "#{branch}" contains non-word characters, ignoring it.}
+  if branchname =~ /[\W]/
+    puts %Q{Branch "#{branchname}" contains non-word characters, ignoring it.}
     next
   end
 
-  environment_path = "#{ENVIRONMENT_BASEDIR}/#{branchname}"
+  if BRANCH_MAP[branchname] != nil
+    environment_name = BRANCH_MAP[branchname]
+    environment_path = "#{ENVIRONMENT_BASEDIR}/#{BRANCH_MAP[branchname]}"
+  else
+    environment_name = branchname
+    environment_path = "#{ENVIRONMENT_BASEDIR}/#{branchname}"
+  end
 
   if newrev =~ /^0+$/
     # We've received a push with a null revision, something like 000000000000,
     # which means that we should delete the given branch.
-    puts "Deleting existing environment #{branchname}"
+    puts "Deleting existing environment #{environment_name}"
     if File.directory? environment_path
       FileUtils.rm_rf environment_path, :secure => true
     end
@@ -52,12 +64,12 @@ $stdin.each_line do |line|
       # Update an existing environment. We do a fetch and then reset in the
       # case that someone did a force push to a branch.
 
-      puts "Updating existing environment #{branchname}"
+      puts "Updating existing environment #{environment_name}"
       Dir.chdir environment_path
       %x{git fetch --all}
       %x{git reset --hard "origin/#{branchname}"}
       if File.exists? "#{environment_path}/.gitmodules"
-        # hacky way to handle git submodules deletions
+        # ensure that we remove deleted sub modules too
         %x{git status --short}.split("\n").each do |file|
           # ?? old_submodule/
           if file =~ /\s*\?{2}\s*(\S*)/
@@ -65,13 +77,12 @@ $stdin.each_line do |line|
             FileUtils.rm_rf $1, :secure => true
           end
         end
-        %x{git submodule init}
-        %x{git submodule update}
+        %x{git submodule update --init --recursive}
       end
     else
       # Instantiate a new environment from the current repository.
 
-      puts "Creating new environment #{branchname}"
+      puts "Creating new environment #{environment_name}"
       %x{git clone --recursive #{SOURCE_REPOSITORY} #{environment_path} --branch #{branchname}}
     end
   end
