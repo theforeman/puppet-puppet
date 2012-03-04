@@ -12,13 +12,13 @@ class puppet::server::config inherits puppet::config {
     path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
   }
 
-  # location where our puppet environments are located
-  file { $puppet::params::envs_dir:
-    ensure => directory,
-    owner  => $puppet::params::user,
-  }
-
   if $puppet::params::git_repo {
+
+    # location where our puppet environments are located
+    file { $puppet::params::envs_dir:
+      ensure => directory,
+      owner  => $puppet::params::user,
+    }
 
     include git
 
@@ -41,6 +41,15 @@ class puppet::server::config inherits puppet::config {
       shell => '/usr/bin/git-shell',
     }
 
+  }
+  else
+  {
+    file { [$puppet::params::modules_path, $puppet::params::common_modules_path]:
+      ensure => directory,
+    }
+
+    # setup empty directories for our environments
+    puppet::server::env {$puppet::params::environments: }
   }
 
 }

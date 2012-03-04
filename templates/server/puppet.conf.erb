@@ -8,4 +8,8 @@
 <% if scope.lookupvar("puppet::params::git_repo") -%>
     manifest       = <%= scope.lookupvar("puppet::params::envs_dir") %>/$environment/manifests/site.pp
     modulepath     = <%= scope.lookupvar("puppet::params::envs_dir") %>/$environment/modules
+<% else -%>
+   <% scope.lookupvar("puppet::params::environments").each do |env| -%>
+[<%= env %>]
+   modulepath = <%= scope.lookupvar("puppet::params::modules_path") %>/<%= env %>:<%= scope.lookupvar("puppet::paras::common_modules_path") %>
 <% end -%>
