@@ -1,6 +1,5 @@
-define puppet::server::env () {
-  require puppet::params
-  file { "${puppet::params::modules_path}/${name}":
+define puppet::server::env ($basedir = $puppet::params::modules_path) {
+  file { "${basedir}/${name}":
     ensure => directory,
   }
 }
