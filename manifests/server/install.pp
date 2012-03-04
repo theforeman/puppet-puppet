@@ -1,3 +1,5 @@
 class puppet::server::install {
-  package { 'puppet-server': ensure => installed }
+
+  package { $puppet::params::master_package: ensure => installed }
+
 }
