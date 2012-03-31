@@ -20,6 +20,14 @@ class puppet::server::config inherits puppet::config {
       owner  => $puppet::params::user,
     }
 
+    # need to chown the $vardir before puppet does it, or else
+    # we can't write puppet.git/ on the first run
+
+    file { '/var/lib/puppet':
+      ensure => directory,
+      owner  => $puppet::params::user,
+    }
+
     include git
 
     git::repo { 'puppet_repo':
