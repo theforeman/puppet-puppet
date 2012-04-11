@@ -26,6 +26,9 @@ class puppet::params {
     default           => ['puppet-server'],
   }
 
+  # Run_style can be cron, daemon, or none
+  $run_style           = 'none'
+  # THis only applies to cron-style
   $cron_range          = 60 # the maximum value for our cron
   $cron_interval       = 2  # the amount of values within the $cron_range
 }
