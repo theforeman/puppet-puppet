@@ -1,6 +1,5 @@
 class puppet::params {
 
-  include foreman::params
   $user                = 'puppet'
   $dir                 = '/etc/puppet'
   $ca                  = true
@@ -17,7 +16,6 @@ class puppet::params {
   $git_repo_path       = '/var/lib/puppet/puppet.git'
   $envs_dir            = "${dir}/environments"
 
-  $apache_conf_dir     = $foreman::params::apache_conf_dir
   $app_root            = "${dir}/rack"
   $ssl_dir             = '/var/lib/puppet/ssl'
 
