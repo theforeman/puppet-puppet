@@ -1,9 +1,10 @@
 class puppet::server::passenger {
   include apache::ssl
+  include apache::params
   include ::passenger
 
   file {'puppet_vhost':
-    path    => "${puppet::params::apache_conf_dir}/puppet.conf",
+    path    => "${apache::params::configdir}/puppet.conf",
     content => template('puppet/server/puppet-vhost.conf.erb'),
     mode    => '0644',
     notify  => Exec['reload-apache'],
