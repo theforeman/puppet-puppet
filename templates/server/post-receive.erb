@@ -2,7 +2,7 @@
 require 'fileutils'
 
 # Set this to where you want to keep your environments
-ENVIRONMENT_BASEDIR = "<%= scope.lookupvar("puppet::params::envs_dir") %>"
+ENVIRONMENT_BASEDIR = "<%= scope.lookupvar("puppet::server::envs_dir") %>"
 
 # post-receive hooks set GIT_DIR to the current repository. If you want to
 # clone from a non-local repository, set this to the URL of the repository,
