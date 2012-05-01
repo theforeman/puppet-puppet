@@ -1,21 +1,32 @@
 class puppet::params {
 
+  # Basic config
   $user                = 'puppet'
   $dir                 = '/etc/puppet'
   $ca                  = true
   $passenger           = true
 
-  # use static environments or ignore the following line and enable git dynamic environments
+  # Set 'false' for staic environments, or 'true' for git-based workflow
+  $git_repo            = false
+
+  # Static environments config, ignore if the git_repo is 'true'
+  # What environments do we have
   $environments        = ['development', 'production']
-  # where we store our puppet modules
+  # Where we store our puppet modules
   $modules_path        = "${dir}/modules"
-  # modules in this directory would be shared across all environments
+  # Modules in this directory would be shared across all environments
   $common_modules_path = "${modules_path}/common"
 
-  $git_repo            = false
+  # Dynamic environments config, ignore if the git_repo is 'false'
+  # Path to the repository
   $git_repo_path       = '/var/lib/puppet/puppet.git'
+  # Where to checkout the branches
   $envs_dir            = "${dir}/environments"
+  # Override these if you need your own hooks
+  $post_hook_content   = 'puppet/server/post-receive.erb'
+  $post_hook_name      = 'post-receive'
 
+  # Passenger config
   $app_root            = "${dir}/rack"
   $ssl_dir             = '/var/lib/puppet/ssl'
 
@@ -24,9 +35,7 @@ class puppet::params {
     default           => ['puppet-server'],
   }
 
-  # Run_style can be cron, daemon, or none
-  $run_style           = 'none'
-  # THis only applies to cron-style
+  # This only applies to puppet::cron
   $cron_range          = 60 # the maximum value for our cron
   $cron_interval       = 2  # the amount of values within the $cron_range
 }
