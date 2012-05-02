@@ -25,5 +25,6 @@
     localconfig = $vardir/localconfig
     report      = true
     pluginsync  = true
+    masterport  = <%= scope.lookupvar("puppet::port") rescue 8140 %>
     environment = <%= environment %>
     server      = <%= puppetmaster rescue fqdn %>
