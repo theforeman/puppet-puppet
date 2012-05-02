@@ -3,7 +3,7 @@ class puppet::server::config inherits puppet::config {
 
   # appends our server configuration to puppet.conf
   File ["${puppet::server::dir}/puppet.conf"] {
-    content => template('puppet/puppet.conf.erb', 'puppet/server/puppet.conf.erb'),
+    content => template($puppet::server::agent_template, $puppet::server::master_template),
   }
 
   exec {'generate_ca_cert':

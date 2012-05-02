@@ -1,5 +1,5 @@
-Listen 8140
-<VirtualHost *:8140>
+Listen <%= scope.lookupvar("puppet::server::port") %>
+<VirtualHost *:<%= scope.lookupvar("puppet::server::port") %>>
 
 	SSLEngine on
 	SSLCipherSuite SSLv2:-LOW:-EXPORT:RC4+RSA

@@ -3,6 +3,7 @@ class puppet::server (
   $dir                 = $puppet::params::dir,
   $ca                  = $puppet::params::ca,
   $passenger           = $puppet::params::passenger,
+  $port                = $puppet::params::port,
   $environments        = $puppet::params::environments,
   $modules_path        = $puppet::params::modules_path,
   $common_modules_path = $puppet::params::common_modules_path,
@@ -13,7 +14,9 @@ class puppet::server (
   $ssl_dir             = $puppet::params::ssl_dir,
   $master_package      = $puppet::params::master_package,
   $post_hook_content   = $puppet::params::post_hook_content,
-  $post_hook_name      = $puppet::params::post_hook_name
+  $post_hook_name      = $puppet::params::post_hook_name,
+  $agent_template      = $puppet::params::agent_template,
+  $master_template     = $puppet::params::master_template
 ) inherits puppet::params {
   class { 'puppet::server::install': }~>
   class { 'puppet::server::config': }
