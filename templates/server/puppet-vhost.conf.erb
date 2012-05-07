@@ -1,17 +1,17 @@
-Listen 8140
-<VirtualHost *:8140>
+Listen <%= scope.lookupvar("puppet::server::port") %>
+<VirtualHost *:<%= scope.lookupvar("puppet::server::port") %>>
 
 	SSLEngine on
 	SSLCipherSuite SSLv2:-LOW:-EXPORT:RC4+RSA
-	SSLCertificateFile      <%= scope.lookupvar("puppet::params::ssl_dir") %>/certs/<%= fqdn %>.pem
-	SSLCertificateKeyFile   <%= scope.lookupvar("puppet::params::ssl_dir") %>/private_keys/<%= fqdn %>.pem
-<% unless scope.lookupvar("puppet::params::ca") %> -%>
-	SSLCACertificateFile    <%= scope.lookupvar("puppet::params::ssl_dir") %>/certs/ca.pem
+	SSLCertificateFile      <%= scope.lookupvar("puppet::server::ssl_dir") %>/certs/<%= fqdn %>.pem
+	SSLCertificateKeyFile   <%= scope.lookupvar("puppet::server::ssl_dir") %>/private_keys/<%= fqdn %>.pem
+<% unless scope.lookupvar("puppet::server::ca") %> -%>
+	SSLCACertificateFile    <%= scope.lookupvar("puppet::server::ssl_dir") %>/certs/ca.pem
 <% else -%>
-	SSLCertificateChainFile <%= scope.lookupvar("puppet::params::ssl_dir") %>/ca/ca_crt.pem
-	SSLCACertificateFile    <%= scope.lookupvar("puppet::params::ssl_dir") %>/ca/ca_crt.pem
+	SSLCertificateChainFile <%= scope.lookupvar("puppet::server::ssl_dir") %>/ca/ca_crt.pem
+	SSLCACertificateFile    <%= scope.lookupvar("puppet::server::ssl_dir") %>/ca/ca_crt.pem
 	# CRL checking should be enabled; if you have problems with Apache complaining about the CRL, disable the next line
-#	SSLCARevocationFile     <%= scope.lookupvar("puppet::params::ssl_dir") %>/ca/ca_crl.pem
+#	SSLCARevocationFile     <%= scope.lookupvar("puppet::server::ssl_dir") %>/ca/ca_crl.pem
 <% end -%>
 	SSLVerifyClient optional
 	SSLVerifyDepth  1
@@ -23,8 +23,8 @@ Listen 8140
 	RequestHeader set X-Client-Verify %{SSL_CLIENT_VERIFY}e
 
 	RackAutoDetect On
-  DocumentRoot <%= scope.lookupvar("puppet::params::app_root") %>/public/
-  <Directory <%= scope.lookupvar("puppet::params::app_root") %>>
+  DocumentRoot <%= scope.lookupvar("puppet::server::app_root") %>/public/
+  <Directory <%= scope.lookupvar("puppet::server::app_root") %>>
 		Options None
 		AllowOverride None
 		Order allow,deny
