@@ -27,7 +27,7 @@ Only really tested on RedHat and Debian. Patches welcome for other OSes :)
 
 # Setup
 
-Please review the variables under module/manifests/params.pp
+This is a parameterized class, but the defaults should get you going:
 
 Standalone agent:
 
@@ -40,6 +40,44 @@ Agent and cron (or daemon):
 Agent and server:
 
     echo include puppet, puppet::server | puppet --modulepath /path_to/extracted_tarball
+
+# Customization
+
+As a parameterized class, all the configurable options can be overridden from your
+wrapper classes or even your ENC (if it supports param classes). For example:
+
+    # You want to use git?
+    class { '::puppet::server': git_repo => true }
+
+    # You need need your own template for puppet.conf?
+    class { '::puppet::server': 
+      agent_template  => 'puppetagent/puppet.conf.core.erb',
+      master_template => 'puppetserver/puppet.conf.master.erb',
+    }
+    class { '::puppet':
+      agent_template  => 'puppetagent/puppet.conf.core.erb',
+    }
+
+    # Maybe you're using gitolite, new hooks, and a different port?
+    class { '::puppet::server': 
+      port              => 8141,
+      git_repo          => true,
+      git_repo_path     => '/var/lib/gitolite/repositories/puppet.git',
+      post_hook_name    => 'post-receive.puppet',
+      post_hook_content => 'puppetserver/post-hook.puppet',
+    }
+
+Look in _init.pp_ for what can be configured this way, see Contributing if anything
+doesn't work.
+
+To use this in standalone mode, edit a file (e.g. install.pp), put in a class resource,
+as per the examples above, and the execute _puppet apply_:
+
+    cat > install.pp <<EOF
+    class { '::puppet': }
+    class { '::puppet::server': git_repo => true } 
+    EOF
+    puppet apply install.pp --modulepath /path_to/extracted_tarball
 
 # Contributing
 
