@@ -1,6 +1,10 @@
 class puppet::server::config inherits puppet::config {
   if $puppet::server::passenger { include puppet::server::passenger }
 
+  # Include foreman components for the puppetmaster
+  # ENC script, reporting script etc.
+  include foreman::puppetmaster
+
   # appends our server configuration to puppet.conf
   File ["${puppet::server::dir}/puppet.conf"] {
     content => template($puppet::server::agent_template, $puppet::server::master_template),
