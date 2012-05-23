@@ -27,4 +27,5 @@
     pluginsync  = true
     masterport  = <%= scope.lookupvar("puppet::port") rescue 8140 %>
     environment = <%= environment %>
+    certname    = <%= clientcert %>
     server      = <%= puppetmaster rescue fqdn %>
