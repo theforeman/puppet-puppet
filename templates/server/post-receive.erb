@@ -77,6 +77,7 @@ $stdin.each_line do |line|
             FileUtils.rm_rf $1, :secure => true
           end
         end
+        %x{git submodule sync}
         %x{git submodule update --init --recursive}
       end
     else
