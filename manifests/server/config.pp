@@ -1,9 +1,17 @@
 class puppet::server::config inherits puppet::config {
   if $puppet::server::passenger { include puppet::server::passenger }
 
+  include foreman::params
+
   # Include foreman components for the puppetmaster
   # ENC script, reporting script etc.
-  include foreman::puppetmaster
+  class {'foreman::puppetmaster':
+    foreman_url    => $foreman::params::foreman_url,
+    facts          => $foreman::params::facts,
+    storeconfigs   => $foreman::params::storeconfigs,
+    puppet_home    => $foreman::params::puppet_home,
+    puppet_basedir => $foreman::params::puppet_basedir
+  }
 
   # appends our server configuration to puppet.conf
   File ["${puppet::server::dir}/puppet.conf"] {
