@@ -5,7 +5,7 @@ Listen <%= scope.lookupvar("puppet::server::port") %>
 	SSLCipherSuite SSLv2:-LOW:-EXPORT:RC4+RSA
 	SSLCertificateFile      <%= scope.lookupvar("puppet::server::ssl_dir") %>/certs/<%= fqdn %>.pem
 	SSLCertificateKeyFile   <%= scope.lookupvar("puppet::server::ssl_dir") %>/private_keys/<%= fqdn %>.pem
-<% unless scope.lookupvar("puppet::server::ca") %> -%>
+<% unless scope.lookupvar("puppet::server::ca") %>
 	SSLCACertificateFile    <%= scope.lookupvar("puppet::server::ssl_dir") %>/certs/ca.pem
 <% else -%>
 	SSLCertificateChainFile <%= scope.lookupvar("puppet::server::ssl_dir") %>/ca/ca_crt.pem

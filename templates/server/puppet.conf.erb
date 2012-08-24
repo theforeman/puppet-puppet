@@ -4,6 +4,7 @@
     reports        = foreman
     external_nodes = /etc/puppet/node.rb
     node_terminus  = exec
+    ca             = <%= scope.lookupvar("puppet::server::ca") %>
 <% if scope.lookupvar("puppet::server::git_repo") -%>
     manifest       = <%= scope.lookupvar("puppet::server::envs_dir") %>/$environment/manifests/site.pp
     modulepath     = <%= scope.lookupvar("puppet::server::envs_dir") %>/$environment/modules
