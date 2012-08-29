@@ -1,5 +1,7 @@
 class puppet::params {
 
+  include foreman::params
+
   # Basic config
   $user                = 'puppet'
   $dir                 = '/etc/puppet'
