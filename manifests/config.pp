@@ -1,9 +1,9 @@
 class puppet::config {
-  file { $puppet::dir:
+  file { $puppet::params::dir:
     ensure => directory,
   }
-    file { "${puppet::dir}/puppet.conf":
-    content => template("$puppet::agent_template"),
+    file { "${puppet::params::dir}/puppet.conf":
+    content => template("$puppet::params::agent_template"),
   }
 
 }
