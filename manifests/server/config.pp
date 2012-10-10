@@ -16,9 +16,14 @@ class puppet::server::config inherits puppet::config {
     content => template($puppet::server::agent_template, $puppet::server::master_template),
   }
 
+  $puppetca_cmd = $::puppetversion ? {
+    /(2\.[6-9].*|3.*)/ => 'puppet cert',
+    default        => 'puppetca',
+  }
+
   exec {'generate_ca_cert':
     creates => "${puppet::server::ssl_dir}/certs/${::fqdn}.pem",
-    command => "puppetca --generate ${::fqdn}",
+    command => "${puppetca_cmd} --generate ${::fqdn}",
     path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
   }
 
