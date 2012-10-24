@@ -37,7 +37,7 @@ class puppet::params {
   $app_root            = "${dir}/rack"
   $ssl_dir             = '/var/lib/puppet/ssl'
 
-  $master_package      = $::operatingsystem ? {
+  $master_package     =  $::operatingsystem ? {
     /(Debian|Ubuntu)/ => ['puppetmaster'],
     default           => ['puppet-server'],
   }
@@ -45,4 +45,19 @@ class puppet::params {
   # This only applies to puppet::cron
   $cron_range          = 60 # the maximum value for our cron
   $cron_interval       = 2  # the amount of values within the $cron_range
+
+  # Puppet cert / ca commands are all over the place...
+  if versioncmp($puppetversion, '2.6') < 0 {
+    $puppetca_bin = 'puppetca'
+  } else {
+    $puppetca_bin = 'puppet cert'
+  }
+
+  $puppetca_path      =  $::operatingsystem ? {
+    /(Debian|Ubuntu)/ => '/usr/bin',
+    default           => '/usr/sbin',
+  }
+
+  $puppetca_cmd = "${puppetca_path}/${puppetca_bin}"
+
 }

@@ -18,7 +18,7 @@ class puppet::server::config inherits puppet::config {
 
   exec {'generate_ca_cert':
     creates => "${puppet::server::ssl_dir}/certs/${::fqdn}.pem",
-    command => "puppetca --generate ${::fqdn}",
+    command => "${puppet::params::puppetca_bin} --generate ${::fqdn}",
     path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
   }
 
