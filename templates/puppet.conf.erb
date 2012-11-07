@@ -29,3 +29,8 @@
     environment = <%= environment %>
     certname    = <%= clientcert %>
     server      = <%= puppetmaster rescue fqdn %>
+<% if has_variable?("agent_params") and agent_params != :undef -%>
+  <% agent_params.each do |param| -%>
+    <%= param %>
+  <% end -%>
+<% end -%>
