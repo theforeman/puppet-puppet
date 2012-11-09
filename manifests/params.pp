@@ -47,7 +47,8 @@ class puppet::params {
   $cron_interval       = 2  # the amount of values within the $cron_range
 
   # Puppet cert / ca commands are all over the place...
-  if versioncmp($puppetversion, '2.6') < 0 {
+  # Only use 'puppet cert' on versions where puppetca no longer exists
+  if versioncmp($puppetversion, '3.0') < 0 {
     $puppetca_bin = 'puppetca'
   } else {
     $puppetca_bin = 'puppet cert'
