@@ -66,6 +66,12 @@ class puppet::server::config inherits puppet::config {
       ensure => directory,
     }
 
+    # make sure your site.pp exists (puppet #15106, foreman #1708)
+    file { "${puppet::server::manifest_path}/site.pp":
+      ensure  => present,
+      content => "# Empty site.pp required (#1708)\n",
+    }
+
     # setup empty directories for our environments
     puppet::server::env {$puppet::server::environments: }
   }

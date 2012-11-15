@@ -21,6 +21,8 @@ class puppet::params {
   $environments        = ['development', 'production']
   # Where we store our puppet modules
   $modules_path        = "${dir}/modules"
+  # Where remains our manifests dir
+  $manifest_path       = "${dir}/manifests"
   # Modules in this directory would be shared across all environments
   $common_modules_path = "${modules_path}/common"
 
