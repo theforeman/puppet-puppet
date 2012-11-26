@@ -32,10 +32,15 @@ class puppet::server::passenger {
       ensure => directory,
       owner  => $puppet::params::user,
   }
+
+  $configru_version = $puppetversion ? {
+    /^2.*/  => "config.ru.2",
+    default => "config.ru"
+  }
   file {
     "${puppet::params::app_root}/config.ru":
       owner  => $puppet::params::user,
-      source => 'puppet:///modules/puppet/config.ru',
+      source => "puppet:///modules/puppet/${configru_version}",
       notify => Exec['restart_puppet'],
   }
 
