@@ -10,6 +10,9 @@ class puppet::server::passenger {
         before  => Class['puppet::server::install']
       }
     }
+    default: {
+      # nothing to do
+    }
   }
 
   file {'puppet_vhost':
