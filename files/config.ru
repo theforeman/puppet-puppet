@@ -1,3 +1,7 @@
+### File managed with puppet ###
+## Served by:   Unable to determine (static file).
+## Module:      'puppet'
+## File source: 'MODULES/puppet/files/config.ru'
 # a config.ru, for use with every rack-compatible webserver.
 # SSL needs to be handled outside this, though.
 

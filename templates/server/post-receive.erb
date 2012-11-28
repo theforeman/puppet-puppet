@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+<%= ERB.new(File.read(File.expand_path("../_header.erb",File.dirname(file)))).result(binding) -%>
+
 require 'fileutils'
 
 # Set this to where you want to keep your environments
