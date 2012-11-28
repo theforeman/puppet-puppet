@@ -3,6 +3,7 @@ class puppet::params {
   include foreman::params
 
   # Basic config
+  $version             = 'present'
   $user                = 'puppet'
   $dir                 = '/etc/puppet'
   $ca                  = true
@@ -40,8 +41,12 @@ class puppet::params {
   $ssl_dir             = '/var/lib/puppet/ssl'
 
   $master_package     =  $::operatingsystem ? {
-    /(Debian|Ubuntu)/ => ['puppetmaster'],
+    /(Debian|Ubuntu)/ => ['puppetmaster-common','puppetmaster'],
     default           => ['puppet-server'],
+  }
+  $client_package     = $::operatingsystem ? {
+    /(Debian|Ubuntu)/ => ['puppet-common','puppet'],
+    default           => ['puppet'],
   }
 
   # This only applies to puppet::cron
