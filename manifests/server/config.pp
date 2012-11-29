@@ -20,6 +20,7 @@ class puppet::server::config inherits puppet::config {
     creates => "${puppet::server::ssl_dir}/certs/${::fqdn}.pem",
     command => "${puppet::params::puppetca_bin} --generate ${::fqdn}",
     path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+    require => File["${puppet::dir}/puppet.conf"],
   }
 
   if $puppet::server::git_repo {
@@ -49,7 +50,7 @@ class puppet::server::config inherits puppet::config {
 
     # git post hook to auto generate an environment per branch
     file { "${puppet::server::git_repo_path}/hooks/${puppet::server::post_hook_name}":
-      content => template("$puppet::server::post_hook_content"),
+      content => template($puppet::server::post_hook_content),
       owner   => $puppet::server::user,
       mode    => '0755',
       require => Git::Repo['puppet_repo'],

@@ -4,7 +4,7 @@ class puppet::config {
   }
 
   file { "${puppet::dir}/puppet.conf":
-    content => template("$puppet::agent_template"),
+    content => template($puppet::agent_template),
   }
 
 }
