@@ -1,6 +1,6 @@
 class puppet::server::passenger {
-  include apache::ssl
-  include apache::params
+  include ::apache::ssl
+  include ::apache::params
   include ::passenger
 
   case $::operatingsystem {
