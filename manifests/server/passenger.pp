@@ -23,17 +23,17 @@ class puppet::server::passenger {
   }
 
   exec {'restart_puppet':
-    command     => "/bin/touch ${puppet::params::app_root}/tmp/restart.txt",
+    command     => "/bin/touch ${puppet::server::app_root}/tmp/restart.txt",
     refreshonly => true,
-    cwd         => $puppet::params::app_root,
+    cwd         => $puppet::server::app_root,
     path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-    require     => [Class['puppet::server::install'],File["${puppet::params::app_root}/tmp"]],
+    require     => [Class['puppet::server::install'],File["${puppet::server::app_root}/tmp"]],
   }
 
   file {
-    [$puppet::params::app_root, "${puppet::params::app_root}/public", "${puppet::params::app_root}/tmp"]:
+    [$puppet::server::app_root, "${puppet::server::app_root}/public", "${puppet::server::app_root}/tmp"]:
       ensure => directory,
-      owner  => $puppet::params::user,
+      owner  => $puppet::server::user,
   }
 
   $configru_version = $puppetversion ? {
@@ -41,8 +41,8 @@ class puppet::server::passenger {
     default => "config.ru"
   }
   file {
-    "${puppet::params::app_root}/config.ru":
-      owner  => $puppet::params::user,
+    "${puppet::server::app_root}/config.ru":
+      owner  => $puppet::server::user,
       source => "puppet:///modules/puppet/${configru_version}",
       notify => Exec['restart_puppet'],
   }
