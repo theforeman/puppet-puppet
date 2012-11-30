@@ -36,9 +36,9 @@ class puppet::server::passenger {
       owner  => $puppet::server::user,
   }
 
-  $configru_version = $puppetversion ? {
-    /^2.*/  => "config.ru.2",
-    default => "config.ru"
+  $configru_version = $::puppetversion ? {
+    /^2.*/  => 'config.ru.2',
+    default => 'config.ru'
   }
   file {
     "${puppet::server::app_root}/config.ru":
