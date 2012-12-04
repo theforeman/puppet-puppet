@@ -1,3 +1,5 @@
 class puppet::install {
-  package { 'puppet': ensure => installed }
+
+  package { $puppet::params::client_package: ensure => $::puppet::version }
+
 }
