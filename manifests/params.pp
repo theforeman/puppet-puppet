@@ -53,19 +53,14 @@ class puppet::params {
   $cron_range          = 60 # the maximum value for our cron
   $cron_interval       = 2  # the amount of values within the $cron_range
 
-  # Puppet cert / ca commands are all over the place...
   # Only use 'puppet cert' on versions where puppetca no longer exists
   if versioncmp($puppetversion, '3.0') < 0 {
-    $puppetca_bin = 'puppetca'
+    $puppetca_path = '/usr/sbin'
+    $puppetca_bin  = 'puppetca'
   } else {
+    $puppetca_path = '/usr/bin'
     $puppetca_bin = 'puppet cert'
   }
 
-  $puppetca_path      =  $::operatingsystem ? {
-    /(Debian|Ubuntu)/ => '/usr/bin',
-    default           => '/usr/sbin',
-  }
-
   $puppetca_cmd = "${puppetca_path}/${puppetca_bin}"
-
 }
