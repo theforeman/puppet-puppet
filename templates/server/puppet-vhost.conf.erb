@@ -2,7 +2,9 @@ Listen <%= scope.lookupvar("puppet::server::port") %>
 <VirtualHost *:<%= scope.lookupvar("puppet::server::port") %>>
 
 	SSLEngine on
-	SSLCipherSuite SSLv2:-LOW:-EXPORT:RC4+RSA
+	SSLProtocol -ALL +SSLv3 +TLSv1
+	SSLCipherSuite ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:-LOW:-SSLv2:-EXP
+
 	SSLCertificateFile      <%= scope.lookupvar("puppet::server::ssl_dir") %>/certs/<%= fqdn %>.pem
 	SSLCertificateKeyFile   <%= scope.lookupvar("puppet::server::ssl_dir") %>/private_keys/<%= fqdn %>.pem
 <% unless scope.lookupvar("puppet::server::ca") %>
@@ -11,20 +13,28 @@ Listen <%= scope.lookupvar("puppet::server::port") %>
 	SSLCertificateChainFile <%= scope.lookupvar("puppet::server::ssl_dir") %>/ca/ca_crt.pem
 	SSLCACertificateFile    <%= scope.lookupvar("puppet::server::ssl_dir") %>/ca/ca_crt.pem
 	# CRL checking should be enabled; if you have problems with Apache complaining about the CRL, disable the next line
-#	SSLCARevocationFile     <%= scope.lookupvar("puppet::server::ssl_dir") %>/ca/ca_crl.pem
+	SSLCARevocationFile     <%= scope.lookupvar("puppet::server::ssl_dir") %>/ca/ca_crl.pem
 <% end -%>
 	SSLVerifyClient optional
 	SSLVerifyDepth  1
-	SSLOptions +StdEnvVars
+	SSLOptions +StdEnvVars +ExportCertData
 
 	# The following client headers allow the same configuration to work with Pound.
 	RequestHeader set X-SSL-Subject %{SSL_CLIENT_S_DN}e
 	RequestHeader set X-Client-DN %{SSL_CLIENT_S_DN}e
 	RequestHeader set X-Client-Verify %{SSL_CLIENT_VERIFY}e
+	RequestHeader unset X-Forwarded-For
+
+	# you probably want to tune these settings
+	PassengerHighPerformance on
+	PassengerMaxPoolSize 12
+	PassengerPoolIdleTime 1500
+	# PassengerMaxRequests 1000
+	PassengerStatThrottleRate 120
 
 	RackAutoDetect On
-  DocumentRoot <%= scope.lookupvar("puppet::server::app_root") %>/public/
-  <Directory <%= scope.lookupvar("puppet::server::app_root") %>>
+	DocumentRoot <%= scope.lookupvar("puppet::server::app_root") %>/public/
+	<Directory <%= scope.lookupvar("puppet::server::app_root") %>>
 		Options None
 		AllowOverride None
 		Order allow,deny
