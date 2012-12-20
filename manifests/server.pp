@@ -26,5 +26,6 @@ class puppet::server (
   $version             = $puppet::params::version
 ) inherits puppet::params {
   class { 'puppet::server::install': }~>
-  class { 'puppet::server::config': }
+  class { 'puppet::server::config':  }~>
+  class { 'puppet::server::service': }
 }
