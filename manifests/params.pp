@@ -9,10 +9,13 @@ class puppet::params {
   $ca                  = true
   $passenger           = true
   $port                = 8140
+  $listen              = false
 
   # Need your own config templates? Specify here:
   $agent_template  = 'puppet/puppet.conf.erb'
   $master_template = 'puppet/server/puppet.conf.erb'
+  $auth_template   = 'puppet/auth.conf.erb'
+  $nsauth_template = 'puppet/namespaceauth.conf.erb'
 
   # Set 'false' for staic environments, or 'true' for git-based workflow
   $git_repo            = false

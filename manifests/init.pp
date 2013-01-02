@@ -4,6 +4,7 @@ class puppet (
   $ca                  = $puppet::params::ca,
   $passenger           = $puppet::params::passenger,
   $port                = $puppet::params::port,
+  $listen              = $puppet::params::listen,
   $environments        = $puppet::params::environments,
   $modules_path        = $puppet::params::modules_path,
   $common_modules_path = $puppet::params::common_modules_path,
@@ -17,6 +18,8 @@ class puppet (
   $post_hook_name      = $puppet::params::post_hook_name,
   $agent_template      = $puppet::params::agent_template,
   $master_template     = $puppet::params::master_template,
+  $auth_template       = $puppet::params::auth_template,
+  $nsauth_template     = $puppet::params::nsauth_template,
   $version             = $puppet::params::version
 ) inherits puppet::params {
   class { 'puppet::install': }~>

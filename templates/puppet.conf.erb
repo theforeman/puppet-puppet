@@ -29,3 +29,4 @@
     environment = <%= environment %>
     certname    = <%= clientcert %>
     server      = <%= puppetmaster rescue fqdn %>
+    listen      = <%= scope.lookupvar('::puppet::listen') %>
