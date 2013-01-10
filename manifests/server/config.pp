@@ -27,16 +27,18 @@ class puppet::server::config inherits puppet::config {
 
     # location where our puppet environments are located
     file { $puppet::server::envs_dir:
-      ensure => directory,
-      owner  => $puppet::server::user,
+      ensure  => directory,
+      owner   => $puppet::server::user,
+      recurse => true,
     }
 
     # need to chown the $vardir before puppet does it, or else
     # we can't write puppet.git/ on the first run
 
     file { '/var/lib/puppet':
-      ensure => directory,
-      owner  => $puppet::server::user,
+      ensure  => directory,
+      owner   => $puppet::server::user,
+      recurse => true,
     }
 
     include git
