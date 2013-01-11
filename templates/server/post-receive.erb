@@ -27,6 +27,12 @@ unless File.directory? ENVIRONMENT_BASEDIR
   exit 1
 end
 
+# If we're running as root we change our UID to the owner of this file.
+file_uid = File.stat($0).uid
+if file_uid != Process.uid and Process.uid == 0
+  Process::UID.change_privilege(file_uid)
+end
+
 # You can push multiple refspecs at once, like 'git push origin branch1 branch2',
 # so we need to handle each one.
 $stdin.each_line do |line|
