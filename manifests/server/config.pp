@@ -16,6 +16,11 @@ class puppet::server::config inherits puppet::config {
     content => template($puppet::server::agent_template, $puppet::server::master_template),
   }
 
+  file { '/var/lib/puppet/reports':
+    ensure => directory,
+    owner  => $puppet::server::user,
+  }
+
   if $puppet::server::git_repo {
 
     # location where our puppet environments are located

@@ -13,6 +13,9 @@
     # The default value is '$confdir/ssl'.
     ssldir = $vardir/ssl
 
+    # Puppet 3.x requires this in both [main] and [master] - harmless on agents
+    autosign       = $confdir/autosign.conf { mode = 664 }
+
 [agent]
     # The file in which puppetd stores a list of the classes
     # associated with the retrieved configuratiion.  Can be loaded in
