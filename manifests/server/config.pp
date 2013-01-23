@@ -16,7 +16,7 @@ class puppet::server::config inherits puppet::config {
     content => template($puppet::server::agent_template, $puppet::server::master_template),
   }
 
-  file { '/var/lib/puppet/reports':
+  file { "${puppet::server::vardir}/reports":
     ensure => directory,
     owner  => $puppet::server::user,
   }
@@ -32,7 +32,7 @@ class puppet::server::config inherits puppet::config {
     # need to chown the $vardir before puppet does it, or else
     # we can't write puppet.git/ on the first run
 
-    file { '/var/lib/puppet':
+    file { $puppet::server::vardir:
       ensure => directory,
       owner  => $puppet::server::user,
     }
