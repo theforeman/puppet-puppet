@@ -16,13 +16,6 @@ class puppet::server::config inherits puppet::config {
     content => template($puppet::server::agent_template, $puppet::server::master_template),
   }
 
-  exec {'generate_ca_cert':
-    creates => "${puppet::server::ssl_dir}/certs/${::fqdn}.pem",
-    command => "${puppet::params::puppetca_bin} --generate ${::fqdn}",
-    path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-    require => File["${puppet::dir}/puppet.conf"],
-  }
-
   if $puppet::server::git_repo {
 
     # location where our puppet environments are located
