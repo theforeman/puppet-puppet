@@ -1,6 +1,7 @@
 class puppet::server (
   $user                = $puppet::params::user,
   $dir                 = $puppet::params::dir,
+  $vardir              = $puppet::params::vardir,
   $ca                  = $puppet::params::ca,
   $passenger           = $puppet::params::passenger,
   $port                = $puppet::params::port,

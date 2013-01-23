@@ -7,12 +7,19 @@ class puppet::server::passenger {
     Debian,Ubuntu: {
       file { '/etc/default/puppetmaster':
         content => "START=no\n",
-        before  => Class['puppet::server::install']
+        before  => Class['puppet::server::install'],
       }
     }
     default: {
       # nothing to do
     }
+  }
+
+  exec {'generate_ca_cert':
+    creates => "${puppet::server::ssl_dir}/certs/${::fqdn}.pem",
+    command => "${puppet::params::puppetca_path}/${puppet::params::puppetca_bin} --generate ${::fqdn}",
+    require => File["${puppet::dir}/puppet.conf"],
+    notify  => Service['httpd'],
   }
 
   file {'puppet_vhost':
@@ -34,6 +41,7 @@ class puppet::server::passenger {
     [$puppet::server::app_root, "${puppet::server::app_root}/public", "${puppet::server::app_root}/tmp"]:
       ensure => directory,
       owner  => $puppet::server::user,
+      before => Class['apache::install'],
   }
 
   $configru_version = $::puppetversion ? {

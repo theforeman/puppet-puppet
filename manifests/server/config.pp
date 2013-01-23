@@ -16,11 +16,9 @@ class puppet::server::config inherits puppet::config {
     content => template($puppet::server::agent_template, $puppet::server::master_template),
   }
 
-  exec {'generate_ca_cert':
-    creates => "${puppet::server::ssl_dir}/certs/${::fqdn}.pem",
-    command => "${puppet::params::puppetca_bin} --generate ${::fqdn}",
-    path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-    require => File["${puppet::dir}/puppet.conf"],
+  file { "${puppet::server::vardir}/reports":
+    ensure => directory,
+    owner  => $puppet::server::user,
   }
 
   if $puppet::server::git_repo {
@@ -34,7 +32,7 @@ class puppet::server::config inherits puppet::config {
     # need to chown the $vardir before puppet does it, or else
     # we can't write puppet.git/ on the first run
 
-    file { '/var/lib/puppet':
+    file { $puppet::server::vardir:
       ensure => directory,
       owner  => $puppet::server::user,
     }

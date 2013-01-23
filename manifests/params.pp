@@ -6,6 +6,7 @@ class puppet::params {
   $version             = 'present'
   $user                = 'puppet'
   $dir                 = '/etc/puppet'
+  $vardir              = '/var/lib/puppet'
   $ca                  = true
   $passenger           = true
   $port                = 8140
@@ -32,7 +33,7 @@ class puppet::params {
 
   # Dynamic environments config, ignore if the git_repo is 'false'
   # Path to the repository
-  $git_repo_path       = '/var/lib/puppet/puppet.git'
+  $git_repo_path       = "${vardir}/puppet.git"
   # Where to checkout the branches
   $envs_dir            = "${dir}/environments"
   # Override these if you need your own hooks
@@ -41,7 +42,7 @@ class puppet::params {
 
   # Passenger config
   $app_root            = "${dir}/rack"
-  $ssl_dir             = '/var/lib/puppet/ssl'
+  $ssl_dir             = "${vardir}/ssl"
 
   $master_package     =  $::operatingsystem ? {
     /(Debian|Ubuntu)/ => ['puppetmaster-common','puppetmaster'],
