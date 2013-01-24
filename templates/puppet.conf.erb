@@ -13,7 +13,11 @@
     # The default value is '$confdir/ssl'.
     ssldir = $vardir/ssl
 
-    # Puppet 3.x requires this in both [main] and [master] - harmless on agents
+    # Allow services in the 'puppet' group to access key (Foreman + proxy)
+    privatekeydir = $ssldir/private_keys { group = service }
+    hostprivkey = $privatekeydir/$certname.pem { mode = 640 }
+
+    # Puppet 3.0.x requires this in both [main] and [master] - harmless on agents
     autosign       = $confdir/autosign.conf { mode = 664 }
 
 [agent]

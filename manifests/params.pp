@@ -5,6 +5,7 @@ class puppet::params {
   # Basic config
   $version             = 'present'
   $user                = 'puppet'
+  $group               = 'puppet'
   $dir                 = '/etc/puppet'
   $vardir              = '/var/lib/puppet'
   $ca                  = true
