@@ -1,5 +1,25 @@
 class puppet::server::config inherits puppet::config {
-  if $puppet::server::passenger { include puppet::server::passenger }
+  if $puppet::server::passenger {
+    # Anchor the passenger config inside this
+    class { 'puppet::server::passenger': } -> Class['puppet::server::config']
+  }
+
+  # Mirror the relationship, as defined() is parse-order dependent
+  # Ensures puppetmasters certs are generated before the proxy is needed 
+  if defined(Class['foreman_proxy::config']) and $foreman_proxy::ssl {
+    Class['puppet::server::config'] -> Class['foreman_proxy::config']
+  }
+
+  # Open read permissions to private keys to puppet group for foreman, proxy etc.
+  file { "${puppet::server::ssl_dir}/private_keys":
+    group => $puppet::server::group,
+    mode  => 0750,
+  }
+
+  file { "${puppet::server::ssl_dir}/private_keys/${fqdn}.pem":
+    group => $puppet::server::group,
+    mode  => 0640,
+  }
 
   # Include foreman components for the puppetmaster
   # ENC script, reporting script etc.
