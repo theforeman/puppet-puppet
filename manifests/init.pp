@@ -1,3 +1,4 @@
+# The puppet module
 class puppet (
   $user                = $puppet::params::user,
   $dir                 = $puppet::params::dir,

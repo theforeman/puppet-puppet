@@ -1,3 +1,4 @@
+# Set up the puppet config
 class puppet::config {
   file { $puppet::dir:
     ensure => directory,
