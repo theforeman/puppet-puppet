@@ -1,3 +1,4 @@
+# Set up the puppet server using passenger
 class puppet::server::passenger {
   include ::apache::ssl
   include ::apache::params

@@ -1,3 +1,4 @@
+# Default parameters
 class puppet::params {
 
   include foreman::params
@@ -30,7 +31,7 @@ class puppet::params {
   # Where remains our manifests dir
   $manifest_path       = "${dir}/manifests"
   # Modules in this directory would be shared across all environments
-  $common_modules_path = ["${modules_path}/common", "/usr/share/puppet/modules"]
+  $common_modules_path = ["${modules_path}/common", '/usr/share/puppet/modules']
 
   # Dynamic environments config, ignore if the git_repo is 'false'
   # Path to the repository

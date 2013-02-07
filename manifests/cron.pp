@@ -1,3 +1,4 @@
+# Set up the puppet client as a cronjob
 class puppet::cron inherits puppet::service {
   Service['puppet'] {
     enable => false,

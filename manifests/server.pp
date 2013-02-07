@@ -1,3 +1,4 @@
+# Set up a puppet server
 class puppet::server (
   $user                = $puppet::params::user,
   $group               = $puppet::params::group,
