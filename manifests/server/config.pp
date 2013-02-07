@@ -75,10 +75,6 @@ class puppet::server::config inherits puppet::config {
       require => Git::Repo['puppet_repo'],
     }
 
-    user { $puppet::server::user:
-      shell => '/usr/bin/git-shell',
-    }
-
   }
   else
   {
