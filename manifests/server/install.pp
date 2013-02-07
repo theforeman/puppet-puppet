@@ -5,4 +5,9 @@ class puppet::server::install {
     ensure => $::puppet::server::version,
   }
 
+  if $puppet::server::git_repo {
+    user { $puppet::server::user:
+      shell => '/usr/bin/git-shell',
+    }
+  }
 }
