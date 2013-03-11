@@ -19,7 +19,7 @@ class puppet::server::passenger {
   exec {'generate_ca_cert':
     creates => "${puppet::server::ssl_dir}/certs/${::fqdn}.pem",
     command => "${puppet::params::puppetca_path}/${puppet::params::puppetca_bin} --generate ${::fqdn}",
-    require => File["${puppet::dir}/puppet.conf"],
+    require => File["${puppet::server::dir}/puppet.conf"],
     notify  => Service['httpd'],
   }
 
@@ -46,14 +46,14 @@ class puppet::server::passenger {
   }
 
   $configru_version = $::puppetversion ? {
-    /^2.*/  => 'config.ru.2',
-    default => 'config.ru'
+    /^2.*/  => 'config.ru.2.erb',
+    default => 'config.ru.erb'
   }
   file {
     "${puppet::server::app_root}/config.ru":
-      owner  => $puppet::server::user,
-      source => "puppet:///modules/puppet/${configru_version}",
-      notify => Exec['restart_puppet'],
+      owner   => $puppet::server::user,
+      content => template("puppet/server/${configru_version}"),
+      notify  => Exec['restart_puppet'],
   }
 
 }
