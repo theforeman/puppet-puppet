@@ -13,6 +13,9 @@ class puppet::params {
   $passenger           = true
   $port                = 8140
   $listen              = false
+  $pluginsync          = true
+  $splay               = false
+  $runinterval         = '30'
 
   # Need your own config templates? Specify here:
   $agent_template  = 'puppet/puppet.conf.erb'
