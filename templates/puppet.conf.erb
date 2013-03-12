@@ -35,9 +35,9 @@
     report      = true
     pluginsync  = <%= scope.lookupvar('::puppet::pluginsync') %>
     masterport  = <%= scope.lookupvar("::puppet::port") rescue 8140 %>
-    environment = <%= environment %>
-    certname    = <%= clientcert %>
-    server      = <% if puppetmaster.nil? || puppetmaster.empty? %><%= fqdn %><% else %><%= puppetmaster %><% end %>
+    environment = <%= @environment %>
+    certname    = <%= @clientcert %>
+    server      = <%= if ( @puppetmaster and !@puppetmaster.empty? ) then @puppetmaster else @fqdn end %>
     listen      = <%= scope.lookupvar('::puppet::listen') %>
     splay       = <%= scope.lookupvar('::puppet::splay') %>
     runinterval = <%= scope.lookupvar('::puppet::runinterval') %>
