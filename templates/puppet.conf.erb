@@ -37,7 +37,7 @@
     masterport  = <%= scope.lookupvar("::puppet::port") rescue 8140 %>
     environment = <%= environment %>
     certname    = <%= clientcert %>
-    server      = <% if puppetmaster.empty? %><%= fqdn %><% else %><%= puppetmaster %><% end %>
+    server      = <% if puppetmaster.nil? || puppetmaster.empty? %><%= fqdn %><% else %><%= puppetmaster %><% end %>
     listen      = <%= scope.lookupvar('::puppet::listen') %>
     splay       = <%= scope.lookupvar('::puppet::splay') %>
     runinterval = <%= scope.lookupvar('::puppet::runinterval') %>

@@ -97,7 +97,7 @@ allow *
 path /run
 auth any
 method save
-allow <% if puppetmaster.empty? %><%= fqdn %><% else %><%= puppetmaster %><% end %>
+allow <% if puppetmaster.nil? || puppetmaster.empty? %><%= fqdn %><% else %><%= puppetmaster %><% end %>
 
 <% end -%>
 # this one is not stricly necessary, but it has the merit
