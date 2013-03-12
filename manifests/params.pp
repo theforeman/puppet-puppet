@@ -15,7 +15,7 @@ class puppet::params {
   $listen              = false
   $pluginsync          = true
   $splay               = false
-  $runinterval         = '30'
+  $runinterval         = '1800'
 
   # Need your own config templates? Specify here:
   $agent_template  = 'puppet/puppet.conf.erb'
