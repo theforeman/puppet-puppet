@@ -20,10 +20,10 @@ class puppet::config {
   
   case $puppet::runmode {
     'service': { 
-      class {'::puppet::daemon':}
+      include ::puppet::daemon
     }
     'cron': {
-      class {'::puppet::cron':}
+      include ::puppet::cron
     }
     default: { 
       fail("Runmode of ${puppet::runmode} not supported by puppet::config!")
