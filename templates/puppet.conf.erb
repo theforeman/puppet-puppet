@@ -33,9 +33,11 @@
     # The default value is '$confdir/localconfig'.
     localconfig = $vardir/localconfig
     report      = true
-    pluginsync  = true
-    masterport  = <%= scope.lookupvar("puppet::port") rescue 8140 %>
+    pluginsync  = <%= scope.lookupvar('::puppet::pluginsync') %>
+    masterport  = <%= scope.lookupvar("::puppet::port") rescue 8140 %>
     environment = <%= environment %>
     certname    = <%= clientcert %>
     server      = <%= puppetmaster rescue fqdn %>
     listen      = <%= scope.lookupvar('::puppet::listen') %>
+    splay       = <%= scope.lookupvar('::puppet::splay') %>
+    runinterval = <%= scope.lookupvar('::puppet::runinterval') %>
