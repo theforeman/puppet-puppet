@@ -18,7 +18,7 @@ class puppet::config {
     }
   }
   
-  case $puppet::runmode {
+  case $::puppet::runmode {
     'service': { 
       include ::puppet::daemon
     }
