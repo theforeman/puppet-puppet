@@ -16,6 +16,7 @@ class puppet::params {
   $pluginsync          = true
   $splay               = false
   $runinterval         = '1800'
+  $runmode             = 'service'
 
   # Need your own config templates? Specify here:
   $agent_template  = 'puppet/puppet.conf.erb'

@@ -10,6 +10,7 @@ class puppet (
   $pluginsync          = $puppet::params::pluginsync,
   $splay               = $puppet::params::splay,
   $runinterval         = $puppet::params::runinterval,
+  $runmode             = $puppet::params::runmode,
   $environments        = $puppet::params::environments,
   $modules_path        = $puppet::params::modules_path,
   $common_modules_path = $puppet::params::common_modules_path,

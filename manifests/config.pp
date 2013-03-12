@@ -17,4 +17,16 @@ class puppet::config {
       content => template($puppet::nsauth_template),
     }
   }
+  
+  case $puppet::runmode {
+    'service': { 
+      class {'::puppet::daemon':}
+    }
+    'cron': {
+      class {'::puppet::cron':}
+    }
+    default: { 
+      fail("Runmode of ${puppet::runmode} not supported by puppet::config!")
+    }
+  }
 }
