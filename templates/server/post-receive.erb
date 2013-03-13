@@ -37,6 +37,23 @@ if file_uid != Process.uid and Process.uid == 0
   Process::UID.change_privilege(file_uid)
 end
 
+# 'git submodule sync' by itself definitely does not work on all git versions...
+# or at all.
+def submodule_sync
+  mods = %x{git config -f .gitmodules --get-regexp '^submodule\..*\.(path|url)$'}.lines.each_slice(2).to_a
+
+  mods.each do |m|
+    m2 = m.collect{|k| k.split(/ /)[1].strip }
+    # explicitly re-add each submodule with url from .gitmodules file
+    %x{git submodule add #{m2[1]} #{m2[0]}}
+  end
+
+  # Y U NO WORK WITHOUT above hack?
+  %x{git submodule sync}
+
+end
+
+
 # You can push multiple refspecs at once, like 'git push origin branch1 branch2',
 # so we need to handle each one.
 $stdin.each_line do |line|
@@ -87,7 +104,7 @@ $stdin.each_line do |line|
             FileUtils.rm_rf $1, :secure => true
           end
         end
-        %x{git submodule sync}
+        submodule_sync
         %x{git submodule update --init --recursive}
       end
     else
