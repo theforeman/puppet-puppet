@@ -20,6 +20,11 @@
     # Puppet 3.0.x requires this in both [main] and [master] - harmless on agents
     autosign       = $confdir/autosign.conf { mode = 664 }
 
+<% if scope.lookupvar("puppet::ca_server") %>
+    # Use the specified central CA server
+    ca_server = <%= ca_server %>
+<% end -%>
+
 [agent]
     # The file in which puppetd stores a list of the classes
     # associated with the retrieved configuratiion.  Can be loaded in
