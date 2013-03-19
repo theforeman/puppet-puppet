@@ -4,6 +4,7 @@ class puppet (
   $dir                 = $puppet::params::dir,
   $vardir              = $puppet::params::vardir,
   $ca                  = $puppet::params::ca,
+  $ca_server           = $puppet::params::ca_server,
   $passenger           = $puppet::params::passenger,
   $port                = $puppet::params::port,
   $listen              = $puppet::params::listen,
