@@ -7,6 +7,7 @@ class puppet::server (
   $ca                  = $puppet::params::ca,
   $passenger           = $puppet::params::passenger,
   $port                = $puppet::params::port,
+  $external_nodes      = $puppet::params::external_nodes,
   $environments        = $puppet::params::environments,
   $modules_path        = $puppet::params::modules_path,
   $manifest_path       = $puppet::params::manifest_path,

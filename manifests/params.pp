@@ -17,6 +17,7 @@ class puppet::params {
   $splay               = false
   $runinterval         = '1800'
   $runmode             = 'service'
+  $external_nodes      = '/etc/puppet/node.rb'
 
   # Need your own config templates? Specify here:
   $agent_template  = 'puppet/puppet.conf.erb'
