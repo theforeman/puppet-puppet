@@ -10,6 +10,7 @@ class puppet::params {
   $dir                 = '/etc/puppet'
   $vardir              = '/var/lib/puppet'
   $ca                  = true
+  $caserver            = false
   $passenger           = true
   $port                = 8140
   $listen              = false
