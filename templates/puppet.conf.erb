@@ -19,10 +19,9 @@
 
     # Puppet 3.0.x requires this in both [main] and [master] - harmless on agents
     autosign       = $confdir/autosign.conf { mode = 664 }
-
-<% if scope.lookupvar("puppet::ca_server") %>
+<% if scope.lookupvar("::puppet::ca_server") %>
     # Use specified CA server
-    ca_server = <%= scope.lookupvar('puppet::ca_server') %>
+    ca_server = <%= scope.lookupvar('::puppet::ca_server') %>
 <% end -%>
 
 [agent]
