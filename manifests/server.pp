@@ -5,6 +5,7 @@ class puppet::server (
   $dir                 = $puppet::params::dir,
   $vardir              = $puppet::params::vardir,
   $ca                  = $puppet::params::ca,
+  $ca_server           = $puppet::params::ca_server,
   $passenger           = $puppet::params::passenger,
   $port                = $puppet::params::port,
   $external_nodes      = $puppet::params::external_nodes,
