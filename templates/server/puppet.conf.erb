@@ -6,7 +6,7 @@
 [master]
     autosign       = $confdir/autosign.conf { mode = 664 }
     reports        = foreman
-    external_nodes = /etc/puppet/node.rb
+    external_nodes = <%= scope.lookupvar("puppet::server::external_nodes") %>
     node_terminus  = exec
     ca             = <%= scope.lookupvar("puppet::server::ca") %>
 <% if scope.lookupvar("puppet::server::git_repo") -%>
