@@ -1,7 +1,7 @@
 # Set up the puppet server using passenger
 class puppet::server::passenger {
-  include ::apache::ssl
-  include ::apache::params
+  include ::apache
+  include ::apache::mod::ssl
   include ::passenger
 
   case $::operatingsystem {
@@ -27,7 +27,7 @@ class puppet::server::passenger {
     path    => "${apache::params::configdir}/puppet.conf",
     content => template('puppet/server/puppet-vhost.conf.erb'),
     mode    => '0644',
-    notify  => Exec['reload-apache'],
+    notify  => Service['httpd'],
   }
 
   exec {'restart_puppet':
@@ -42,7 +42,7 @@ class puppet::server::passenger {
     [$puppet::server::app_root, "${puppet::server::app_root}/public", "${puppet::server::app_root}/tmp"]:
       ensure => directory,
       owner  => $puppet::server::user,
-      before => Class['apache::install'],
+      before => Class['apache'],
   }
 
   $configru_version = $::puppetversion ? {
