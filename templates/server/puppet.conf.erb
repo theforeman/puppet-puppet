@@ -18,3 +18,9 @@
     modulepath     = <%= scope.lookupvar("puppet::server::modules_path") %>/<%= env %>:<%= [scope.lookupvar("puppet::server::common_modules_path")].flatten.join(":") %>
 <% end -%>
 <% end -%>
+<% if scope.lookupvar("puppet::server::storeconfigs") -%>
+    storeconfigs   = <%= scope.lookupvar("puppet::server::storeconfigs") %>
+<% if scope.lookupvar("puppet::server::storeconfigs_backend") -%>
+    storeconfigs_backend = <%= scope.lookupvar("puppet::server::storeconfigs_backend") %>
+<% end -%>
+<% end -%>
