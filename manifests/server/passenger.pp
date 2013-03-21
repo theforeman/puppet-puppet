@@ -24,7 +24,7 @@ class puppet::server::passenger {
   }
 
   file {'puppet_vhost':
-    path    => "${apache::params::configdir}/puppet.conf",
+    path    => "${apache::params::vdir}/puppet.conf",
     content => template('puppet/server/puppet-vhost.conf.erb'),
     mode    => '0644',
     notify  => Service['httpd'],
