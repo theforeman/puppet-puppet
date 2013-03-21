@@ -25,11 +25,12 @@ class puppet::server::config inherits puppet::config {
   # Include foreman components for the puppetmaster
   # ENC script, reporting script etc.
   class {'foreman::puppetmaster':
-    foreman_url    => $puppet::server::foreman_url,
-    facts          => $puppet::server::facts,
-    storeconfigs   => $puppet::server::storeconfigs,
-    puppet_home    => $puppet::server::puppet_home,
-    puppet_basedir => $puppet::server::puppet_basedir
+    foreman_url          => $puppet::server::foreman_url,
+    facts                => $puppet::server::facts,
+    storeconfigs         => $puppet::server::storeconfigs,
+    storeconfigs_backend => $puppet::server::storeconfigs_backend,
+    puppet_home          => $puppet::server::puppet_home,
+    puppet_basedir       => $puppet::server::puppet_basedir
   }
 
   # appends our server configuration to puppet.conf

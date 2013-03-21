@@ -15,6 +15,7 @@ class puppet::server (
   $foreman_url         = $foreman::params::foreman_url,
   $facts               = $foreman::params::facts,
   $storeconfigs        = $foreman::params::storeconfigs,
+  $storeconfigs_backend = $foreman::params::storeconfigs_backend,
   $puppet_home         = $foreman::params::puppet_home,
   $puppet_basedir      = $foreman::params::puppet_basedir,
   $git_repo            = $puppet::params::git_repo,
