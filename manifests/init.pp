@@ -12,6 +12,7 @@ class puppet (
   $splay               = $puppet::params::splay,
   $runinterval         = $puppet::params::runinterval,
   $runmode             = $puppet::params::runmode,
+  $noop                = $puppet::params::noop,
   $environments        = $puppet::params::environments,
   $modules_path        = $puppet::params::modules_path,
   $common_modules_path = $puppet::params::common_modules_path,
