@@ -15,7 +15,7 @@
 <% else -%>
 <% scope.lookupvar("puppet::server::environments").each do |env| -%>
 [<%= env %>]
-    modulepath     = <%= scope.lookupvar("puppet::server::modules_path") %>/<%= env %>:<%= [scope.lookupvar("puppet::server::common_modules_path")].flatten.join(":") %>
+    modulepath     = <%= scope.lookupvar("puppet::server::modules_path") %>/<%= env %>/modules:<%= [scope.lookupvar("puppet::server::common_modules_path")].flatten.join(":") %>
 <% end -%>
 <% end -%>
 <% if scope.lookupvar("puppet::server::storeconfigs") -%>
