@@ -7,6 +7,7 @@ class puppet::server (
   $ca                  = $puppet::params::ca,
   $ca_server           = $puppet::params::ca_server,
   $passenger           = $puppet::params::passenger,
+  $service_fallback    = $puppet::params::service_fallback,
   $httpd_service       = $puppet::params::httpd_service,
   $port                = $puppet::params::port,
   $external_nodes      = $puppet::params::external_nodes,
@@ -32,6 +33,13 @@ class puppet::server (
   $master_template     = $puppet::params::master_template,
   $version             = $puppet::params::version
 ) inherits puppet::params {
+
+  if $passenger or ($service_fallback == false) {
+    $use_service = false
+  } else {
+    $use_service = true
+  }
+
   class { 'puppet::server::install': }~>
   class { 'puppet::server::config':  }~>
   class { 'puppet::server::service': }

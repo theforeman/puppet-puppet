@@ -12,6 +12,7 @@ class puppet::params {
   $ca                  = true
   $ca_server           = false
   $passenger           = true
+  $service_fallback    = true
   $httpd_service       = 'httpd'
   $port                = 8140
   $listen              = false
@@ -21,6 +22,7 @@ class puppet::params {
   $runmode             = 'service'
   $noop                = false
   $external_nodes      = '/etc/puppet/node.rb'
+
 
   # Need your own config templates? Specify here:
   $agent_template  = 'puppet/puppet.conf.erb'

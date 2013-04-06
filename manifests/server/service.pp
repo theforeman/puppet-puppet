@@ -1,8 +1,13 @@
 # Set up the puppet server as a service
 class puppet::server::service {
 
-  $ensured = $puppet::server::passenger ? { false => 'running', default => 'stopped', }
-  $enabled = $puppet::server::passenger ? { false => true,      default => false, }
+  if $::puppet::server::use_service {
+    $ensured = 'running'
+    $enabled = true
+  } else {
+    $ensured = 'stopped'
+    $enabled = false
+  }
 
   service { 'puppetmaster':
     ensure => $ensured,
