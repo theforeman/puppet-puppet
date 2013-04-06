@@ -64,7 +64,19 @@ class puppet::server (
     $use_service = true
   }
 
+  if $ca {
+    $ssl_ca_cert   = "${ssl_dir}/ca/ca_crt.pem"
+    $ssl_ca_crl    = "${ssl_dir}/ca/ca_crl.pem"
+    $ssl_chain     = "${ssl_dir}/ca/ca_crt.pem"
+  } else {
+    $ssl_ca_cert = "${ssl_dir}/certs/ca.pem"
+  }
+
+  $ssl_cert      = "${ssl_dir}/certs/${::fqdn}.pem"
+  $ssl_cert_key  = "${ssl_dir}/private_keys/${::fqdn}.pem"
+
   class { 'puppet::server::install': }~>
   class { 'puppet::server::config':  }~>
   class { 'puppet::server::service': }
+
 }

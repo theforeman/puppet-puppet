@@ -9,6 +9,7 @@
     external_nodes = <%= scope.lookupvar("puppet::server::external_nodes") %>
     node_terminus  = exec
     ca             = <%= scope.lookupvar("puppet::server::ca") %>
+    ssldir         = <%= scope.lookupvar("puppet::server::ssl_dir") %>
 <% if scope.lookupvar("puppet::server::git_repo") -%>
     manifest       = <%= scope.lookupvar("puppet::server::envs_dir") %>/$environment/manifests/site.pp
     modulepath     = <%= scope.lookupvar("puppet::server::envs_dir") %>/$environment/modules

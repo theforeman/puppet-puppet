@@ -1,22 +1,23 @@
 <%= ERB.new(File.read(File.expand_path("../_header.erb",File.dirname(file)))).result(binding) -%>
 
-Listen <%= scope.lookupvar("puppet::server::port") %>
-<VirtualHost *:<%= scope.lookupvar("puppet::server::port") %>>
+Listen <%= @port %>
+<VirtualHost *:<%= @port %>>
 
 	SSLEngine on
 	SSLProtocol -ALL +SSLv3 +TLSv1
 	SSLCipherSuite ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:-LOW:-SSLv2:-EXP
 
-	SSLCertificateFile      <%= scope.lookupvar("puppet::server::ssl_dir") %>/certs/<%= fqdn %>.pem
-	SSLCertificateKeyFile   <%= scope.lookupvar("puppet::server::ssl_dir") %>/private_keys/<%= fqdn %>.pem
-<% unless scope.lookupvar("puppet::server::ca") %>
-	SSLCACertificateFile    <%= scope.lookupvar("puppet::server::ssl_dir") %>/certs/ca.pem
-<% else -%>
-	SSLCertificateChainFile <%= scope.lookupvar("puppet::server::ssl_dir") %>/ca/ca_crt.pem
-	SSLCACertificateFile    <%= scope.lookupvar("puppet::server::ssl_dir") %>/ca/ca_crt.pem
-	# CRL checking should be enabled; if you have problems with Apache complaining about the CRL, disable the next line
-	SSLCARevocationFile     <%= scope.lookupvar("puppet::server::ssl_dir") %>/ca/ca_crl.pem
+	SSLCertificateFile      <%= @ssl_cert %>
+	SSLCertificateKeyFile   <%= @ssl_cert_key %>
+
+	SSLCACertificateFile    <%= @ssl_ca_cert %>
+<% if @ssl_chain -%>
+	SSLCertificateChainFile <%= @ssl_chain %>
 <% end -%>
+<% if @ssl_ca_crl -%>
+	SSLCARevocationFile     <%= @ssl_ca_crl %>
+<% end -%>
+
 	SSLVerifyClient optional
 	SSLVerifyDepth  1
 	SSLOptions +StdEnvVars +ExportCertData
@@ -35,8 +36,8 @@ Listen <%= scope.lookupvar("puppet::server::port") %>
 	PassengerStatThrottleRate 120
 
 	RackAutoDetect On
-	DocumentRoot <%= scope.lookupvar("puppet::server::app_root") %>/public/
-	<Directory <%= scope.lookupvar("puppet::server::app_root") %>>
+	DocumentRoot <%= @app_root %>/public/
+	<Directory <%= @app_root %>>
 		Options None
 		AllowOverride None
 		Order allow,deny
