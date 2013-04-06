@@ -1,5 +1,10 @@
-# Set up the puppet server using passenger
+# == Class: puppet::server::passenger
+#
+# Set up the puppet server using passenger and apache.
+#
 class puppet::server::passenger {
+
+  include ::puppet::server::rack
   include ::apache::ssl
   include ::apache::params
   include ::passenger
@@ -21,32 +26,7 @@ class puppet::server::passenger {
     content => template('puppet/server/puppet-vhost.conf.erb'),
     mode    => '0644',
     notify  => Exec['reload-apache'],
-  }
-
-  exec {'restart_puppet':
-    command     => "/bin/touch ${puppet::server::app_root}/tmp/restart.txt",
-    refreshonly => true,
-    cwd         => $puppet::server::app_root,
-    path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-    require     => [Class['puppet::server::install'],File["${puppet::server::app_root}/tmp"]],
-  }
-
-  file {
-    [$puppet::server::app_root, "${puppet::server::app_root}/public", "${puppet::server::app_root}/tmp"]:
-      ensure => directory,
-      owner  => $puppet::server::user,
-      before => Class['apache::install'],
-  }
-
-  $configru_version = $::puppetversion ? {
-    /^2.*/  => 'config.ru.2.erb',
-    default => 'config.ru.erb'
-  }
-  file {
-    "${puppet::server::app_root}/config.ru":
-      owner   => $puppet::server::user,
-      content => template("puppet/server/${configru_version}"),
-      notify  => Exec['restart_puppet'],
+    before  => Service[$::puppet::server::httpd_service],
   }
 
 }
