@@ -38,7 +38,15 @@ class puppet::server::config inherits puppet::config {
     content => template($puppet::server::agent_template, $puppet::server::master_template),
   }
 
-  exec {'generate_ca_cert':
+  ## If the ssl dir is not the default dir, it needs to be created before running
+  # the generate ca cert or it will fail.
+  exec {'puppet_server_config-create_ssl_dir':
+    creates => $::puppet::server::ssl_dir,
+    command => "/bin/mkdir -p ${::puppet::server::ssl_dir}",
+    before  => Exec['puppet_server_config-generate_ca_cert'],
+  }
+
+  exec {'puppet_server_config-generate_ca_cert':
     creates => "${puppet::server::ssl_dir}/certs/${::fqdn}.pem",
     command => "${puppet::params::puppetca_path}/${puppet::params::puppetca_bin} --generate ${::fqdn}",
     require => File["${puppet::server::dir}/puppet.conf"],
