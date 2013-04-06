@@ -12,6 +12,7 @@ class puppet::params {
   $ca                  = true
   $ca_server           = false
   $passenger           = true
+  $httpd_service       = 'httpd'
   $port                = 8140
   $listen              = false
   $pluginsync          = true

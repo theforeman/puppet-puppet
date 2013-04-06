@@ -38,6 +38,13 @@ class puppet::server::config inherits puppet::config {
     content => template($puppet::server::agent_template, $puppet::server::master_template),
   }
 
+  exec {'generate_ca_cert':
+    creates => "${puppet::server::ssl_dir}/certs/${::fqdn}.pem",
+    command => "${puppet::params::puppetca_path}/${puppet::params::puppetca_bin} --generate ${::fqdn}",
+    require => File["${puppet::server::dir}/puppet.conf"],
+    notify  => Service[$puppet::server::httpd_service],
+  }
+
   file { "${puppet::server::vardir}/reports":
     ensure => directory,
     owner  => $puppet::server::user,

@@ -16,13 +16,6 @@ class puppet::server::passenger {
     }
   }
 
-  exec {'generate_ca_cert':
-    creates => "${puppet::server::ssl_dir}/certs/${::fqdn}.pem",
-    command => "${puppet::params::puppetca_path}/${puppet::params::puppetca_bin} --generate ${::fqdn}",
-    require => File["${puppet::server::dir}/puppet.conf"],
-    notify  => Service['httpd'],
-  }
-
   file {'puppet_vhost':
     path    => "${apache::params::configdir}/puppet.conf",
     content => template('puppet/server/puppet-vhost.conf.erb'),
