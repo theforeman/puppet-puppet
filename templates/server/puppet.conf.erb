@@ -10,6 +10,13 @@
     node_terminus  = exec
     ca             = <%= scope.lookupvar("puppet::server::ca") %>
     ssldir         = <%= scope.lookupvar("puppet::server::ssl_dir") %>
+<% if scope.lookupvar("puppet::server::storeconfigs") -%>
+    storeconfigs   = <%= scope.lookupvar("puppet::server::storeconfigs") %>
+<% if scope.lookupvar("puppet::server::storeconfigs_backend") -%>
+    storeconfigs_backend = <%= scope.lookupvar("puppet::server::storeconfigs_backend") %>
+<% end -%>
+<% end -%>
+
 <% if scope.lookupvar("puppet::server::git_repo") -%>
     manifest       = <%= scope.lookupvar("puppet::server::envs_dir") %>/$environment/manifests/site.pp
     modulepath     = <%= scope.lookupvar("puppet::server::envs_dir") %>/$environment/modules
@@ -17,11 +24,5 @@
 <% scope.lookupvar("puppet::server::environments").each do |env| -%>
 [<%= env %>]
     modulepath     = <%= scope.lookupvar("puppet::server::modules_path") %>/<%= env %>/modules:<%= [scope.lookupvar("puppet::server::common_modules_path")].flatten.join(":") %>
-<% end -%>
-<% end -%>
-<% if scope.lookupvar("puppet::server::storeconfigs") -%>
-    storeconfigs   = <%= scope.lookupvar("puppet::server::storeconfigs") %>
-<% if scope.lookupvar("puppet::server::storeconfigs_backend") -%>
-    storeconfigs_backend = <%= scope.lookupvar("puppet::server::storeconfigs_backend") %>
 <% end -%>
 <% end -%>
