@@ -1,4 +1,28 @@
-# Set up a puppet server
+# == Class: puppet::server
+#
+# Sets up a puppet master.
+#
+# === Parameters:
+#
+# $passenger::              If set to true, we will configure apache with
+#                           passenger. If set to false, we will enable the
+#                           default puppetmaster service unless
+#                           service_fallback is set to false. See 'Advanced
+#                           parameters for more information.
+#                           Defaults to 'true;.
+#
+# TODO: Add more documentation
+#
+# === Advanced parameters:
+#
+# $httpd_service::          Apache/httpd service name to notify on configuration
+#                           changes. Defaults to 'httpd' based on the default
+#                           apache module included with foreman-installer.
+#
+# $service_fallback::       If passenger is not used, do we want to fallback
+#                           to using the puppetmaster service? Set to false
+#                           if you disabled passenger and you do NOT want to
+#                           use the puppetmaster service. Defaults to true.
 class puppet::server (
   $user                = $puppet::params::user,
   $group               = $puppet::params::group,
