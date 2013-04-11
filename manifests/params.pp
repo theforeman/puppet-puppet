@@ -70,7 +70,7 @@ class puppet::params {
   $cron_interval       = 2  # the amount of values within the $cron_range
 
   # Only use 'puppet cert' on versions where puppetca no longer exists
-  if versioncmp($puppetversion, '3.0') < 0 {
+  if versioncmp($::puppetversion, '3.0') < 0 {
     $puppetca_path = '/usr/sbin'
     $puppetca_bin  = 'puppetca'
     $puppetrun_cmd = '/usr/sbin/puppetrun'
