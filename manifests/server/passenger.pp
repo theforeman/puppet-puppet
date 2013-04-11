@@ -27,6 +27,7 @@ class puppet::server::passenger {
     mode    => '0644',
     notify  => Exec['reload-apache'],
     before  => Service[$::puppet::server::httpd_service],
+    require => Class['::puppet::server::rack'],
   }
 
 }
