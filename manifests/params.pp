@@ -20,7 +20,7 @@ class puppet::params {
   $splay               = false
   $runinterval         = '1800'
   $runmode             = 'service'
-  $noop                = false
+  $agent_noop          = false
   $external_nodes      = '/etc/puppet/node.rb'
 
 
