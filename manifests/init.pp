@@ -31,7 +31,7 @@
 #                     'cron' or 'service'.
 #                     Defaults to 'service'.
 #
-# $noop::             Run the client in noop mode.
+# $agent_noop::       Run the agent in noop mode.
 #                     Defaults to 'false'.
 #
 # $agent_template::   Use a custom template for the agent puppet configuration.
@@ -54,8 +54,8 @@
 # * Advanced usage:
 #
 #   class {'puppet':
-#     noop    => true,
-#     version => '2.7.20-1',
+#     agent_noop => true,
+#     version    => '2.7.20-1',
 #   }
 #
 #
@@ -68,7 +68,7 @@ class puppet (
   $splay               = $puppet::params::splay,
   $runinterval         = $puppet::params::runinterval,
   $runmode             = $puppet::params::runmode,
-  $noop                = $puppet::params::noop,
+  $agent_noop          = $puppet::params::agent_noop,
   $agent_template      = $puppet::params::agent_template,
   $auth_template       = $puppet::params::auth_template,
   $nsauth_template     = $puppet::params::nsauth_template,
