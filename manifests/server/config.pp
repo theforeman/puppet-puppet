@@ -94,7 +94,7 @@ class puppet::server::config inherits puppet::config {
   }
   else
   {
-    file { [$puppet::server::modules_path, $puppet::server::common_modules_path]:
+    file { [$puppet::server::envs_dir, $puppet::server::common_modules_path]:
       ensure => directory,
     }
 

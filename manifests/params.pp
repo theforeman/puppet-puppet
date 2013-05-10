@@ -36,18 +36,16 @@ class puppet::params {
   # Static environments config, ignore if the git_repo is 'true'
   # What environments do we have
   $environments        = ['development', 'production']
-  # Where we store our puppet modules
-  $modules_path        = "${dir}/modules"
+  # Where we store our puppet environments
+  $envs_dir            = "${dir}/environments"
   # Where remains our manifests dir
   $manifest_path       = "${dir}/manifests"
   # Modules in this directory would be shared across all environments
-  $common_modules_path = ["${modules_path}/common", '/usr/share/puppet/modules']
+  $common_modules_path = ["${envs_dir}/common", '/usr/share/puppet/modules']
 
   # Dynamic environments config, ignore if the git_repo is 'false'
   # Path to the repository
   $git_repo_path       = "${vardir}/puppet.git"
-  # Where to checkout the branches
-  $envs_dir            = "${dir}/environments"
   # Override these if you need your own hooks
   $post_hook_content   = 'puppet/server/post-receive.erb'
   $post_hook_name      = 'post-receive'
