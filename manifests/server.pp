@@ -23,6 +23,9 @@
 #                           to using the puppetmaster service? Set to false
 #                           if you disabled passenger and you do NOT want to
 #                           use the puppetmaster service. Defaults to true.
+# $config_version::         How to determine the configuration version. When
+#                           using git_repo, by default a git describe approach
+#                           will be installed.
 class puppet::server (
   $user                = $puppet::params::user,
   $group               = $puppet::params::group,
@@ -35,6 +38,7 @@ class puppet::server (
   $httpd_service       = $puppet::params::httpd_service,
   $port                = $puppet::params::port,
   $external_nodes      = $puppet::params::external_nodes,
+  $config_version      = $puppet::params::config_version,
   $environments        = $puppet::params::environments,
   $manifest_path       = $puppet::params::manifest_path,
   $common_modules_path = $puppet::params::common_modules_path,
@@ -73,6 +77,16 @@ class puppet::server (
 
   $ssl_cert      = "${ssl_dir}/certs/${::fqdn}.pem"
   $ssl_cert_key  = "${ssl_dir}/private_keys/${::fqdn}.pem"
+
+  if $config_version == undef {
+    if $git_repo {
+      $config_version_cmd = "git --git-dir ${envs_dir}/\$environment/.git describe --all --long"
+    } else {
+      $config_version_cmd = ''
+    }
+  } else {
+    $config_version_cmd = $config_version
+  }
 
   class { 'puppet::server::install': }~>
   class { 'puppet::server::config':  }~>

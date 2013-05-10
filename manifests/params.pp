@@ -33,6 +33,10 @@ class puppet::params {
   # Set 'false' for staic environments, or 'true' for git-based workflow
   $git_repo            = false
 
+  # The script that is run to determine the reported manifest version. Undef
+  # means we determine it in server.pp
+  $config_version      = undef
+
   # Static environments config, ignore if the git_repo is 'true'
   # What environments do we have
   $environments        = ['development', 'production']
