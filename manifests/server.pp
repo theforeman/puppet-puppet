@@ -36,7 +36,6 @@ class puppet::server (
   $port                = $puppet::params::port,
   $external_nodes      = $puppet::params::external_nodes,
   $environments        = $puppet::params::environments,
-  $modules_path        = $puppet::params::modules_path,
   $manifest_path       = $puppet::params::manifest_path,
   $common_modules_path = $puppet::params::common_modules_path,
   $foreman_url         = $foreman::params::foreman_url,
