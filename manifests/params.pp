@@ -54,6 +54,12 @@ class puppet::params {
   $post_hook_content   = 'puppet/server/post-receive.erb'
   $post_hook_name      = 'post-receive'
 
+  # Do you use storeconfigs? (note: not required)
+  # - false if you don't
+  # - active_record for 2.X style db
+  # - puppetdb for puppetdb
+  $storeconfigs_backend = false
+
   # Passenger config
   $app_root            = "${dir}/rack"
   $ssl_dir             = "${vardir}/ssl"

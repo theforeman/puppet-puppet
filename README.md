@@ -8,7 +8,7 @@ Installs Puppet agent:
 Optional support for install Puppet server (puppet::server)
 
   * Configurable support for static or git-backed dynamic environments (requires puppet-git module)
-  * Storeconfig option
+  * Storeconfig options (off, ActiveRecord or PuppetDB)
   * Passenger support (requires puppet-apache and puppet-passenger modules)
 
 # Installation

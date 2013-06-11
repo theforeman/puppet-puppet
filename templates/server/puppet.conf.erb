@@ -10,11 +10,9 @@
     node_terminus  = exec
     ca             = <%= scope.lookupvar("puppet::server::ca") %>
     ssldir         = <%= scope.lookupvar("puppet::server::ssl_dir") %>
-<% if scope.lookupvar("puppet::server::storeconfigs") -%>
-    storeconfigs   = <%= scope.lookupvar("puppet::server::storeconfigs") %>
 <% if scope.lookupvar("puppet::server::storeconfigs_backend") -%>
+    storeconfigs   = true
     storeconfigs_backend = <%= scope.lookupvar("puppet::server::storeconfigs_backend") %>
-<% end -%>
 <% end -%>
 
 <% if scope.lookupvar("puppet::server::git_repo") -%>
