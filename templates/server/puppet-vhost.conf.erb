@@ -1,45 +1,51 @@
 <%= ERB.new(File.read(File.expand_path("../_header.erb",File.dirname(file)))).result(binding) -%>
+# vim: ts=2:sw=2:et
 
 Listen <%= @port %>
 <VirtualHost *:<%= @port %>>
 
-	SSLEngine on
-	SSLProtocol -ALL +SSLv3 +TLSv1
-	SSLCipherSuite ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:-LOW:-SSLv2:-EXP
+  SSLEngine on
+  SSLProtocol -ALL +SSLv3 +TLSv1
+  SSLCipherSuite ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:-LOW:-SSLv2:-EXP
 
-	SSLCertificateFile      <%= @ssl_cert %>
-	SSLCertificateKeyFile   <%= @ssl_cert_key %>
+  SSLCertificateFile      <%= @ssl_cert %>
+  SSLCertificateKeyFile   <%= @ssl_cert_key %>
 
-	SSLCACertificateFile    <%= @ssl_ca_cert %>
+  SSLCACertificateFile    <%= @ssl_ca_cert %>
 <% if @ssl_chain -%>
-	SSLCertificateChainFile <%= @ssl_chain %>
+  SSLCertificateChainFile <%= @ssl_chain %>
 <% end -%>
 <% if @ssl_ca_crl -%>
-	SSLCARevocationFile     <%= @ssl_ca_crl %>
+  SSLCARevocationFile     <%= @ssl_ca_crl %>
 <% end -%>
 
-	SSLVerifyClient optional
-	SSLVerifyDepth  1
-	SSLOptions +StdEnvVars +ExportCertData
+  SSLVerifyClient optional
+  SSLVerifyDepth  1
+  SSLOptions +StdEnvVars +ExportCertData
 
-	# The following client headers allow the same configuration to work with Pound.
-	RequestHeader set X-SSL-Subject %{SSL_CLIENT_S_DN}e
-	RequestHeader set X-Client-DN %{SSL_CLIENT_S_DN}e
-	RequestHeader set X-Client-Verify %{SSL_CLIENT_VERIFY}e
-	RequestHeader unset X-Forwarded-For
+  # The following client headers allow the same configuration to work with Pound.
+  RequestHeader set X-SSL-Subject %{SSL_CLIENT_S_DN}e
+  RequestHeader set X-Client-DN %{SSL_CLIENT_S_DN}e
+  RequestHeader set X-Client-Verify %{SSL_CLIENT_VERIFY}e
+  RequestHeader unset X-Forwarded-For
 
-	# you probably want to tune these settings
-	PassengerHighPerformance on
-	PassengerMaxPoolSize 12
-	PassengerPoolIdleTime 1500
-	# PassengerMaxRequests 1000
-	PassengerStatThrottleRate 120
+  # you probably want to tune these settings
+  PassengerHighPerformance on
+  PassengerMaxPoolSize 12
+  PassengerPoolIdleTime 1500
+  # PassengerMaxRequests 1000
+  PassengerStatThrottleRate 120
 
-	DocumentRoot <%= @app_root %>/public/
-	<Directory <%= @app_root %>>
-		Options None
-		AllowOverride None
-		Order allow,deny
-		allow from all
-	</Directory>
+  DocumentRoot <%= @app_root %>/public/
+  <Directory <%= @app_root %>>
+    Options None
+    AllowOverride None
+    <IfVersion < 2.4>
+      Order allow,deny
+      Allow from all
+    </IfVersion>
+    <IfVersion >= 2.4>
+      Require all granted
+    </IfVersion>
+  </Directory>
 </VirtualHost>
