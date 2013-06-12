@@ -1,17 +1,16 @@
-## MAC OS
-.DS_Store
-
-## TEXTMATE
-*.tmproj
-tmtags
-
-## EMACS
-*~
-\#*
-.\#*
-
-## VIM
+.vagrant
 *.swp
-tags
+*.swo
+
+.bundle
+vendor/
 
 pkg/
+
+Gemfile.lock
+
+.rbenv*
+.rvmrc*
+.ruby-version
+
+spec/fixtures/
