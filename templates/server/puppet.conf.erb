@@ -5,8 +5,8 @@
 
 [master]
     autosign       = $confdir/autosign.conf { mode = 664 }
-<% if scope.lookupvar("puppet::server::use_foreman") -%>
-    reports        = foreman
+    reports        = <%= scope.lookupvar("puppet::server::reports") %>
+<% if scope.lookupvar("puppet::server::external_nodes") -%>
     external_nodes = <%= scope.lookupvar("puppet::server::external_nodes") %>
     node_terminus  = exec
 <% end -%>
