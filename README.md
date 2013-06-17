@@ -67,6 +67,12 @@ wrapper classes or even your ENC (if it supports param classes). For example:
       post_hook_content => 'puppetserver/post-hook.puppet',
     }
 
+    # Perhaps you want to install without foreman?
+    class { '::puppet::server': 
+        reports        => store,
+        external_nodes => undef,
+    }
+
 Look in _init.pp_ for what can be configured this way, see Contributing if anything
 doesn't work.
 
