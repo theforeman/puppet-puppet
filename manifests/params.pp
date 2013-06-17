@@ -20,11 +20,7 @@ class puppet::params {
   $runmode             = 'service'
   $agent_noop          = false
   $external_nodes      = '/etc/puppet/node.rb'
-<<<<<<< HEAD
-  $use_foreman         = true
-=======
   $reports             = 'foreman'
->>>>>>> feature/optional_foreman
 
 
   # Need your own config templates? Specify here:
