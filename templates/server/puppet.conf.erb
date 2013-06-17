@@ -5,9 +5,11 @@
 
 [master]
     autosign       = $confdir/autosign.conf { mode = 664 }
+<% if scope.lookupvar("puppet::server::use_foreman") -%>
     reports        = foreman
     external_nodes = <%= scope.lookupvar("puppet::server::external_nodes") %>
     node_terminus  = exec
+<% end -%>
     ca             = <%= scope.lookupvar("puppet::server::ca") %>
     ssldir         = <%= scope.lookupvar("puppet::server::ssl_dir") %>
 <% if scope.lookupvar("puppet::server::storeconfigs_backend") -%>
