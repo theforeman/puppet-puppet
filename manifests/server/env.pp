@@ -3,4 +3,8 @@ define puppet::server::env ($basedir = $puppet::server::envs_dir) {
   file { "${basedir}/${name}":
     ensure => directory,
   }
+
+  file { "${basedir}/${name}/modules":
+    ensure => directory,
+  }
 }
