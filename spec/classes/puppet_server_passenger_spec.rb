@@ -28,6 +28,7 @@ describe 'puppet::server::passenger' do
         with_content(/^  SSLCARevocationFile\s+\/var\/lib\/puppet\/ssl\/ca\/ca_crl.pem$/).
         with_content(/^  DocumentRoot \/etc\/puppet\/rack\/public\/$/).
         with_content(/^  <Directory \/etc\/puppet\/rack>$/).
+        with_content(/^  PassengerMaxPoolSize 12$/).
         with({
           :path    => '/etc/httpd/conf.d/puppet.conf',
           :mode    => '0644',
@@ -35,6 +36,20 @@ describe 'puppet::server::passenger' do
           :before  => 'Service[httpd]',
           :require => 'Class[Puppet::Server::Rack]',
         })
+    end
+  end
+
+  describe 'with no custom parameters' do
+    let :pre_condition do
+      "
+      include puppet
+      class {'puppet::server':
+        passenger_max_pool => 6,
+      }
+      "
+    end
+    it 'should override PassengerMaxPoolSize' do
+      should contain_file('puppet_vhost').with_content(/^  PassengerMaxPoolSize 6$/)
     end
   end
 
