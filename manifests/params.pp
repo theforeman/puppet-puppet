@@ -13,6 +13,7 @@ class puppet::params {
   $ca_server           = false
   $passenger           = true
   $service_fallback    = true
+  $passenger_max_pool  = 12
   $httpd_service       = 'httpd'
   $port                = 8140
   $listen              = false

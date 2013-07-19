@@ -1,5 +1,8 @@
 fixtures:
   repositories:
+    apache:           'git://github.com/theforeman/puppet-apache'
+    passenger:        'git://github.com/theforeman/puppet-passenger'
+    foreman:          'git://github.com/theforeman/puppet-foreman'
     concat_native:    'git://github.com/theforeman/puppet-concat'
 
   symlinks:

@@ -31,7 +31,7 @@ Listen <%= @port %>
 
   # you probably want to tune these settings
   PassengerHighPerformance on
-  PassengerMaxPoolSize 12
+  PassengerMaxPoolSize <%= @passenger_max_pool %>
   PassengerPoolIdleTime 1500
   # PassengerMaxRequests 1000
   PassengerStatThrottleRate 120

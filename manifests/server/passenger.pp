@@ -21,9 +21,10 @@ class puppet::server::passenger {
     $ssl_ca_crl   = $::puppet::server::ssl_ca_crl
   }
 
-  $port         = $::puppet::server::port
-  $user         = $::puppet::server::user
-  $app_root     = $::puppet::server::app_root
+  $port               = $::puppet::server::port
+  $user               = $::puppet::server::user
+  $app_root           = $::puppet::server::app_root
+  $passenger_max_pool = $::puppet::server::passenger_max_pool
 
   case $::operatingsystem {
     Debian,Ubuntu: {

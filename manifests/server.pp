@@ -23,6 +23,9 @@
 #                           to using the puppetmaster service? Set to false
 #                           if you disabled passenger and you do NOT want to
 #                           use the puppetmaster service. Defaults to true.
+# $passenger_max_pool::     The PassengerMaxPoolSize parameter. If your host is
+#                           low on memory, it may be a good thing to lower
+#                           this. Defaults to 12.
 # $config_version::         How to determine the configuration version. When
 #                           using git_repo, by default a git describe approach
 #                           will be installed.
@@ -35,6 +38,7 @@ class puppet::server (
   $ca_server            = $puppet::params::ca_server,
   $passenger            = $puppet::params::passenger,
   $service_fallback     = $puppet::params::service_fallback,
+  $passenger_max_pool   = $puppet::params::passenger_max_pool,
   $httpd_service        = $puppet::params::httpd_service,
   $port                 = $puppet::params::port,
   $external_nodes       = $puppet::params::external_nodes,
