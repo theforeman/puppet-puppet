@@ -46,6 +46,7 @@ class puppet::server (
   $environments         = $puppet::params::environments,
   $manifest_path        = $puppet::params::manifest_path,
   $common_modules_path  = $puppet::params::common_modules_path,
+  $reports              = $puppet::params::reports,
   $foreman_url          = $foreman::params::foreman_url,
   $facts                = $foreman::params::facts,
   $storeconfigs_backend = $puppet::params::storeconfigs_backend,
