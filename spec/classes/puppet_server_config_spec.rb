@@ -63,6 +63,37 @@ describe 'puppet::server::config' do
 
       should contain_puppet__server__env('production')
     end
+
+    it 'should configure puppet' do
+      should contain_file('/etc/puppet/puppet.conf').
+        with_content(/^\s+reports\s+= foreman$/).
+        with_content(/^\s+external_nodes\s+= \/etc\/puppet\/node.rb$/).
+        with_content(/^\s+node_terminus\s+= exec$/).
+        with_content(/^\s+ca\s+= true$/).
+        with_content(/^\s+ssldir\s+= \/var\/lib\/puppet\/ssl$/).
+        with_content(/^\[development\]\n\s+modulepath\s+= \/etc\/puppet\/environments\/development\/modules:\/etc\/puppet\/environments\/common:\/usr\/share\/puppet\/modules\n\s+config_version = $/).
+        with_content(/^\[production\]\n\s+modulepath\s+= \/etc\/puppet\/environments\/production\/modules:\/etc\/puppet\/environments\/common:\/usr\/share\/puppet\/modules\n\s+config_version = $/).
+        with({}) # So we can use a trailing dot on each with_content line
+
+      should_not contain_file('/etc/puppet/puppet.conf').with_content(/storeconfigs/)
+    end
   end
 
+  describe 'without foreman' do
+    let :pre_condition do
+      "include puppet
+      class {'puppet::server':
+        reports        => 'store',
+        external_nodes => false,
+      }"
+    end
+
+    it 'should store reports' do
+      should contain_file('/etc/puppet/puppet.conf').with_content(/^\s+reports\s+= store$/)
+    end
+
+    it 'should not contain external_nodes' do
+      should_not contain_file('/etc/puppet/puppet.conf').with_content(/external_nodes/)
+    end
+  end
 end
