@@ -11,8 +11,7 @@ describe 'puppet::server::config' do
 
   describe 'with no custom parameters' do
     let :pre_condition do
-      "include puppet
-      class {'puppet::server':}"
+      "class {'puppet::server':}"
     end
 
     it 'should set up SSL permissions' do
@@ -81,8 +80,7 @@ describe 'puppet::server::config' do
 
   describe 'without foreman' do
     let :pre_condition do
-      "include puppet
-      class {'puppet::server':
+      "class {'puppet::server':
         reports        => 'store',
         external_nodes => false,
       }"

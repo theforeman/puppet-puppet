@@ -11,10 +11,7 @@ describe 'puppet::server::passenger' do
 
   describe 'with no custom parameters' do
     let :pre_condition do
-      "
-      include puppet
-      class {'puppet::server':}
-      "
+      "class {'puppet::server':}"
     end
 
     it 'should include the puppet vhost' do
@@ -39,15 +36,11 @@ describe 'puppet::server::passenger' do
     end
   end
 
-  describe 'with no custom parameters' do
+  describe 'with passenger_max_pool overridden' do
     let :pre_condition do
-      "
-      include puppet
-      class {'puppet::server':
-        passenger_max_pool => 6,
-      }
-      "
+      "class {'puppet::server': passenger_max_pool => 6 }"
     end
+
     it 'should override PassengerMaxPoolSize' do
       should contain_file('puppet_vhost').with_content(/^  PassengerMaxPoolSize 6$/)
     end
