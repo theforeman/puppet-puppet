@@ -9,9 +9,66 @@
 #                           default puppetmaster service unless
 #                           service_fallback is set to false. See 'Advanced
 #                           parameters for more information.
-#                           Defaults to 'true;.
+#                           type:boolean
 #
-# TODO: Add more documentation
+# $user::                   Puppet user
+#
+# $group::                  Puppet group
+#
+# $dir::                    Puppet configuration directory
+#
+# $vardir::                 Puppet data directory
+#
+# $ca::                     Provide puppet CA
+#                           type:boolean
+#
+# $port::                   Puppet master port
+#                           type:integer
+#
+# $external_nodes::         External nodes classifier executable
+#
+# $environments::           Environments to setup (creates directories)
+#                           type:array
+#
+# $manifest_path::          Path to puppet site.pp manifest
+#
+# $common_modules_path::    Common modules paths
+#                           type:array
+#
+# $foreman_url::            Foreman URL
+#
+# $facts::                  Should foreman receive facts from puppet
+#                           type:boolean
+#
+# $puppet_basedir::         Where is the puppet code base located
+#
+# $puppet_home::            Puppet var directory
+#
+# $storeconfigs_backend::   Do you use storeconfigs? (note: not required)
+#                           false if you don't, "active_record" for 2.X style db, "puppetdb" for puppetdb
+#
+# $git_repo::               Use git repository as a source of modules
+#                           type:boolean
+#
+# $git_repo_path::          Git repository path
+#
+# $envs_dir::               Directory that holds puppet environments
+#
+# $app_root::               Directory where the application lives
+#
+# $ssl_dir::                SSL directory
+#
+# $master_package::         Custom package name for puppet master
+#
+# $post_hook_content::      Which template to use for git post hook
+#
+# $post_hook_name::         Name of a git hook
+#
+# $agent_template::         Which template should be used for agent configuration
+#
+# $master_template::        Which template should be used for master configuration
+#
+# $version::                Puppet master version
 #
 # === Advanced parameters:
 #
@@ -23,12 +80,17 @@
 #                           to using the puppetmaster service? Set to false
 #                           if you disabled passenger and you do NOT want to
 #                           use the puppetmaster service. Defaults to true.
+#                           type:boolean
+#
 # $passenger_max_pool::     The PassengerMaxPoolSize parameter. If your host is
 #                           low on memory, it may be a good thing to lower
 #                           this. Defaults to 12.
+#                           type:integer
+#
 # $config_version::         How to determine the configuration version. When
 #                           using git_repo, by default a git describe approach
 #                           will be installed.
+#
 class puppet::server (
   $user                 = $puppet::params::user,
   $group                = $puppet::params::group,
