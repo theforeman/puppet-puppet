@@ -32,7 +32,7 @@ class puppet::params {
   $auth_template   = 'puppet/auth.conf.erb'
   $nsauth_template = 'puppet/namespaceauth.conf.erb'
 
-  # Set 'false' for staic environments, or 'true' for git-based workflow
+  # Set 'false' for static environments, or 'true' for git-based workflow
   $git_repo            = false
 
   # The script that is run to determine the reported manifest version. Undef
