@@ -24,6 +24,7 @@ class puppet::params {
   $agent_noop          = false
   $external_nodes      = '/etc/puppet/node.rb'
   $reports             = 'foreman'
+  $show_diff           = false
 
 
   # Need your own config templates? Specify here:
