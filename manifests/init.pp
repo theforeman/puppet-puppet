@@ -45,6 +45,9 @@
 #                     You can also use certain values like 'latest'.
 #                     Defaults to 'present'.
 #
+# $show_diff::        Show and report changed files with diff output
+#                     Defaults to 'false'.
+#
 # === Usage:
 #
 # * Simple usage:
@@ -72,7 +75,8 @@ class puppet (
   $agent_template      = $puppet::params::agent_template,
   $auth_template       = $puppet::params::auth_template,
   $nsauth_template     = $puppet::params::nsauth_template,
-  $version             = $puppet::params::version
+  $version             = $puppet::params::version,
+  $show_diff           = $puppet::params::show_diff
 ) inherits puppet::params {
   class { 'puppet::install': }~>
   class { 'puppet::config': }
