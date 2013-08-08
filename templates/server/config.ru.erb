@@ -18,8 +18,8 @@ ARGV << "--rack"
 # Rack applications typically don't start as root.  Set --confdir and --vardir
 # to prevent reading configuration from ~puppet/.puppet/puppet.conf and writing
 # to ~puppet/.puppet
-ARGV << "--confdir" << "<%= scope.lookupvar('::puppet::server::dir') %>"
-ARGV << "--vardir"  << "<%= scope.lookupvar('::puppet::server::vardir') %>"
+ARGV << "--confdir" << "<%= scope.lookupvar('::puppet::server_dir') %>"
+ARGV << "--vardir"  << "<%= scope.lookupvar('::puppet::server_vardir') %>"
 
 # NOTE: it's unfortunate that we have to use the "CommandLine" class
 #  here to launch the app, but it contains some initialization logic

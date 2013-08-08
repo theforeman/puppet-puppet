@@ -2,10 +2,7 @@
 
 Installs Puppet agent:
 
-  * Optional class to run Puppet from Cron   - puppet::cron
-  * Optional Class to run Puppet as a daemon - puppet::daemon
-
-Optional support for install Puppet server (puppet::server)
+Optional support for installation of a Puppetmaster (using server => true)
 
   * Configurable support for static or git-backed dynamic environments (requires puppet-git module)
   * Storeconfig options (off, ActiveRecord or PuppetDB)
@@ -29,59 +26,59 @@ Only really tested on RedHat and Debian. Patches welcome for other OSes :)
 
 This is a parameterized class, but the defaults should get you going:
 
-Standalone agent:
+Standalone agent with defaults:
 
     echo include puppet | puppet --modulepath /path_to/extracted_tarball
-
-Agent and cron (or daemon):
-
-    echo include puppet, puppet::cron | puppet --modulepath /path_to/extracted_tarball
-
-Agent and server:
-
-    echo include puppet, puppet::server | puppet --modulepath /path_to/extracted_tarball
 
 # Customization
 
 As a parameterized class, all the configurable options can be overridden from your
 wrapper classes or even your ENC (if it supports param classes). For example:
 
+    # Agent and cron (or daemon):
+    class { '::puppet': runmode => 'cron' }
+
+    # Agent and puppetmaster:
+    class { '::puppet': server => true }
+
     # You want to use git?
-    class { '::puppet::server': git_repo => true }
+    class { '::puppet':
+      server          => true
+      server_git_repo => true
+    }
 
     # You need need your own template for puppet.conf?
-    class { '::puppet::server': 
-      agent_template  => 'puppetagent/puppet.conf.core.erb',
-      master_template => 'puppetserver/puppet.conf.master.erb',
-    }
     class { '::puppet':
       agent_template  => 'puppetagent/puppet.conf.core.erb',
+      server          => true,
+      server_template => 'puppetserver/puppet.conf.master.erb',
     }
 
     # Maybe you're using gitolite, new hooks, and a different port?
-    class { '::puppet::server': 
-      port              => 8141,
-      git_repo          => true,
-      git_repo_path     => '/var/lib/gitolite/repositories/puppet.git',
-      post_hook_name    => 'post-receive.puppet',
-      post_hook_content => 'puppetserver/post-hook.puppet',
+    class { '::puppet':
+      server                   => true
+      server_port              => 8141,
+      server_git_repo          => true,
+      server_git_repo_path     => '/var/lib/gitolite/repositories/puppet.git',
+      server_post_hook_name    => 'post-receive.puppet',
+      server_post_hook_content => 'puppetserver/post-hook.puppet',
     }
 
     # Perhaps you want to install without foreman?
-    class { '::puppet::server':
-        reports        => 'store',
-        external_nodes => false,
+    class { '::puppet':
+      server                => true,
+      server_reports        => 'store',
+      server_external_nodes => false,
     }
 
 Look in _init.pp_ for what can be configured this way, see Contributing if anything
 doesn't work.
 
 To use this in standalone mode, edit a file (e.g. install.pp), put in a class resource,
-as per the examples above, and the execute _puppet apply_:
+as per the examples above, and the execute _puppet apply_ e.g:
 
     cat > install.pp <<EOF
-    class { '::puppet': }
-    class { '::puppet::server': git_repo => true } 
+    class { '::puppet': server => true }
     EOF
     puppet apply install.pp --modulepath /path_to/extracted_tarball
 

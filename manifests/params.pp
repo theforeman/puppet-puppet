@@ -8,13 +8,6 @@ class puppet::params {
   $user                = 'puppet'
   $group               = 'puppet'
   $dir                 = '/etc/puppet'
-  $vardir              = '/var/lib/puppet'
-  $ca                  = true
-  $ca_server           = false
-  $passenger           = true
-  $service_fallback    = true
-  $passenger_max_pool  = 12
-  $httpd_service       = 'httpd'
   $port                = 8140
   $listen              = false
   $pluginsync          = true
@@ -22,52 +15,63 @@ class puppet::params {
   $runinterval         = '1800'
   $runmode             = 'service'
   $agent_noop          = false
-  $external_nodes      = '/etc/puppet/node.rb'
-  $reports             = 'foreman'
   $show_diff           = false
-
+  $ca_server           = false
 
   # Need your own config templates? Specify here:
   $agent_template  = 'puppet/puppet.conf.erb'
-  $master_template = 'puppet/server/puppet.conf.erb'
   $auth_template   = 'puppet/auth.conf.erb'
   $nsauth_template = 'puppet/namespaceauth.conf.erb'
 
-  # Set 'false' for static environments, or 'true' for git-based workflow
-  $git_repo            = false
+  # Will this host be a puppetmaster?
+  $server                    = false
+  $server_vardir             = '/var/lib/puppet'
+  $server_ca                 = true
+  $server_reports            = 'foreman'
+  $server_passenger          = true
+  $server_service_fallback   = true
+  $server_passenger_max_pool = 12
+  $server_httpd_service      = 'httpd'
+  $server_external_nodes     = '/etc/puppet/node.rb'
+
+  # Need a new master template for the server?
+  $server_template = 'puppet/server/puppet.conf.erb'
 
   # The script that is run to determine the reported manifest version. Undef
   # means we determine it in server.pp
-  $config_version      = undef
+  $server_config_version      = undef
+
+  # Set 'false' for static environments, or 'true' for git-based workflow
+  $server_git_repo            = false
 
   # Static environments config, ignore if the git_repo is 'true'
   # What environments do we have
-  $environments        = ['development', 'production']
+  $server_environments        = ['development', 'production']
   # Where we store our puppet environments
-  $envs_dir            = "${dir}/environments"
+  $server_envs_dir            = "${dir}/environments"
   # Where remains our manifests dir
-  $manifest_path       = "${dir}/manifests"
+  $server_manifest_path       = "${dir}/manifests"
   # Modules in this directory would be shared across all environments
-  $common_modules_path = ["${envs_dir}/common", '/usr/share/puppet/modules']
+  $server_common_modules_path = ["${server_envs_dir}/common", '/usr/share/puppet/modules']
 
   # Dynamic environments config, ignore if the git_repo is 'false'
   # Path to the repository
-  $git_repo_path       = "${vardir}/puppet.git"
+  $server_git_repo_path       = "${server_vardir}/puppet.git"
   # Override these if you need your own hooks
-  $post_hook_content   = 'puppet/server/post-receive.erb'
-  $post_hook_name      = 'post-receive'
+  $server_post_hook_content   = 'puppet/server/post-receive.erb'
+  $server_post_hook_name      = 'post-receive'
 
   # Do you use storeconfigs? (note: not required)
   # - false if you don't
   # - active_record for 2.X style db
   # - puppetdb for puppetdb
-  $storeconfigs_backend = false
+  $server_storeconfigs_backend = false
 
   # Passenger config
-  $app_root            = "${dir}/rack"
-  $ssl_dir             = "${vardir}/ssl"
+  $server_app_root = "${dir}/rack"
+  $server_ssl_dir  = "${server_vardir}/ssl"
 
-  $master_package     =  $::operatingsystem ? {
+  $server_package     =  $::operatingsystem ? {
     /(Debian|Ubuntu)/ => ['puppetmaster-common','puppetmaster'],
     default           => ['puppet-server'],
   }

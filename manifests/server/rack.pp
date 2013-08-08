@@ -14,19 +14,19 @@ class puppet::server::rack {
 
 
   exec {'puppet_server_rack-restart':
-    command     => "/bin/touch ${puppet::server::app_root}/tmp/restart.txt",
+    command     => "/bin/touch ${puppet::server_app_root}/tmp/restart.txt",
     refreshonly => true,
-    cwd         => $puppet::server::app_root,
+    cwd         => $puppet::server_app_root,
     require     => [
       Class['puppet::server::install'],
-      File["${puppet::server::app_root}/tmp"]
+      File["${puppet::server_app_root}/tmp"]
     ],
   }
 
   file {
-    [$puppet::server::app_root, "${puppet::server::app_root}/public", "${puppet::server::app_root}/tmp"]:
+    [$puppet::server_app_root, "${puppet::server_app_root}/public", "${puppet::server_app_root}/tmp"]:
       ensure => directory,
-      owner  => $puppet::server::user,
+      owner  => $puppet::server_user,
   }
 
   $configru_version = $::puppetversion ? {
@@ -34,8 +34,8 @@ class puppet::server::rack {
     default => 'config.ru.erb'
   }
   file {
-    "${puppet::server::app_root}/config.ru":
-      owner   => $puppet::server::user,
+    "${puppet::server_app_root}/config.ru":
+      owner   => $puppet::server_user,
       content => template("puppet/server/${configru_version}"),
       notify  => Exec['puppet_server_rack-restart'],
   }
