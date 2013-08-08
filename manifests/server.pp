@@ -92,17 +92,21 @@
 #                           will be installed.
 #
 class puppet::server (
+  ## These are inherited from the puppet class
+  $dir                  = $puppet::dir,
+  $port                 = $puppet::port,
+  $agent_template       = $puppet::agent_template,
+  $version              = $puppet::version,
+
+  ## These are only for the server
   $user                 = $puppet::params::user,
   $group                = $puppet::params::group,
-  $dir                  = $puppet::params::dir,
   $vardir               = $puppet::params::vardir,
   $ca                   = $puppet::params::ca,
-  $ca_server            = $puppet::params::ca_server,
   $passenger            = $puppet::params::passenger,
   $service_fallback     = $puppet::params::service_fallback,
   $passenger_max_pool   = $puppet::params::passenger_max_pool,
   $httpd_service        = $puppet::params::httpd_service,
-  $port                 = $puppet::params::port,
   $external_nodes       = $puppet::params::external_nodes,
   $config_version       = $puppet::params::config_version,
   $environments         = $puppet::params::environments,
@@ -122,10 +126,8 @@ class puppet::server (
   $master_package       = $puppet::params::master_package,
   $post_hook_content    = $puppet::params::post_hook_content,
   $post_hook_name       = $puppet::params::post_hook_name,
-  $agent_template       = $puppet::params::agent_template,
-  $master_template      = $puppet::params::master_template,
-  $version              = $puppet::params::version
-) inherits puppet::params {
+  $master_template      = $puppet::params::master_template
+) inherits puppet {
 
   if $passenger or ($service_fallback == false) {
     $use_service = false
