@@ -1,3 +1,6 @@
+# == Class: puppet::server
+#
+# Sets up a puppet master.
 class puppet::server {
 
   if $::puppet::server_passenger or ($::puppet::server_service_fallback == false) {

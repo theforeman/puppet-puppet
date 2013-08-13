@@ -1,6 +1,7 @@
 .vagrant
 *.swp
 *.swo
+.idea
 
 .bundle
 vendor/

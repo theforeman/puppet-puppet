@@ -19,7 +19,6 @@
 #
 # $listen::           Should the puppet agent listen for connections.
 #                     type:boolean
-#
 # $pluginsync::       Enable pluginsync.
 #                     type:boolean
 #
@@ -131,14 +130,16 @@
 #                           using git_repo, by default a git describe approach
 #                           will be installed.
 #
-# $foreman_url::            Foreman URL
-#
-# $facts::                  Should foreman receive facts from puppet
+# $server_facts::           Should foreman receive facts from puppet
 #                           type:boolean
 #
-# $puppet_basedir::         Where is the puppet code base located
+# $server_foreman_url::     Foreman URL
 #
-# $puppet_home::            Puppet var directory
+# $server_puppet_basedir::  Where is the puppet code base located
+#
+# $server_puppet_home::     Puppet var directory
+#
+# $server_reports::         List of report types to include on the puppetmaster
 #
 # === Usage:
 #
@@ -210,6 +211,19 @@ class puppet (
   $server_puppet_basedir       = $foreman::params::puppet_basedir
 ) inherits puppet::params {
 
+  validate_bool($listen)
+  validate_bool($pluginsync)
+  validate_bool($splay)
+  validate_bool($agent_noop)
+  validate_bool($server)
+  validate_bool($server_ca)
+  validate_bool($server_passenger)
+  validate_bool($server_git_repo)
+  validate_bool($server_service_fallback)
+  validate_bool($server_facts)
+
+  validate_string($server_external_nodes)
+
   class { 'puppet::install': } ~>
   class { 'puppet::config': } ->
   Class['puppet']
@@ -219,5 +233,4 @@ class puppet (
       require => Class['puppet::config'],
     }
   }
-
 }

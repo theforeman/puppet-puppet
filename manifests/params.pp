@@ -16,7 +16,7 @@ class puppet::params {
   $runmode             = 'service'
   $agent_noop          = false
   $show_diff           = false
-  $ca_server           = false
+  $ca_server           = undef
 
   # Need your own config templates? Specify here:
   $agent_template  = 'puppet/puppet.conf.erb'
@@ -62,10 +62,10 @@ class puppet::params {
   $server_post_hook_name      = 'post-receive'
 
   # Do you use storeconfigs? (note: not required)
-  # - false if you don't
+  # - undef if you don't
   # - active_record for 2.X style db
   # - puppetdb for puppetdb
-  $server_storeconfigs_backend = false
+  $server_storeconfigs_backend = undef
 
   # Passenger config
   $server_app_root = "${dir}/rack"
