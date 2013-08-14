@@ -5,26 +5,26 @@
 
 [master]
     autosign       = $confdir/autosign.conf { mode = 664 }
-    reports        = <%= scope.lookupvar("puppet::server::reports") %>
-<% if scope.lookupvar("puppet::server::external_nodes") -%>
-    external_nodes = <%= scope.lookupvar("puppet::server::external_nodes") %>
+    reports        = <%= scope.lookupvar("puppet::server_reports") %>
+<% if scope.lookupvar("puppet::server_external_nodes") -%>
+    external_nodes = <%= scope.lookupvar("puppet::server_external_nodes") %>
     node_terminus  = exec
 <% end -%>
-    ca             = <%= scope.lookupvar("puppet::server::ca") %>
-    ssldir         = <%= scope.lookupvar("puppet::server::ssl_dir") %>
-<% if scope.lookupvar("puppet::server::storeconfigs_backend") -%>
+    ca             = <%= scope.lookupvar("puppet::server_ca") %>
+    ssldir         = <%= scope.lookupvar("puppet::server_ssl_dir") %>
+<% if scope.lookupvar("puppet::server_storeconfigs_backend") -%>
     storeconfigs   = true
-    storeconfigs_backend = <%= scope.lookupvar("puppet::server::storeconfigs_backend") %>
+    storeconfigs_backend = <%= scope.lookupvar("puppet::server_storeconfigs_backend") %>
 <% end -%>
 
-<% if scope.lookupvar("puppet::server::git_repo") -%>
-    manifest       = <%= scope.lookupvar("puppet::server::envs_dir") %>/$environment/manifests/site.pp
-    modulepath     = <%= scope.lookupvar("puppet::server::envs_dir") %>/$environment/modules
+<% if scope.lookupvar("puppet::server_git_repo") -%>
+    manifest       = <%= scope.lookupvar("puppet::server_envs_dir") %>/$environment/manifests/site.pp
+    modulepath     = <%= scope.lookupvar("puppet::server_envs_dir") %>/$environment/modules
     config_version = <%= scope.lookupvar("puppet::server::config_version_cmd") %>
 <% else -%>
-<% scope.lookupvar("puppet::server::environments").each do |env| -%>
+<% scope.lookupvar("puppet::server_environments").each do |env| -%>
 [<%= env %>]
-    modulepath     = <%= scope.lookupvar("puppet::server::envs_dir") %>/<%= env %>/modules:<%= [scope.lookupvar("puppet::server::common_modules_path")].flatten.join(":") %>
+    modulepath     = <%= scope.lookupvar("puppet::server_envs_dir") %>/<%= env %>/modules:<%= [scope.lookupvar("puppet::server_common_modules_path")].flatten.join(":") %>
     config_version = <%= scope.lookupvar("puppet::server::config_version_cmd") %>
 <% end -%>
 <% end -%>

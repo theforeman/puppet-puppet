@@ -11,8 +11,7 @@ describe 'puppet::server::config' do
 
   describe 'with no custom parameters' do
     let :pre_condition do
-      "include puppet
-      class {'puppet::server':}"
+      "class {'puppet': server => true}"
     end
 
     it 'should set up SSL permissions' do
@@ -29,13 +28,13 @@ describe 'puppet::server::config' do
       should contain_exec('puppet_server_config-create_ssl_dir').with({
         :creates => '/var/lib/puppet/ssl',
         :command => '/bin/mkdir -p /var/lib/puppet/ssl',
-        :before  => 'Exec[puppet_server_config-generate_ca_cert]',
+        :before  => /Exec\[puppet_server_config-generate_ca_cert\]/
       })
 
       should contain_exec('puppet_server_config-generate_ca_cert').with({
         :creates => "/var/lib/puppet/ssl/certs/#{facts[:fqdn]}.pem",
         :command => "/usr/sbin/puppetca --generate #{facts[:fqdn]}",
-        :require => 'File[/etc/puppet/puppet.conf]',
+        :require => /File\[\/etc\/puppet\/puppet\.conf\]/,
         :notify  => 'Service[httpd]',
       })
     end
@@ -81,11 +80,11 @@ describe 'puppet::server::config' do
 
   describe 'without foreman' do
     let :pre_condition do
-      "include puppet
-      class {'puppet::server':
-        reports        => 'store',
-        external_nodes => false,
-      }"
+      "class {'puppet':
+          server                => true,
+          server_reports        => 'store',
+          server_external_nodes => false,
+       }"
     end
 
     it 'should store reports' do

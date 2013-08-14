@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'puppet::server' do
 
   let :pre_condition do
-    "include puppet"
+    "class {'puppet': server => true}"
   end
 
   let :facts do

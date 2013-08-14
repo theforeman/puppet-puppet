@@ -12,8 +12,7 @@ describe 'puppet::server::passenger' do
   describe 'with no custom parameters' do
     let :pre_condition do
       "
-      include puppet
-      class {'puppet::server':}
+      class {'puppet': server => true}
       "
     end
 
@@ -33,8 +32,8 @@ describe 'puppet::server::passenger' do
           :path    => '/etc/httpd/conf.d/puppet.conf',
           :mode    => '0644',
           :notify  => 'Exec[reload-apache]',
-          :before  => 'Service[httpd]',
-          :require => 'Class[Puppet::Server::Rack]',
+          :before  => /Service\[httpd\]/,
+          :require => /Class\[Puppet::Server::Rack\]/,
         })
     end
   end
@@ -42,9 +41,9 @@ describe 'puppet::server::passenger' do
   describe 'with no custom parameters' do
     let :pre_condition do
       "
-      include puppet
-      class {'puppet::server':
-        passenger_max_pool => 6,
+      class {'puppet':
+        server                    => true,
+        server_passenger_max_pool => 6,
       }
       "
     end

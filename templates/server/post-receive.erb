@@ -6,7 +6,7 @@ ERB.new(File.read(File.expand_path("../_header.erb",File.dirname(file))), nil, n
 require 'fileutils'
 
 # Set this to where you want to keep your environments
-ENVIRONMENT_BASEDIR = "<%= scope.lookupvar("puppet::server::envs_dir") %>"
+ENVIRONMENT_BASEDIR = "<%= scope.lookupvar("puppet::server_envs_dir") %>"
 
 # post-receive hooks set GIT_DIR to the current repository. If you want to
 # clone from a non-local repository, set this to the URL of the repository,
