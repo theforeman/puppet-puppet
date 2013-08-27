@@ -12,6 +12,7 @@ class puppet::config {
     }
   }
 
+  $ca_server = $::puppet::ca_server
   file { $puppet::dir:
     ensure => directory,
   } ->

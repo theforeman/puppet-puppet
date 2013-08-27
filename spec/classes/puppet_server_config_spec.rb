@@ -83,7 +83,7 @@ describe 'puppet::server::config' do
       "class {'puppet':
           server                => true,
           server_reports        => 'store',
-          server_external_nodes => false,
+          server_external_nodes => '',
        }"
     end
 
@@ -91,8 +91,24 @@ describe 'puppet::server::config' do
       should contain_file('/etc/puppet/puppet.conf').with_content(/^\s+reports\s+= store$/)
     end
 
+    it 'should contain an empty external_nodes' do
+      should contain_file('/etc/puppet/puppet.conf').with_content(/^\s+external_nodes\s+=\s+$/)
+    end
+  end
+
+  describe 'without external_nodes' do
+    let :pre_condition do
+      "class {'puppet':
+          server                => true,
+          server_external_nodes => '',
+       }"
+    end
+
     it 'should not contain external_nodes' do
-      should_not contain_file('/etc/puppet/puppet.conf').with_content(/external_nodes/)
+      should contain_file('/etc/puppet/puppet.conf').
+        with_content(/^\s+external_nodes\s+= $/).
+        with_content(/^\s+node_terminus\s+= plain$/).
+        with({})
     end
   end
 end

@@ -6,15 +6,13 @@
 [master]
     autosign       = $confdir/autosign.conf { mode = 664 }
     reports        = <%= scope.lookupvar("puppet::server_reports") %>
-<% if scope.lookupvar("puppet::server_external_nodes") -%>
-    external_nodes = <%= scope.lookupvar("puppet::server_external_nodes") %>
-    node_terminus  = exec
-<% end -%>
+    external_nodes = <%= @server_external_nodes %>
+    node_terminus  = <%= @server_node_terminus %>
     ca             = <%= scope.lookupvar("puppet::server_ca") %>
     ssldir         = <%= scope.lookupvar("puppet::server_ssl_dir") %>
-<% if scope.lookupvar("puppet::server_storeconfigs_backend") -%>
+<% if @server_storeconfigs_backend -%>
     storeconfigs   = true
-    storeconfigs_backend = <%= scope.lookupvar("puppet::server_storeconfigs_backend") %>
+    storeconfigs_backend = <%= @server_storeconfigs_backend %>
 <% end -%>
 
 <% if scope.lookupvar("puppet::server_git_repo") -%>

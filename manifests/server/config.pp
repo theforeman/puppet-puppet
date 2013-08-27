@@ -31,6 +31,16 @@ class puppet::server::config inherits puppet::config {
     puppet_basedir       => $puppet::server_puppet_basedir
   }
 
+  $ca_server                   = $::puppet::ca_server
+  $server_storeconfigs_backend = $::puppet::server_storeconfigs_backend
+  $server_external_nodes       = $::puppet::server_external_nodes
+
+  if $server_external_nodes {
+    $server_node_terminus = 'exec'
+  } else {
+    $server_node_terminus = 'plain'
+  }
+
   # appends our server configuration to puppet.conf
   File ["${puppet::server_dir}/puppet.conf"] {
     content => template($puppet::agent_template, $puppet::server_template),

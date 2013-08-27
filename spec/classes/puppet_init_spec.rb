@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe 'puppet' do
 
-  let(:pre_condition) { "class foreman::params { }" }
   let(:facts) do
     {
       :fqdn => 'puppetmaster.example.com',
