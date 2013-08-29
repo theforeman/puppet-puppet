@@ -111,4 +111,45 @@ describe 'puppet::server::config' do
         with({})
     end
   end
+
+  describe 'with git repo' do
+    let :pre_condition do
+      "class {'puppet':
+          server          => true,
+          server_git_repo => true,
+       }"
+    end
+
+    it 'should set up the environments directory' do
+      should contain_file('/etc/puppet/environments').with({
+        :ensure => 'directory',
+        :owner  => 'puppet',
+      })
+    end
+
+    it 'should create the git repo' do
+      should contain_file('/var/lib/puppet').with({
+        :ensure => 'directory',
+        :owner  => 'puppet',
+      })
+
+      should contain_git__repo('puppet_repo').with({
+        :bare    => true,
+        :target  => '/var/lib/puppet/puppet.git',
+        :user    => 'puppet',
+        :require => %r{File\[/etc/puppet/environments\]},
+      })
+
+      should contain_file('/var/lib/puppet/puppet.git/hooks/post-receive').with({
+        :owner   => 'puppet',
+        :mode    => '0755',
+        :require => %r{Git::Repo\[puppet_repo\]},
+      })
+    end
+
+    it 'should configure puppet.conf' do
+      should contain_file('/etc/puppet/puppet.conf').
+        with_content(%r{^\s+manifest\s+= /etc/puppet/environments/\$environment/manifests/site.pp\n\s+modulepath\s+= /etc/puppet/environments/\$environment/modules\n\s+config_version\s+= git --git-dir /etc/puppet/environments/\$environment/.git describe --all --long$})
+    end
+  end
 end
