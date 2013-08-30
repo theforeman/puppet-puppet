@@ -37,6 +37,11 @@
     # extension indicating the cache format is added automatically.
     # The default value is '$confdir/localconfig'.
     localconfig = $vardir/localconfig
+
+    # Disable the default schedules as they cause continual skipped
+    # resources to be displayed in Foreman - only for Puppet >= 3.4
+    default_schedules = false
+
     report      = true
     pluginsync  = <%= scope.lookupvar('::puppet::pluginsync') %>
     masterport  = <%= scope.lookupvar("::puppet::port") rescue 8140 %>
