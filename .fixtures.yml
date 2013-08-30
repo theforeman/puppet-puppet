@@ -1,6 +1,6 @@
 fixtures:
   repositories:
-    apache:           'git://github.com/theforeman/puppet-apache'
+    apache:           'git://github.com/puppetlabs/puppetlabs-apache'
     passenger:        'git://github.com/theforeman/puppet-passenger'
     foreman:          'git://github.com/theforeman/puppet-foreman'
     git:              'git://github.com/theforeman/puppet-git'

@@ -3,11 +3,10 @@
 # Set up the puppet server using passenger and apache.
 #
 class puppet::server::passenger {
-
   include ::puppet::server::rack
-  include ::apache::ssl
-  include ::apache::params
+  include ::apache
   include ::passenger
+  include ::apache::mod::headers
 
   # mirror 'external' params here for easy use in templates.
 
@@ -19,6 +18,9 @@ class puppet::server::passenger {
   if $::puppet::server_ca {
     $ssl_chain    = $::puppet::server::ssl_chain
     $ssl_ca_crl   = $::puppet::server::ssl_ca_crl
+  } else {
+    $ssl_chain    = false
+    $ssl_ca_crl   = false
   }
 
   $port               = $::puppet::server_port
@@ -38,13 +40,26 @@ class puppet::server::passenger {
     }
   }
 
-  file {'puppet_vhost':
-    path    => "${apache::params::configdir}/puppet.conf",
-    content => template('puppet/server/puppet-vhost.conf.erb'),
-    mode    => '0644',
-    notify  => Exec['reload-apache'],
-    before  => Service[$::puppet::server_httpd_service],
-    require => Class['::puppet::server::rack'],
+  $directories = [
+    {
+      'path'              => "${app_root}/public/",
+      'passenger_enabled' => 'On',
+    },
+  ]
+
+  apache::vhost {'puppet':
+    docroot         => "${app_root}/public/",
+    directories     => $directories,
+    port            => $port,
+    ssl             => true,
+    ssl_cert        => $ssl_cert,
+    ssl_key         => $ssl_cert_key,
+    ssl_ca          => $ssl_ca_cert,
+    ssl_crl         => $ssl_ca_crl,
+    ssl_chain       => $ssl_chain,
+    options         => ['None'],
+    custom_fragment => template('puppet/server/puppet-vhost-fragment.erb'),
+    require         => Class['::puppet::server::rack'],
   }
 
 }

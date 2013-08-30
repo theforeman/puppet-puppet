@@ -77,11 +77,6 @@ class puppet::server::config inherits puppet::config {
     # need to chown the $vardir before puppet does it, or else
     # we can't write puppet.git/ on the first run
 
-    file { $puppet::server_vardir:
-      ensure => directory,
-      owner  => $puppet::server_user,
-    }
-
     include git
 
     git::repo { 'puppet_repo':
