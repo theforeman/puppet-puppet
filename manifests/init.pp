@@ -211,12 +211,12 @@ class puppet (
   $server_app_root             = $puppet::params::server_app_root,
   $server_ssl_dir              = $puppet::params::server_ssl_dir,
   $server_package              = $puppet::params::server_package,
+  $server_enc_api              = $puppet::params::server_enc_api,
+  $server_report_api           = $puppet::params::server_report_api,
   $server_foreman_url          = $foreman::params::foreman_url,
   $server_facts                = $foreman::params::facts,
   $server_puppet_home          = $foreman::params::puppet_home,
-  $server_puppet_basedir       = $foreman::params::puppet_basedir,
-  $server_enc_api              = 'v2',
-  $server_report_api           = 'v2'
+  $server_puppet_basedir       = $foreman::params::puppet_basedir
 ) inherits puppet::params {
 
   validate_bool($listen)

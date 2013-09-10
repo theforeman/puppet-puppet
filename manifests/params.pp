@@ -33,6 +33,8 @@ class puppet::params {
   $server_passenger_max_pool = 12
   $server_httpd_service      = 'httpd'
   $server_external_nodes     = '/etc/puppet/node.rb'
+  $server_enc_api            = 'v2'
+  $server_report_api         = 'v2'
 
   # Need a new master template for the server?
   $server_template = 'puppet/server/puppet.conf.erb'
