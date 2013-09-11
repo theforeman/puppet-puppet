@@ -68,7 +68,7 @@ wrapper classes or even your ENC (if it supports param classes). For example:
     class { '::puppet':
       server                => true,
       server_reports        => 'store',
-      server_external_nodes => false,
+      server_external_nodes => '',
     }
 
 Look in _init.pp_ for what can be configured this way, see Contributing if anything
