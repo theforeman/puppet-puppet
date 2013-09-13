@@ -135,6 +135,13 @@
 #
 # $server_foreman_url::     Foreman URL
 #
+# $server_foreman_ssl_ca::  SSL CA of the Foreman server
+#
+# $server_foreman_ssl_cert::Client certificate for authenticating against Foreman server
+#
+# $server_foreman_ssl_key:: Key for authenticating against Foreman server
+#
+#
 # $server_puppet_basedir::  Where is the puppet code base located
 #
 # $server_puppet_home::     Puppet var directory
@@ -214,6 +221,9 @@ class puppet (
   $server_enc_api              = $puppet::params::server_enc_api,
   $server_report_api           = $puppet::params::server_report_api,
   $server_foreman_url          = $foreman::params::foreman_url,
+  $server_foreman_ssl_ca       = $foreman::params::client_ssl_ca,
+  $server_foreman_ssl_cert     = $foreman::params::client_ssl_cert,
+  $server_foreman_ssl_key      = $foreman::params::client_ssl_key,
   $server_facts                = $foreman::params::facts,
   $server_puppet_home          = $foreman::params::puppet_home,
   $server_puppet_basedir       = $foreman::params::puppet_basedir
