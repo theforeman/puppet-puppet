@@ -4,100 +4,118 @@
 #
 # === Parameters:
 #
-# $version::          Specify a specific version of a package to install.
-#                     The version should be the exact match for your distro.
-#                     You can also use certain values like 'latest'.
+# $version::                       Specify a specific version of a package to
+#                                  install. The version should be the exact
+#                                  match for your distro.
+#                                  You can also use certain values like 'latest'.
 #
-# $user::             Override the name of the puppet user.
+# $user::                          Override the name of the puppet user.
 #
-# $group::            Override the name of the puppet group.
+# $group::                         Override the name of the puppet group.
 #
-# $dir::              Override the puppet directory.
+# $dir::                           Override the puppet directory.
 #
-# $port::             Override the port of the master we connect to.
-#                     type:integer
+# $port::                          Override the port of the master we connect to.
+#                                  type:integer
 #
-# $listen::           Should the puppet agent listen for connections.
-#                     type:boolean
-# $pluginsync::       Enable pluginsync.
-#                     type:boolean
+# $listen::                        Should the puppet agent listen for connections.
+#                                  type:boolean
+# $pluginsync::                    Enable pluginsync.
+#                                  type:boolean
 #
-# $splay::            Switch to enable a random amount of time to sleep before
-#                     each run.
-#                     type:boolean
+# $splay::                         Switch to enable a random amount of time
+#                                  to sleep before each run.
+#                                  type:boolean
 #
-# $runinterval::      Set up the interval (in seconds) to run the puppet agent.
-#                     type:integer
+# $runinterval::                   Set up the interval (in seconds) to run
+#                                  the puppet agent.
+#                                  type:integer
 #
-# $runmode::          Select the mode to setup the puppet agent. Can be either
-#                     'cron' or 'service'.
+# $runmode::                       Select the mode to setup the puppet agent.
+#                                  Can be either 'cron' or 'service'.
 #
-# $agent_noop::       Run the agent in noop mode.
-#                     type:boolean
+# $agent_noop::                    Run the agent in noop mode.
+#                                  type:boolean
 #
-# $show_diff::        Show and report changed files with diff output
+# $show_diff::                     Show and report changed files with diff output
 #
-# $ca_server::        Use a different ca server. Should be either a string
-#                     with the location of the ca_server or 'false'.
+# $ca_server::                     Use a different ca server. Should be either
+#                                  a string with the location of the ca_server
+#                                  or 'false'.
 #
-# $agent_template::   Use a custom template for the agent puppet configuration.
+# $agent_template::                Use a custom template for the agent puppet
+#                                  configuration.
 #
-# $auth_template::    Use a custom template for the auth configuration.
+# $auth_template::                 Use a custom template for the auth
+#                                  configuration.
 #
-# $nsauth_template::  Use a custom template for the nsauth configuration.
+# $nsauth_template::               Use a custom template for the nsauth configuration.
 #
-# $client_package::   Install a custom package to provide the puppet client
+# $client_package::                Install a custom package to provide
+#                                  the puppet client
 #
 # == puppet::server parameters
 #
-# $server::           Should a puppet master be installed as well as the client
-#                     type:boolean
+# $server::                        Should a puppet master be installed as well as the client
+#                                  type:boolean
 #
-# $server_user::      Name of the puppetmaster user.
+# $server_user::                   Name of the puppetmaster user.
 #
-# $server_group::     Name of the puppetmaster group.
+# $server_group::                  Name of the puppetmaster group.
 #
-# $server_dir::       Puppet configuration directory
+# $server_dir::                    Puppet configuration directory
 #
-# $server_port::      Puppet master port
-#                     type:integer
+# $server_port::                   Puppet master port
+#                                  type:integer
 #
-# $server_vardir::    Puppet data directory.
+# $server_vardir::                 Puppet data directory.
 #
-# $server_ca::        Provide puppet CA
-#                     type:boolean
+# $server_ca::                     Provide puppet CA
+#                                  type:boolean
 #
-# $server_reports     List of report types to include on the puppetmaster
+# $server_reports                  List of report types to include on the puppetmaster
 #
-# $server_passenger:: If set to true, we will configure apache with
-#                     passenger. If set to false, we will enable the
-#                     default puppetmaster service unless
-#                     service_fallback is set to false. See 'Advanced
-#                     server parameters' for more information.
-#                     type:boolean
+# $server_passenger::              If set to true, we will configure apache with
+#                                  passenger. If set to false, we will enable the
+#                                  default puppetmaster service unless
+#                                  service_fallback is set to false. See 'Advanced
+#                                  server parameters' for more information.
+#                                  type:boolean
 #
-# $server_external_nodes::  External nodes classifier executable
+# $server_external_nodes::         External nodes classifier executable
 #
-# $server_template::        Which template should be used for master configuration
+# $server_template::               Which template should be used for master
+#                                  configuration
 #
-# $server_git_repo::        Use git repository as a source of modules
-#                           type:boolean
+# $server_git_repo::               Use git repository as a source of modules
+#                                  type:boolean
 #
-# $server_environments::    Environments to setup (creates directories)
-#                           type:array
+# $server_dynamic_environments::   Use $environment in the modulepath
+#                                  type:boolean
 #
-# $server_envs_dir::        Directory that holds puppet environments
+# $server_environments::           Environments to setup (creates directories).
+#                                  Applies only when $server_dynamic_environments
+#                                  is false
+#                                  type:array
 #
-# $server_manifest_path::   Path to puppet site.pp manifest
+# $server_environments_owner::     The owner of the environments directory
 #
-# $server_common_modules_path:: Common modules paths
-#                               type:array
+# $server_envs_dir::               Directory that holds puppet environments
 #
-# $server_git_repo_path::       Git repository path
+# $server_manifest_path::          Path to puppet site.pp manifest (only when
+#                                  $server_git_repo_path and $server_dynamic_environments
+#                                  are false)
 #
-# $server_post_hook_content::   Which template to use for git post hook
+# $server_common_modules_path::    Common modules paths (only when
+#                                  $server_git_repo_path and $server_dynamic_environments
+#                                  are false)
+#                                  type:array
 #
-# $server_post_hook_name::      Name of a git hook
+# $server_git_repo_path::          Git repository path
+#
+# $server_post_hook_content::      Which template to use for git post hook
+#
+# $server_post_hook_name::         Name of a git hook
 #
 # $server_storeconfigs_backend::   Do you use storeconfigs? (note: not required)
 #                                  false if you don't, "active_record" for 2.X
@@ -107,52 +125,56 @@
 #
 # $server_ssl_dir::                SSL directory
 #
-# $server_package::         Custom package name for puppet master
+# $server_package::                Custom package name for puppet master
 #
 # === Advanced server parameters:
 #
-# $server_httpd_service::   Apache/httpd service name to notify on configuration
-#                           changes. Defaults to 'httpd' based on the default
-#                           apache module included with foreman-installer.
+# $server_httpd_service::          Apache/httpd service name to notify
+#                                  on configuration changes. Defaults
+#                                  to 'httpd' based on the default
+#                                  apache module included with foreman-installer.
 #
-# $server_service_fallback:: If passenger is not used, do we want to fallback
-#                            to using the puppetmaster service? Set to false
-#                            if you disabled passenger and you do NOT want to
-#                            use the puppetmaster service. Defaults to true.
-#                            type:boolean
+# $server_service_fallback::       If passenger is not used, do we want to fallback
+#                                  to using the puppetmaster service? Set to false
+#                                  if you disabled passenger and you do NOT want to
+#                                  use the puppetmaster service. Defaults to true.
+#                                  type:boolean
 #
-# $server_passenger_max_pool:: The PassengerMaxPoolSize parameter. If your host is
-#                              low on memory, it may be a good thing to lower
-#                              this. Defaults to 12.
-#                              type:integer
+# $server_passenger_max_pool::     The PassengerMaxPoolSize parameter. If your
+#                                  host is low on memory, it may be a good thing
+#                                  to lower this. Defaults to 12.
+#                                  type:integer
 #
-# $server_config_version::  How to determine the configuration version. When
-#                           using git_repo, by default a git describe approach
-#                           will be installed.
+# $server_config_version::         How to determine the configuration version. When
+#                                  using git_repo, by default a git describe
+#                                  approach will be installed.
 #
-# $server_facts::           Should foreman receive facts from puppet
-#                           type:boolean
+# $server_facts::                  Should foreman receive facts from puppet
+#                                  type:boolean
 #
-# $server_foreman_url::     Foreman URL
+# $server_foreman_url::            Foreman URL
 #
-# $server_foreman_ssl_ca::  SSL CA of the Foreman server
+# $server_foreman_ssl_ca::         SSL CA of the Foreman server
 #
-# $server_foreman_ssl_cert:: Client certificate for authenticating against Foreman server
+# $server_foreman_ssl_cert::       Client certificate for authenticating against Foreman server
 #
-# $server_foreman_ssl_key:: Key for authenticating against Foreman server
+# $server_foreman_ssl_key::        Key for authenticating against Foreman server
 #
 #
-# $server_puppet_basedir::  Where is the puppet code base located
+# $server_puppet_basedir::         Where is the puppet code base located
 #
-# $server_puppet_home::     Puppet var directory
+# $server_puppet_home::            Puppet var directory
 #
-# $server_reports::         List of report types to include on the puppetmaster
+# $server_reports::                List of report types to include on
+#                                  the puppetmaster
 #
-# $server_enc_api::         What version of enc script to deploy. Valid values are
-#                           'v2' for latest, and 'v1' for Foreman =< 1.2
+# $server_enc_api::                What version of enc script to deploy. Valid
+#                                  values are 'v2' for latest, and 'v1'
+#                                  for Foreman =< 1.2
 #
-# $server_report_api::      What version of report processor to deploy. Valid values
-#                           are 'v2' for latest, and 'v1' for Foreman =< 1.2
+# $server_report_api::             What version of report processor to deploy.
+#                                  Valid values are 'v2' for latest, and 'v1'
+#                                  for Foreman =< 1.2
 #
 # === Usage:
 #
@@ -207,7 +229,9 @@ class puppet (
   $server_template             = $puppet::params::server_template,
   $server_config_version       = $puppet::params::server_config_version,
   $server_git_repo             = $puppet::params::server_git_repo,
+  $server_dynamic_environments = $puppet::params::server_dynamic_environments,
   $server_environments         = $puppet::params::server_environments,
+  $server_environments_owner   = $puppet::params::server_environments_owner,
   $server_envs_dir             = $puppet::params::server_envs_dir,
   $server_manifest_path        = $puppet::params::server_manifest_path,
   $server_common_modules_path  = $puppet::params::server_common_modules_path,
