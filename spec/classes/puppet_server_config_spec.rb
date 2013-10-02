@@ -152,4 +152,26 @@ describe 'puppet::server::config' do
         with_content(%r{^\s+manifest\s+= /etc/puppet/environments/\$environment/manifests/site.pp\n\s+modulepath\s+= /etc/puppet/environments/\$environment/modules\n\s+config_version\s+= git --git-dir /etc/puppet/environments/\$environment/.git describe --all --long$})
     end
   end
+
+  describe 'with dynamic environments' do
+    let :pre_condition do
+      "class {'puppet':
+          server                      => true,
+          server_dynamic_environments => true,
+          server_environments_owner   => 'apache',
+       }"
+    end
+
+    it 'should set up the environments directory' do
+      should contain_file('/etc/puppet/environments').with({
+        :ensure => 'directory',
+        :owner  => 'apache',
+      })
+    end
+
+    it 'should configure puppet.conf' do
+      should contain_file('/etc/puppet/puppet.conf').
+        with_content(%r{^\s+manifest\s+= /etc/puppet/environments/\$environment/manifests/site.pp\n\s+modulepath\s+= /etc/puppet/environments/\$environment/modules\n\s+config_version\s+= $})
+    end
+  end
 end

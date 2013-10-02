@@ -41,20 +41,25 @@ class puppet::params {
 
   # The script that is run to determine the reported manifest version. Undef
   # means we determine it in server.pp
-  $server_config_version      = undef
+  $server_config_version       = undef
 
   # Set 'false' for static environments, or 'true' for git-based workflow
-  $server_git_repo            = false
+  $server_git_repo             = false
 
-  # Static environments config, ignore if the git_repo is 'true'
+  # Static environments config, ignore if the git_repo or dynamic_environments is 'true'
   # What environments do we have
-  $server_environments        = ['development', 'production']
+  $server_environments         = ['development', 'production']
+  # Dynamic environments config
+  $server_dynamic_environments = false
+  # Owner of the environments dir: for cases external service needs write
+  # access to manage it.
+  $server_environments_owner   = $user
   # Where we store our puppet environments
-  $server_envs_dir            = "${dir}/environments"
+  $server_envs_dir             = "${dir}/environments"
   # Where remains our manifests dir
-  $server_manifest_path       = "${dir}/manifests"
+  $server_manifest_path        = "${dir}/manifests"
   # Modules in this directory would be shared across all environments
-  $server_common_modules_path = ["${server_envs_dir}/common", '/usr/share/puppet/modules']
+  $server_common_modules_path  = ["${server_envs_dir}/common", '/usr/share/puppet/modules']
 
   # Dynamic environments config, ignore if the git_repo is 'false'
   # Path to the repository

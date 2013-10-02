@@ -15,7 +15,8 @@
     storeconfigs_backend = <%= @server_storeconfigs_backend %>
 <% end -%>
 
-<% if scope.lookupvar("puppet::server_git_repo") -%>
+<% if scope.lookupvar("puppet::server_git_repo") ||
+        scope.lookupvar("puppet::server_dynamic_environments") -%>
     manifest       = <%= scope.lookupvar("puppet::server_envs_dir") %>/$environment/manifests/site.pp
     modulepath     = <%= scope.lookupvar("puppet::server_envs_dir") %>/$environment/modules
     config_version = <%= scope.lookupvar("puppet::server::config_version_cmd") %>
