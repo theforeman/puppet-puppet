@@ -73,7 +73,7 @@
 # $server_ca::                     Provide puppet CA
 #                                  type:boolean
 #
-# $server_reports                  List of report types to include on the puppetmaster
+# $server_reports::                List of report types to include on the puppetmaster
 #
 # $server_passenger::              If set to true, we will configure apache with
 #                                  passenger. If set to false, we will enable the
@@ -164,9 +164,6 @@
 # $server_puppet_basedir::         Where is the puppet code base located
 #
 # $server_puppet_home::            Puppet var directory
-#
-# $server_reports::                List of report types to include on
-#                                  the puppetmaster
 #
 # $server_enc_api::                What version of enc script to deploy. Valid
 #                                  values are 'v2' for latest, and 'v1'
