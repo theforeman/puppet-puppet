@@ -6,6 +6,7 @@ describe 'puppet' do
     {
       :fqdn => 'puppetmaster.example.com',
       :clientcert => 'puppetmaster.example.com',
+      :osfamily => 'RedHat'
     }
   end
 

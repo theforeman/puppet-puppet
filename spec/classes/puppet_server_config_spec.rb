@@ -3,9 +3,10 @@ require 'spec_helper'
 describe 'puppet::server::config' do
   let :facts do
     {
-      :osfamily   => 'RedHat',
-      :fqdn       => 'puppetmaster.example.com',
-      :clientcert => 'puppetmaster.example.com',
+      :osfamily    => 'RedHat',
+      :rubyversion => '1.9.3',
+      :fqdn        => 'puppetmaster.example.com',
+      :clientcert  => 'puppetmaster.example.com',
     }
   end
 
@@ -44,7 +45,7 @@ describe 'puppet::server::config' do
         :foreman_url    => "https://#{facts[:fqdn]}",
         :facts          => true,
         :puppet_home    => '/var/lib/puppet',
-        :puppet_basedir => '/usr/lib/ruby/site_ruby//puppet',
+        :puppet_basedir => '/usr/lib/ruby/site_ruby/1.9/puppet',
       })
     end
 
