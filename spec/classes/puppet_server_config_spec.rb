@@ -174,4 +174,23 @@ describe 'puppet::server::config' do
         with_content(%r{^\s+manifest\s+= /etc/puppet/environments/\$environment/manifests/site.pp\n\s+modulepath\s+= /etc/puppet/environments/\$environment/modules\n\s+config_version\s+= $})
     end
   end
+
+  describe 'with SSL path overrides' do
+    let :pre_condition do
+      "class {'puppet':
+          server                  => true,
+          server_foreman_ssl_ca   => '/etc/example/ca.pem',
+          server_foreman_ssl_cert => '/etc/example/cert.pem',
+          server_foreman_ssl_key  => '/etc/example/key.pem',
+       }"
+    end
+
+    it 'should pass SSL parameters to the ENC' do
+      should contain_class('foreman::puppetmaster').with({
+        :ssl_ca   => '/etc/example/ca.pem',
+        :ssl_cert => '/etc/example/cert.pem',
+        :ssl_key  => '/etc/example/key.pem',
+      })
+    end
+  end
 end
