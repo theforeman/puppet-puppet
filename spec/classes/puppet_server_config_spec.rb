@@ -71,6 +71,7 @@ describe 'puppet::server::config' do
         with_content(/^\s+node_terminus\s+= exec$/).
         with_content(/^\s+ca\s+= true$/).
         with_content(/^\s+ssldir\s+= \/var\/lib\/puppet\/ssl$/).
+        with_content(/^\s+configtimeout\s+= 120$/).
         with_content(/^\[development\]\n\s+modulepath\s+= \/etc\/puppet\/environments\/development\/modules:\/etc\/puppet\/environments\/common:\/usr\/share\/puppet\/modules\n\s+config_version = $/).
         with_content(/^\[production\]\n\s+modulepath\s+= \/etc\/puppet\/environments\/production\/modules:\/etc\/puppet\/environments\/common:\/usr\/share\/puppet\/modules\n\s+config_version = $/).
         with({}) # So we can use a trailing dot on each with_content line

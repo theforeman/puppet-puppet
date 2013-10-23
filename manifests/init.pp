@@ -39,6 +39,11 @@
 #
 # $show_diff::                     Show and report changed files with diff output
 #
+# $configtimeout::                 How long the client should wait for the
+#                                  configuration to be retrieved before
+#                                  considering it a failure.
+#                                  type:integer
+#
 # $ca_server::                     Use a different ca server. Should be either
 #                                  a string with the location of the ca_server
 #                                  or 'false'.
@@ -205,6 +210,7 @@ class puppet (
   $runmode                     = $puppet::params::runmode,
   $agent_noop                  = $puppet::params::agent_noop,
   $show_diff                   = $puppet::params::show_diff,
+  $configtimeout               = $puppet::params::configtimeout,
   $ca_server                   = $puppet::params::ca_server,
   $agent_template              = $puppet::params::agent_template,
   $auth_template               = $puppet::params::auth_template,
