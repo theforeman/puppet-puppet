@@ -16,6 +16,7 @@ class puppet::params {
   $runmode             = 'service'
   $agent_noop          = false
   $show_diff           = false
+  $configtimeout       = 120
   $ca_server           = undef
 
   # Need your own config templates? Specify here:
