@@ -135,6 +135,8 @@
 #
 # $server_package::                Custom package name for puppet master
 #
+# $server_certname::               The name to use when handling certificates.
+#
 # === Advanced server parameters:
 #
 # $server_httpd_service::          Apache/httpd service name to notify
@@ -249,6 +251,7 @@ class puppet (
   $server_app_root             = $puppet::params::server_app_root,
   $server_ssl_dir              = $puppet::params::server_ssl_dir,
   $server_package              = $puppet::params::server_package,
+  $server_certname             = $puppet::params::server_certname,
   $server_enc_api              = $puppet::params::server_enc_api,
   $server_report_api           = $puppet::params::server_report_api,
   $server_foreman_url          = $foreman::params::foreman_url,
