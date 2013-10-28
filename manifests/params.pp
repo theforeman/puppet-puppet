@@ -14,6 +14,7 @@ class puppet::params {
   $splay               = false
   $runinterval         = '1800'
   $runmode             = 'service'
+  $cron_cmd            = undef
   $agent_noop          = false
   $show_diff           = false
   $configtimeout       = 120

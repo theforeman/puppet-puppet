@@ -34,6 +34,9 @@
 # $runmode::                       Select the mode to setup the puppet agent.
 #                                  Can be either 'cron' or 'service'.
 #
+# $cron_cmd::                      Specify command to launch when runmode is
+#                                  set 'cron'.
+#
 # $agent_noop::                    Run the agent in noop mode.
 #                                  type:boolean
 #
@@ -208,6 +211,7 @@ class puppet (
   $splay                       = $puppet::params::splay,
   $runinterval                 = $puppet::params::runinterval,
   $runmode                     = $puppet::params::runmode,
+  $cron_cmd                    = $puppet::params::cron_cmd,
   $agent_noop                  = $puppet::params::agent_noop,
   $show_diff                   = $puppet::params::show_diff,
   $configtimeout               = $puppet::params::configtimeout,
