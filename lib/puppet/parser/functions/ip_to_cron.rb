@@ -1,23 +1,28 @@
 # provides a "random" value to cron based on the last bit of the machine IP address.
 # used to avoid starting a certain cron job at the same time on all servers.
-# if used with no parameters, it will return a single value between 0-59
-# first argument is the occournce within a timeframe, for example if you want it to run 2 times per hour
-# the second argument is the timeframe, by default its 60 minutes, but it could also be 24 hours etc
+# takes the runinterval in seconds as parameter and return an array of [hour, minute]
 #
 # example usage
-# ip_to_cron()     - returns one value between 0..59
-# ip_to_cron(2)    - returns an array of two values between 0..59
-# ip_to_cron(2,24) - returns an array of two values between 0..23
+# ip_to_cron(3600) - returns [ '*', one value between 0..59 ]
+# ip_to_cron(1800) - returns [ '*', an array of two values between 0..59 ]
+# ip_to_cron(7200) - returns [ an array of twelve values between 0..23, one value between 0..59 ]
 module Puppet::Parser::Functions
   newfunction(:ip_to_cron, :type => :rvalue) do |args|
-    occours = (args[0] || 1).to_i
-    scope   = (args[1] || 60).to_i
-    ip      = lookupvar('ipaddress').to_s.split('.')[3].to_i
-    base    = ip % scope
-    if occours == 1
-      base
+    runinterval = (args[0] || 30).to_i
+    ip          = lookupvar('ipaddress').to_s.split('.')[3].to_i
+    if runinterval <= 3600
+      occurances = 3600 / runinterval
+      scope = 60
+      base = ip % scope
+      hour = '*'
+      minute = (1..occurances).map { |i| (base - (scope / occurances * i)) % scope }.sort
     else
-      (1..occours).map { |i| (base - (scope / occours * i)) % scope }.sort
+      occurances = 86400 / runinterval
+      scope = 24
+      base = ip % scope
+      hour = (1..occurances).map { |i| (base - (scope / occurances * i)) % scope }.sort
+      minute = ip % 60
     end
+    [ hour, minute ]
   end
 end
