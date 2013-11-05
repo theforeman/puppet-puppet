@@ -10,10 +10,13 @@ class puppet::cron inherits puppet::service {
     default => $puppet::cron_cmd,
   }
 
+  $times = ip_to_cron($puppet::runinterval)
+
   cron { 'puppet':
     command => $command,
     user    => root,
-    minute  => ip_to_cron($puppet::cron_interval, $puppet::cron_range),
+    hour    => $times[0],
+    minute  => $times[1],
   }
 
 }

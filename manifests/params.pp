@@ -89,10 +89,6 @@ class puppet::params {
     default           => ['puppet'],
   }
 
-  # This only applies to puppet::cron
-  $cron_range          = 60 # the maximum value for our cron
-  $cron_interval       = 2  # the amount of values within the $cron_range
-
   # Only use 'puppet cert' on versions where puppetca no longer exists
   if versioncmp($::puppetversion, '3.0') < 0 {
     $puppetca_path = '/usr/sbin'
