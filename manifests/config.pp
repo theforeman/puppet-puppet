@@ -12,12 +12,17 @@ class puppet::config {
     }
   }
 
+  concat_build { 'puppet.conf': }
+  concat_fragment { 'puppet.conf+10-main':
+    content => template($puppet::agent_template),
+  }
+
   $ca_server = $::puppet::ca_server
   file { $puppet::dir:
     ensure => directory,
   } ->
   file { "${puppet::dir}/puppet.conf":
-    content => template($puppet::agent_template),
+    source => concat_output('puppet.conf'),
   } ~>
   file { "${puppet::dir}/auth.conf":
     content => template($puppet::auth_template),
