@@ -30,8 +30,8 @@
     # associated with the retrieved configuratiion.  Can be loaded in
     # the separate ``puppet`` executable using the ``--loadclasses``
     # option.
-    # The default value is '$confdir/classes.txt'.
-    classfile = $vardir/classes.txt
+    # The default value is '$statedir/classes.txt'.
+    classfile = <%= scope.lookupvar('::puppet::classfile') %>
 
     # Where puppetd caches the local configuration.  An
     # extension indicating the cache format is added automatically.

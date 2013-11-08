@@ -19,6 +19,7 @@ class puppet::params {
   $show_diff           = false
   $configtimeout       = 120
   $ca_server           = undef
+  $classfile           = '$vardir/classes.txt'
 
   # Need your own config templates? Specify here:
   $agent_template  = 'puppet/puppet.conf.erb'
