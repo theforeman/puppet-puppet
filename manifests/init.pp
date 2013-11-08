@@ -51,6 +51,10 @@
 #                                  a string with the location of the ca_server
 #                                  or 'false'.
 #
+# $classfile::                     The file in which puppet agent stores a list
+#                                  of the classes associated with the retrieved
+#                                  configuration.
+#
 # $agent_template::                Use a custom template for the agent puppet
 #                                  configuration.
 #
@@ -218,6 +222,7 @@ class puppet (
   $show_diff                   = $puppet::params::show_diff,
   $configtimeout               = $puppet::params::configtimeout,
   $ca_server                   = $puppet::params::ca_server,
+  $classfile                   = $puppet::params::classfile,
   $agent_template              = $puppet::params::agent_template,
   $auth_template               = $puppet::params::auth_template,
   $nsauth_template             = $puppet::params::nsauth_template,
