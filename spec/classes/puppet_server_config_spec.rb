@@ -78,7 +78,13 @@ describe 'puppet::server::config' do
         with_content(/^\s+node_terminus\s+= exec$/).
         with_content(/^\s+ca\s+= true$/).
         with_content(/^\s+ssldir\s+= \/var\/lib\/puppet\/ssl$/).
+        with({}) # So we can use a trailing dot on each with_content line
+
+      should contain_concat_fragment('puppet.conf+40-development').
         with_content(/^\[development\]\n\s+modulepath\s+= \/etc\/puppet\/environments\/development\/modules:\/etc\/puppet\/environments\/common:\/usr\/share\/puppet\/modules\n\s+config_version = $/).
+        with({}) # So we can use a trailing dot on each with_content line
+
+      should contain_concat_fragment('puppet.conf+40-production').
         with_content(/^\[production\]\n\s+modulepath\s+= \/etc\/puppet\/environments\/production\/modules:\/etc\/puppet\/environments\/common:\/usr\/share\/puppet\/modules\n\s+config_version = $/).
         with({}) # So we can use a trailing dot on each with_content line
 
