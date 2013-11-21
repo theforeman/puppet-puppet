@@ -21,10 +21,4 @@
     manifest       = <%= scope.lookupvar("puppet::server_envs_dir") %>/$environment/manifests/site.pp
     modulepath     = <%= scope.lookupvar("puppet::server_envs_dir") %>/$environment/modules
     config_version = <%= scope.lookupvar("puppet::server::config_version_cmd") %>
-<% else -%>
-<% scope.lookupvar("puppet::server_environments").each do |env| -%>
-[<%= env %>]
-    modulepath     = <%= scope.lookupvar("puppet::server_envs_dir") %>/<%= env %>/modules:<%= [scope.lookupvar("puppet::server_common_modules_path")].flatten.join(":") %>
-    config_version = <%= scope.lookupvar("puppet::server::config_version_cmd") %>
-<% end -%>
 <% end -%>
