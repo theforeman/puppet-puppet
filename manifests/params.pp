@@ -22,9 +22,13 @@ class puppet::params {
   $classfile           = '$vardir/classes.txt'
 
   # Need your own config templates? Specify here:
-  $agent_template  = 'puppet/puppet.conf.erb'
+  $main_template   = 'puppet/puppet.conf.erb'
+  $agent_template  = 'puppet/agent/puppet.conf.erb'
   $auth_template   = 'puppet/auth.conf.erb'
   $nsauth_template = 'puppet/namespaceauth.conf.erb'
+
+  # Will this host be a puppet agent ?
+  $agent                     = true
 
   # Will this host be a puppetmaster?
   $server                    = false

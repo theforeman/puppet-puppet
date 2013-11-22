@@ -68,6 +68,15 @@ describe 'puppet::server::config' do
       should contain_concat_build('puppet.conf')
 
       should contain_concat_fragment('puppet.conf+10-main').
+        with_content(/^\s+logdir\s+= \/var\/log\/puppet$/).
+        with_content(/^\s+rundir\s+= \/var\/run\/puppet$/).
+        with_content(/^\s+ssldir\s+= \$vardir\/ssl$/).
+        with_content(/^\s+privatekeydir\s+= \$ssldir\/private_keys { group = service }$/).
+        with_content(/^\s+hostprivkey\s+= \$privatekeydir\/\$certname.pem { mode = 640 }$/).
+        with_content(/^\s+autosign\s+= \$confdir\/autosign.conf { mode = 664 }$/).
+        with({}) # So we can use a trailing dot on each with_content line
+
+      should contain_concat_fragment('puppet.conf+20-agent').
         with_content(/^\s+configtimeout\s+= 120$/).
         with_content(/^\s+classfile\s+= \$vardir\/classes.txt/).
         with({}) # So we can use a trailing dot on each with_content line

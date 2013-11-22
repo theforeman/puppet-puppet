@@ -1,20 +1,8 @@
 # Set up the puppet config
 class puppet::config {
-  case $::puppet::runmode {
-    'service': {
-      $runmode_class = 'daemon'
-    }
-    'cron': {
-      $runmode_class = 'cron'
-    }
-    default: {
-      fail("Runmode of ${puppet::runmode} not supported by puppet::config!")
-    }
-  }
-
   concat_build { 'puppet.conf': }
   concat_fragment { 'puppet.conf+10-main':
-    content => template($puppet::agent_template),
+    content => template($puppet::main_template),
   }
 
   $ca_server = $::puppet::ca_server
@@ -27,9 +15,7 @@ class puppet::config {
   } ~>
   file { "${puppet::dir}/auth.conf":
     content => template($puppet::auth_template),
-  } ~>
-  class { "::puppet::${runmode_class}": } ~>
-  Class['::puppet::service']
+  }
 
   if $puppet::listen {
     file { "${puppet::dir}/namespaceauth.conf":

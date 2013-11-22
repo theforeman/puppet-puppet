@@ -1,0 +1,34 @@
+### Next part of the file is managed by a different template ###
+## Module:           '<%= scope.to_hash['module_name'] %>'
+<% module_paths =  Puppet::Node::Environment.current[:modulepath].split(':').map{|i| File.expand_path(i) }.join("|") -%>
+## Template source:  'MODULES<%= template_source.gsub(Regexp.new("^#{module_paths}"),"") %>'
+
+[agent]
+    # The file in which puppetd stores a list of the classes
+    # associated with the retrieved configuratiion.  Can be loaded in
+    # the separate ``puppet`` executable using the ``--loadclasses``
+    # option.
+    # The default value is '$statedir/classes.txt'.
+    classfile = <%= scope.lookupvar('::puppet::classfile') %>
+
+    # Where puppetd caches the local configuration.  An
+    # extension indicating the cache format is added automatically.
+    # The default value is '$confdir/localconfig'.
+    localconfig = $vardir/localconfig
+
+    # Disable the default schedules as they cause continual skipped
+    # resources to be displayed in Foreman - only for Puppet >= 3.4
+    default_schedules = false
+
+    report        = true
+    pluginsync    = <%= scope.lookupvar('::puppet::pluginsync') %>
+    masterport    = <%= scope.lookupvar("::puppet::port") rescue 8140 %>
+    environment   = <%= @environment %>
+    certname      = <%= @clientcert %>
+    server        = <%= if ( @puppetmaster and !@puppetmaster.empty? ) then @puppetmaster else @fqdn end %>
+    listen        = <%= scope.lookupvar('::puppet::listen') %>
+    splay         = <%= scope.lookupvar('::puppet::splay') %>
+    runinterval   = <%= scope.lookupvar('::puppet::runinterval') %>
+    noop          = <%= scope.lookupvar('::puppet::agent_noop') %>
+    show_diff     = <%= scope.lookupvar('::puppet::show_diff') %>
+    configtimeout = <%= scope.lookupvar('::puppet::configtimeout') %>
