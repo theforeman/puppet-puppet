@@ -11,7 +11,6 @@ describe 'puppet' do
   end
 
   describe 'with no custom parameters' do
-    it { should include_class('puppet::install') }
     it { should include_class('puppet::config') }
     it { should contain_file('/etc/puppet').with_ensure('directory') }
     it { should contain_file('/etc/puppet/puppet.conf') }

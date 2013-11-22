@@ -35,4 +35,5 @@ class puppet::server {
   class { 'puppet::server::service': }->
   Class['puppet::server']
 
+  Class['puppet::config'] ~> Class['puppet::server::service']
 }

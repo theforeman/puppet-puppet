@@ -37,9 +37,6 @@
 # $cron_cmd::                      Specify command to launch when runmode is
 #                                  set 'cron'.
 #
-# $agent_noop::                    Run the agent in noop mode.
-#                                  type:boolean
-#
 # $show_diff::                     Show and report changed files with diff output
 #
 # $configtimeout::                 How long the client should wait for the
@@ -55,13 +52,24 @@
 #                                  of the classes associated with the retrieved
 #                                  configuration.
 #
-# $agent_template::                Use a custom template for the agent puppet
-#                                  configuration.
-#
 # $auth_template::                 Use a custom template for the auth
 #                                  configuration.
 #
 # $nsauth_template::               Use a custom template for the nsauth configuration.
+#
+# $main_template::                 Use a custom template for the main puppet
+#                                  configuration.
+#
+# == puppet::agent parameters
+#
+# $agent::                         Should a puppet agent be installed
+#                                  type:boolean
+#
+# $agent_noop::                    Run the agent in noop mode.
+#                                  type:boolean
+#
+# $agent_template::                Use a custom template for the agent puppet
+#                                  configuration.
 #
 # $client_package::                Install a custom package to provide
 #                                  the puppet client
@@ -223,10 +231,12 @@ class puppet (
   $configtimeout               = $puppet::params::configtimeout,
   $ca_server                   = $puppet::params::ca_server,
   $classfile                   = $puppet::params::classfile,
+  $main_template               = $puppet::params::main_template,
   $agent_template              = $puppet::params::agent_template,
   $auth_template               = $puppet::params::auth_template,
   $nsauth_template             = $puppet::params::nsauth_template,
   $client_package              = $puppet::params::client_package,
+  $agent                       = $puppet::params::agent,
   $server                      = $puppet::params::server,
   $server_user                 = $puppet::params::user,
   $server_group                = $puppet::params::group,
@@ -272,6 +282,7 @@ class puppet (
   validate_bool($pluginsync)
   validate_bool($splay)
   validate_bool($agent_noop)
+  validate_bool($agent)
   validate_bool($server)
   validate_bool($server_ca)
   validate_bool($server_passenger)
@@ -281,13 +292,16 @@ class puppet (
 
   validate_string($server_external_nodes)
 
-  class { 'puppet::install': } ~>
   class { 'puppet::config': } ->
   Class['puppet']
 
+  if $agent == true {
+    include ::puppet::agent
+    Class['puppet::agent'] -> Class['puppet']
+  }
+
   if $server == true {
-    class { 'puppet::server':
-      require => Class['puppet::config'],
-    }
+    include ::puppet::server
+    Class['puppet::server'] -> Class['puppet']
   }
 }
