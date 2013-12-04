@@ -95,6 +95,7 @@ class puppet::server::config inherits puppet::config {
       require => File[$puppet::server_envs_dir],
     }
 
+    $git_branch_map = $puppet::server_git_branch_map
     # git post hook to auto generate an environment per branch
     file { "${puppet::server_git_repo_path}/hooks/${puppet::server_post_hook_name}":
       content => template($puppet::server_post_hook_content),

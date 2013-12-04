@@ -133,6 +133,10 @@
 #
 # $server_git_repo_path::          Git repository path
 #
+# $server_git_branch_map::         Git branch to puppet env mapping for the
+#                                  default post receive hook
+#                                  type:hash
+#
 # $server_post_hook_content::      Which template to use for git post hook
 #
 # $server_post_hook_name::         Name of a git hook
@@ -260,6 +264,7 @@ class puppet (
   $server_manifest_path        = $puppet::params::server_manifest_path,
   $server_common_modules_path  = $puppet::params::server_common_modules_path,
   $server_git_repo_path        = $puppet::params::server_git_repo_path,
+  $server_git_branch_map       = $puppet::params::server_git_branch_map,
   $server_post_hook_content    = $puppet::params::server_post_hook_content,
   $server_post_hook_name       = $puppet::params::server_post_hook_name,
   $server_storeconfigs_backend = $puppet::params::server_storeconfigs_backend,
