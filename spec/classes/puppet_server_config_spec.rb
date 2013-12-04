@@ -154,6 +154,7 @@ describe 'puppet::server::config' do
         :owner   => 'puppet',
         :mode    => '0755',
         :require => %r{Git::Repo\[puppet_repo\]},
+        :content => %r{BRANCH_MAP = \{[^a-zA-Z=>]\}},
       })
     end
 
@@ -201,6 +202,21 @@ describe 'puppet::server::config' do
         :ssl_cert => '/etc/example/cert.pem',
         :ssl_key  => '/etc/example/key.pem',
       })
+    end
+  end
+
+  describe 'with a puppet git branch map' do
+    let :pre_condition do
+      "class {'puppet':
+          server                => true,
+          server_git_repo       => true,
+          server_git_branch_map => { 'a' => 'b', 'c' => 'd' }
+       }"
+    end
+
+    it 'should add the branch map to the post receive hook' do
+      should contain_file('/var/lib/puppet/puppet.git/hooks/post-receive').
+        with_content(/BRANCH_MAP = {\n  "a" => "b",\n  "c" => "d",\n}/)
     end
   end
 end

@@ -16,8 +16,11 @@ SOURCE_REPOSITORY = File.expand_path(ENV['GIT_DIR'])
 # Mapping of branches to directories.  In many cases, the master branch is
 # checked out to the 'development' environment.
 BRANCH_MAP = {
-  # This will clone/pull the master branch into the development puppet environment
-  # "master" => "development",
+<% if @git_branch_map -%>
+<%   @git_branch_map.sort.each do |g,p| -%>
+  "<%= g %>" => "<%= p %>",
+<%   end -%>
+<% end -%>
 }
 
 # The git_dir environment variable will override the --git-dir, so we remove it

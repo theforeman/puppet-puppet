@@ -49,6 +49,8 @@ class puppet::params {
 
   # Set 'false' for static environments, or 'true' for git-based workflow
   $server_git_repo             = false
+  # Git branch to puppet env mapping for the post receive hook
+  $server_git_branch_map       = {}
 
   # Static environments config, ignore if the git_repo or dynamic_environments is 'true'
   # What environments do we have
