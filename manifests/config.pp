@@ -22,7 +22,8 @@ class puppet::config {
     ensure => directory,
   } ->
   file { "${puppet::dir}/puppet.conf":
-    source => concat_output('puppet.conf'),
+    source  => concat_output('puppet.conf'),
+    require => Concat_build['puppet.conf'],
   } ~>
   file { "${puppet::dir}/auth.conf":
     content => template($puppet::auth_template),
