@@ -16,9 +16,9 @@ describe 'puppet::server' do
 
   describe 'with no custom parameters' do
     it 'should include classes' do
-      should include_class('puppet::server::install')
-      should include_class('puppet::server::config')
-      should include_class('puppet::server::service')
+      should contain_class('puppet::server::install')
+      should contain_class('puppet::server::config')
+      should contain_class('puppet::server::service')
     end
   end
 
