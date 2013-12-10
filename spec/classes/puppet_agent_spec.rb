@@ -20,6 +20,11 @@ describe 'puppet::agent' do
     it { should contain_file('/etc/puppet').with_ensure('directory') }
     it { should contain_file('/etc/puppet/puppet.conf') }
     it { should contain_package('puppet').with_ensure('present') }
+    it do
+      should contain_concat_fragment('puppet.conf+20-agent').
+        with_content(/^\[agent\]/).
+        with({})
+    end
   end
 
 end

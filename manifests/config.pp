@@ -20,7 +20,6 @@ class puppet::config {
   if $puppet::listen {
     file { "${puppet::dir}/namespaceauth.conf":
       content => template($puppet::nsauth_template),
-      notify  => Class["::puppet::${runmode_class}", '::puppet::service'],
     }
   }
 }
