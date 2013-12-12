@@ -22,16 +22,6 @@ class puppet::server {
   $ssl_cert      = "${::puppet::server_ssl_dir}/certs/${::fqdn}.pem"
   $ssl_cert_key  = "${::puppet::server_ssl_dir}/private_keys/${::fqdn}.pem"
 
-  if $::puppet::server_config_version == undef {
-    if $::puppet::server_git_repo {
-      $config_version_cmd = "git --git-dir ${::puppet::server_envs_dir}/\$environment/.git describe --all --long"
-    } else {
-      $config_version_cmd = ''
-    }
-  } else {
-    $config_version_cmd = $::puppet::server_config_version
-  }
-
   class { 'puppet::server::install': }~>
   class { 'puppet::server::config':  }~>
   class { 'puppet::server::service': }->

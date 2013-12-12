@@ -1,5 +1,23 @@
 # Set up the puppet server config
 class puppet::server::config inherits puppet::config {
+  if $::puppet::server_git_repo or $::puppet::server_dynamic_environments {
+    $manifest = pick($::puppet::server_manifest, "${::puppet::server_envs_dir}/\$environment/manifests/site.pp")
+    $modulepath = pick($::puppet::server_modulepath, "${::puppet::server_envs_dir}/\$environment/modules")
+  } else {
+    $manifest = $::puppet::server_manifest
+    $modulepath = $::puppet::server_modulepath
+  }
+
+  if $::puppet::server_config_version == undef {
+    if $::puppet::server_git_repo {
+      $config_version = "git --git-dir ${::puppet::server_envs_dir}/\$environment/.git describe --all --long"
+    } else {
+      $config_version = undef
+    }
+  } else {
+    $config_version = $::puppet::server_config_version
+  }
+
   if $puppet::server_passenger {
     # Anchor the passenger config inside this
     class { 'puppet::server::passenger': } -> Class['puppet::server::config']

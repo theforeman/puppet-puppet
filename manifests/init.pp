@@ -171,6 +171,10 @@
 #                                  to lower this. Defaults to 12.
 #                                  type:integer
 #
+# $server_manifest::               The entry-point manifest for puppet master.
+#
+# $server_modulepath::             The search path for modules.
+#
 # $server_config_version::         How to determine the configuration version. When
 #                                  using git_repo, by default a git describe
 #                                  approach will be installed.
@@ -255,6 +259,8 @@ class puppet (
   $server_httpd_service        = $puppet::params::server_httpd_service,
   $server_external_nodes       = $puppet::params::server_external_nodes,
   $server_template             = $puppet::params::server_template,
+  $server_manifest             = $puppet::params::server_manifest,
+  $server_modulepath           = $puppet::params::server_modulepath,
   $server_config_version       = $puppet::params::server_config_version,
   $server_git_repo             = $puppet::params::server_git_repo,
   $server_dynamic_environments = $puppet::params::server_dynamic_environments,

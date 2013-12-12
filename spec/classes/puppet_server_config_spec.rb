@@ -87,20 +87,45 @@ describe 'puppet::server::config' do
         with_content(/^\s+node_terminus\s+= exec$/).
         with_content(/^\s+ca\s+= true$/).
         with_content(/^\s+ssldir\s+= \/var\/lib\/puppet\/ssl$/).
+        without_content(/^\s+manifest\s+=/).
+        without_content(/^\s+modulepath\s+=/).
+        without_content(/^\s+config_version\s+=/).
         with({}) # So we can use a trailing dot on each with_content line
 
       should contain_concat_fragment('puppet.conf+40-development').
-        with_content(/^\[development\]\n\s+modulepath\s+= \/etc\/puppet\/environments\/development\/modules:\/etc\/puppet\/environments\/common:\/usr\/share\/puppet\/modules\n\s+config_version = $/).
+        with_content(/^\[development\]\n\s+modulepath\s+= \/etc\/puppet\/environments\/development\/modules:\/etc\/puppet\/environments\/common:\/usr\/share\/puppet\/modules$/).
         with({}) # So we can use a trailing dot on each with_content line
 
       should contain_concat_fragment('puppet.conf+40-production').
-        with_content(/^\[production\]\n\s+modulepath\s+= \/etc\/puppet\/environments\/production\/modules:\/etc\/puppet\/environments\/common:\/usr\/share\/puppet\/modules\n\s+config_version = $/).
+        with_content(/^\[production\]\n\s+modulepath\s+= \/etc\/puppet\/environments\/production\/modules:\/etc\/puppet\/environments\/common:\/usr\/share\/puppet\/modules$/).
         with({}) # So we can use a trailing dot on each with_content line
 
       should contain_file('/etc/puppet/puppet.conf')
 
       should_not contain_file('/etc/puppet/puppet.conf').with_content(/storeconfigs/)
     end
+  end
+
+  describe 'with server_manifest, server_modulepath and server_config_version set' do
+    let :pre_condition do
+      "class {'puppet':
+          server                => true,
+          server_manifest       => '/etc/puppet/manifests/site.pp',
+          server_modulepath     => '/etc/puppet/modules',
+          server_config_version => 'git --git-dir $confdir/$environment/.git describe --all --long'
+       }"
+    end
+
+    it 'should configure puppet' do
+      should contain_concat_build('puppet.conf')
+
+      should contain_concat_fragment('puppet.conf+30-master').
+        with_content(/^\s+manifest\s+=\s+\/etc\/puppet\/manifests\/site.pp/).
+        with_content(/^\s+modulepath\s+=\s+\/etc\/puppet\/modules/).
+        with_content(/^\s+config_version\s+=\s+git --git-dir \$confdir\/\$environment\/.git describe --all --long/).
+        with({}) # So we can use a trailing dot on each with_content line
+    end
+
   end
 
   describe 'without foreman' do
@@ -197,7 +222,7 @@ describe 'puppet::server::config' do
 
     it 'should configure puppet.conf' do
       should contain_concat_fragment('puppet.conf+30-master').
-        with_content(%r{^\s+manifest\s+= /etc/puppet/environments/\$environment/manifests/site.pp\n\s+modulepath\s+= /etc/puppet/environments/\$environment/modules\n\s+config_version\s+= $})
+        with_content(%r{^\s+manifest\s+= /etc/puppet/environments/\$environment/manifests/site.pp\n\s+modulepath\s+= /etc/puppet/environments/\$environment/modules$})
     end
   end
 
