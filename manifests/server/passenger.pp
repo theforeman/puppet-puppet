@@ -2,29 +2,22 @@
 #
 # Set up the puppet server using passenger and apache.
 #
-class puppet::server::passenger {
-
+class puppet::server::passenger (
+  $app_root           = $::puppet::server_app_root,
+  $passenger_max_pool = $::puppet::server_passenger_max_pool,
+  $port               = $::puppet::server_port,
+  $ssl_ca_cert        = $::puppet::server::ssl_ca_cert,
+  $ssl_ca_crl         = $::puppet::server::ssl_ca_crl,
+  $ssl_cert           = $::puppet::server::ssl_cert,
+  $ssl_cert_key       = $::puppet::server::ssl_cert_key,
+  $ssl_chain          = $::puppet::server::ssl_chain,
+  $ssl_dir            = $::puppet::server_ssl_dir,
+  $user               = $::puppet::server_user
+) {
   include ::puppet::server::rack
   include ::apache::ssl
   include ::apache::params
   include ::passenger
-
-  # mirror 'external' params here for easy use in templates.
-
-  $ssl_dir      = $::puppet::server_ssl_dir
-  $ssl_cert     = $::puppet::server::ssl_cert
-  $ssl_cert_key = $::puppet::server::ssl_cert_key
-  $ssl_ca_cert  = $::puppet::server::ssl_ca_cert
-  # We check to surpress some warnings.
-  if $::puppet::server_ca {
-    $ssl_chain    = $::puppet::server::ssl_chain
-    $ssl_ca_crl   = $::puppet::server::ssl_ca_crl
-  }
-
-  $port               = $::puppet::server_port
-  $user               = $::puppet::server_user
-  $app_root           = $::puppet::server_app_root
-  $passenger_max_pool = $::puppet::server_passenger_max_pool
 
   case $::operatingsystem {
     Debian,Ubuntu: {
