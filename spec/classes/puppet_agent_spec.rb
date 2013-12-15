@@ -2,13 +2,13 @@ require 'spec_helper'
 
 describe 'puppet::agent' do
 
-  let(:facts) do
-    {
-      :fqdn => 'puppetmaster.example.com',
-      :clientcert => 'puppetmaster.example.com',
-      :osfamily => 'RedHat',
-    }
-  end
+  let :facts do {
+    :clientcert             => 'puppetmaster.example.com',
+    :concat_basedir         => '/nonexistant',
+    :fqdn                   => 'puppetmaster.example.com',
+    :operatingsystemrelease => '6.5',
+    :osfamily               => 'RedHat',
+  } end
 
   describe 'with no custom parameters' do
     let :pre_condition do

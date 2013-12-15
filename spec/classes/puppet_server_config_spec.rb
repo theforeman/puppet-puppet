@@ -1,14 +1,14 @@
 require 'spec_helper'
 
 describe 'puppet::server::config' do
-  let :facts do
-    {
-      :osfamily    => 'RedHat',
-      :rubyversion => '1.9.3',
-      :fqdn        => 'puppetmaster.example.com',
-      :clientcert  => 'puppetmaster.example.com',
-    }
-  end
+  let :facts do {
+    :clientcert             => 'puppetmaster.example.com',
+    :concat_basedir         => '/nonexistant',
+    :fqdn                   => 'puppetmaster.example.com',
+    :rubyversion            => '1.9.3',
+    :operatingsystemrelease => '6.5',
+    :osfamily               => 'RedHat',
+  } end
 
   describe 'with no custom parameters' do
     let :pre_condition do

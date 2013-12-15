@@ -15,9 +15,7 @@ class puppet::server::passenger (
   $user               = $::puppet::server_user
 ) {
   include ::puppet::server::rack
-  include ::apache::ssl
-  include ::apache::params
-  include ::passenger
+  include ::apache
 
   case $::operatingsystem {
     Debian,Ubuntu: {
@@ -31,13 +29,39 @@ class puppet::server::passenger (
     }
   }
 
-  file {'puppet_vhost':
-    path    => "${apache::params::configdir}/puppet.conf",
-    content => template('puppet/server/puppet-vhost.conf.erb'),
-    mode    => '0644',
-    notify  => Exec['reload-apache'],
-    before  => Service[$::puppet::server_httpd_service],
-    require => Class['::puppet::server::rack'],
+  $directories = [
+    {
+      'path'              => "${app_root}/public/",
+      'passenger_enabled' => 'On',
+    },
+  ]
+
+  # The following client headers allow the same configuration to work with Pound.
+  $request_headers = [
+    'set X-SSL-Subject %{SSL_CLIENT_S_DN}e',
+    'set X-Client-DN %{SSL_CLIENT_S_DN}e',
+    'set X-Client-Verify %{SSL_CLIENT_VERIFY}e',
+    'unset X-Forwarded-For',
+  ]
+
+  apache::vhost { 'puppet':
+    docroot           => "${app_root}/public/",
+    directories       => $directories,
+    port              => $port,
+    ssl               => true,
+    ssl_cert          => $ssl_cert,
+    ssl_key           => $ssl_cert_key,
+    ssl_ca            => $ssl_ca_cert,
+    ssl_crl           => $ssl_ca_crl,
+    ssl_chain         => $ssl_chain,
+    ssl_protocol      => '-ALL +SSLv3 +TLSv1',
+    ssl_cipher        => 'ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:-LOW:-SSLv2:-EXP',
+    ssl_verify_client => 'optional',
+    ssl_options       => '+StdEnvVars +ExportCertData',
+    ssl_verify_depth  => '1',
+    request_headers   => $request_headers,
+    options           => ['None'],
+    require           => Class['::puppet::server::rack'],
   }
 
 }

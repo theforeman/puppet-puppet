@@ -6,13 +6,13 @@ describe 'puppet::server' do
     "class {'puppet': server => true}"
   end
 
-  let :facts do
-    {
-      :osfamily   => 'RedHat',
-      :fqdn       => 'puppetmaster.example.com',
-      :clientcert => 'puppetmaster.example.com',
-    }
-  end
+  let :facts do {
+    :concat_basedir         => '/nonexistant',
+    :clientcert             => 'puppetmaster.example.com',
+    :fqdn                   => 'puppetmaster.example.com',
+    :operatingsystemrelease => '6.5',
+    :osfamily               => 'RedHat',
+  } end
 
   describe 'with no custom parameters' do
     it 'should include classes' do
