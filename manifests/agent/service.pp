@@ -40,4 +40,13 @@ class puppet::agent::service {
       fail("Runmode of ${puppet::runmode} not supported by puppet::agent::config!")
     }
   }
+
+  case $::operatingsystem {
+    debian, ubuntu: {
+      file { $::puppet::params::startup_default:
+        content => template($puppet::default_template)
+      }
+    }
+  }
+
 }

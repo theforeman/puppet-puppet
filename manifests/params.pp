@@ -22,10 +22,19 @@ class puppet::params {
   $classfile           = '$vardir/classes.txt'
 
   # Need your own config templates? Specify here:
-  $main_template   = 'puppet/puppet.conf.erb'
-  $agent_template  = 'puppet/agent/puppet.conf.erb'
-  $auth_template   = 'puppet/auth.conf.erb'
-  $nsauth_template = 'puppet/namespaceauth.conf.erb'
+  $main_template            = 'puppet/puppet.conf.erb'
+  $agent_template           = 'puppet/agent/puppet.conf.erb'
+  $auth_template            = 'puppet/auth.conf.erb'
+  $nsauth_template          = 'puppet/namespaceauth.conf.erb'
+  $startup_default_template = 'puppet/startup_default.erb'
+
+  # On Debian based systems, we need to make sure
+  # /etc/default/puppet is included and configurable
+  #
+  # Note: startup_default_start is either yes/no, not true/false
+  $startup_default                   = '/etc/default/puppet'
+  $startup_default_opts              = ''
+  $startup_default_start             = 'no'
 
   # Will this host be a puppet agent ?
   $agent                     = true

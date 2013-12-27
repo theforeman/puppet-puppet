@@ -219,7 +219,7 @@
 #   }
 #
 class puppet (
-  $version                     = $puppet::params::version,
+  $version                      = $puppet::params::version,
   $user                        = $puppet::params::user,
   $group                       = $puppet::params::group,
   $dir                         = $puppet::params::dir,
@@ -240,6 +240,9 @@ class puppet (
   $auth_template               = $puppet::params::auth_template,
   $nsauth_template             = $puppet::params::nsauth_template,
   $client_package              = $puppet::params::client_package,
+  $startup_default             = $puppet::params::startup_default,
+  $startup_default_opts        = $puppet::params::startup_default_opts,
+  $startup_default_start       = $puppet::params::startup_default_start,
   $agent                       = $puppet::params::agent,
   $server                      = $puppet::params::server,
   $server_user                 = $puppet::params::user,
