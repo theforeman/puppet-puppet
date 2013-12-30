@@ -41,10 +41,10 @@ class puppet::agent::service {
     }
   }
 
-  case $::operatingsystem {
-    debian, ubuntu: {
+  case $::osfamily {
+    'debian': {
       file { $::puppet::params::startup_default:
-        content => template($puppet::default_template)
+        content => template($puppet::startup_default_template)
       }
     }
   }

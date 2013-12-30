@@ -219,7 +219,7 @@
 #   }
 #
 class puppet (
-  $version                      = $puppet::params::version,
+  $version                     = $puppet::params::version,
   $user                        = $puppet::params::user,
   $group                       = $puppet::params::group,
   $dir                         = $puppet::params::dir,
