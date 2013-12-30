@@ -34,7 +34,7 @@ class puppet::params {
   # Note: startup_default_start is either yes/no, not true/false
   $startup_default                   = '/etc/default/puppet'
   $startup_default_opts              = ''
-  $startup_default_start             = 'no'
+  $startup_default_start             = 'yes'
 
   # Will this host be a puppet agent ?
   $agent                     = true
