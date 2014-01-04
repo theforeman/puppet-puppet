@@ -47,6 +47,8 @@ class puppet::params {
   # Need a new master template for the server?
   $server_template = 'puppet/server/puppet.conf.erb'
 
+  $server_manifest             = undef
+  $server_modulepath           = undef
   # The script that is run to determine the reported manifest version. Undef
   # means we determine it in server.pp
   $server_config_version       = undef
