@@ -1,13 +1,13 @@
 # Set up a puppet environment
 define puppet::server::env (
   $basedir        = $::puppet::server_envs_dir,
-  $config_version = $::puppet::server::config_version,
+  $config_version = $::puppet::server::config::config_version,
   $manifest       = undef,
   $manifestdir    = undef,
-  $modulepath     = [
+  $modulepath     = flatten([
     "${::puppet::server_envs_dir}/${name}/modules",
     $::puppet::server_common_modules_path,
-  ],
+  ]),
   $templatedir    = undef
 ) {
   file { "${basedir}/${name}":

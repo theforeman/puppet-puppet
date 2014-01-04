@@ -61,7 +61,28 @@ describe 'puppet::server::config' do
         :content => "# Empty site.pp required (puppet #15106, foreman #1708)\n",
       })
 
-      should contain_puppet__server__env('production')
+      should contain_puppet__server__env('development').with({
+        :basedir        => '/etc/puppet/environments',
+        :config_version => nil,
+        :manifest       => nil,
+        :manifestdir    => nil,
+        :modulepath     => [
+          '/etc/puppet/environments/development/modules',
+          '/etc/puppet/environments/common',
+          '/usr/share/puppet/modules',
+        ],
+      })
+      should contain_puppet__server__env('production').with({
+        :basedir        => '/etc/puppet/environments',
+        :config_version => nil,
+        :manifest       => nil,
+        :manifestdir    => nil,
+        :modulepath     => [
+          '/etc/puppet/environments/production/modules',
+          '/etc/puppet/environments/common',
+          '/usr/share/puppet/modules',
+        ],
+      })
     end
 
     it 'should configure puppet' do

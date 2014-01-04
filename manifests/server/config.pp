@@ -1,5 +1,5 @@
 # Set up the puppet server config
-class puppet::server::config inherits puppet::config {
+class puppet::server::config {
   if $::puppet::server_git_repo or $::puppet::server_dynamic_environments {
     $manifest = pick($::puppet::server_manifest, "${::puppet::server_envs_dir}/\$environment/manifests/site.pp")
     $modulepath = pick($::puppet::server_modulepath, "${::puppet::server_envs_dir}/\$environment/modules")
