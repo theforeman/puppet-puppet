@@ -32,7 +32,7 @@ describe 'puppet::server::env' do
         without_content(/^\s+manifestdir\s+=/).
         with_content(%r{^\s+modulepath\s+= /etc/puppet/environments/foo/modules:/etc/puppet/environments/common:/usr/share/puppet/modules$}).
         without_content(/^\s+templatedir\s+=/).
-        with_content(/^\s+config_version\s+=/).
+        without_content(/^\s+config_version\s+=/).
         with({}) # So we can use a trailing dot on each with_content line
     end
 
@@ -57,7 +57,7 @@ describe 'puppet::server::env' do
         without_content(/^\s+manifestdir\s+=/).
         with_content(%r{^\s+modulepath\s+= /etc/puppet/environments/foo/modules:/etc/puppet/environments/common:/usr/share/puppet/modules$}).
         without_content(/^\s+templatedir\s+=/).
-        with_content(/^\s+config_version\s+= bar/).
+        without_content(/^\s+config_version\s+=/).
         with({}) # So we can use a trailing dot on each with_content line
     end
 

@@ -1,7 +1,7 @@
 # Set up a puppet environment
 define puppet::server::env (
   $basedir        = $::puppet::server_envs_dir,
-  $config_version = $::puppet::server::config_version_cmd,
+  $config_version = undef,
   $manifest       = undef,
   $manifestdir    = undef,
   $modulepath     = [
