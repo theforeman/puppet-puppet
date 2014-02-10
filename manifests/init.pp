@@ -297,8 +297,10 @@ class puppet (
 
   validate_string($server_external_nodes)
 
-  class { 'puppet::config': } ->
-  Class['puppet']
+  if $agent == true or $server == true {
+    class { 'puppet::config': } ->
+    Class['puppet']
+  }
 
   if $agent == true {
     include ::puppet::agent
