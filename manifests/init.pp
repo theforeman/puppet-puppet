@@ -305,15 +305,15 @@ class puppet (
   if $manage == true {
     class { 'puppet::config': } ->
     Class['puppet']
-  }
-
-  if $agent == true {
-    include ::puppet::agent
-    Class['puppet::agent'] -> Class['puppet']
-  }
-
-  if $server == true {
-    include ::puppet::server
-    Class['puppet::server'] -> Class['puppet']
+	
+	  if $agent == true {
+	    include ::puppet::agent
+	    Class['puppet::agent'] -> Class['puppet']
+	  }
+	
+	  if $server == true {
+	    include ::puppet::server
+	    Class['puppet::server'] -> Class['puppet']
+	  }
   }
 }
