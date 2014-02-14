@@ -17,4 +17,20 @@ describe 'puppet' do
     it { should contain_package('puppet').with_ensure('present') }
   end
 
+  describe 'with empty ca_server' do
+    let :params do {
+      :ca_server => '',
+    } end
+
+    it { should_not contain_concat_fragment('puppet.conf+10-main').with_content(/ca_server/) }
+  end
+
+  describe 'with ca_server' do
+    let :params do {
+      :ca_server => 'ca.example.org',
+    } end
+
+    it { should contain_concat_fragment('puppet.conf+10-main').with_content(/^\s+ca_server\s+= ca.example.org$/) }
+  end
+
 end
