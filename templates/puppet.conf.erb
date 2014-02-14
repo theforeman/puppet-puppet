@@ -20,7 +20,7 @@
     # Puppet 3.0.x requires this in both [main] and [master] - harmless on agents
     autosign       = $confdir/autosign.conf { mode = 664 }
 
-<% if @ca_server -%>
+<% if @ca_server and !@ca_server.empty? -%>
     # Use specified CA server
     ca_server = <%= @ca_server %>
 <% end -%>

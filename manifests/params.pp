@@ -18,7 +18,7 @@ class puppet::params {
   $agent_noop          = false
   $show_diff           = false
   $configtimeout       = 120
-  $ca_server           = undef
+  $ca_server           = ''
   $classfile           = '$vardir/classes.txt'
 
   # Need your own config templates? Specify here:
