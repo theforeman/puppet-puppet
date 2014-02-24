@@ -60,6 +60,9 @@
 # $main_template::                 Use a custom template for the main puppet
 #                                  configuration.
 #
+# $manage::                        Will this host be a managed by the puppet module?
+#                                  type:boolean
+#
 # == puppet::agent parameters
 #
 # $agent::                         Should a puppet agent be installed
@@ -240,6 +243,7 @@ class puppet (
   $auth_template               = $puppet::params::auth_template,
   $nsauth_template             = $puppet::params::nsauth_template,
   $client_package              = $puppet::params::client_package,
+  $manage                      = $puppet::params::manage,
   $agent                       = $puppet::params::agent,
   $server                      = $puppet::params::server,
   $server_user                 = $puppet::params::user,
@@ -287,6 +291,7 @@ class puppet (
   validate_bool($pluginsync)
   validate_bool($splay)
   validate_bool($agent_noop)
+  validate_bool($manage)
   validate_bool($agent)
   validate_bool($server)
   validate_bool($server_ca)
@@ -298,16 +303,18 @@ class puppet (
   validate_string($ca_server)
   validate_string($server_external_nodes)
 
-  class { 'puppet::config': } ->
-  Class['puppet']
-
-  if $agent == true {
-    include ::puppet::agent
-    Class['puppet::agent'] -> Class['puppet']
-  }
-
-  if $server == true {
-    include ::puppet::server
-    Class['puppet::server'] -> Class['puppet']
+  if $manage == true {
+    class { 'puppet::config': } ->
+    Class['puppet']
+	
+	  if $agent == true {
+	    include ::puppet::agent
+	    Class['puppet::agent'] -> Class['puppet']
+	  }
+	
+	  if $server == true {
+	    include ::puppet::server
+	    Class['puppet::server'] -> Class['puppet']
+	  }
   }
 }

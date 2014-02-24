@@ -27,6 +27,9 @@ class puppet::params {
   $auth_template   = 'puppet/auth.conf.erb'
   $nsauth_template = 'puppet/namespaceauth.conf.erb'
 
+  # Will this host be a managed by the puppet module ?
+  $manage                    = true
+
   # Will this host be a puppet agent ?
   $agent                     = true
 
