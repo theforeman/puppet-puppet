@@ -14,4 +14,14 @@ describe 'puppet::config' do
       should contain_file('/etc/puppet/auth.conf').with_content(%r{^path /certificate_revocation_list/ca\nmethod find$})
     end
   end
+
+  describe 'with allow_any_crl_auth' do
+    let :pre_condition do
+      'class {"::puppet": allow_any_crl_auth => true}'
+    end
+
+    it 'should contain auth.conf with auth any' do
+      should contain_file('/etc/puppet/auth.conf').with_content(%r{^path /certificate_revocation_list/ca\nauth any$})
+    end
+  end
 end

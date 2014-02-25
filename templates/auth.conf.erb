@@ -59,6 +59,9 @@ allow $1
 
 # allow all nodes to access the certificates services
 path /certificate_revocation_list/ca
+<% if @allow_any_crl_auth -%>
+auth any
+<% end -%>
 method find
 allow *
 
