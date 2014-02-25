@@ -199,6 +199,11 @@
 #                                  Valid values are 'v2' for latest, and 'v1'
 #                                  for Foreman =< 1.2
 #
+# $server_ca_proxy::               The actual server that handles puppet CA.
+#                                  Setting this to anything non-empty causes
+#                                  the apache vhost to set up a proxy for all
+#                                  certificates pointing to the value.
+#
 # === Usage:
 #
 # * Simple usage:
@@ -274,6 +279,7 @@ class puppet (
   $server_certname             = $puppet::params::server_certname,
   $server_enc_api              = $puppet::params::server_enc_api,
   $server_report_api           = $puppet::params::server_report_api,
+  $server_ca_proxy             = $puppet::params::server_ca_proxy,
   $server_foreman_url          = $foreman::params::foreman_url,
   $server_foreman_ssl_ca       = $foreman::params::client_ssl_ca,
   $server_foreman_ssl_cert     = $foreman::params::client_ssl_cert,
@@ -297,6 +303,7 @@ class puppet (
 
   validate_string($ca_server)
   validate_string($server_external_nodes)
+  validate_string($server_ca_proxy)
 
   class { 'puppet::config': } ->
   Class['puppet']
