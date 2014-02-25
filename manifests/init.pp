@@ -305,8 +305,8 @@ class puppet (
   validate_string($server_external_nodes)
   validate_string($server_ca_proxy)
 
-  class { 'puppet::config': } ->
-  Class['puppet']
+  include ::puppet::config
+  Class['puppet::config'] -> Class['puppet']
 
   if $agent == true {
     include ::puppet::agent
