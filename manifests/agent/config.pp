@@ -2,7 +2,7 @@ class puppet::agent::config {
   concat_fragment { 'puppet.conf+20-agent':
     content => template($puppet::agent_template),
   }
-  
+
   if $::puppet::runmode == 'service' {
     $should_start = 'yes'
   } else {
@@ -11,7 +11,7 @@ class puppet::agent::config {
 
   if $::osfamily == 'Debian'{
     augeas {'puppet::set_start':
-      context => "/files/etc/default/puppet",
+      context => '/files/etc/default/puppet',
       changes => "set START ${should_start}",
     }
   }
