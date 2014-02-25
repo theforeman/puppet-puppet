@@ -12,6 +12,7 @@ class puppet::server::passenger (
   $ssl_cert_key       = $::puppet::server::ssl_cert_key,
   $ssl_chain          = $::puppet::server::ssl_chain,
   $ssl_dir            = $::puppet::server_ssl_dir,
+  $puppet_ca_proxy    = $::puppet::server_ca_proxy,
   $user               = $::puppet::server_user
 ) {
   include ::puppet::server::rack
@@ -45,6 +46,15 @@ class puppet::server::passenger (
     'unset X-Forwarded-For',
   ]
 
+  if $puppet_ca_proxy != '' {
+    include apache::mod::proxy
+    include apache::mod::proxy_http
+
+    $custom_fragment = "ProxyPassMatch ^/([^/]+/certificate.*)$ ${puppet_ca_proxy}/\$1"
+  } else {
+    $custom_fragment = ''
+  }
+
   apache::vhost { 'puppet':
     docroot           => "${app_root}/public/",
     directories       => $directories,
@@ -60,6 +70,8 @@ class puppet::server::passenger (
     ssl_verify_client => 'optional',
     ssl_options       => '+StdEnvVars +ExportCertData',
     ssl_verify_depth  => '1',
+    ssl_proxyengine   => $puppet_ca_proxy != '',
+    custom_fragment   => $custom_fragment,
     request_headers   => $request_headers,
     options           => ['None'],
     require           => Class['::puppet::server::rack'],

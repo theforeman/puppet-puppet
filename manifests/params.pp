@@ -42,6 +42,7 @@ class puppet::params {
   $server_external_nodes     = '/etc/puppet/node.rb'
   $server_enc_api            = 'v2'
   $server_report_api         = 'v2'
+  $server_ca_proxy           = ''
   $server_certname           = $::clientcert
 
   # Need a new master template for the server?
