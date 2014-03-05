@@ -204,6 +204,11 @@
 #                                  the apache vhost to set up a proxy for all
 #                                  certificates pointing to the value.
 #
+# $allow_any_crl_auth::            Allow any authentication for the CRL. This
+#                                  is needed on the puppet CA to accept clients
+#                                  from a the puppet CA proxy.
+#                                  type:boolean
+#
 # === Usage:
 #
 # * Simple usage:
@@ -244,6 +249,7 @@ class puppet (
   $agent_template              = $puppet::params::agent_template,
   $auth_template               = $puppet::params::auth_template,
   $nsauth_template             = $puppet::params::nsauth_template,
+  $allow_any_crl_auth          = $puppet::params::allow_any_crl_auth,
   $client_package              = $puppet::params::client_package,
   $agent                       = $puppet::params::agent,
   $server                      = $puppet::params::server,
@@ -295,6 +301,7 @@ class puppet (
   validate_bool($agent_noop)
   validate_bool($agent)
   validate_bool($server)
+  validate_bool($allow_any_crl_auth)
   validate_bool($server_ca)
   validate_bool($server_passenger)
   validate_bool($server_git_repo)
@@ -305,8 +312,8 @@ class puppet (
   validate_string($server_external_nodes)
   validate_string($server_ca_proxy)
 
-  class { 'puppet::config': } ->
-  Class['puppet']
+  include ::puppet::config
+  Class['puppet::config'] -> Class['puppet']
 
   if $agent == true {
     include ::puppet::agent

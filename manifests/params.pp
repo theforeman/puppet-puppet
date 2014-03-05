@@ -27,6 +27,9 @@ class puppet::params {
   $auth_template   = 'puppet/auth.conf.erb'
   $nsauth_template = 'puppet/namespaceauth.conf.erb'
 
+  # Allow any to the CRL. Needed in case of puppet CA proxy
+  $allow_any_crl_auth = false
+
   # Will this host be a puppet agent ?
   $agent                     = true
 
