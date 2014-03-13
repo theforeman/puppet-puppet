@@ -9,10 +9,12 @@ class puppet::agent::config {
     $should_start = 'no'
   }
 
-  if $::osfamily == 'Debian'{
+  if $::osfamily == 'Debian' {
     augeas {'puppet::set_start':
       context => '/files/etc/default/puppet',
       changes => "set START ${should_start}",
+      incl    => '/etc/default/puppet',
+      lens    => 'Shellvars.lns',
     }
   }
 }
