@@ -18,6 +18,9 @@ class puppet::config(
   file { "${puppet_dir}/puppet.conf":
     source  => concat_output('puppet.conf'),
     require => Concat_build['puppet.conf'],
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
   } ~>
   file { "${puppet_dir}/auth.conf":
     content => template($auth_template),
