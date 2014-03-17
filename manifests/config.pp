@@ -6,6 +6,8 @@ class puppet::config(
   $main_template      = $::puppet::main_template,
   $nsauth_template    = $::puppet::nsauth_template,
   $puppet_dir         = $::puppet::dir,
+  $user               = $::puppet::user,
+  $group              = $::puppet::group,
 ) {
   concat_build { 'puppet.conf': }
   concat_fragment { 'puppet.conf+10-main':
@@ -18,6 +20,8 @@ class puppet::config(
   file { "${puppet_dir}/puppet.conf":
     source  => concat_output('puppet.conf'),
     require => Concat_build['puppet.conf'],
+    owner   => $user,
+    group   => $group,
     mode    => '0644',
   } ~>
   file { "${puppet_dir}/auth.conf":
