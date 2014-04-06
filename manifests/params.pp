@@ -47,6 +47,7 @@ class puppet::params {
   $server_report_api         = 'v2'
   $server_ca_proxy           = ''
   $server_certname           = $::clientcert
+  $server_strict_variables   = false
 
   # Need a new master template for the server?
   $server_template = 'puppet/server/puppet.conf.erb'
