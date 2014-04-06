@@ -153,6 +153,10 @@
 #
 # $server_certname::               The name to use when handling certificates.
 #
+# $server_strict_variables::       if set to true, it will throw parse errors
+#                                  when accessing undeclared variables.
+#                                  type:boolean
+#
 # === Advanced server parameters:
 #
 # $server_httpd_service::          Apache/httpd service name to notify
@@ -286,6 +290,7 @@ class puppet (
   $server_enc_api              = $puppet::params::server_enc_api,
   $server_report_api           = $puppet::params::server_report_api,
   $server_ca_proxy             = $puppet::params::server_ca_proxy,
+  $server_strict_variables     = $puppet::params::server_strict_variables,
   $server_foreman_url          = $foreman::params::foreman_url,
   $server_foreman_ssl_ca       = $foreman::params::client_ssl_ca,
   $server_foreman_ssl_cert     = $foreman::params::client_ssl_cert,
@@ -307,6 +312,7 @@ class puppet (
   validate_bool($server_git_repo)
   validate_bool($server_service_fallback)
   validate_bool($server_facts)
+  validate_bool($server_strict_variables)
 
   validate_string($ca_server)
   validate_string($server_external_nodes)
