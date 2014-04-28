@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.1.1
+* Add server_strict_variables parameter
+* Update auth.conf from Puppet 3.5
+* Ensure /etc/default/puppet has START=yes on Debian
+* Set explicit ownership and mode on puppet.conf
+* Move show_diff from agent section to main for puppet apply
+* Pin to Rake 10.2.0 on Ruby 1.8
+
 ## 2.1.0
 * Add a server_ca_proxy parameter for real Puppet CA hostname
 * Add a allow_any_crl parameter to allow access to the CRL (#4345)
