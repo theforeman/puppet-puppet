@@ -4,10 +4,10 @@ class puppet::agent::service {
   case $::puppet::runmode {
     'service': {
       service {'puppet':
+        ensure    => running,
         name      => $puppet::params::service_name,
         hasstatus => true,
         enable    => true,
-        ensure    => running,
       }
 
       cron { 'puppet':
@@ -16,10 +16,10 @@ class puppet::agent::service {
     }
     'cron': {
       service {'puppet':
+        ensure    => stopped,
         name      => $puppet::params::service_name,
         hasstatus => true,
         enable    => false,
-        ensure    => stopped,
       }
 
       $command = $puppet::cron_cmd ? {

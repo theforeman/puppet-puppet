@@ -4,10 +4,7 @@ define puppet::server::env (
   $config_version = $::puppet::server::config_version_cmd,
   $manifest       = undef,
   $manifestdir    = undef,
-  $modulepath     = [
-    "${::puppet::server_envs_dir}/${name}/modules",
-    $::puppet::server_common_modules_path,
-  ],
+  $modulepath     = ["${::puppet::server_envs_dir}/${name}/modules", $::puppet::server_common_modules_path],
   $templatedir    = undef
 ) {
   file { "${basedir}/${name}":
