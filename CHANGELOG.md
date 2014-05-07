@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.2
+* Remove Puppet agent '--disable' lock file on Debian
+* Treat puppet-lint warnings as failures
+
 ## 2.1.1
 * Add server_strict_variables parameter
 * Update auth.conf from Puppet 3.5
