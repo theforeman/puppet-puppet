@@ -22,6 +22,10 @@
 
     show_diff     = <%= scope.lookupvar('::puppet::show_diff') %>
 
+<% if @module_repository and !@module_repository.empty? -%>
+    module_repository = <%= @module_repository %>
+<% end -%>
+
 <% if @ca_server and !@ca_server.empty? -%>
     # Use specified CA server
     ca_server = <%= @ca_server %>

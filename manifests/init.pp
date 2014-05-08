@@ -71,6 +71,8 @@
 #
 # $show_diff::                     Show and report changed files with diff output
 #
+# $module_repository::             Use a different puppet module repository
+#
 # $configtimeout::                 How long the client should wait for the
 #                                  configuration to be retrieved before
 #                                  considering it a failure.
@@ -338,6 +340,7 @@ class puppet (
   $cron_cmd                      = $puppet::params::cron_cmd,
   $agent_noop                    = $puppet::params::agent_noop,
   $show_diff                     = $puppet::params::show_diff,
+  $module_repository             = $puppet::params::module_repository,
   $configtimeout                 = $puppet::params::configtimeout,
   $ca_server                     = $puppet::params::ca_server,
   $ca_port                       = $puppet::params::ca_port,

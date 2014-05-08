@@ -18,6 +18,7 @@ class puppet::params {
   $cron_cmd            = undef
   $agent_noop          = false
   $show_diff           = false
+  $module_repository   = undef
   $configtimeout       = 120
   $usecacheonfailure   = true
   $ca_server           = ''

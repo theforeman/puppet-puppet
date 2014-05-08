@@ -78,6 +78,19 @@ describe 'puppet::config' do
       end
     end
 
+    context "when module_repository => 'https://myforgeapi.example.com'" do
+      let :pre_condition do
+        "class { 'puppet': module_repository => 'https://myforgeapi.example.com' }"
+      end
+
+      it 'should contain puppet.conf [main] with module_repository' do
+        verify_concat_fragment_contents(subject, 'puppet.conf+10-main', [
+          '[main]',
+          '    module_repository = https://myforgeapi.example.com',
+        ])
+      end
+    end
+
     context "when hiera_config => '$confdir/hiera.yaml'" do
       let :pre_condition do
         "class { 'puppet': hiera_config => '/etc/puppet/hiera/production/hiera.yaml' }"

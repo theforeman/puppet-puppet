@@ -11,6 +11,7 @@ class puppet::config(
   $nsauth_template    = $::puppet::nsauth_template,
   $puppet_dir         = $::puppet::dir,
   $syslogfacility     = $::puppet::syslogfacility,
+  $module_repository  = $::puppet::module_repository,
 ) {
   concat_build { 'puppet.conf': }
   concat_fragment { 'puppet.conf+10-main':
