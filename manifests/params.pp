@@ -17,6 +17,7 @@ class puppet::params {
   $cron_cmd            = undef
   $agent_noop          = false
   $show_diff           = false
+  $module_repository   = ''
   $configtimeout       = 120
   $ca_server           = ''
   $classfile           = '$vardir/classes.txt'
