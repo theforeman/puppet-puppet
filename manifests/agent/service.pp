@@ -36,6 +36,18 @@ class puppet::agent::service {
         minute  => $times[1],
       }
     }
+    'none': {
+      service { 'puppet':
+        ensure    => stopped,
+        name      => $puppet::params::service_name,
+        hasstatus => true,
+        enable    => false,
+      }
+
+      cron { 'puppet':
+        ensure => absent,
+      }
+    }
     default: {
       fail("Runmode of ${puppet::runmode} not supported by puppet::agent::config!")
     }
