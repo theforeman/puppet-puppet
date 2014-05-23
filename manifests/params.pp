@@ -73,6 +73,8 @@ class puppet::params {
   $server_environments         = ['development', 'production']
   # Dynamic environments config
   $server_dynamic_environments = false
+  # Directory environments config
+  $server_directory_environments = false
   # Owner of the environments dir: for cases external service needs write
   # access to manage it.
   $server_environments_owner   = $user
