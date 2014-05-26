@@ -48,6 +48,7 @@ class puppet::params {
   $server_ca_proxy           = ''
   $server_certname           = $::clientcert
   $server_strict_variables   = false
+  $server_environmentpath    = undef
 
   # Need a new master template for the server?
   $server_template = 'puppet/server/puppet.conf.erb'

@@ -201,6 +201,26 @@ describe 'puppet::server::config' do
     end
   end
 
+  describe 'with directory environments' do
+    let :pre_condition do
+      "class {'puppet':
+          server                 => true,
+          server_environmentpath => '$confdir/environments',
+       }"
+    end
+
+    it 'should set up the environments directory' do
+      should contain_file('/etc/puppet/environments').with({
+        :ensure => 'directory',
+      })
+    end
+
+    it 'should configure puppet.conf' do
+      should contain_concat_fragment('puppet.conf+30-master').
+        with_content(%r{^\s+environmentpath\s+= \$confdir/environments$})
+    end
+  end
+
   describe 'with SSL path overrides' do
     let :pre_condition do
       "class {'puppet':

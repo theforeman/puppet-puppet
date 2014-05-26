@@ -157,6 +157,9 @@
 #                                  when accessing undeclared variables.
 #                                  type:boolean
 #
+# $server_environmentpath::        set Puppetmaster's environmentpath and enable
+#                                  Directory Environments.
+#
 # === Advanced server parameters:
 #
 # $server_httpd_service::          Apache/httpd service name to notify
@@ -291,6 +294,7 @@ class puppet (
   $server_report_api           = $puppet::params::server_report_api,
   $server_ca_proxy             = $puppet::params::server_ca_proxy,
   $server_strict_variables     = $puppet::params::server_strict_variables,
+  $server_environmentpath      = $puppet::params::server_environmentpath,
   $server_foreman_url          = $foreman::params::foreman_url,
   $server_foreman_ssl_ca       = $foreman::params::client_ssl_ca,
   $server_foreman_ssl_cert     = $foreman::params::client_ssl_cert,
