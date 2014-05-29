@@ -74,6 +74,9 @@
 # $client_package::                Install a custom package to provide
 #                                  the puppet client
 #
+# $puppetmaster::                  Hostname of your puppetmaster (server
+#                                  directive in puppet.conf)
+#
 # == puppet::server parameters
 #
 # $server::                        Should a puppet master be installed as well as the client
@@ -256,6 +259,7 @@ class puppet (
   $allow_any_crl_auth          = $puppet::params::allow_any_crl_auth,
   $client_package              = $puppet::params::client_package,
   $agent                       = $puppet::params::agent,
+  $puppetmaster                = $puppet::params::puppetmaster,
   $server                      = $puppet::params::server,
   $server_user                 = $puppet::params::user,
   $server_group                = $puppet::params::group,

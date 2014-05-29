@@ -2,13 +2,19 @@ require 'spec_helper'
 
 describe 'puppet::agent' do
 
-  let :facts do {
-    :clientcert             => 'puppetmaster.example.com',
-    :concat_basedir         => '/nonexistant',
-    :fqdn                   => 'puppetmaster.example.com',
-    :operatingsystemrelease => '6.5',
-    :osfamily               => 'RedHat',
-  } end
+  let :default_facts do
+    {
+        :clientcert => 'puppetmaster.example.com',
+        :concat_basedir => '/nonexistant',
+        :fqdn => 'puppetmaster.example.com',
+        :operatingsystemrelease => '6.5',
+        :osfamily => 'RedHat',
+    }
+  end
+
+  let :facts do
+    default_facts
+  end
 
   describe 'with no custom parameters' do
     let :pre_condition do
@@ -25,7 +31,41 @@ describe 'puppet::agent' do
         with_content(/^\[agent\]/).
         with({})
     end
+
+    it do
+      should contain_concat_fragment('puppet.conf+20-agent').
+                 with_content(/server.*puppetmaster\.example\.com/)
+    end
   end
 
+  describe 'puppetmaster parameter overrides server fqdn' do
+    let(:pre_condition) { "class {'puppet': agent => true, puppetmaster => 'mymaster.example.com'}" }
+    it do
+      should contain_concat_fragment('puppet.conf+20-agent').
+                 with_content(/server.*mymaster\.example\.com/)
+    end
+  end
+
+  describe 'global puppetmaster overrides fqdn' do
+    let(:pre_condition) { "class {'puppet': agent => true}" }
+    let :facts do
+      default_facts.merge({:puppetmaster => 'mymaster.example.com'})
+    end
+    it do
+      should contain_concat_fragment('puppet.conf+20-agent').
+                 with_content(/server.*mymaster\.example\.com/)
+    end
+  end
+
+  describe 'puppetmaster parameter overrides global puppetmaster' do
+    let(:pre_condition) { "class {'puppet': agent => true, puppetmaster => 'mymaster.example.com'}" }
+    let :facts do
+      default_facts.merge({:puppetmaster => 'global.example.com'})
+    end
+    it do
+      should contain_concat_fragment('puppet.conf+20-agent').
+                 with_content(/server.*mymaster\.example\.com/)
+    end
+  end
 end
 

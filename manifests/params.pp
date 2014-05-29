@@ -33,6 +33,9 @@ class puppet::params {
   # Will this host be a puppet agent ?
   $agent                     = true
 
+  # Custom puppetmaster
+  $puppetmaster              = $::puppetmaster
+
   # Will this host be a puppetmaster?
   $server                    = false
   $server_vardir             = '/var/lib/puppet'
