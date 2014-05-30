@@ -32,7 +32,7 @@
 #                                  type:integer
 #
 # $runmode::                       Select the mode to setup the puppet agent.
-#                                  Can be either 'cron' or 'service'.
+#                                  Can be either 'cron', 'service' or 'none'.
 #
 # $cron_cmd::                      Specify command to launch when runmode is
 #                                  set 'cron'.
