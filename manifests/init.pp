@@ -268,6 +268,9 @@
 # $server_facts::                  Should foreman receive facts from puppet
 #                                  type:boolean
 #
+# $server_foreman::                Should foreman integration be installed
+#                                  type:boolean
+#
 # $server_foreman_url::            Foreman URL
 #
 # $server_foreman_ssl_ca::         SSL CA of the Foreman server
@@ -276,10 +279,7 @@
 #
 # $server_foreman_ssl_key::        Key for authenticating against Foreman server
 #
-#
 # $server_puppet_basedir::         Where is the puppet code base located
-#
-# $server_puppet_home::            Puppet var directory
 #
 # $server_enc_api::                What version of enc script to deploy. Valid
 #                                  values are 'v2' for latest, and 'v1'
@@ -408,13 +408,13 @@ class puppet (
   $server_strict_variables       = $puppet::params::server_strict_variables,
   $server_additional_settings    = $puppet::params::server_additional_settings,
   $server_rack_arguments         = $puppet::params::server_rack_arguments,
-  $server_foreman_url            = $foreman::params::foreman_url,
-  $server_foreman_ssl_ca         = $foreman::params::client_ssl_ca,
-  $server_foreman_ssl_cert       = $foreman::params::client_ssl_cert,
-  $server_foreman_ssl_key        = $foreman::params::client_ssl_key,
-  $server_facts                  = $foreman::params::receive_facts,
-  $server_puppet_home            = $foreman::params::puppet_home,
-  $server_puppet_basedir         = $foreman::params::puppet_basedir
+  $server_foreman                = $puppet::params::server_foreman,
+  $server_foreman_url            = $puppet::params::server_foreman_url,
+  $server_foreman_ssl_ca         = $puppet::params::client_ssl_ca,
+  $server_foreman_ssl_cert       = $puppet::params::client_ssl_cert,
+  $server_foreman_ssl_key        = $puppet::params::client_ssl_key,
+  $server_facts                  = $puppet::params::server_facts,
+  $server_puppet_basedir         = $puppet::params::server_puppet_basedir,
 ) inherits puppet::params {
 
   validate_bool($listen)
@@ -432,6 +432,7 @@ class puppet (
   validate_bool($server_facts)
   validate_bool($server_strict_variables)
   validate_hash($server_additional_settings)
+  validate_bool($server_foreman)
 
   validate_string($ca_server)
   validate_string($hiera_config)
