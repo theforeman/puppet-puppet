@@ -74,6 +74,8 @@ class puppet::server::config inherits puppet::config {
   file { $puppet::server_envs_dir:
     ensure => directory,
     owner  => $puppet::server_environments_owner,
+    group  => $puppet::server_environments_group,
+    mode   => $puppet::server_environments_mode,
   }
 
   if $puppet::server_git_repo {

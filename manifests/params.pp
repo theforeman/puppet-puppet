@@ -72,6 +72,8 @@ class puppet::params {
   # Owner of the environments dir: for cases external service needs write
   # access to manage it.
   $server_environments_owner   = $user
+  $server_environments_group   = 'root'
+  $server_environments_mode    = '0755'
   # Where we store our puppet environments
   $server_envs_dir             = "${dir}/environments"
   # Where remains our manifests dir

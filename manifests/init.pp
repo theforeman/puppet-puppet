@@ -123,6 +123,10 @@
 #
 # $server_environments_owner::     The owner of the environments directory
 #
+# $server_environments_group::     The group owning the environments directory
+#
+# $server_environments_mode::      Environments directory mode.
+#
 # $server_envs_dir::               Directory that holds puppet environments
 #
 # $server_manifest_path::          Path to puppet site.pp manifest (only when
@@ -279,6 +283,8 @@ class puppet (
   $server_dynamic_environments = $puppet::params::server_dynamic_environments,
   $server_environments         = $puppet::params::server_environments,
   $server_environments_owner   = $puppet::params::server_environments_owner,
+  $server_environments_group   = $puppet::params::server_environments_group,
+  $server_environments_mode    = $puppet::params::server_environments_mode,
   $server_envs_dir             = $puppet::params::server_envs_dir,
   $server_manifest_path        = $puppet::params::server_manifest_path,
   $server_common_modules_path  = $puppet::params::server_common_modules_path,
