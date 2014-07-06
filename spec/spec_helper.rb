@@ -8,3 +8,8 @@ RSpec.configure do |c|
   c.manifest_dir = File.join(fixture_path, 'manifests')
   c.mock_with :mocha
 end
+
+# Workaround for no method in rspec-puppet to pass undef through :params
+class Undef
+  def inspect; 'undef'; end
+end
