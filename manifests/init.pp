@@ -132,9 +132,12 @@
 #                                  type:boolean
 #
 # $server_dynamic_environments::   Use $environment in the modulepath
+#                                  Deprecated when $server_directory_environments is true,
+#                                  set $server_environments to [] instead.
 #                                  type:boolean
 #
-# $server_directory_environments:: Enable directory environments
+# $server_directory_environments:: Enable directory environments, defaulting to true
+#                                  with Puppet 3.6.0 or higher
 #                                  type:boolean
 #
 # $server_environments::           Environments to setup (creates directories).
