@@ -19,6 +19,7 @@ class puppet::params {
   $show_diff           = false
   $configtimeout       = 120
   $ca_server           = ''
+  $dns_alt_names       = []
   $classfile           = '$vardir/classes.txt'
 
   # Need your own config templates? Specify here:

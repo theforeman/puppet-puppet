@@ -27,3 +27,7 @@
     ca_server = <%= @ca_server %>
 <% end -%>
 
+<% if @dns_alt_names and !@dns_alt_names.empty? -%>
+    dns_alt_names = <%= @dns_alt_names.join(",") %>
+<% end -%>
+

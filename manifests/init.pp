@@ -48,6 +48,10 @@
 #                                  a string with the location of the ca_server
 #                                  or 'false'.
 #
+# $dns_alt_names::                 Use additional DNS names when generating a
+#                                  certificate.  Defaults to an empty Array.
+#                                  type:array
+#
 # $classfile::                     The file in which puppet agent stores a list
 #                                  of the classes associated with the retrieved
 #                                  configuration.
@@ -255,6 +259,7 @@ class puppet (
   $show_diff                   = $puppet::params::show_diff,
   $configtimeout               = $puppet::params::configtimeout,
   $ca_server                   = $puppet::params::ca_server,
+  $dns_alt_names               = $puppet::params::dns_alt_names,
   $classfile                   = $puppet::params::classfile,
   $main_template               = $puppet::params::main_template,
   $agent_template              = $puppet::params::agent_template,
@@ -327,6 +332,8 @@ class puppet (
   validate_string($ca_server)
   validate_string($server_external_nodes)
   validate_string($server_ca_proxy)
+
+  validate_array($dns_alt_names)
 
   include ::puppet::config
   Class['puppet::config'] -> Class['puppet']
