@@ -26,7 +26,9 @@
     # Use specified CA server
     ca_server = <%= @ca_server %>
 <% end -%>
-
+<% if @hiera_config and !@hiera_config.empty? -%>
+    hiera_config = <%= @hiera_config %>
+<% end -%>
 <% if @dns_alt_names and !@dns_alt_names.empty? -%>
     dns_alt_names = <%= @dns_alt_names.join(",") %>
 <% end -%>
