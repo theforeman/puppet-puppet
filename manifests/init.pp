@@ -27,6 +27,12 @@
 #                                  to sleep before each run.
 #                                  type:boolean
 #
+# $splaylimit::                    The maximum time to delay before runs.
+#                                  Defaults to being the same as the run interval.
+#                                  This setting can be a time interval in seconds
+#                                  (30 or 30s), minutes (30m), hours (6h), days (2d),
+#                                  or years (5y).
+#
 # $runinterval::                   Set up the interval (in seconds) to run
 #                                  the puppet agent.
 #                                  type:integer
@@ -252,6 +258,7 @@ class puppet (
   $listen                      = $puppet::params::listen,
   $pluginsync                  = $puppet::params::pluginsync,
   $splay                       = $puppet::params::splay,
+  $splaylimit                  = $puppet::params::splaylimit,
   $runinterval                 = $puppet::params::runinterval,
   $usecacheonfailure           = $puppet::params::usecacheonfailure,
   $runmode                     = $puppet::params::runmode,
