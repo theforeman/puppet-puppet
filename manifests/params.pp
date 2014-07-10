@@ -12,6 +12,7 @@ class puppet::params {
   $listen              = false
   $pluginsync          = true
   $splay               = false
+  $splaylimit          = '1800'
   $runinterval         = '1800'
   $runmode             = 'service'
   $cron_cmd            = undef
