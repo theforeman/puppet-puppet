@@ -31,6 +31,10 @@
 #                                  the puppet agent.
 #                                  type:integer
 #
+# $usecacheonfailure::             Switch to enable use of cached catalog on
+#                                  failure of run.
+#                                  type: boolean
+#
 # $runmode::                       Select the mode to setup the puppet agent.
 #                                  Can be either 'cron', 'service', or 'none'.
 #
@@ -249,6 +253,7 @@ class puppet (
   $pluginsync                  = $puppet::params::pluginsync,
   $splay                       = $puppet::params::splay,
   $runinterval                 = $puppet::params::runinterval,
+  $usecacheonfailure           = $puppet::params::usecacheonfailure,
   $runmode                     = $puppet::params::runmode,
   $cron_cmd                    = $puppet::params::cron_cmd,
   $agent_noop                  = $puppet::params::agent_noop,
@@ -313,6 +318,7 @@ class puppet (
   validate_bool($listen)
   validate_bool($pluginsync)
   validate_bool($splay)
+  validate_bool($usecacheonfailure)
   validate_bool($agent_noop)
   validate_bool($agent)
   validate_bool($server)
