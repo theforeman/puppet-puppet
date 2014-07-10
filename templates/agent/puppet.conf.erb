@@ -18,15 +18,15 @@
     # resources to be displayed in Foreman - only for Puppet >= 3.4
     default_schedules = false
 
-    report        = true
-    pluginsync    = <%= scope.lookupvar('::puppet::pluginsync') %>
-    masterport    = <%= scope.lookupvar("::puppet::port") rescue 8140 %>
-    environment   = <%= @environment %>
-    certname      = <%= @clientcert %>
-    server        = <%= if ( @puppetmaster and !@puppetmaster.empty? ) then @puppetmaster else @fqdn end %>
-    listen        = <%= scope.lookupvar('::puppet::listen') %>
-    splay         = <%= scope.lookupvar('::puppet::splay') %>
-    runinterval   = <%= scope.lookupvar('::puppet::runinterval') %>
-    noop          = <%= scope.lookupvar('::puppet::agent_noop') %>
-    configtimeout = <%= scope.lookupvar('::puppet::configtimeout') %>
-
+    report            = true
+    pluginsync        = <%= scope.lookupvar('::puppet::pluginsync') %>
+    masterport        = <%= scope.lookupvar("::puppet::port") rescue 8140 %>
+    environment       = <%= @environment %>
+    certname          = <%= @clientcert %>
+    server            = <%= if ( @puppetmaster and !@puppetmaster.empty? ) then @puppetmaster else @fqdn end %>
+    listen            = <%= scope.lookupvar('::puppet::listen') %>
+    splay             = <%= scope.lookupvar('::puppet::splay') %>
+    runinterval       = <%= scope.lookupvar('::puppet::runinterval') %>
+    noop              = <%= scope.lookupvar('::puppet::agent_noop') %>
+    configtimeout     = <%= scope.lookupvar('::puppet::configtimeout') %>
+    usecacheonfailure = <%= scope.lookupvar('::puppet::usecacheonfailure') %>
