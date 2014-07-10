@@ -18,6 +18,7 @@ class puppet::params {
   $agent_noop          = false
   $show_diff           = false
   $configtimeout       = 120
+  $usecacheonfailure   = true
   $ca_server           = ''
   $classfile           = '$vardir/classes.txt'
 
