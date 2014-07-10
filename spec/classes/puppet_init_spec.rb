@@ -43,4 +43,14 @@ describe 'puppet' do
     end
   end
 
+  # Test validate_string parameters
+  [
+    :hiera_config,
+  ].each do |p|
+    context "when #{p} => ['foo']" do
+      let(:params) {{ p => ['foo'] }}
+      it { expect { should create_class('puppet') }.to raise_error(Puppet::Error, /is not a string/) }
+    end
+  end
+
 end

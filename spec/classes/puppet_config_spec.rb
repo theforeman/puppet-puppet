@@ -24,6 +24,7 @@ describe 'puppet::config' do
         '    hostprivkey = $privatekeydir/$certname.pem { mode = 640 }',
         '    autosign       = $confdir/autosign.conf { mode = 664 }',
         '    show_diff     = false',
+        '    hiera_config = $confdir/hiera.yaml'
       ])
     end
   end
@@ -50,4 +51,18 @@ describe 'puppet::config' do
       ])
     end
   end
+
+  context "when hiera_config => '$confdir/hiera.yaml'" do
+    let :pre_condition do
+      "class { 'puppet': hiera_config => '/etc/puppet/hiera/production/hiera.yaml' }"
+    end
+
+    it 'should contain puppet.conf [main] with non-default hiera_config' do
+      verify_concat_fragment_contents(subject, 'puppet.conf+10-main', [
+        '[main]',
+        '    hiera_config = /etc/puppet/hiera/production/hiera.yaml',
+      ])
+    end
+  end
+
 end

@@ -66,6 +66,10 @@
 #                                  of the classes associated with the retrieved
 #                                  configuration.
 #
+# $hiera_config::                  The hiera configuration file.
+#                                  Defaults to '$confdir/hiera.yaml'.
+#                                  type:string
+#
 # $auth_template::                 Use a custom template for the auth
 #                                  configuration.
 #
@@ -273,6 +277,7 @@ class puppet (
   $ca_server                   = $puppet::params::ca_server,
   $dns_alt_names               = $puppet::params::dns_alt_names,
   $classfile                   = $puppet::params::classfile,
+  $hiera_config                = $puppet::params::hiera_config,
   $main_template               = $puppet::params::main_template,
   $agent_template              = $puppet::params::agent_template,
   $auth_template               = $puppet::params::auth_template,
@@ -343,6 +348,7 @@ class puppet (
   validate_bool($server_strict_variables)
 
   validate_string($ca_server)
+  validate_string($hiera_config)
   validate_string($server_external_nodes)
   validate_string($server_ca_proxy)
 
