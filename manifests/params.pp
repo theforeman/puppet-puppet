@@ -12,12 +12,14 @@ class puppet::params {
   $listen              = false
   $pluginsync          = true
   $splay               = false
+  $splaylimit          = '1800'
   $runinterval         = '1800'
   $runmode             = 'service'
   $cron_cmd            = undef
   $agent_noop          = false
   $show_diff           = false
   $configtimeout       = 120
+  $usecacheonfailure   = true
   $ca_server           = ''
   $dns_alt_names       = []
   $classfile           = '$vardir/classes.txt'

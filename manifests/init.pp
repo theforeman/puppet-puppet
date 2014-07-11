@@ -27,9 +27,19 @@
 #                                  to sleep before each run.
 #                                  type:boolean
 #
+# $splaylimit::                    The maximum time to delay before runs.
+#                                  Defaults to being the same as the run interval.
+#                                  This setting can be a time interval in seconds
+#                                  (30 or 30s), minutes (30m), hours (6h), days (2d),
+#                                  or years (5y).
+#
 # $runinterval::                   Set up the interval (in seconds) to run
 #                                  the puppet agent.
 #                                  type:integer
+#
+# $usecacheonfailure::             Switch to enable use of cached catalog on
+#                                  failure of run.
+#                                  type: boolean
 #
 # $runmode::                       Select the mode to setup the puppet agent.
 #                                  Can be either 'cron', 'service', or 'none'.
@@ -252,7 +262,9 @@ class puppet (
   $listen                      = $puppet::params::listen,
   $pluginsync                  = $puppet::params::pluginsync,
   $splay                       = $puppet::params::splay,
+  $splaylimit                  = $puppet::params::splaylimit,
   $runinterval                 = $puppet::params::runinterval,
+  $usecacheonfailure           = $puppet::params::usecacheonfailure,
   $runmode                     = $puppet::params::runmode,
   $cron_cmd                    = $puppet::params::cron_cmd,
   $agent_noop                  = $puppet::params::agent_noop,
@@ -318,6 +330,7 @@ class puppet (
   validate_bool($listen)
   validate_bool($pluginsync)
   validate_bool($splay)
+  validate_bool($usecacheonfailure)
   validate_bool($agent_noop)
   validate_bool($agent)
   validate_bool($server)
