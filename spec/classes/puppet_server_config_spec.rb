@@ -90,11 +90,11 @@ describe 'puppet::server::config' do
         with({}) # So we can use a trailing dot on each with_content line
 
       should contain_concat_fragment('puppet.conf+40-development').
-        with_content(/^\[development\]\n\s+modulepath\s+= \/etc\/puppet\/environments\/development\/modules:\/etc\/puppet\/environments\/common:\/usr\/share\/puppet\/modules\n\s+config_version = $/).
+        with_content(%r{^\[development\]\n\s+modulepath\s+= /etc/puppet/environments/development/modules:/etc/puppet/environments/common:/usr/share/puppet/modules$}).
         with({}) # So we can use a trailing dot on each with_content line
 
       should contain_concat_fragment('puppet.conf+40-production').
-        with_content(/^\[production\]\n\s+modulepath\s+= \/etc\/puppet\/environments\/production\/modules:\/etc\/puppet\/environments\/common:\/usr\/share\/puppet\/modules\n\s+config_version = $/).
+        with_content(%r{^\[production\]\n\s+modulepath\s+= /etc/puppet/environments/production/modules:/etc/puppet/environments/common:/usr/share/puppet/modules$}).
         with({}) # So we can use a trailing dot on each with_content line
 
       should contain_file('/etc/puppet/puppet.conf')
