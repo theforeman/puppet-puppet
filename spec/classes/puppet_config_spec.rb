@@ -3,6 +3,7 @@ require 'spec_helper'
 describe 'puppet::config' do
   let :facts do {
     :osfamily => 'RedHat',
+    :domain   => 'example.org',
   } end
 
   describe 'with default parameters' do
@@ -61,6 +62,21 @@ describe 'puppet::config' do
       verify_concat_fragment_contents(subject, 'puppet.conf+10-main', [
         '[main]',
         '    hiera_config = /etc/puppet/hiera/production/hiera.yaml',
+      ])
+    end
+  end
+
+  context "when use_srv_records => true" do
+    let :pre_condition do
+      "class { 'puppet': use_srv_records => true }"
+    end
+
+    it 'should contain puppet.conf [main] with SRV settings' do
+      verify_concat_fragment_contents(subject, 'puppet.conf+10-main', [
+        '[main]',
+        '    use_srv_records = true',
+        '    srv_domain = example.org',
+        '    pluginsource = puppet:///plugins',
       ])
     end
   end

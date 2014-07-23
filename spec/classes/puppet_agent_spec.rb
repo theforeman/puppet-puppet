@@ -67,5 +67,13 @@ describe 'puppet::agent' do
                  with_content(/server.*mymaster\.example\.com/)
     end
   end
+
+  describe 'use_srv_records removes server setting' do
+    let(:pre_condition) { "class {'puppet': agent => true, use_srv_records => true}" }
+    it do
+      should contain_concat_fragment('puppet.conf+20-agent').
+                 without_content(/server\s*=/)
+    end
+  end
 end
 

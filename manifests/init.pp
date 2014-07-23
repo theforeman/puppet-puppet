@@ -78,6 +78,14 @@
 # $main_template::                 Use a custom template for the main puppet
 #                                  configuration.
 #
+# $use_srv_records::               Whether DNS SRV records will be used to resolve
+#                                  the Puppet master
+#                                  type:boolean
+#
+# $srv_domain::                    Search domain for SRV records
+#
+# $pluginsource::                  URL to retrieve Puppet plugins from during pluginsync
+#
 # == puppet::agent parameters
 #
 # $agent::                         Should a puppet agent be installed
@@ -282,6 +290,9 @@ class puppet (
   $configtimeout                 = $puppet::params::configtimeout,
   $ca_server                     = $puppet::params::ca_server,
   $dns_alt_names                 = $puppet::params::dns_alt_names,
+  $use_srv_records               = $puppet::params::use_srv_records,
+  $srv_domain                    = $puppet::params::srv_domain,
+  $pluginsource                  = $puppet::params::pluginsource,
   $classfile                     = $puppet::params::classfile,
   $hiera_config                  = $puppet::params::hiera_config,
   $main_template                 = $puppet::params::main_template,
