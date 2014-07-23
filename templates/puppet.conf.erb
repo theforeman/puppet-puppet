@@ -32,4 +32,11 @@
 <% if @dns_alt_names and !@dns_alt_names.empty? -%>
     dns_alt_names = <%= @dns_alt_names.join(",") %>
 <% end -%>
+<% if @use_srv_records -%>
+    use_srv_records = true
+    srv_domain = <%= @srv_domain %>
+<% if @srv_pluginsync -%>
+    <%= @srv_pluginsync %>
+<% end -%>
+<% end -%>
 
