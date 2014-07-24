@@ -278,7 +278,7 @@ class puppet (
   $dns_alt_names               = $puppet::params::dns_alt_names,
   $use_srv_records             = $puppet::params::use_srv_records,
   $srv_domain                  = $puppet::params::srv_domain,
-  $srv_pluginsync              = $puppet::params::srv_pluginsync,
+  $pluginsource                = $puppet::params::pluginsource,
   $classfile                   = $puppet::params::classfile,
   $hiera_config                = $puppet::params::hiera_config,
   $main_template               = $puppet::params::main_template,
