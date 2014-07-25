@@ -22,6 +22,9 @@ class puppet::params {
   $usecacheonfailure   = true
   $ca_server           = ''
   $dns_alt_names       = []
+  $use_srv_records     = false
+  $srv_domain          = $::domain
+  $pluginsource        = 'puppet:///plugins'
   $classfile           = '$vardir/classes.txt'
   $hiera_config        = '$confdir/hiera.yaml'
 
