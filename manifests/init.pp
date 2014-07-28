@@ -70,6 +70,8 @@
 #                                  Defaults to '$confdir/hiera.yaml'.
 #                                  type:string
 #
+# $syslogfacility::                Facility name to use when logging to syslog
+#
 # $auth_template::                 Use a custom template for the auth
 #                                  configuration.
 #
@@ -303,6 +305,7 @@ class puppet (
   $client_package                = $puppet::params::client_package,
   $agent                         = $puppet::params::agent,
   $puppetmaster                  = $puppet::params::puppetmaster,
+  $syslogfacility                = $puppet::params::syslogfacility,
   $server                        = $puppet::params::server,
   $server_user                   = $puppet::params::user,
   $server_group                  = $puppet::params::group,
