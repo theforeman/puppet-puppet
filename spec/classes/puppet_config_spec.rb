@@ -52,6 +52,19 @@ describe 'puppet::config' do
     end
   end
 
+  context "when syslogfacility => 'local6'" do
+    let :pre_condition do
+      "class { 'puppet': syslogfacility => 'local6' }"
+    end
+
+    it 'should contain puppet.conf [main] with syslogfacility' do
+      verify_concat_fragment_contents(subject, 'puppet.conf+10-main', [
+        '[main]',
+        '    syslogfacility = local6',
+      ])
+    end
+  end
+
   context "when hiera_config => '$confdir/hiera.yaml'" do
     let :pre_condition do
       "class { 'puppet': hiera_config => '/etc/puppet/hiera/production/hiera.yaml' }"

@@ -24,6 +24,7 @@ class puppet::params {
   $dns_alt_names       = []
   $classfile           = '$vardir/classes.txt'
   $hiera_config        = '$confdir/hiera.yaml'
+  $syslogfacility      = undef
 
   # Need your own config templates? Specify here:
   $main_template   = 'puppet/puppet.conf.erb'

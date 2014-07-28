@@ -32,4 +32,7 @@
 <% if @dns_alt_names and !@dns_alt_names.empty? -%>
     dns_alt_names = <%= @dns_alt_names.join(",") %>
 <% end -%>
+<% if @syslogfacility and !@syslogfacility.empty? -%>
+    syslogfacility = <%= @syslogfacility %>
+<% end -%>
 
