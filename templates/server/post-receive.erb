@@ -40,6 +40,16 @@ if file_uid != Process.uid and Process.uid == 0
   Process::UID.change_privilege(file_uid)
 end
 
+# Run a command, return its output and abort if it fails
+def do_cmd(cmd)
+   ret = %x{#{cmd}}
+   if $?.exitstatus != 0
+     puts("'#{cmd}' failed. Giving up.")
+     exit 1
+   end
+   ret
+end
+
 # You can push multiple refspecs at once, like 'git push origin branch1 branch2',
 # so we need to handle each one.
 $stdin.each_line do |line|
@@ -79,25 +89,25 @@ $stdin.each_line do |line|
 
       puts "Updating existing environment #{environment_name}"
       Dir.chdir environment_path
-      %x{git fetch --all}
-      %x{git reset --hard "origin/#{branchname}"}
+      do_cmd("git fetch --all")
+      do_cmd("git reset --hard 'origin/#{branchname}'")
       if File.exists? "#{environment_path}/.gitmodules"
         # ensure that we remove deleted sub modules too
-        %x{git status --short}.split("\n").each do |file|
+        do_cmd("git status --short").split("\n").each do |file|
           # ?? old_submodule/
           if file =~ /\s*\?{2}\s*(\S*)/
             puts "Found a few unknown files.. deleting #{$1}"
             FileUtils.rm_rf $1, :secure => true
           end
         end
-        %x{git submodule sync}
-        %x{git submodule update --init --recursive}
+        do_cmd("git submodule sync")
+        do_cmd("git submodule update --init --recursive")
       end
     else
       # Instantiate a new environment from the current repository.
 
       puts "Creating new environment #{environment_name}"
-      %x{git clone --recursive #{SOURCE_REPOSITORY} #{environment_path} --branch #{branchname}}
+      do_cmd("git clone --recursive #{SOURCE_REPOSITORY} #{environment_path} --branch #{branchname}")
     end
   end
 end
