@@ -56,6 +56,7 @@ class puppet::server::config inherits puppet::config {
     creates => $::puppet::server_ssl_dir,
     command => "/bin/mkdir -p ${::puppet::server_ssl_dir}",
     before  => Exec['puppet_server_config-generate_ca_cert'],
+    umask   => '0022',
   }
 
   exec {'puppet_server_config-generate_ca_cert':
@@ -63,6 +64,7 @@ class puppet::server::config inherits puppet::config {
     command => "${puppet::params::puppetca_path}/${puppet::params::puppetca_bin} --generate ${::fqdn}",
     require => File["${puppet::server_dir}/puppet.conf"],
     notify  => Service[$puppet::server_httpd_service],
+    umask   => '0022',
   }
 
   file { "${puppet::server_vardir}/reports":
