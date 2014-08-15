@@ -8,7 +8,8 @@ class puppet::server::config inherits puppet::config {
   # Mirror the relationship, as defined() is parse-order dependent
   # Ensures puppetmasters certs are generated before the proxy is needed
   if defined(Class['foreman_proxy::config']) and $foreman_proxy::ssl {
-    Class['puppet::server::config'] ~> Class['foreman_proxy::config', 'foreman_proxy::service']
+    Class['puppet::server::config'] ~> Class['foreman_proxy::config']
+    Class['puppet::server::config'] ~> Class['foreman_proxy::service']
   }
 
   # Open read permissions to private keys to puppet group for foreman, proxy etc.
