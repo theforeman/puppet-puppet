@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.2.1
+* Fix relationship specification for early Puppet 2.7 releases
+
 ## 2.2.0
 * Add support for directory environments, used by default on Puppet 3.6+
     * server_dynamic_environments is deprecated when
