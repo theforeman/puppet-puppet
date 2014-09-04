@@ -40,3 +40,6 @@
 <% end -%>
 <% end -%>
 
+<% if @syslogfacility and !@syslogfacility.empty? -%>
+    syslogfacility = <%= @syslogfacility %>
+<% end -%>

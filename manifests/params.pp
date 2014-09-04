@@ -29,6 +29,7 @@ class puppet::params {
   # lint:endignore
   $classfile           = '$vardir/classes.txt'
   $hiera_config        = '$confdir/hiera.yaml'
+  $syslogfacility      = undef
 
   # Need your own config templates? Specify here:
   $main_template   = 'puppet/puppet.conf.erb'
