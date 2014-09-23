@@ -37,8 +37,7 @@ describe 'puppet::server::config' do
         :creates => "/var/lib/puppet/ssl/certs/#{facts[:fqdn]}.pem",
         :command => "/usr/sbin/puppetca --generate #{facts[:fqdn]}",
         :require => /File\[\/etc\/puppet\/puppet\.conf\]/,
-        :notify  => 'Service[httpd]',
-      })
+      }).that_notifies('Service[httpd]')
     end
 
     it 'should set up the ENC' do

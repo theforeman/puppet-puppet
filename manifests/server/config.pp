@@ -63,7 +63,10 @@ class puppet::server::config inherits puppet::config {
     creates => $::puppet::server::ssl_cert,
     command => "${puppet::params::puppetca_path}/${puppet::params::puppetca_bin} --generate ${::fqdn}",
     require => File["${puppet::server_dir}/puppet.conf"],
-    notify  => Service[$puppet::server_httpd_service],
+  }
+
+  if $puppet::server_passenger {
+    Exec['puppet_server_config-generate_ca_cert'] ~> Service[$puppet::server_httpd_service]
   }
 
   file { "${puppet::server_vardir}/reports":
