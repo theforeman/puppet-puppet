@@ -1,17 +1,41 @@
+# == Class: puppet::server::service
+#
 # Set up the puppet server as a service
-class puppet::server::service {
+#
+# === Parameters:
+#
+# $puppetmaster::  Whether to start/stop the (Ruby) puppetmaster service
+#                  type:boolean
+#
+# $puppetserver::  Whether to start/stop the (JVM) puppetserver service
+#                  type:boolean
+#
+class puppet::server::service(
+  $puppetmaster = true,
+  $puppetserver = false,
+) {
+  validate_bool($puppetmaster, $puppetserver)
 
-  if $::puppet::server::use_service {
-    $ensured = 'running'
-    $enabled = true
-  } else {
-    $ensured = 'stopped'
-    $enabled = false
+  if $puppetmaster and $puppetserver {
+    fail('Both puppetmaster and puppetserver cannot be enabled simultaneously')
   }
 
+  $pm_ensure = $puppetmaster ? {
+    true  => 'running',
+    false => 'stopped',
+  }
   service { 'puppetmaster':
-    ensure => $ensured,
-    enable => $enabled,
+    ensure => $pm_ensure,
+    enable => $puppetmaster,
+  }
+
+  $ps_ensure = $puppetserver ? {
+    true  => 'running',
+    false => 'stopped',
+  }
+  service { 'puppetserver':
+    ensure => $ps_ensure,
+    enable => $puppetserver,
   }
 
 }

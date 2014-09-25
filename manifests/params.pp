@@ -51,6 +51,7 @@ class puppet::params {
   $server_vardir             = '/var/lib/puppet'
   $server_ca                 = true
   $server_reports            = 'foreman'
+  $server_implementation     = 'master'
   $server_passenger          = true
   $server_service_fallback   = true
   $server_passenger_max_pool = 12
@@ -110,10 +111,7 @@ class puppet::params {
   $server_app_root = "${dir}/rack"
   $server_ssl_dir  = "${server_vardir}/ssl"
 
-  $server_package     =  $::operatingsystem ? {
-    /(Debian|Ubuntu)/ => ['puppetmaster-common','puppetmaster'],
-    default           => ['puppet-server'],
-  }
+  $server_package     = undef
   $client_package     = $::operatingsystem ? {
     /(Debian|Ubuntu)/ => ['puppet-common','puppet'],
     default           => ['puppet'],

@@ -126,11 +126,15 @@
 #
 # $server_reports::                List of report types to include on the puppetmaster
 #
+# $server_implementation::         Puppet master implementation, either "master" (traditional
+#                                  Ruby) or "puppetserver" (JVM-based)
+#
 # $server_passenger::              If set to true, we will configure apache with
 #                                  passenger. If set to false, we will enable the
 #                                  default puppetmaster service unless
 #                                  service_fallback is set to false. See 'Advanced
 #                                  server parameters' for more information.
+#                                  Only applicable when server_implementation is "master".
 #                                  type:boolean
 #
 # $server_external_nodes::         External nodes classifier executable
@@ -314,6 +318,7 @@ class puppet (
   $server_vardir                 = $puppet::params::server_vardir,
   $server_ca                     = $puppet::params::server_ca,
   $server_reports                = $puppet::params::server_reports,
+  $server_implementation         = $puppet::params::server_implementation,
   $server_passenger              = $puppet::params::server_passenger,
   $server_service_fallback       = $puppet::params::server_service_fallback,
   $server_passenger_max_pool     = $puppet::params::server_passenger_max_pool,
@@ -374,6 +379,8 @@ class puppet (
   validate_string($server_ca_proxy)
 
   validate_array($dns_alt_names)
+
+  validate_re($server_implementation, '^(master|puppetserver)$')
 
   include ::puppet::config
   Class['puppet::config'] -> Class['puppet']

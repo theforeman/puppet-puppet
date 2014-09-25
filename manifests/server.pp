@@ -3,12 +3,6 @@
 # Sets up a puppet master.
 class puppet::server {
 
-  if $::puppet::server_passenger or ($::puppet::server_service_fallback == false) {
-    $use_service = false
-  } else {
-    $use_service = true
-  }
-
   if $::puppet::server_ca {
     $ssl_ca_cert   = "${::puppet::server_ssl_dir}/ca/ca_crt.pem"
     $ssl_ca_crl    = "${::puppet::server_ssl_dir}/ca/ca_crl.pem"
@@ -35,7 +29,10 @@ class puppet::server {
 
   class { 'puppet::server::install': }~>
   class { 'puppet::server::config':  }~>
-  class { 'puppet::server::service': }->
+  class { 'puppet::server::service':
+    puppetmaster => $::puppet::server_implementation == 'master' and !$::puppet::server_passenger and $::puppet::server_service_fallback,
+    puppetserver => $::puppet::server_implementation == 'puppetserver',
+  }->
   Class['puppet::server']
 
   Class['puppet::config'] ~> Class['puppet::server::service']

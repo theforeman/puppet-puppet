@@ -21,8 +21,11 @@ describe 'puppet::server' do
       it 'should include classes' do
         should contain_class('puppet::server::install')
         should contain_class('puppet::server::config')
-        should contain_class('puppet::server::service')
+        should contain_class('puppet::server::service').
+          with_puppetmaster(false).
+          with_puppetserver(false)
       end
+      it { should contain_package('puppet-server') }
     end
   end
 
@@ -54,6 +57,46 @@ describe 'puppet::server' do
 
     it { should compile.with_all_deps }
     it { should_not contain_class('apache') }
+    it do
+      should contain_class('puppet::server::service').
+        with_puppetmaster(true).
+        with_puppetserver(false)
+    end
+
+    describe "and server_service_fallback => false" do
+      let :pre_condition do
+        "class {'puppet': server => true, server_passenger => false, server_service_fallback => false}"
+      end
+
+      it { should compile.with_all_deps }
+      it do
+        should contain_class('puppet::server::service').
+          with_puppetmaster(false).
+          with_puppetserver(false)
+      end
+    end
+  end
+
+  describe 'with server_implementation => "puppetserver"' do
+    let :pre_condition do
+      "class {'puppet': server => true, server_implementation => 'puppetserver'}"
+    end
+
+    it { should compile.with_all_deps }
+    it { should_not contain_class('apache') }
+    it do
+      should contain_class('puppet::server::service').
+        with_puppetmaster(false).
+        with_puppetserver(true)
+    end
+    it { should contain_package('puppetserver') }
+  end
+
+  describe 'with unknown server_implementation' do
+    let :pre_condition do
+      "class {'puppet': server => true, server_implementation => 'golang'}"
+    end
+    it { expect { should create_class('puppet') }.to raise_error(Puppet::Error, /"golang" does not match/) }
   end
 
 end
