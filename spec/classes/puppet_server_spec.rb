@@ -23,7 +23,7 @@ describe 'puppet::server' do
         should contain_class('puppet::server::config')
         should contain_class('puppet::server::service').
           with_puppetmaster(false).
-          with_puppetserver(false)
+          with_puppetserver(nil)
       end
       it { should contain_package('puppet-server') }
     end
@@ -60,7 +60,7 @@ describe 'puppet::server' do
     it do
       should contain_class('puppet::server::service').
         with_puppetmaster(true).
-        with_puppetserver(false)
+        with_puppetserver(nil)
     end
 
     describe "and server_service_fallback => false" do
@@ -72,7 +72,7 @@ describe 'puppet::server' do
       it do
         should contain_class('puppet::server::service').
           with_puppetmaster(false).
-          with_puppetserver(false)
+          with_puppetserver(nil)
       end
     end
   end
@@ -86,7 +86,7 @@ describe 'puppet::server' do
     it { should_not contain_class('apache') }
     it do
       should contain_class('puppet::server::service').
-        with_puppetmaster(false).
+        with_puppetmaster(nil).
         with_puppetserver(true)
     end
     it { should contain_package('puppetserver') }

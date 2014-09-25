@@ -27,11 +27,19 @@ class puppet::server {
     $config_version_cmd = $::puppet::server_config_version
   }
 
+  if $::puppet::server_implementation == 'master' {
+    $pm_service = !$::puppet::server_passenger and $::puppet::server_service_fallback
+    $ps_service = undef
+  } elsif $::puppet::server_implementation == 'puppetserver' {
+    $pm_service = undef
+    $ps_service = true
+  }
+
   class { 'puppet::server::install': }~>
   class { 'puppet::server::config':  }~>
   class { 'puppet::server::service':
-    puppetmaster => $::puppet::server_implementation == 'master' and !$::puppet::server_passenger and $::puppet::server_service_fallback,
-    puppetserver => $::puppet::server_implementation == 'puppetserver',
+    puppetmaster => $pm_service,
+    puppetserver => $ps_service,
   }->
   Class['puppet::server']
 

@@ -11,31 +11,33 @@
 #                  type:boolean
 #
 class puppet::server::service(
-  $puppetmaster = true,
-  $puppetserver = false,
+  $puppetmaster = undef,
+  $puppetserver = undef,
 ) {
-  validate_bool($puppetmaster, $puppetserver)
-
   if $puppetmaster and $puppetserver {
     fail('Both puppetmaster and puppetserver cannot be enabled simultaneously')
   }
 
-  $pm_ensure = $puppetmaster ? {
-    true  => 'running',
-    false => 'stopped',
-  }
-  service { 'puppetmaster':
-    ensure => $pm_ensure,
-    enable => $puppetmaster,
+  if $puppetmaster != undef {
+    $pm_ensure = $puppetmaster ? {
+      true  => 'running',
+      false => 'stopped',
+    }
+    service { 'puppetmaster':
+      ensure => $pm_ensure,
+      enable => $puppetmaster,
+    }
   }
 
-  $ps_ensure = $puppetserver ? {
-    true  => 'running',
-    false => 'stopped',
-  }
-  service { 'puppetserver':
-    ensure => $ps_ensure,
-    enable => $puppetserver,
+  if $puppetserver != undef {
+    $ps_ensure = $puppetserver ? {
+      true  => 'running',
+      false => 'stopped',
+    }
+    service { 'puppetserver':
+      ensure => $ps_ensure,
+      enable => $puppetserver,
+    }
   }
 
 }
