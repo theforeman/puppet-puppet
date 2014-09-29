@@ -10,6 +10,16 @@ class puppet::server::install {
   }
   $server_package = pick($::puppet::server_package, $server_package_default)
 
+  if $::operatingsystem == 'CentOs' {
+    package {"puppet_yum_repo":
+      name => "puppetlabs-release",
+      source => "http://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm",
+      ensure => present,
+      provider => rpm,
+      before => Package["puppet-server"],
+    }
+  }
+
   package { $server_package:
     ensure => $::puppet::version,
   }
