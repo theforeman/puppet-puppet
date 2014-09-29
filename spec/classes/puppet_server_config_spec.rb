@@ -58,7 +58,7 @@ describe 'puppet::server::config' do
       should contain_file('/etc/puppet/manifests/site.pp').with({
         :ensure  => 'present',
         :replace => false,
-        :content => "# Empty site.pp required (puppet #15106, foreman #1708)\n",
+        :content => "# site.pp must exist (puppet #15106, foreman #1708)\n",
       })
 
       should contain_puppet__server__env('development')
