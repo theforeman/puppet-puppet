@@ -131,5 +131,7 @@ class puppet::params {
   $puppetca_cmd = "${puppetca_path}/${puppetca_bin}"
 
   # Puppet service name
-  $service_name = 'puppet'
+  if $::operatingsystem == 'Fedora' and versioncmp($::os_maj_release, '19') > 0 {
+    $service_name = 'puppetagent'
+  }
 }
