@@ -63,12 +63,12 @@
 # allow nodes to retrieve their own catalog
 path ~ ^/catalog/([^/]+)$
 method find
-allow $1
+allow <%= @auth_allowed.join(', ') %>
 
 # allow nodes to retrieve their own node definition
 path ~ ^/node/([^/]+)$
 method find
-allow $1
+allow <%= @auth_allowed.join(', ') %>
 
 # allow all nodes to access the certificates services
 path /certificate_revocation_list/ca
@@ -81,7 +81,7 @@ allow *
 # allow all nodes to store their own reports
 path ~ ^/report/([^/]+)$
 method save
-allow $1
+allow <%= @auth_allowed.join(', ') %>
 
 # Allow all nodes to access all file services; this is necessary for
 # pluginsync, file serving from modules, and file serving from custom

@@ -40,6 +40,9 @@ class puppet::params {
   # Allow any to the CRL. Needed in case of puppet CA proxy
   $allow_any_crl_auth = false
 
+  # Authenticated nodes to allow
+  $auth_allowed = ['$1']
+
   # Will this host be a puppet agent ?
   $agent                     = true
 

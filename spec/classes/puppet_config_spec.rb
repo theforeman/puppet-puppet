@@ -40,6 +40,16 @@ describe 'puppet::config' do
     end
   end
 
+  describe 'with auth_allowed' do
+    let :pre_condition do
+      'class {"::puppet": auth_allowed => [\'$1\', \'puppetproxy\']}'
+    end
+
+    it 'should contain auth.conf with allow' do
+      should contain_file('/etc/puppet/auth.conf').with_content(%r{^allow \$1, puppetproxy$})
+    end
+  end
+
   context "when dns_alt_names => ['foo','bar']" do
     let :pre_condition do
       "class { 'puppet': dns_alt_names => ['foo','bar'] }"

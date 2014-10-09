@@ -1,6 +1,7 @@
 # Set up the puppet config
 class puppet::config(
   $allow_any_crl_auth = $::puppet::allow_any_crl_auth,
+  $auth_allowed       = $::puppet::auth_allowed,
   $auth_template      = $::puppet::auth_template,
   $ca_server          = $::puppet::ca_server,
   $dns_alt_names      = $::puppet::dns_alt_names,

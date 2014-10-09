@@ -258,6 +258,11 @@
 #                                  from a the puppet CA proxy.
 #                                  type:boolean
 #
+# $auth_allowed::                  An array of authenticated nodes allowed to
+#                                  access all catalog and node endpoints.
+#                                  default to ['$1']
+#                                  type:array
+#
 # === Usage:
 #
 # * Simple usage:
@@ -306,6 +311,7 @@ class puppet (
   $auth_template                 = $puppet::params::auth_template,
   $nsauth_template               = $puppet::params::nsauth_template,
   $allow_any_crl_auth            = $puppet::params::allow_any_crl_auth,
+  $auth_allowed                  = $puppet::params::auth_allowed,
   $client_package                = $puppet::params::client_package,
   $agent                         = $puppet::params::agent,
   $puppetmaster                  = $puppet::params::puppetmaster,
@@ -379,6 +385,7 @@ class puppet (
   validate_string($server_ca_proxy)
 
   validate_array($dns_alt_names)
+  validate_array($auth_allowed)
 
   validate_re($server_implementation, '^(master|puppetserver)$')
 
