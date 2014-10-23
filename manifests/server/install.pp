@@ -21,7 +21,8 @@ class puppet::server::install {
     }
 
     user { $puppet::server_user:
-      shell => '/usr/bin/git-shell',
+      shell   => '/usr/bin/git-shell',
+      require => Class['::git::install'],
     }
   }
 }
