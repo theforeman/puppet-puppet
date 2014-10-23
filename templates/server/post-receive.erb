@@ -4,6 +4,7 @@ ERB.new(File.read(File.expand_path("../_header.erb",File.dirname(file))), nil, n
 <%= @template_header %>
 
 require 'fileutils'
+require 'etc'
 
 $stdout.sync = true
 $stderr.sync = true
@@ -41,6 +42,11 @@ end
 file_uid = File.stat($0).uid
 if file_uid != Process.uid and Process.uid == 0
   Process::UID.change_privilege(file_uid)
+  # Set LOGNAME and HOME directories to file-owning user's values
+  # so git can read ~/.config/git/attributes (for example) without error
+  file_pwuid = Etc::getpwuid(file_uid)
+  ENV.store('LOGNAME',file_pwuid.name)
+  ENV.store('HOME',file_pwuid.dir)
 end
 
 # Run a command, return its output and abort if it fails
