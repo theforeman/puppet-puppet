@@ -33,4 +33,24 @@ describe 'puppet' do
     it { should contain_concat_fragment('puppet.conf+10-main').with_content(/^\s+ca_server\s+= ca.example.org$/) }
   end
 
+  # Test validate_array parameters
+  [
+    :dns_alt_names,
+  ].each do |p|
+    context "when #{p} => 'foo'" do
+      let(:params) {{ p => 'foo' }}
+      it { expect { should create_class('puppet') }.to raise_error(Puppet::Error, /is not an Array/) }
+    end
+  end
+
+  # Test validate_string parameters
+  [
+    :hiera_config,
+  ].each do |p|
+    context "when #{p} => ['foo']" do
+      let(:params) {{ p => ['foo'] }}
+      it { expect { should create_class('puppet') }.to raise_error(Puppet::Error, /is not a string/) }
+    end
+  end
+
 end

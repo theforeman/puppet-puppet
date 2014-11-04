@@ -1,6 +1,6 @@
 # Set up the puppet server config
 class puppet::server::config inherits puppet::config {
-  if $puppet::server_passenger {
+  if $puppet::server_passenger and $::puppet::server_implementation == 'master' {
     # Anchor the passenger config inside this
     class { 'puppet::server::passenger': } -> Class['puppet::server::config']
   }
@@ -8,7 +8,8 @@ class puppet::server::config inherits puppet::config {
   # Mirror the relationship, as defined() is parse-order dependent
   # Ensures puppetmasters certs are generated before the proxy is needed
   if defined(Class['foreman_proxy::config']) and $foreman_proxy::ssl {
-    Class['puppet::server::config'] -> Class['foreman_proxy::config']
+    Class['puppet::server::config'] ~> Class['foreman_proxy::config']
+    Class['puppet::server::config'] ~> Class['foreman_proxy::service']
   }
 
   # Open read permissions to private keys to puppet group for foreman, proxy etc.
@@ -62,7 +63,10 @@ class puppet::server::config inherits puppet::config {
     creates => $::puppet::server::ssl_cert,
     command => "${puppet::params::puppetca_path}/${puppet::params::puppetca_bin} --generate ${::fqdn}",
     require => File["${puppet::server_dir}/puppet.conf"],
-    notify  => Service[$puppet::server_httpd_service],
+  }
+
+  if $puppet::server_passenger and $::puppet::server_implementation == 'master' {
+    Exec['puppet_server_config-generate_ca_cert'] ~> Service[$puppet::server_httpd_service]
   }
 
   file { "${puppet::server_vardir}/reports":
@@ -74,6 +78,8 @@ class puppet::server::config inherits puppet::config {
   file { $puppet::server_envs_dir:
     ensure => directory,
     owner  => $puppet::server_environments_owner,
+    group  => $puppet::server_environments_group,
+    mode   => $puppet::server_environments_mode,
   }
 
   if $puppet::server_git_repo {
@@ -109,7 +115,7 @@ class puppet::server::config inherits puppet::config {
     file { "${puppet::server_manifest_path}/site.pp":
       ensure  => present,
       replace => false,
-      content => "# Empty site.pp required (puppet #15106, foreman #1708)\n",
+      content => "# site.pp must exist (puppet #15106, foreman #1708)\n",
       mode    => '0644',
     }
 

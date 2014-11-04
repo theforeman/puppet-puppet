@@ -3,12 +3,6 @@
 # Sets up a puppet master.
 class puppet::server {
 
-  if $::puppet::server_passenger or ($::puppet::server_service_fallback == false) {
-    $use_service = false
-  } else {
-    $use_service = true
-  }
-
   if $::puppet::server_ca {
     $ssl_ca_cert   = "${::puppet::server_ssl_dir}/ca/ca_crt.pem"
     $ssl_ca_crl    = "${::puppet::server_ssl_dir}/ca/ca_crl.pem"
@@ -19,8 +13,9 @@ class puppet::server {
     $ssl_chain   = false
   }
 
-  $ssl_cert      = "${::puppet::server_ssl_dir}/certs/${::fqdn}.pem"
-  $ssl_cert_key  = "${::puppet::server_ssl_dir}/private_keys/${::fqdn}.pem"
+  $lower_fqdn    = downcase($::fqdn)
+  $ssl_cert      = "${::puppet::server_ssl_dir}/certs/${lower_fqdn}.pem"
+  $ssl_cert_key  = "${::puppet::server_ssl_dir}/private_keys/${lower_fqdn}.pem"
 
   if $::puppet::server_config_version == undef {
     if $::puppet::server_git_repo {
@@ -32,9 +27,20 @@ class puppet::server {
     $config_version_cmd = $::puppet::server_config_version
   }
 
+  if $::puppet::server_implementation == 'master' {
+    $pm_service = !$::puppet::server_passenger and $::puppet::server_service_fallback
+    $ps_service = undef
+  } elsif $::puppet::server_implementation == 'puppetserver' {
+    $pm_service = undef
+    $ps_service = true
+  }
+
   class { 'puppet::server::install': }~>
   class { 'puppet::server::config':  }~>
-  class { 'puppet::server::service': }->
+  class { 'puppet::server::service':
+    puppetmaster => $pm_service,
+    puppetserver => $ps_service,
+  }->
   Class['puppet::server']
 
   Class['puppet::config'] ~> Class['puppet::server::service']

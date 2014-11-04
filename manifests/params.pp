@@ -12,14 +12,24 @@ class puppet::params {
   $listen              = false
   $pluginsync          = true
   $splay               = false
+  $splaylimit          = '1800'
   $runinterval         = '1800'
   $runmode             = 'service'
   $cron_cmd            = undef
   $agent_noop          = false
   $show_diff           = false
   $configtimeout       = 120
+  $usecacheonfailure   = true
   $ca_server           = ''
+  $dns_alt_names       = []
+  $use_srv_records     = false
+  $srv_domain          = $::domain
+  # lint:ignore:puppet_url_without_modules
+  $pluginsource        = 'puppet:///plugins'
+  # lint:endignore
   $classfile           = '$vardir/classes.txt'
+  $hiera_config        = '$confdir/hiera.yaml'
+  $syslogfacility      = undef
 
   # Need your own config templates? Specify here:
   $main_template   = 'puppet/puppet.conf.erb'
@@ -30,14 +40,21 @@ class puppet::params {
   # Allow any to the CRL. Needed in case of puppet CA proxy
   $allow_any_crl_auth = false
 
+  # Authenticated nodes to allow
+  $auth_allowed = ['$1']
+
   # Will this host be a puppet agent ?
   $agent                     = true
+
+  # Custom puppetmaster
+  $puppetmaster              = $::puppetmaster
 
   # Will this host be a puppetmaster?
   $server                    = false
   $server_vardir             = '/var/lib/puppet'
   $server_ca                 = true
   $server_reports            = 'foreman'
+  $server_implementation     = 'master'
   $server_passenger          = true
   $server_service_fallback   = true
   $server_passenger_max_pool = 12
@@ -64,17 +81,21 @@ class puppet::params {
   # Static environments config, ignore if the git_repo or dynamic_environments is 'true'
   # What environments do we have
   $server_environments         = ['development', 'production']
-  # Dynamic environments config
+  # Dynamic environments config (deprecated when directory_environments is true)
   $server_dynamic_environments = false
+  # Directory environments config
+  $server_directory_environments = versioncmp($::puppetversion, '3.6.0') >= 0
   # Owner of the environments dir: for cases external service needs write
   # access to manage it.
   $server_environments_owner   = $user
+  $server_environments_group   = 'root'
+  $server_environments_mode    = '0755'
   # Where we store our puppet environments
   $server_envs_dir             = "${dir}/environments"
   # Where remains our manifests dir
   $server_manifest_path        = "${dir}/manifests"
   # Modules in this directory would be shared across all environments
-  $server_common_modules_path  = ["${server_envs_dir}/common", '/usr/share/puppet/modules']
+  $server_common_modules_path  = ["${server_envs_dir}/common", "${dir}/modules", '/usr/share/puppet/modules']
 
   # Dynamic environments config, ignore if the git_repo is 'false'
   # Path to the repository
@@ -93,10 +114,7 @@ class puppet::params {
   $server_app_root = "${dir}/rack"
   $server_ssl_dir  = "${server_vardir}/ssl"
 
-  $server_package     =  $::operatingsystem ? {
-    /(Debian|Ubuntu)/ => ['puppetmaster-common','puppetmaster'],
-    default           => ['puppet-server'],
-  }
+  $server_package     = undef
   $client_package     = $::operatingsystem ? {
     /(Debian|Ubuntu)/ => ['puppet-common','puppet'],
     default           => ['puppet'],

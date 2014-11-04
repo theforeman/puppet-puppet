@@ -1,8 +1,9 @@
 # Set up the puppet client as a service
 class puppet::agent::service {
+
   case $::puppet::runmode {
-    'service' : {
-      service { 'puppet':
+    'service': {
+      service {'puppet':
         ensure    => running,
         name      => $puppet::params::service_name,
         hasstatus => true,
@@ -15,8 +16,8 @@ class puppet::agent::service {
         cron { 'puppet': ensure => absent, }
       }
     }
-    'cron'    : {
-      service { 'puppet':
+    'cron': {
+      service {'puppet':
         ensure    => stopped,
         name      => $puppet::params::service_name,
         hasstatus => true,
@@ -49,7 +50,19 @@ class puppet::agent::service {
         }
       }
     }
-    default   : {
+    'none': {
+      service { 'puppet':
+        ensure    => stopped,
+        name      => $puppet::params::service_name,
+        hasstatus => true,
+        enable    => false,
+      }
+
+      cron { 'puppet':
+        ensure => absent,
+      }
+    }
+    default: {
       fail("Runmode of ${puppet::runmode} not supported by puppet::agent::config!")
     }
   }

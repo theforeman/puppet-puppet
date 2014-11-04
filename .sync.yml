@@ -1,0 +1,4 @@
+---
+spec/spec_helper.rb:
+  requires:
+    - lib/module_spec_helper

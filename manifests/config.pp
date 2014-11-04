@@ -1,11 +1,15 @@
 # Set up the puppet config
 class puppet::config(
   $allow_any_crl_auth = $::puppet::allow_any_crl_auth,
+  $auth_allowed       = $::puppet::auth_allowed,
   $auth_template      = $::puppet::auth_template,
   $ca_server          = $::puppet::ca_server,
+  $dns_alt_names      = $::puppet::dns_alt_names,
+  $hiera_config       = $::puppet::hiera_config,
   $main_template      = $::puppet::main_template,
   $nsauth_template    = $::puppet::nsauth_template,
   $puppet_dir         = $::puppet::dir,
+  $syslogfacility     = $::puppet::syslogfacility,
 ) {
   concat_build { 'puppet.conf': }
   concat_fragment { 'puppet.conf+10-main':

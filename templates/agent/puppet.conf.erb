@@ -3,7 +3,7 @@
 
 [agent]
     # The file in which puppetd stores a list of the classes
-    # associated with the retrieved configuratiion.  Can be loaded in
+    # associated with the retrieved configuration.  Can be loaded in
     # the separate ``puppet`` executable using the ``--loadclasses``
     # option.
     # The default value is '$statedir/classes.txt'.
@@ -18,15 +18,18 @@
     # resources to be displayed in Foreman - only for Puppet >= 3.4
     default_schedules = false
 
-    report        = true
-    pluginsync    = <%= scope.lookupvar('::puppet::pluginsync') %>
-    masterport    = <%= scope.lookupvar("::puppet::port") rescue 8140 %>
-    environment   = <%= @environment %>
-    certname      = <%= @clientcert %>
-    server        = <%= if ( @puppetmaster and !@puppetmaster.empty? ) then @puppetmaster else @fqdn end %>
-    listen        = <%= scope.lookupvar('::puppet::listen') %>
-    splay         = <%= scope.lookupvar('::puppet::splay') %>
-    runinterval   = <%= scope.lookupvar('::puppet::runinterval') %>
-    noop          = <%= scope.lookupvar('::puppet::agent_noop') %>
-    configtimeout = <%= scope.lookupvar('::puppet::configtimeout') %>
-
+    report            = true
+    pluginsync        = <%= scope.lookupvar('::puppet::pluginsync') %>
+    masterport        = <%= scope.lookupvar("::puppet::port") rescue 8140 %>
+    environment       = <%= @environment %>
+    certname          = <%= @clientcert %>
+<% if !@use_srv_records -%>
+    server            = <%= if ( @puppetmaster and !@puppetmaster.empty? ) then @puppetmaster else @fqdn end %>
+<% end -%>
+    listen            = <%= scope.lookupvar('::puppet::listen') %>
+    splay             = <%= scope.lookupvar('::puppet::splay') %>
+    splaylimit        = <%= scope.lookupvar('::puppet::splaylimit') %>
+    runinterval       = <%= scope.lookupvar('::puppet::runinterval') %>
+    noop              = <%= scope.lookupvar('::puppet::agent_noop') %>
+    configtimeout     = <%= scope.lookupvar('::puppet::configtimeout') %>
+    usecacheonfailure = <%= scope.lookupvar('::puppet::usecacheonfailure') %>

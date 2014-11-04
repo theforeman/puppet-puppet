@@ -28,4 +28,20 @@
     # Use specified CA server
     ca_server = <%= @ca_server %>
 <% end -%>
+<% if @hiera_config and !@hiera_config.empty? -%>
+    hiera_config = <%= @hiera_config %>
+<% end -%>
+<% if @dns_alt_names and !@dns_alt_names.empty? -%>
+    dns_alt_names = <%= @dns_alt_names.join(",") %>
+<% end -%>
+<% if @use_srv_records -%>
+    use_srv_records = true
+    srv_domain = <%= @srv_domain %>
+<% if @pluginsource -%>
+    pluginsource = <%= @pluginsource %>
+<% end -%>
+<% end -%>
+<% if @syslogfacility and !@syslogfacility.empty? -%>
 
+    syslogfacility = <%= @syslogfacility %>
+<% end -%>
