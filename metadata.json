@@ -1,0 +1,30 @@
+{
+  "name":         "theforeman-puppet",
+  "version":      "2.2.1",
+  "author":       "theforeman",
+  "summary":      "Puppet agent and server configuration",
+  "license":      "GPLv3+",
+  "source":       "git://github.com/theforeman/puppet-puppet",
+  "project_page": "https://github.com/theforeman/puppet-puppet",
+  "issues_url":   "https://github.com/theforeman/puppet-puppet/issues",
+  "description":  "Module for installing the Puppet agent and Puppet server",
+  "tags":         ["foreman", "puppet", "puppetmaster"],
+  "dependencies": [
+    { "name": "theforeman/concat_native", "version_requirement": ">= 1.3.0" },
+    { "name": "theforeman/foreman",       "version_requirement": ">= 1.3.0" },
+    { "name": "theforeman/git",           "version_requirement": ">= 1.3.0" },
+    { "name": "puppetlabs/apache",        "version_requirement": ">= 1.0.0 < 2.0.0" },
+    { "name": "puppetlabs/stdlib",        "version_requirement": ">= 2.0.0" }
+  ],
+  "requirements": [
+    { "name": "puppet", "version_requirement": ">= 2.7.0 < 4.0.0" }
+  ],
+  "operatingsystem_support": [
+    { "operatingsystem": "RedHat",     "operatingsystemrelease": [ "6", "7" ] },
+    { "operatingsystem": "CentOS",     "operatingsystemrelease": [ "6", "7" ] },
+    { "operatingsystem": "Scientific", "operatingsystemrelease": [ "6", "7" ] },
+    { "operatingsystem": "Fedora",     "operatingsystemrelease": [ "19" ] },
+    { "operatingsystem": "Debian",     "operatingsystemrelease": [ "6", "7" ] },
+    { "operatingsystem": "Ubuntu",     "operatingsystemrelease": [ "12.04", "14.04" ] }
+  ]
+}
