@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.3.0
+* Add server_implementation parameter to support Puppet Server
+* Update SSL/TLS virtual host settings to latest recommendations
+* Add syslogfacility parameter
+* Add auth_allowed parameter
+* Fix missing notify when Passenger is disabled (GH-183)
+* Fix git warning shown by post-receive hook
+* Fix order of git-shell installation for user shell
+* Fix site.pp message to be clearer
+
 ## 2.2.1
 * Fix relationship specification for early Puppet 2.7 releases
 
