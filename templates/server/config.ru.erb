@@ -30,6 +30,10 @@ ARGV << "--vardir"  << "<%= scope.lookupvar('::puppet::server_vardir') %>"
 #  supposed to be running master.
 #
 # --cprice 2012-05-22
+#
+
+#Ensure UTF-8 is our default (sadly Ruby 1.9 sets to US-ASCII)
+Encoding.default_external = Encoding::UTF_8 if defined? Encoding
 
 require 'puppet/util/command_line'
 # we're usually running inside a Rack::Builder.new {} block,
