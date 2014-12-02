@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.3.1
+* Ensure that the Puppet master runs with UTF-8 locale under Rack (GH-196)
+
 ## 2.3.0
 * Add server_implementation parameter to support Puppet Server
 * Update SSL/TLS virtual host settings to latest recommendations
