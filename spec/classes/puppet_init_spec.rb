@@ -63,7 +63,7 @@ describe 'puppet' do
       ].each do |p|
         context "when #{p} => 'foo'" do
           let(:params) {{ p => 'foo' }}
-          it { expect { should create_class('puppet') }.to raise_error(Puppet::Error, /is not an Array/) }
+          it { should raise_error(Puppet::Error, /is not an Array/) }
         end
       end
 
@@ -73,7 +73,7 @@ describe 'puppet' do
       ].each do |p|
         context "when #{p} => ['foo']" do
           let(:params) {{ p => ['foo'] }}
-          it { expect { should create_class('puppet') }.to raise_error(Puppet::Error, /is not a string/) }
+          it { should raise_error(Puppet::Error, /is not a string/) }
         end
       end
 
@@ -83,7 +83,7 @@ describe 'puppet' do
         ].each do |d|
         context "when #{d} => './somedir'" do
           let(:params) {{ d => './somedir'}}
-          it { expect { should create_class('puppet') }.to raise_error(Puppet::Error, /is not an absolute path/) }
+          it { should raise_error(Puppet::Error, /is not an absolute path/) }
         end
       end
     end

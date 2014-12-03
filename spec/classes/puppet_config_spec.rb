@@ -18,7 +18,7 @@ describe 'puppet::config' do
       end
 
       it 'should contain puppet.conf [main]' do
-        verify_concat_fragment_exact_contents(subject, 'puppet.conf+10-main', [
+        verify_concat_fragment_exact_contents(catalogue, 'puppet.conf+10-main', [
           '[main]',
           '    logdir = /var/log/puppet',
           '    rundir = /var/run/puppet',
@@ -58,7 +58,7 @@ describe 'puppet::config' do
       end
 
       it 'should contain puppet.conf [main] with dns_alt_names' do
-        verify_concat_fragment_contents(subject, 'puppet.conf+10-main', [
+        verify_concat_fragment_contents(catalogue, 'puppet.conf+10-main', [
           '[main]',
           '    dns_alt_names = foo,bar',
         ])
@@ -71,7 +71,7 @@ describe 'puppet::config' do
       end
 
       it 'should contain puppet.conf [main] with syslogfacility' do
-        verify_concat_fragment_contents(subject, 'puppet.conf+10-main', [
+        verify_concat_fragment_contents(catalogue, 'puppet.conf+10-main', [
           '[main]',
           '    syslogfacility = local6',
         ])
@@ -84,7 +84,7 @@ describe 'puppet::config' do
       end
 
       it 'should contain puppet.conf [main] with module_repository' do
-        verify_concat_fragment_contents(subject, 'puppet.conf+10-main', [
+        verify_concat_fragment_contents(catalogue, 'puppet.conf+10-main', [
           '[main]',
           '    module_repository = https://myforgeapi.example.com',
         ])
@@ -97,7 +97,7 @@ describe 'puppet::config' do
       end
 
       it 'should contain puppet.conf [main] with non-default hiera_config' do
-        verify_concat_fragment_contents(subject, 'puppet.conf+10-main', [
+        verify_concat_fragment_contents(catalogue, 'puppet.conf+10-main', [
           '[main]',
           '    hiera_config = /etc/puppet/hiera/production/hiera.yaml',
         ])
@@ -110,7 +110,7 @@ describe 'puppet::config' do
       end
 
       it 'should contain puppet.conf [main] with SRV settings' do
-        verify_concat_fragment_contents(subject, 'puppet.conf+10-main', [
+        verify_concat_fragment_contents(catalogue, 'puppet.conf+10-main', [
           '[main]',
           '    use_srv_records = true',
           '    srv_domain = example.org',
@@ -170,7 +170,7 @@ describe 'puppet::config' do
       end
 
       it 'should contain puppet.conf [main]' do
-        verify_concat_fragment_exact_contents(subject, 'puppet.conf+10-main', [
+        verify_concat_fragment_exact_contents(catalogue, 'puppet.conf+10-main', [
           '[main]',
           '    logdir = C:/ProgramData/PuppetLabs/puppet/var/log',
           '    rundir = C:/ProgramData/PuppetLabs/puppet/var/run',
@@ -210,7 +210,7 @@ describe 'puppet::config' do
       end
 
       it 'should contain puppet.conf [main] with non-default hiera_config' do
-        verify_concat_fragment_contents(subject, 'puppet.conf+10-main', [
+        verify_concat_fragment_contents(catalogue, 'puppet.conf+10-main', [
           '[main]',
           '    hiera_config = C:/ProgramData/PuppetLabs/hiera/etc/production/hiera.yaml',
         ])

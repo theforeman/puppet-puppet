@@ -73,7 +73,7 @@ describe 'puppet::agent::service' do
       "class {'puppet': agent => true, runmode => 'foo'}"
     end
 
-    it { expect { should create_class('puppet::agent::service') }.to raise_error(Puppet::Error, /Runmode of foo not supported by puppet::agent::config!/) }
+    it { should raise_error(Puppet::Error, /Runmode of foo not supported by puppet::agent::config!/) }
   end
 
 end

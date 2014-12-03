@@ -97,7 +97,7 @@ describe 'puppet::server' do
     let :pre_condition do
       "class {'puppet': server => true, server_implementation => 'golang'}"
     end
-    it { expect { should create_class('puppet') }.to raise_error(Puppet::Error, /"golang" does not match/) }
+    it { should raise_error(Puppet::Error, /"golang" does not match/) }
   end
 
 end

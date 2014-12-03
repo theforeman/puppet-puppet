@@ -67,7 +67,7 @@ describe 'puppet::server::service' do
 
   describe 'when puppetmaster => true and puppetserver => true' do
     let(:params) { {:puppetserver => true, :puppetmaster => true} }
-    it { expect { should create_class('puppet::server::service') }.to raise_error(Puppet::Error, /Both puppetmaster and puppetserver cannot be enabled simultaneously/) }
+    it { should raise_error(Puppet::Error, /Both puppetmaster and puppetserver cannot be enabled simultaneously/) }
   end
 
 end
