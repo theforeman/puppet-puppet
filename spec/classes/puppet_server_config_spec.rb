@@ -290,6 +290,21 @@ describe 'puppet::server::config' do
     end
   end
 
+  describe 'with additional settings' do
+    let :pre_condition do
+      "class {'puppet':
+          server                      => true,
+          server_additional_settings => {stringify_facts => true},
+       }"
+    end
+
+    it 'should configure puppet.conf' do
+      should contain_concat_fragment('puppet.conf+30-master').
+        with_content(/^\s+stringify_facts\s+= true$/).
+        with({}) # So we can use a trailing dot on each with_content line
+    end
+  end
+
   describe 'directory environments default' do
     let :pre_condition do
       "class {'puppet':

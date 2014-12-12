@@ -27,3 +27,6 @@
         scope.lookupvar("puppet::server_dynamic_environments") -%>
     config_version = <%= scope.lookupvar("puppet::server::config_version_cmd") %>
 <% end -%>
+<% scope.lookupvar("puppet::server_additional_settings").sort_by {|k, v| k}.each do |key, value| -%>
+    <%= key %> = <%= value %>
+<% end -%>
