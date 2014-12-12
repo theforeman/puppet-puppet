@@ -20,6 +20,18 @@
 #
 # $listen::                        Should the puppet agent listen for connections.
 #                                  type:boolean
+#
+# $listen_to::                     An array of servers allowed to initiate a puppet run.
+#                                  If $listen = true one of three things will happen:
+#                                  1) if $listen_to is not empty then this array
+#                                     will be used.
+#                                  2) if $listen_to is empty and $puppetmaster is
+#                                     defined then only $puppetmaster will be
+#                                     allowed.
+#                                  3) if $puppetmaster is not defined or empty,
+#                                     $fqdn will be used.
+#                                  type:array
+#
 # $pluginsync::                    Enable pluginsync.
 #                                  type:boolean
 #
@@ -289,6 +301,7 @@ class puppet (
   $dir                           = $puppet::params::dir,
   $port                          = $puppet::params::port,
   $listen                        = $puppet::params::listen,
+  $listen_to                     = $puppet::params::listen_to,
   $pluginsync                    = $puppet::params::pluginsync,
   $splay                         = $puppet::params::splay,
   $splaylimit                    = $puppet::params::splaylimit,
@@ -384,6 +397,7 @@ class puppet (
   validate_string($server_external_nodes)
   validate_string($server_ca_proxy)
 
+  validate_array($listen_to)
   validate_array($dns_alt_names)
   validate_array($auth_allowed)
 

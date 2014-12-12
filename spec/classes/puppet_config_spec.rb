@@ -104,4 +104,38 @@ describe 'puppet::config' do
     end
   end
 
+  describe 'when listen and listen_to has values' do
+    let :pre_condition do
+      'class {"::puppet": listen => true, listen_to => ["node1.example.com","node2.example.com",],}'
+    end
+
+    it 'should contain auth.conf with auth any' do
+      should contain_file('/etc/puppet/auth.conf').with_content(%r{^path /run\nauth any\nmethod save\nallow node1.example.com,node2.example.com$})
+    end
+  end
+
+  describe 'when listen and puppetmaster has value' do
+    let :pre_condition do
+      'class {"::puppet": listen => true, puppetmaster => "master.example.com",}'
+    end
+
+    it 'should contain auth.conf with auth any' do
+      should contain_file('/etc/puppet/auth.conf').with_content(%r{^path /run\nauth any\nmethod save\nallow master.example.com$})
+    end
+  end
+
+  describe 'when listen => true and default value is used' do
+    let :pre_condition do
+      'class {"::puppet": listen => true}'
+    end
+    let :facts do {
+      :osfamily => 'RedHat',
+      :fqdn => 'me.example.org',
+      } end
+
+    it 'should contain auth.conf with auth any' do
+      should contain_file('/etc/puppet/auth.conf').with_content(%r{^path /run\nauth any\nmethod save\nallow me.example.org$})
+      end
+    end
+
 end

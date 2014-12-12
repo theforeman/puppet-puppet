@@ -10,6 +10,7 @@ class puppet::params {
   $dir                 = '/etc/puppet'
   $port                = 8140
   $listen              = false
+  $listen_to           = []
   $pluginsync          = true
   $splay               = false
   $splaylimit          = '1800'
