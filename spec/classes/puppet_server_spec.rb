@@ -45,7 +45,8 @@ describe 'puppet::server' do
       it 'should use lowercase certificates' do
         should contain_class('puppet::server::passenger').
           with_ssl_cert('/var/lib/puppet/ssl/certs/puppetmaster.example.com.pem').
-          with_ssl_cert_key('/var/lib/puppet/ssl/private_keys/puppetmaster.example.com.pem')
+          with_ssl_cert_key('/var/lib/puppet/ssl/private_keys/puppetmaster.example.com.pem').
+          with_ssl_ca_crl('/var/lib/puppet/ssl/ca/ca_crl.pem')
       end
     end
   end
