@@ -55,6 +55,11 @@ class puppet::server::passenger (
     $custom_fragment = ''
   }
 
+  $ssl_crl_check = $ssl_ca_crl ? {
+    undef   => undef,
+    default => 'chain',
+  }
+
   apache::vhost { 'puppet':
     docroot              => "${app_root}/public/",
     directories          => $directories,
@@ -64,6 +69,7 @@ class puppet::server::passenger (
     ssl_key              => $ssl_cert_key,
     ssl_ca               => $ssl_ca_cert,
     ssl_crl              => $ssl_ca_crl,
+    ssl_crl_check        => $ssl_crl_check,
     ssl_chain            => $ssl_chain,
     ssl_protocol         => 'ALL -SSLv2 -SSLv3',
     ssl_cipher           => 'EDH+CAMELLIA:EDH+aRSA:EECDH+aRSA+AESGCM:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH:+CAMELLIA256:+AES256:+CAMELLIA128:+AES128:+SSLv3:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!DSS:!RC4:!SEED:!IDEA:!ECDSA:kEDH:CAMELLIA256-SHA:AES256-SHA:CAMELLIA128-SHA:AES128-SHA',
