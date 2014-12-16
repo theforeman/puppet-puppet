@@ -33,6 +33,22 @@ describe 'puppet' do
     it { should contain_concat_fragment('puppet.conf+10-main').with_content(/^\s+ca_server\s+= ca.example.org$/) }
   end
 
+  describe 'with empty ca_port' do
+    let :params do {
+      :ca_port => '',
+    } end
+
+    it { should_not contain_concat_fragment('puppet.conf+10-main').with_content(/ca_port/) }
+  end
+
+  describe 'with ca_port' do
+    let :params do {
+      :ca_port => '8140',
+    } end
+
+    it { should contain_concat_fragment('puppet.conf+10-main').with_content(/^\s+ca_port\s+= 8140$/) }
+  end
+
   # Test validate_array parameters
   [
     :dns_alt_names,

@@ -4,6 +4,7 @@ class puppet::config(
   $auth_allowed       = $::puppet::auth_allowed,
   $auth_template      = $::puppet::auth_template,
   $ca_server          = $::puppet::ca_server,
+  $ca_port            = $::puppet::ca_port,
   $dns_alt_names      = $::puppet::dns_alt_names,
   $hiera_config       = $::puppet::hiera_config,
   $main_template      = $::puppet::main_template,

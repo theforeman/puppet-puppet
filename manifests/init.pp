@@ -58,6 +58,9 @@
 #                                  a string with the location of the ca_server
 #                                  or 'false'.
 #
+# $ca_port::                       Puppet CA port
+#                                  type:integer
+#
 # $dns_alt_names::                 Use additional DNS names when generating a
 #                                  certificate.  Defaults to an empty Array.
 #                                  type:array
@@ -304,6 +307,7 @@ class puppet (
   $show_diff                     = $puppet::params::show_diff,
   $configtimeout                 = $puppet::params::configtimeout,
   $ca_server                     = $puppet::params::ca_server,
+  $ca_port                       = $puppet::params::ca_port,
   $dns_alt_names                 = $puppet::params::dns_alt_names,
   $use_srv_records               = $puppet::params::use_srv_records,
   $srv_domain                    = $puppet::params::srv_domain,
