@@ -38,6 +38,7 @@ class puppet::server::config inherits puppet::config {
   }
 
   $ca_server                   = $::puppet::ca_server
+  $ca_port                     = $::puppet::ca_port
   $server_storeconfigs_backend = $::puppet::server_storeconfigs_backend
   $server_external_nodes       = $::puppet::server_external_nodes
 

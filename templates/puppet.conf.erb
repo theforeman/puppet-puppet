@@ -26,6 +26,10 @@
     # Use specified CA server
     ca_server = <%= @ca_server %>
 <% end -%>
+<% if @ca_port and !@ca_port.empty? -%>
+    # Use specified CA port
+    ca_port = <%= @ca_port %>
+<% end -%>
 <% if @hiera_config and !@hiera_config.empty? -%>
     hiera_config = <%= @hiera_config %>
 <% end -%>
