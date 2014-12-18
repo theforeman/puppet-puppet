@@ -24,12 +24,12 @@
 # $listen_to::                     An array of servers allowed to initiate a puppet run.
 #                                  If $listen = true one of three things will happen:
 #                                  1) if $listen_to is not empty then this array
-#                                     will be used.
+#                                  will be used.
 #                                  2) if $listen_to is empty and $puppetmaster is
-#                                     defined then only $puppetmaster will be
-#                                     allowed.
+#                                  defined then only $puppetmaster will be
+#                                  allowed.
 #                                  3) if $puppetmaster is not defined or empty,
-#                                     $fqdn will be used.
+#                                  $fqdn will be used.
 #                                  type:array
 #
 # $pluginsync::                    Enable pluginsync.
