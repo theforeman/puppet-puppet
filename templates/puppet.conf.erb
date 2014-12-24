@@ -26,7 +26,7 @@
     # Use specified CA server
     ca_server = <%= @ca_server %>
 <% end -%>
-<% if @ca_port and !@ca_port.empty? -%>
+<% if @ca_port and !@ca_port.to_s.empty? -%>
     # Use specified CA port
     ca_port = <%= @ca_port %>
 <% end -%>
