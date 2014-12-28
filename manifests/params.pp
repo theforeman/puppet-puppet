@@ -28,6 +28,7 @@ class puppet::params {
   $srv_domain          = $::domain
   # lint:ignore:puppet_url_without_modules
   $pluginsource        = 'puppet:///plugins'
+  $pluginfactsource    = 'puppet:///pluginfacts'
   # lint:endignore
   $classfile           = '$vardir/classes.txt'
   $hiera_config        = '$confdir/hiera.yaml'
