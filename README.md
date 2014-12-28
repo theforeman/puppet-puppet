@@ -7,6 +7,7 @@ Optional support for installation of a Puppetmaster (using server => true)
   * Configurable support for static or git-backed dynamic environments (requires puppet-git module)
   * Storeconfig options (off, ActiveRecord or PuppetDB)
   * Passenger support (requires puppet-apache and puppet-passenger modules)
+  * PuppetDB integration (requires puppetlabs-puppetdb module)
 
 # Installation
 
@@ -79,6 +80,15 @@ wrapper classes or even your ENC (if it supports param classes). For example:
       server_git_repo_path     => '/var/lib/gitolite/repositories/puppet.git',
       server_post_hook_name    => 'post-receive.puppet',
       server_post_hook_content => 'puppetserver/post-hook.puppet',
+    }
+
+    # Want to integrate with an existing PuppetDB?
+    class { '::puppet':
+      server               => true,
+      server_puppetdb_host => 'mypuppetdb.example.com',
+      server_reports       => 'puppetdb',
+      storeconfigs         => true,
+      storeconfigs_backend => 'puppetdb',
     }
 
 Look in _init.pp_ for what can be configured this way, see Contributing if anything

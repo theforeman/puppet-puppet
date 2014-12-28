@@ -38,7 +38,7 @@ class puppet::params {
     Windows : {
       # Windows prefixes normal paths with the Data Directory's path and leaves 'puppet' off the end
       $dir_prefix = 'C:/ProgramData/PuppetLabs/puppet'
-      
+
       $dir    = "${dir_prefix}/etc"
       $logdir = "${dir_prefix}/var/log"
       $rundir = "${dir_prefix}/var/run"
@@ -132,6 +132,11 @@ class puppet::params {
   # Override these if you need your own hooks
   $server_post_hook_content   = 'puppet/server/post-receive.erb'
   $server_post_hook_name      = 'post-receive'
+
+  # PuppetDB config
+  $server_puppetdb_host = undef
+  $server_puppetdb_port = 8081
+  $server_puppetdb_swf  = false
 
   # Do you use storeconfigs? (note: not required)
   # - undef if you don't

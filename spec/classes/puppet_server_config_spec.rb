@@ -94,6 +94,11 @@ describe 'puppet::server::config' do
 
       should_not contain_file('/etc/puppet/puppet.conf').with_content(/storeconfigs/)
     end
+
+    it 'should not configure PuppetDB' do
+      should_not contain_class('puppetdb')
+      should_not contain_class('puppetdb::master::config')
+    end
   end
 
   describe 'without foreman' do
@@ -272,6 +277,26 @@ describe 'puppet::server::config' do
         :ssl_ca   => '/etc/example/ca.pem',
         :ssl_cert => '/etc/example/cert.pem',
         :ssl_key  => '/etc/example/key.pem',
+      })
+    end
+  end
+
+  describe 'with a PuppetDB host set' do
+    let :pre_condition do
+      "class {'puppet':
+          server                      => true,
+          server_puppetdb_host        => 'mypuppetdb.example.com',
+          server_storeconfigs_backend => 'puppetdb',
+       }"
+    end
+
+    it 'should configure PuppetDB' do
+      should contain_class('puppetdb::master::config').with({
+        :puppetdb_server             => 'mypuppetdb.example.com',
+        :puppetdb_port               => 8081,
+        :puppetdb_soft_write_failure => false,
+        :manage_storeconfigs         => false,
+        :restart_puppet              => false,
       })
     end
   end

@@ -125,4 +125,15 @@ class puppet::server::config inherits puppet::config {
     # setup empty directories for our environments
     puppet::server::env {$puppet::server_environments: }
   }
+
+  # PuppetDB
+  if $puppet::server_puppetdb_host {
+    class { 'puppetdb::master::config':
+      puppetdb_server             => $puppet::server_puppetdb_host,
+      puppetdb_port               => $puppet::server_puppetdb_port,
+      puppetdb_soft_write_failure => $puppet::server_puppetdb_swf,
+      manage_storeconfigs         => false,
+      restart_puppet              => false,
+    }
+  }
 }

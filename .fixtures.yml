@@ -6,6 +6,8 @@ fixtures:
     git:              'https://github.com/theforeman/puppet-git'
     concat_native:    'https://github.com/theforeman/puppet-concat'
     stdlib:           'https://github.com/puppetlabs/puppetlabs-stdlib.git'
+    puppetdb:         'https://github.com/puppetlabs/puppetlabs-puppetdb.git'
+    intfile:          'https://github.com/puppetlabs/puppetlabs-inifile.git'
 
   symlinks:
     puppet: "#{source_dir}"

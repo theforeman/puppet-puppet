@@ -243,6 +243,14 @@
 #                                  --vardir.  The default is an empty array.
 #                                  type:array
 #
+# $server_puppetdb_host::          PuppetDB host
+#
+# $server_puppetdb_port::          PuppetDB port
+#                                  type:integer
+#
+# $server_puppetdb_swf::           PuppetDB soft_write_failure
+#                                  type:boolean
+#
 # === Advanced server parameters:
 #
 # $server_httpd_service::          Apache/httpd service name to notify
@@ -415,6 +423,9 @@ class puppet (
   $server_foreman_ssl_key        = $puppet::params::client_ssl_key,
   $server_facts                  = $puppet::params::server_facts,
   $server_puppet_basedir         = $puppet::params::server_puppet_basedir,
+  $server_puppetdb_host          = $puppet::params::server_puppetdb_host,
+  $server_puppetdb_port          = $puppet::params::server_puppetdb_port,
+  $server_puppetdb_swf           = $puppet::params::server_puppetdb_swf,
 ) inherits puppet::params {
 
   validate_bool($listen)
@@ -433,11 +444,15 @@ class puppet (
   validate_bool($server_strict_variables)
   validate_hash($server_additional_settings)
   validate_bool($server_foreman)
+  validate_bool($server_puppetdb_swf)
 
   validate_string($ca_server)
   validate_string($hiera_config)
   validate_string($server_external_nodes)
   validate_string($server_ca_proxy)
+  if $server_puppetdb_host {
+    validate_string($server_puppetdb_host)
+  }
 
   validate_array($listen_to)
   validate_array($dns_alt_names)
