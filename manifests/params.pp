@@ -22,7 +22,7 @@ class puppet::params {
   $configtimeout       = 120
   $usecacheonfailure   = true
   $ca_server           = ''
-  $ca_port             = ''
+  $ca_port             = undef
   $dns_alt_names       = []
   $use_srv_records     = false
   $srv_domain          = $::domain
