@@ -103,6 +103,8 @@
 #
 # $pluginsource::                  URL to retrieve Puppet plugins from during pluginsync
 #
+# $pluginfactsource::              URL to retrieve Puppet facts from during pluginsync
+#
 # == puppet::agent parameters
 #
 # $agent::                         Should a puppet agent be installed
