@@ -8,18 +8,30 @@ define puppet::server::env (
   $templatedir            = undef,
   $environment_timeout    = undef,
   $directory_environments = $::puppet::server_directory_environments,
+  $owner                  = $::puppet::server_environments_owner,
+  $group                  = $::puppet::server_environments_group,
+  $mode                   = $::puppet::server_environments_mode,
 ) {
   file { "${basedir}/${name}":
     ensure => directory,
+    owner  => $owner,
+    group  => $group,
+    mode   => $mode,
   }
 
   file { "${basedir}/${name}/modules":
     ensure => directory,
+    owner  => $owner,
+    group  => $group,
+    mode   => $mode,
   }
 
   if $directory_environments {
     file { "${basedir}/${name}/manifests":
       ensure => directory,
+      owner  => $owner,
+      group  => $group,
+      mode   => $mode,
     }
 
     $custom_modulepath = $modulepath and ($modulepath != ["${basedir}/${name}/modules", $::puppet::server_common_modules_path])
