@@ -50,3 +50,7 @@
 
     syslogfacility = <%= @syslogfacility %>
 <% end -%>
+<% if scope.lookupvar("puppet::server_directory_environments") -%>
+    environmentpath  = <%= scope.lookupvar("puppet::server_envs_dir") %>
+    basemodulepath   = <%= [scope.lookupvar("puppet::server_common_modules_path")].flatten.join(':') %>
+<% end -%>

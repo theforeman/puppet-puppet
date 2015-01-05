@@ -180,8 +180,10 @@ describe 'puppet::server::config' do
 
       it 'should configure puppet.conf' do
         should contain_concat_fragment('puppet.conf+30-master').
-          with_content(%r{^\s+environmentpath\s+= /etc/puppet/environments$}).
           with_content(%r{^\s+config_version\s+= git --git-dir /etc/puppet/environments/\$environment/.git describe --all --long$})
+
+        should contain_concat_fragment('puppet.conf+10-main').
+          with_content(%r{^\s+environmentpath\s+= /etc/puppet/environments$})
       end
     end
 
@@ -221,7 +223,7 @@ describe 'puppet::server::config' do
       end
 
       it 'should configure puppet.conf' do
-        should contain_concat_fragment('puppet.conf+30-master').
+        should contain_concat_fragment('puppet.conf+10-main').
           with_content(%r{^\s+environmentpath\s+= /etc/puppet/environments\n\s+basemodulepath\s+= /etc/puppet/environments/common:/etc/puppet/modules:/usr/share/puppet/modules$})
       end
 
@@ -323,7 +325,7 @@ describe 'puppet::server::config' do
     context 'on Puppet 3.6.0+' do
       let(:facts) { default_facts.merge(:puppetversion => '3.6.0') }
       it 'should be enabled' do
-        should contain_concat_fragment('puppet.conf+30-master').
+        should contain_concat_fragment('puppet.conf+10-main').
           with_content(%r{^\s+environmentpath\s+= /etc/puppet/environments$})
       end
     end
