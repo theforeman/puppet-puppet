@@ -1,6 +1,7 @@
 <%= ERB.new(File.read(File.expand_path("_header.erb",File.dirname(file)))).result(binding) -%>
 
 [main]
+<% if @osfamily != 'windows' -%>
     # The Puppet log directory.
     # The default value is '$vardir/log'.
     logdir = /var/log/puppet
@@ -12,6 +13,7 @@
     # Where SSL certificates are kept.
     # The default value is '$confdir/ssl'.
     ssldir = $vardir/ssl
+<% end -%>
 
     # Allow services in the 'puppet' group to access key (Foreman + proxy)
     privatekeydir = $ssldir/private_keys { group = service }

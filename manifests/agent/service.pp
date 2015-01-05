@@ -10,8 +10,10 @@ class puppet::agent::service {
         enable    => true,
       }
 
-      cron { 'puppet':
-        ensure => absent,
+      if $::osfamily == 'windows' {
+        scheduled_task { 'puppet': ensure => absent, }
+      } else {
+        cron { 'puppet': ensure => absent, }
       }
     }
     'cron': {
@@ -29,11 +31,23 @@ class puppet::agent::service {
 
       $times = ip_to_cron($puppet::runinterval)
 
-      cron { 'puppet':
-        command => $command,
-        user    => root,
-        hour    => $times[0],
-        minute  => $times[1],
+      if $::osfamily == 'windows' {
+        scheduled_task { 'puppet':
+          ensure  => present,
+          enabled => true,
+          command => $command,
+          trigger => {
+            schedule   => daily,
+            start_time => $times[0],
+          }
+        }
+      } else {
+        cron { 'puppet':
+          command => $command,
+          user    => root,
+          hour    => $times[0],
+          minute  => $times[1],
+        }
       }
     }
     'none': {
