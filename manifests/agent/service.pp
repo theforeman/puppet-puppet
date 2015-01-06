@@ -50,9 +50,9 @@ class puppet::agent::service {
       }
 
       if $::osfamily != 'windows' {
-	      cron { 'puppet':
-	        ensure => absent,
-	      }
+        cron { 'puppet':
+          ensure => absent,
+        }
       }
     }
     default: {
