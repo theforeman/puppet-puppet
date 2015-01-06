@@ -10,10 +10,10 @@ class puppet::agent::service {
         enable    => true,
       }
 
-      if $::osfamily == 'windows' {
-        scheduled_task { 'puppet': ensure => absent, }
-      } else {
-        cron { 'puppet': ensure => absent, }
+      if $::osfamily != 'windows' {
+        cron { 'puppet':
+          ensure => absent,
+        }
       }
     }
     'cron': {
@@ -29,19 +29,10 @@ class puppet::agent::service {
         default => $puppet::cron_cmd,
       }
 
-      $times = ip_to_cron($puppet::runinterval)
-
       if $::osfamily == 'windows' {
-        scheduled_task { 'puppet':
-          ensure  => present,
-          enabled => true,
-          command => $command,
-          trigger => {
-            schedule   => daily,
-            start_time => $times[0],
-          }
-        }
+        fail("Currently we don't support setting cron on windows.")
       } else {
+        $times = ip_to_cron($puppet::runinterval)
         cron { 'puppet':
           command => $command,
           user    => root,
@@ -58,8 +49,10 @@ class puppet::agent::service {
         enable    => false,
       }
 
-      cron { 'puppet':
-        ensure => absent,
+      if $::osfamily != 'windows' {
+	      cron { 'puppet':
+	        ensure => absent,
+	      }
       }
     }
     default: {
