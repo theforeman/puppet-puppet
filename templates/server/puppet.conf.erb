@@ -14,13 +14,12 @@
     storeconfigs_backend = <%= @server_storeconfigs_backend %>
 <% end -%>
     strict_variables = <%= scope.lookupvar("puppet::server_strict_variables") %>
-<% if !scope.lookupvar("puppet::server_directory_environments")  && 
+<% if !scope.lookupvar("puppet::server_directory_environments")  &&
     ( scope.lookupvar("puppet::server_git_repo") || scope.lookupvar("puppet::server_dynamic_environments") ) -%>
     manifest       = <%= scope.lookupvar("puppet::server_envs_dir") %>/$environment/manifests/site.pp
     modulepath     = <%= scope.lookupvar("puppet::server_envs_dir") %>/$environment/modules
 <% end -%>
-<% if scope.lookupvar("puppet::server_git_repo") ||
-        scope.lookupvar("puppet::server_dynamic_environments") -%>
+<% if scope.lookupvar("puppet::server_git_repo") -%>
     config_version = <%= scope.lookupvar("puppet::server::config_version_cmd") %>
 <% end -%>
 <% scope.lookupvar("puppet::server_additional_settings").sort_by {|k, v| k}.each do |key, value| -%>
