@@ -384,7 +384,7 @@ class puppet (
   $server_foreman_ssl_ca         = $foreman::params::client_ssl_ca,
   $server_foreman_ssl_cert       = $foreman::params::client_ssl_cert,
   $server_foreman_ssl_key        = $foreman::params::client_ssl_key,
-  $server_facts                  = $foreman::params::facts,
+  $server_facts                  = $foreman::params::receive_facts,
   $server_puppet_home            = $foreman::params::puppet_home,
   $server_puppet_basedir         = $foreman::params::puppet_basedir
 ) inherits puppet::params {
