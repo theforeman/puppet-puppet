@@ -43,7 +43,7 @@ describe 'puppet::server::config' do
     it 'should set up the ENC' do
       should contain_class('foreman::puppetmaster').with({
         :foreman_url    => "https://#{facts[:fqdn]}",
-        :facts          => true,
+        :receive_facts  => true,
         :puppet_home    => '/var/lib/puppet',
         :puppet_basedir => '/usr/lib/ruby/site_ruby/1.9/puppet',
       })
