@@ -5,6 +5,7 @@
 class puppet::server::passenger (
   $app_root           = $::puppet::server_app_root,
   $passenger_max_pool = $::puppet::server_passenger_max_pool,
+  $ip                 = $::puppet::server_ip,
   $port               = $::puppet::server_port,
   $ssl_ca_cert        = $::puppet::server::ssl_ca_cert,
   $ssl_ca_crl         = $::puppet::server::ssl_ca_crl,
@@ -63,6 +64,7 @@ class puppet::server::passenger (
   apache::vhost { 'puppet':
     docroot              => "${app_root}/public/",
     directories          => $directories,
+    ip                   => $ip,
     port                 => $port,
     ssl                  => true,
     ssl_cert             => $ssl_cert,

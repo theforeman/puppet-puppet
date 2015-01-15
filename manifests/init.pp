@@ -149,6 +149,8 @@
 #
 # $server_dir::                    Puppet configuration directory
 #
+# $server_ip::                     Puppet master bind IP address
+#
 # $server_port::                   Puppet master port
 #                                  type:integer
 #
@@ -371,6 +373,7 @@ class puppet (
   $server_user                   = $puppet::params::user,
   $server_group                  = $puppet::params::group,
   $server_dir                    = $puppet::params::dir,
+  $server_ip                     = $puppet::params::ip,
   $server_port                   = $puppet::params::port,
   $server_vardir                 = $puppet::params::server_vardir,
   $server_ca                     = $puppet::params::server_ca,
