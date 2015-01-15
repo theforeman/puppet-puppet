@@ -11,7 +11,7 @@
   "tags":         ["foreman", "puppet", "puppetmaster"],
   "dependencies": [
     { "name": "theforeman/concat_native", "version_requirement": ">= 1.3.0" },
-    { "name": "theforeman/foreman",       "version_requirement": ">= 1.3.0" },
+    { "name": "theforeman/foreman",       "version_requirement": ">= 3.0.0 < 4.0.0" },
     { "name": "theforeman/git",           "version_requirement": ">= 1.3.0" },
     { "name": "puppetlabs/apache",        "version_requirement": ">= 1.2.0 < 2.0.0" },
     { "name": "puppetlabs/stdlib",        "version_requirement": ">= 2.0.0" }
