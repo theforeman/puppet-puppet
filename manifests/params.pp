@@ -7,7 +7,6 @@ class puppet::params {
   $version             = 'present'
   $user                = 'puppet'
   $group               = 'puppet'
-  $dir                 = '/etc/puppet'
   $port                = 8140
   $listen              = false
   $listen_to           = []
@@ -33,6 +32,30 @@ class puppet::params {
   $classfile           = '$vardir/classes.txt'
   $hiera_config        = '$confdir/hiera.yaml'
   $syslogfacility      = undef
+
+  case $::osfamily {
+    Windows : {
+      # Windows prefixes normal paths with the Data Directory's path and leaves 'puppet' off the end
+      $dir_prefix = 'C:/ProgramData/PuppetLabs/puppet'
+      
+      $dir    = "${dir_prefix}/etc"
+      $logdir = "${dir_prefix}/var/log"
+      $rundir = "${dir_prefix}/var/run"
+      $ssldir = '$confdir/ssl'
+    }
+
+    default : {
+      $dir    = '/etc/puppet'
+      $logdir = '/var/log/puppet'
+      $rundir = '/var/run/puppet'
+      $ssldir = '$vardir/ssl'
+    }
+  }
+
+  $package_provider = $::osfamily ? {
+    'windows' => 'chocolatey',
+    default   => undef,
+  }
 
   # Need your own config templates? Specify here:
   $main_template   = 'puppet/puppet.conf.erb'
@@ -139,4 +162,5 @@ class puppet::params {
 
   # Puppet service name
   $service_name = 'puppet'
+
 }

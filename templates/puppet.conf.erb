@@ -3,15 +3,15 @@
 [main]
     # The Puppet log directory.
     # The default value is '$vardir/log'.
-    logdir = /var/log/puppet
+    logdir = <%= scope.lookupvar('::puppet::logdir') %>
 
     # Where Puppet PID files are kept.
     # The default value is '$vardir/run'.
-    rundir = /var/run/puppet
+    rundir = <%= scope.lookupvar('::puppet::rundir') %>
 
     # Where SSL certificates are kept.
     # The default value is '$confdir/ssl'.
-    ssldir = $vardir/ssl
+    ssldir = <%= scope.lookupvar('::puppet::ssldir') %>
 
     # Allow services in the 'puppet' group to access key (Foreman + proxy)
     privatekeydir = $ssldir/private_keys { group = service }

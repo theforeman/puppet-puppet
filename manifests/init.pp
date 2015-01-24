@@ -15,6 +15,16 @@
 #
 # $dir::                           Override the puppet directory.
 #
+# $logdir::                        Override the log directory.
+#
+# $rundir::                        Override the PID directory.
+#
+# $ssldir::                        Override where SSL certificates are kept.
+#
+# $package_provider::              The provider used to install the agent.
+#                                  Defaults to chocolatey on Windows
+#                                  Defaults to undef elsewhere
+#
 # $port::                          Override the port of the master we connect to.
 #                                  type:integer
 #
@@ -308,6 +318,10 @@ class puppet (
   $user                          = $puppet::params::user,
   $group                         = $puppet::params::group,
   $dir                           = $puppet::params::dir,
+  $logdir                        = $puppet::params::logdir,
+  $rundir                        = $puppet::params::rundir,
+  $ssldir                        = $puppet::params::ssldir,
+  $package_provider              = $puppet::params::package_provider,
   $port                          = $puppet::params::port,
   $listen                        = $puppet::params::listen,
   $listen_to                     = $puppet::params::listen_to,
@@ -413,6 +427,10 @@ class puppet (
   validate_array($listen_to)
   validate_array($dns_alt_names)
   validate_array($auth_allowed)
+
+  validate_absolute_path($dir)
+  validate_absolute_path($logdir)
+  validate_absolute_path($rundir)
 
   validate_re($server_implementation, '^(master|puppetserver)$')
 
