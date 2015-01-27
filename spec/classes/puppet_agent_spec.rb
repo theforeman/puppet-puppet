@@ -36,6 +36,16 @@ describe 'puppet::agent' do
       should contain_concat_fragment('puppet.conf+20-agent').
                  with_content(/server.*puppetmaster\.example\.com/)
     end
+
+    it do
+      should contain_concat_fragment('puppet.conf+20-agent').
+        without_content(/prerun_command\s*=/)
+    end
+
+    it do
+      should contain_concat_fragment('puppet.conf+20-agent').
+        without_content(/postrun_command\s*=/)
+    end
   end
 
   describe 'puppetmaster parameter overrides server fqdn' do
@@ -73,6 +83,22 @@ describe 'puppet::agent' do
     it do
       should contain_concat_fragment('puppet.conf+20-agent').
                  without_content(/server\s*=/)
+    end
+  end
+
+  describe 'set prerun_command will be included in config' do
+    let(:pre_condition) { "class {'puppet': agent => true, prerun_command => '/my/prerun'}" }
+    it do
+      should contain_concat_fragment('puppet.conf+20-agent').
+        with_content(/prerun_command.*\/my\/prerun/)
+    end
+  end
+
+  describe 'set postrun_command will be included in config' do
+    let(:pre_condition) { "class {'puppet': agent => true, postrun_command => '/my/postrun'}" }
+    it do
+      should contain_concat_fragment('puppet.conf+20-agent').
+        with_content(/postrun_command.*\/my\/postrun/)
     end
   end
 end

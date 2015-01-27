@@ -33,3 +33,9 @@
     noop              = <%= scope.lookupvar('::puppet::agent_noop') %>
     configtimeout     = <%= scope.lookupvar('::puppet::configtimeout') %>
     usecacheonfailure = <%= scope.lookupvar('::puppet::usecacheonfailure') %>
+<% unless [nil, :undefined, :undef].include?(scope.lookupvar('::puppet::prerun_command')) -%>
+    prerun_command    = <%= scope.lookupvar('::puppet::prerun_command') %>
+<% end -%>
+<% unless [nil, :undefined, :undef].include?(scope.lookupvar('::puppet::postrun_command')) -%>
+    postrun_command   = <%= scope.lookupvar('::puppet::postrun_command') %>
+<% end -%>

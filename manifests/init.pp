@@ -122,6 +122,10 @@
 # $puppetmaster::                  Hostname of your puppetmaster (server
 #                                  directive in puppet.conf)
 #
+# $prerun_command::                A command which gets excuted before each Puppet run
+#
+# $postrun_command::               A command which gets excuted after each Puppet run
+#
 # == puppet::server parameters
 #
 # $server::                        Should a puppet master be installed as well as the client
@@ -323,6 +327,8 @@ class puppet (
   $configtimeout                 = $puppet::params::configtimeout,
   $ca_server                     = $puppet::params::ca_server,
   $ca_port                       = $puppet::params::ca_port,
+  $prerun_command                = $puppet::params::prerun_command,
+  $postrun_command               = $puppet::params::postrun_command,
   $dns_alt_names                 = $puppet::params::dns_alt_names,
   $use_srv_records               = $puppet::params::use_srv_records,
   $srv_domain                    = $puppet::params::srv_domain,
@@ -409,6 +415,8 @@ class puppet (
   validate_string($hiera_config)
   validate_string($server_external_nodes)
   validate_string($server_ca_proxy)
+  validate_string($prerun_command)
+  validate_string($postrun_command)
 
   validate_array($listen_to)
   validate_array($dns_alt_names)

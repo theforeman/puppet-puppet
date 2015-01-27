@@ -23,6 +23,8 @@ class puppet::params {
   $usecacheonfailure   = true
   $ca_server           = ''
   $ca_port             = undef
+  $prerun_command      = undef
+  $postrun_command     = undef
   $dns_alt_names       = []
   $use_srv_records     = false
   $srv_domain          = $::domain
