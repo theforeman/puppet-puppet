@@ -179,8 +179,7 @@ describe 'puppet::server::config' do
       end
 
       it 'should configure puppet.conf' do
-        should contain_concat_fragment('puppet.conf+30-master').
-          with_content(%r{^\s+config_version\s+= git --git-dir /etc/puppet/environments/\$environment/.git describe --all --long$})
+        should_not contain_concat_fragment('puppet.conf+30-master').with_content(%r{^\s+config_version\s+=$})
 
         should contain_concat_fragment('puppet.conf+10-main').
           with_content(%r{^\s+environmentpath\s+= /etc/puppet/environments$})

@@ -18,9 +18,6 @@
     ( scope.lookupvar("puppet::server_git_repo") || scope.lookupvar("puppet::server_dynamic_environments") ) -%>
     manifest       = <%= scope.lookupvar("puppet::server_envs_dir") %>/$environment/manifests/site.pp
     modulepath     = <%= scope.lookupvar("puppet::server_envs_dir") %>/$environment/modules
-<% end -%>
-<% if scope.lookupvar("puppet::server_git_repo") ||
-        scope.lookupvar("puppet::server_dynamic_environments") -%>
     config_version = <%= scope.lookupvar("puppet::server::config_version_cmd") %>
 <% end -%>
 <% scope.lookupvar("puppet::server_additional_settings").sort_by {|k, v| k}.each do |key, value| -%>
