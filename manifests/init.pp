@@ -415,8 +415,6 @@ class puppet (
   validate_string($hiera_config)
   validate_string($server_external_nodes)
   validate_string($server_ca_proxy)
-  validate_string($prerun_command)
-  validate_string($postrun_command)
 
   validate_array($listen_to)
   validate_array($dns_alt_names)
