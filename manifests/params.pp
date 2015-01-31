@@ -95,6 +95,7 @@ class puppet::params {
   $server_certname            = $::clientcert
   $server_strict_variables    = false
   $server_additional_settings = {}
+  $server_rack_arguments      = []
 
   # Need a new master template for the server?
   $server_template = 'puppet/server/puppet.conf.erb'

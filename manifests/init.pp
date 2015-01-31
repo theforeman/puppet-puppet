@@ -239,6 +239,10 @@
 #                                  Example: {trusted_node_data => true, stringify_facts => true, ordering => 'manifest'}
 #                                  type:hash
 #
+# $server_rack_arguments           Arguments passed to rack app ARGV in addition to --confdir and
+#                                  --vardir.  The default is an empty array.
+#                                  type:array
+#
 # === Advanced server parameters:
 #
 # $server_httpd_service::          Apache/httpd service name to notify
@@ -403,6 +407,7 @@ class puppet (
   $server_ca_proxy               = $puppet::params::server_ca_proxy,
   $server_strict_variables       = $puppet::params::server_strict_variables,
   $server_additional_settings    = $puppet::params::server_additional_settings,
+  $server_rack_arguments         = $puppet::params::server_rack_arguments,
   $server_foreman_url            = $foreman::params::foreman_url,
   $server_foreman_ssl_ca         = $foreman::params::client_ssl_ca,
   $server_foreman_ssl_cert       = $foreman::params::client_ssl_cert,
@@ -435,6 +440,7 @@ class puppet (
 
   validate_array($listen_to)
   validate_array($dns_alt_names)
+  validate_array($server_rack_arguments)
   validate_array($auth_allowed)
 
   validate_absolute_path($dir)

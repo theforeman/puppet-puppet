@@ -12,6 +12,7 @@
 #
 class puppet::server::rack {
 
+  $server_rack_arguments = $puppet::server_rack_arguments
 
   exec {'puppet_server_rack-restart':
     command     => "/bin/touch ${puppet::server_app_root}/tmp/restart.txt",
