@@ -1,54 +1,58 @@
-# Puppet module for installing Puppet agent, and Puppet server
+[![Puppet Forge](http://img.shields.io/puppetforge/v/theforeman/puppet.svg)](https://forge.puppetlabs.com/theforeman/puppet)
+[![Build Status](https://travis-ci.org/theforeman/puppet-puppet.svg?branch=master)](https://travis-ci.org/theforeman/puppet-puppet)
 
-Installs Puppet agent:
+# Puppet module for installing the Puppet agent and master
 
-Optional support for installation of a Puppetmaster (using server => true)
+Installs and configures the Puppet agent and optionally a Puppet master (when
+`server` is true).  Part of the [Foreman installer](http://github.com/theforeman/foreman-installer)
+or to be used as a Puppet module.
 
-  * Configurable support for static or git-backed dynamic environments (requires puppet-git module)
-  * Storeconfig options (off, ActiveRecord or PuppetDB)
-  * Passenger support (requires puppet-apache and puppet-passenger modules)
-  * PuppetDB integration (requires puppetlabs-puppetdb module)
+The Puppet master is configured under Apache and Passenger by default, unless
+`server_passenger` is set to false.  Alternatively, set `server_implementation`
+to `puppetserver` to switch to the JVM-based Puppet Server.
 
-# Installation
+Many puppet.conf options for agents, masters and other are parameterized, with
+class documentation provided at the top of the manifests.
+`server_additional_settings` can be used to supply master options that are
+missing parameters.
 
-## Using GIT
+## Environments support
 
-git clone git://github.com/theforeman/puppet-puppet.git
+The module helps configure Puppet environments using directory environments on
+Puppet 3.6+ and config environments on older versions.  These are set up under
+/etc/puppet/environments/ - change `server_environments` to define the list to
+create, or use `puppet::server::env` for more control.
 
-## Downloadable Tarball
+## Git repo support with theforeman/git
 
-  * http://github.com/theforeman/puppet-puppet/tarball/master
+Environments can be backed by git by setting `server_git_repo` to true, which
+sets up `/var/lib/puppet/puppet.git` where each branch maps to one environment.
+Avoid using 'master' as this name isn't permitted.  On each push to the repo, a
+hook updates `/etc/puppet/environments` with the contents of the branch.
 
-# Requirements
-
-Only really tested on RedHat and Debian. Patches welcome for other OSes :)
-
-# Setup
-
-This is a parameterized class, but the defaults should get you going:
-
-Standalone agent with defaults:
-
-    echo include puppet | puppet --modulepath /path_to/extracted_tarball
-
-# Integration with Foreman
+## Foreman integration with theforeman/foreman
 
 With the 3.0.0 release the Foreman integration became optional. Note that you
-need the [puppet-foreman module](https://github.com/theforeman/puppet-foreman)
+need the [theforeman/foreman module](https://github.com/theforeman/puppet-foreman)
 installed.
 
 It will still by default install the Foreman integration when `server` is true,
-so if you wish to run a puppet server without Foreman, it can be disabled by
-setting `server_foreman` to false:
+so if you wish to run a Puppet master without Foreman, it can be disabled by
+setting `server_foreman` to false.
 
-    class { '::puppet':
-      server                => true,
-      server_foreman        => false,
-      server_reports        => 'store',
-      server_external_nodes => '',
-    }
+## PuppetDB integration with puppetlabs/puppetdb
 
-# Customization
+The Puppet master can be configured to export catalogs and reports to a
+PuppetDB instance, using the puppetlabs/puppetdb module.  Use its
+`puppetdb::server` class to install PuppetDB and this module to configure the
+Puppet master.
+
+# Installation
+
+Available from GitHub (via cloning or tarball), [Puppet Forge](https://forge.puppetlabs.com/theforeman/puppet)
+or as part of the Foreman installer.
+
+# Usage
 
 As a parameterized class, all the configurable options can be overridden from your
 wrapper classes or even your ENC (if it supports param classes). For example:
@@ -80,6 +84,14 @@ wrapper classes or even your ENC (if it supports param classes). For example:
       server_git_repo_path     => '/var/lib/gitolite/repositories/puppet.git',
       server_post_hook_name    => 'post-receive.puppet',
       server_post_hook_content => 'puppetserver/post-hook.puppet',
+    }
+
+    # Configure master without Foreman integration
+    class { '::puppet':
+      server                => true,
+      server_foreman        => false,
+      server_reports        => 'store',
+      server_external_nodes => '',
     }
 
     # Want to integrate with an existing PuppetDB?
