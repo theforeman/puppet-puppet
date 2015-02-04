@@ -30,6 +30,23 @@ Standalone agent with defaults:
 
     echo include puppet | puppet --modulepath /path_to/extracted_tarball
 
+# Integration with foreman
+
+With the 3.0.0 release the Foreman integration became optional. Note that you
+need the [puppet-foreman module](https://github.com/theforeman/puppet-foreman)
+installed.
+
+It will still by default install the Foreman integration when `server` is true,
+so if you wish to run a puppet server without Foreman, it can be disabled by
+setting `server_foreman` to false:
+
+    class { '::puppet':
+      server                => true,
+      server_foreman        => false,
+      server_reports        => 'store',
+      server_external_nodes => '',
+    }
+
 # Customization
 
 As a parameterized class, all the configurable options can be overridden from your
@@ -62,13 +79,6 @@ wrapper classes or even your ENC (if it supports param classes). For example:
       server_git_repo_path     => '/var/lib/gitolite/repositories/puppet.git',
       server_post_hook_name    => 'post-receive.puppet',
       server_post_hook_content => 'puppetserver/post-hook.puppet',
-    }
-
-    # Perhaps you want to install without foreman?
-    class { '::puppet':
-      server                => true,
-      server_reports        => 'store',
-      server_external_nodes => '',
     }
 
 Look in _init.pp_ for what can be configured this way, see Contributing if anything
