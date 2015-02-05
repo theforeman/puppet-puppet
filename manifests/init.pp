@@ -239,7 +239,7 @@
 #                                  Example: {trusted_node_data => true, stringify_facts => true, ordering => 'manifest'}
 #                                  type:hash
 #
-# $server_rack_arguments           Arguments passed to rack app ARGV in addition to --confdir and
+# $server_rack_arguments::         Arguments passed to rack app ARGV in addition to --confdir and
 #                                  --vardir.  The default is an empty array.
 #                                  type:array
 #
