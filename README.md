@@ -86,7 +86,7 @@ wrapper classes or even your ENC (if it supports param classes). For example:
     class { '::puppet':
       server               => true,
       server_puppetdb_host => 'mypuppetdb.example.com',
-      server_reports       => 'puppetdb',
+      server_reports       => 'puppetdb,foreman',
       storeconfigs         => true,
       storeconfigs_backend => 'puppetdb',
     }
