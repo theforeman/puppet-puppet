@@ -23,29 +23,32 @@ Puppet 3.6+ and config environments on older versions.  These are set up under
 /etc/puppet/environments/ - change `server_environments` to define the list to
 create, or use `puppet::server::env` for more control.
 
-## Git repo support with theforeman/git
+## Git repo support
 
 Environments can be backed by git by setting `server_git_repo` to true, which
 sets up `/var/lib/puppet/puppet.git` where each branch maps to one environment.
 Avoid using 'master' as this name isn't permitted.  On each push to the repo, a
 hook updates `/etc/puppet/environments` with the contents of the branch.
 
-## Foreman integration with theforeman/foreman
+Requires [theforeman/git](https://forge.puppetlabs.com/theforeman/git).
 
-With the 3.0.0 release the Foreman integration became optional. Note that you
-need the [theforeman/foreman module](https://github.com/theforeman/puppet-foreman)
-installed.
+## Foreman integration
 
-It will still by default install the Foreman integration when `server` is true,
+With the 3.0.0 release the Foreman integration became optional.  It will still
+by default install the Foreman integration when `server` is true,
 so if you wish to run a Puppet master without Foreman, it can be disabled by
 setting `server_foreman` to false.
 
-## PuppetDB integration with puppetlabs/puppetdb
+Requires [theforeman/foreman](https://forge.puppetlabs.com/theforeman/foreman).
+
+## PuppetDB integration
 
 The Puppet master can be configured to export catalogs and reports to a
 PuppetDB instance, using the puppetlabs/puppetdb module.  Use its
 `puppetdb::server` class to install PuppetDB and this module to configure the
 Puppet master.
+
+Requires [puppetlabs/puppetdb](https://forge.puppetlabs.com/puppetlabs/puppetdb).
 
 # Installation
 
