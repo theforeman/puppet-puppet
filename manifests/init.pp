@@ -297,6 +297,10 @@
 #                                  Valid values are 'v2' for latest, and 'v1'
 #                                  for Foreman =< 1.2
 #
+# $server_request_timeout::        Timeout in node.rb script for fetching
+#                                  catalog from Foreman (in seconds).
+#                                  type:integer
+#
 # $server_ca_proxy::               The actual server that handles puppet CA.
 #                                  Setting this to anything non-empty causes
 #                                  the apache vhost to set up a proxy for all
@@ -412,6 +416,7 @@ class puppet (
   $server_certname               = $puppet::params::server_certname,
   $server_enc_api                = $puppet::params::server_enc_api,
   $server_report_api             = $puppet::params::server_report_api,
+  $server_request_timeout        = $puppet::params::server_request_timeout,
   $server_ca_proxy               = $puppet::params::server_ca_proxy,
   $server_strict_variables       = $puppet::params::server_strict_variables,
   $server_additional_settings    = $puppet::params::server_additional_settings,

@@ -33,6 +33,7 @@ class puppet::server::config inherits puppet::config {
       puppet_basedir => $puppet::server_puppet_basedir,
       enc_api        => $puppet::server_enc_api,
       report_api     => $puppet::server_report_api,
+      timeout        => $puppet::server_request_timeout,
       ssl_ca         => pick($puppet::server_foreman_ssl_ca, $puppet::server::ssl_ca_cert),
       ssl_cert       => pick($puppet::server_foreman_ssl_cert, $puppet::server::ssl_cert),
       ssl_key        => pick($puppet::server_foreman_ssl_key, $puppet::server::ssl_cert_key),

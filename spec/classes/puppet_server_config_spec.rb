@@ -46,6 +46,7 @@ describe 'puppet::server::config' do
         :receive_facts  => true,
         :puppet_home    => '/var/lib/puppet',
         :puppet_basedir => '/usr/lib/ruby/site_ruby/1.9/puppet',
+        :timeout        => 60,
       })
     end
 

@@ -89,6 +89,7 @@ class puppet::params {
   $server_external_nodes      = '/etc/puppet/node.rb'
   $server_enc_api             = 'v2'
   $server_report_api          = 'v2'
+  $server_request_timeout     = 60
   $server_ca_proxy            = ''
   $server_certname            = $::clientcert
   $server_strict_variables    = false
