@@ -88,7 +88,11 @@ class puppet::params {
   $remove_lock               = true
 
   # Custom puppetmaster
-  $puppetmaster              = $::puppetmaster
+  if defined('$trusted') and $::trusted['authenticated'] == 'local' {
+    $puppetmaster            = undef
+  } else {
+    $puppetmaster            = $::puppetmaster
+  }
 
   # Hashes containing additional settings
   $additional_settings   =      {}
