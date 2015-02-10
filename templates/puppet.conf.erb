@@ -64,3 +64,6 @@
 <% scope.lookupvar("puppet::additional_settings").sort_by {|k, v| k}.each do |key, value| -%>
     <%= key %> = <%= value %>
 <% end -%>
+<% if @stringify_facts == false -%>
+    stringify_facts = <%= @stringify_facts.to_s %>
+<% end -%>
