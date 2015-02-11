@@ -56,6 +56,7 @@ class puppet::server::passenger (
   }
 
   $ssl_crl_check = $ssl_ca_crl ? {
+    false   => undef,
     undef   => undef,
     default => 'chain',
   }
