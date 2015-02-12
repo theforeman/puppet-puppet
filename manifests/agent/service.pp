@@ -5,7 +5,7 @@ class puppet::agent::service {
     'service': {
       service {'puppet':
         ensure    => running,
-        name      => $puppet::params::service_name,
+        name      => $puppet::service_name,
         hasstatus => true,
         enable    => true,
       }
@@ -19,7 +19,7 @@ class puppet::agent::service {
     'cron': {
       service {'puppet':
         ensure    => stopped,
-        name      => $puppet::params::service_name,
+        name      => $puppet::service_name,
         hasstatus => true,
         enable    => false,
       }
@@ -44,7 +44,7 @@ class puppet::agent::service {
     'none': {
       service { 'puppet':
         ensure    => stopped,
-        name      => $puppet::params::service_name,
+        name      => $puppet::service_name,
         hasstatus => true,
         enable    => false,
       }

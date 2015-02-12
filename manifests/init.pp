@@ -138,6 +138,8 @@
 #
 # $postrun_command::               A command which gets excuted after each Puppet run
 #
+# $service_name::                  The name of the puppet agent service.
+#
 # == puppet::server parameters
 #
 # $server::                        Should a puppet master be installed as well as the client
@@ -378,6 +380,7 @@ class puppet (
   $client_package                = $puppet::params::client_package,
   $agent                         = $puppet::params::agent,
   $puppetmaster                  = $puppet::params::puppetmaster,
+  $service_name                  = $puppet::params::service_name,
   $syslogfacility                = $puppet::params::syslogfacility,
   $server                        = $puppet::params::server,
   $server_user                   = $puppet::params::user,
@@ -458,6 +461,8 @@ class puppet (
   if $server_puppetdb_host {
     validate_string($server_puppetdb_host)
   }
+
+  validate_string($service_name)
 
   validate_array($listen_to)
   validate_array($dns_alt_names)
