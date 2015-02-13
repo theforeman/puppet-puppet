@@ -12,9 +12,9 @@ The Puppet master is configured under Apache and Passenger by default, unless
 to `puppetserver` to switch to the JVM-based Puppet Server.
 
 Many puppet.conf options for agents, masters and other are parameterized, with
-class documentation provided at the top of the manifests.
-`server_additional_settings` can be used to supply master options that are
-missing parameters.
+class documentation provided at the top of the manifests. In addition, there
+are hash parameters for each configuration section that can be used to supply
+any options that are not explicitly supported.
 
 ## Environments support
 

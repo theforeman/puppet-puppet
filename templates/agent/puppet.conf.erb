@@ -39,3 +39,6 @@
 <% unless [nil, :undefined, :undef].include?(scope.lookupvar('::puppet::postrun_command')) -%>
     postrun_command   = <%= scope.lookupvar('::puppet::postrun_command') %>
 <% end -%>
+<% scope.lookupvar("puppet::agent_additional_settings").sort_by {|k, v| k}.each do |key, value| -%>
+    <%= key %> = <%= value %>
+<% end -%>

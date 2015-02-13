@@ -101,5 +101,20 @@ describe 'puppet::agent' do
         with_content(/postrun_command.*\/my\/postrun/)
     end
   end
+
+  describe 'with additional settings' do
+    let :pre_condition do
+      "class {'puppet':
+          agent_additional_settings => {ignoreschedules => true},
+       }"
+    end
+
+    it 'should configure puppet.conf' do
+      should contain_concat_fragment('puppet.conf+20-agent').
+        with_content(/^\s+ignoreschedules\s+= true$/).
+        with({}) # So we can use a trailing dot on each with_content line
+    end
+  end
+
 end
 

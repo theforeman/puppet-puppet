@@ -152,6 +152,20 @@ describe 'puppet::config' do
         should contain_file('/etc/puppet/auth.conf').with_content(%r{^path /run\nauth any\nmethod save\nallow me.example.org$})
         end
       end
+
+    describe 'with additional settings' do
+      let :pre_condition do
+        "class {'puppet':
+            additional_settings => {disable_warnings => deprecations},
+         }"
+      end
+
+      it 'should configure puppet.conf' do
+        should contain_concat_fragment('puppet.conf+10-main').
+          with_content(/^\s+disable_warnings\s+= deprecations$/).
+          with({}) # So we can use a trailing dot on each with_content line
+      end
+    end
   end
 
   context "on a Windows family OS" do

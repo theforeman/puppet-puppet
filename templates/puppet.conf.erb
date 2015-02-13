@@ -58,3 +58,6 @@
     environmentpath  = <%= scope.lookupvar("puppet::server_envs_dir") %>
     basemodulepath   = <%= [scope.lookupvar("puppet::server_common_modules_path")].flatten.join(':') %>
 <% end -%>
+<% scope.lookupvar("puppet::additional_settings").sort_by {|k, v| k}.each do |key, value| -%>
+    <%= key %> = <%= value %>
+<% end -%>

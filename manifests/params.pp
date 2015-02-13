@@ -76,6 +76,11 @@ class puppet::params {
   # Custom puppetmaster
   $puppetmaster              = $::puppetmaster
 
+  # Hashes containing additional settings
+  $additional_settings   =      {}
+  $agent_additional_settings  = {}
+  $server_additional_settings = {}
+
   # Will this host be a puppetmaster?
   $server                     = false
   $server_vardir              = '/var/lib/puppet'
@@ -93,7 +98,6 @@ class puppet::params {
   $server_ca_proxy            = ''
   $server_certname            = $::clientcert
   $server_strict_variables    = false
-  $server_additional_settings = {}
   $server_rack_arguments      = []
 
   # Need a new master template for the server?

@@ -117,6 +117,9 @@
 #
 # $pluginfactsource::              URL to retrieve Puppet facts from during pluginsync
 #
+# $additional_settings::           A hash of additional main settings.
+#                                  type:hash
+#
 # == puppet::agent parameters
 #
 # $agent::                         Should a puppet agent be installed
@@ -139,6 +142,9 @@
 # $postrun_command::               A command which gets excuted after each Puppet run
 #
 # $service_name::                  The name of the puppet agent service.
+#
+# $agent_additional_settings::     A hash of additional agent settings.
+#                                  type:hash
 #
 # == puppet::server parameters
 #
@@ -369,6 +375,8 @@ class puppet (
   $srv_domain                    = $puppet::params::srv_domain,
   $pluginsource                  = $puppet::params::pluginsource,
   $pluginfactsource              = $puppet::params::pluginfactsource,
+  $additional_settings           = $puppet::params::additional_settings,
+  $agent_additional_settings     = $puppet::params::agent_additional_settings,
   $classfile                     = $puppet::params::classfile,
   $hiera_config                  = $puppet::params::hiera_config,
   $main_template                 = $puppet::params::main_template,
@@ -450,9 +458,12 @@ class puppet (
   validate_bool($server_service_fallback)
   validate_bool($server_facts)
   validate_bool($server_strict_variables)
-  validate_hash($server_additional_settings)
   validate_bool($server_foreman)
   validate_bool($server_puppetdb_swf)
+
+  validate_hash($additional_settings)
+  validate_hash($agent_additional_settings)
+  validate_hash($server_additional_settings)
 
   validate_string($ca_server)
   validate_string($hiera_config)
