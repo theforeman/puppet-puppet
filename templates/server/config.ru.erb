@@ -17,7 +17,7 @@ ARGV << "--rack"
 # to prevent reading configuration from ~puppet/.puppet/puppet.conf and writing
 # to ~puppet/.puppet
 ARGV << "--confdir" << "<%= scope.lookupvar('::puppet::server_dir') %>"
-ARGV << "--vardir"  << "<%= scope.lookupvar('::puppet::server_vardir') %>"
+ARGV << "--vardir"  << "<%= scope.lookupvar('::puppet::vardir') %>"
 <% (@server_rack_arguments || []).each do |server_rack_argument| -%>
 ARGV << "<%= server_rack_argument %>"
 <% end -%>

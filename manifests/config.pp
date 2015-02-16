@@ -34,7 +34,7 @@ class puppet::config(
         source  => concat_output('puppet.conf'),
         require => Concat_build['puppet.conf'],
         owner   => 'root',
-        group   => 'root',
+        group   => $::puppet::params::root_group,
         mode    => '0644',
       }
     }

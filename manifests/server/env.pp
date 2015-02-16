@@ -39,7 +39,7 @@ define puppet::server::env (
       file { "${basedir}/${name}/environment.conf":
         ensure  => file,
         owner   => 'root',
-        group   => 'root',
+        group   => $::puppet::params::root_group,
         mode    => '0644',
         content => template('puppet/server/environment.conf.erb'),
       }

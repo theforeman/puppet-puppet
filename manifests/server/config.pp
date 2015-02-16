@@ -29,7 +29,7 @@ class puppet::server::config inherits puppet::config {
     class {'foreman::puppetmaster':
       foreman_url    => $puppet::server_foreman_url,
       receive_facts  => $puppet::server_facts,
-      puppet_home    => $puppet::server_vardir,
+      puppet_home    => $puppet::vardir,
       puppet_basedir => $puppet::server_puppet_basedir,
       enc_api        => $puppet::server_enc_api,
       report_api     => $puppet::server_report_api,
@@ -73,7 +73,7 @@ class puppet::server::config inherits puppet::config {
     Exec['puppet_server_config-generate_ca_cert'] ~> Service[$puppet::server_httpd_service]
   }
 
-  file { "${puppet::server_vardir}/reports":
+  file { "${puppet::vardir}/reports":
     ensure => directory,
     owner  => $puppet::server_user,
   }

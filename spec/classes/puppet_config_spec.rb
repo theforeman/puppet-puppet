@@ -20,6 +20,7 @@ describe 'puppet::config' do
       it 'should contain puppet.conf [main]' do
         verify_concat_fragment_exact_contents(catalogue, 'puppet.conf+10-main', [
           '[main]',
+          '    vardir = /var/lib/puppet',
           '    logdir = /var/log/puppet',
           '    rundir = /var/run/puppet',
           '    ssldir = $vardir/ssl',
@@ -168,6 +169,38 @@ describe 'puppet::config' do
     end
   end
 
+  context "on a FreeBSD family OS" do
+    let :facts do {
+      :osfamily => 'FreeBSD',
+      :domain   => 'example.org',
+    } end
+
+    describe 'with default parameters' do
+      let :pre_condition do
+        'include ::puppet'
+      end
+
+      it 'should contain auth.conf' do
+        should contain_file('/usr/local/etc/puppet/auth.conf').with_content(%r{^path /certificate_revocation_list/ca\nmethod find$})
+      end
+
+      it 'should contain puppet.conf [main]' do
+        verify_concat_fragment_exact_contents(catalogue, 'puppet.conf+10-main', [
+          '[main]',
+          '    vardir = /var/puppet',
+          '    logdir = /var/log/puppet',
+          '    rundir = /var/run/puppet',
+          '    ssldir = $vardir/ssl',
+          '    privatekeydir = $ssldir/private_keys { group = service }',
+          '    hostprivkey = $privatekeydir/$certname.pem { mode = 640 }',
+          '    autosign       = $confdir/autosign.conf { mode = 664 }',
+          '    show_diff     = false',
+          '    hiera_config = $confdir/hiera.yaml'
+        ])
+      end
+    end
+  end
+
   context "on a Windows family OS" do
     let :facts do {
       :osfamily => 'windows',
@@ -186,6 +219,7 @@ describe 'puppet::config' do
       it 'should contain puppet.conf [main]' do
         verify_concat_fragment_exact_contents(catalogue, 'puppet.conf+10-main', [
           '[main]',
+          '    vardir = C:/ProgramData/PuppetLabs/puppet/var',
           '    logdir = C:/ProgramData/PuppetLabs/puppet/var/log',
           '    rundir = C:/ProgramData/PuppetLabs/puppet/var/run',
           '    ssldir = $confdir/ssl',

@@ -15,7 +15,7 @@ class puppet::server::install {
   }
 
   if $puppet::server_git_repo {
-    file { $puppet::server_vardir:
+    file { $puppet::vardir:
       ensure => directory,
       owner  => $puppet::server_user,
     }

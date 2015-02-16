@@ -15,6 +15,8 @@
 #
 # $dir::                           Override the puppet directory.
 #
+# $vardir::                        Override the puppet var directory.
+#
 # $logdir::                        Override the log directory.
 #
 # $rundir::                        Override the PID directory.
@@ -159,8 +161,6 @@
 #
 # $server_port::                   Puppet master port
 #                                  type:integer
-#
-# $server_vardir::                 Puppet data directory.
 #
 # $server_ca::                     Provide puppet CA
 #                                  type:boolean
@@ -348,6 +348,7 @@ class puppet (
   $user                          = $puppet::params::user,
   $group                         = $puppet::params::group,
   $dir                           = $puppet::params::dir,
+  $vardir                        = $puppet::params::vardir,
   $logdir                        = $puppet::params::logdir,
   $rundir                        = $puppet::params::rundir,
   $ssldir                        = $puppet::params::ssldir,
@@ -395,7 +396,6 @@ class puppet (
   $server_group                  = $puppet::params::group,
   $server_dir                    = $puppet::params::dir,
   $server_port                   = $puppet::params::port,
-  $server_vardir                 = $puppet::params::server_vardir,
   $server_ca                     = $puppet::params::server_ca,
   $server_reports                = $puppet::params::server_reports,
   $server_implementation         = $puppet::params::server_implementation,
@@ -481,6 +481,7 @@ class puppet (
   validate_array($auth_allowed)
 
   validate_absolute_path($dir)
+  validate_absolute_path($vardir)
   validate_absolute_path($logdir)
   validate_absolute_path($rundir)
 

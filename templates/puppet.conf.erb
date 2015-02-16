@@ -1,6 +1,9 @@
 <%= ERB.new(File.read(File.expand_path("_header.erb",File.dirname(file)))).result(binding) -%>
 
 [main]
+    # Where Puppet's general dynamic and/or growing data is kept
+    vardir = <%= scope.lookupvar('::puppet::vardir') %>
+
     # The Puppet log directory.
     # The default value is '$vardir/log'.
     logdir = <%= scope.lookupvar('::puppet::logdir') %>
