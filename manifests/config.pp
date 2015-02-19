@@ -22,7 +22,7 @@ class puppet::config(
     ensure => directory,
   } ->
   case $::osfamily {
-    Windows: {
+    'Windows': {
       file { "${puppet_dir}/puppet.conf":
         source  => concat_output('puppet.conf'),
         require => Concat_build['puppet.conf'],

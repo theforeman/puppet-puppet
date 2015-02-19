@@ -2,7 +2,7 @@
 class puppet::server::config inherits puppet::config {
   if $puppet::server_passenger and $::puppet::server_implementation == 'master' {
     # Anchor the passenger config inside this
-    class { 'puppet::server::passenger': } -> Class['puppet::server::config']
+    class { '::puppet::server::passenger': } -> Class['puppet::server::config']
   }
 
   # Mirror the relationship, as defined() is parse-order dependent
@@ -26,7 +26,7 @@ class puppet::server::config inherits puppet::config {
   if $::puppet::server_foreman {
     # Include foreman components for the puppetmaster
     # ENC script, reporting script etc.
-    class {'foreman::puppetmaster':
+    class {'::foreman::puppetmaster':
       foreman_url    => $puppet::server_foreman_url,
       receive_facts  => $puppet::server_facts,
       puppet_home    => $puppet::vardir,
@@ -91,7 +91,7 @@ class puppet::server::config inherits puppet::config {
     # need to chown the $vardir before puppet does it, or else
     # we can't write puppet.git/ on the first run
 
-    include git
+    include ::git
 
     git::repo { 'puppet_repo':
       bare    => true,
@@ -117,7 +117,7 @@ class puppet::server::config inherits puppet::config {
 
     # make sure your site.pp exists (puppet #15106, foreman #1708)
     file { "${puppet::server_manifest_path}/site.pp":
-      ensure  => present,
+      ensure  => file,
       replace => false,
       content => "# site.pp must exist (puppet #15106, foreman #1708)\n",
       mode    => '0644',
@@ -129,7 +129,7 @@ class puppet::server::config inherits puppet::config {
 
   # PuppetDB
   if $puppet::server_puppetdb_host {
-    class { 'puppetdb::master::config':
+    class { '::puppetdb::master::config':
       puppetdb_server             => $puppet::server_puppetdb_host,
       puppetdb_port               => $puppet::server_puppetdb_port,
       puppetdb_soft_write_failure => $puppet::server_puppetdb_swf,

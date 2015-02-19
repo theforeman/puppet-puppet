@@ -19,7 +19,7 @@ class puppet::agent::config {
     }
     if $::puppet::remove_lock {
       file {'/var/lib/puppet/state/agent_disabled.lock':
-        ensure => absent
+        ensure => absent,
       }
     }
   }

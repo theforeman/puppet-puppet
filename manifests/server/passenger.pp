@@ -20,7 +20,7 @@ class puppet::server::passenger (
   include ::apache::mod::passenger
 
   case $::operatingsystem {
-    Debian,Ubuntu: {
+    'Debian', 'Ubuntu': {
       file { '/etc/default/puppetmaster':
         content => "START=no\n",
         before  => Class['puppet::server::install'],
@@ -47,8 +47,8 @@ class puppet::server::passenger (
   ]
 
   if $puppet_ca_proxy != '' {
-    include apache::mod::proxy
-    include apache::mod::proxy_http
+    include ::apache::mod::proxy
+    include ::apache::mod::proxy_http
 
     $custom_fragment = "ProxyPassMatch ^/([^/]+/certificate.*)$ ${puppet_ca_proxy}/\$1"
   } else {

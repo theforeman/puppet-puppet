@@ -46,7 +46,7 @@ define puppet::server::env (
     }
   } else {
     concat_fragment { "puppet.conf+40-${name}":
-      content => template('puppet/server/puppet.conf.env.erb')
+      content => template('puppet/server/puppet.conf.env.erb'),
     }
   }
 }
