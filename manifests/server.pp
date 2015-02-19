@@ -21,7 +21,7 @@ class puppet::server {
     if $::puppet::server_git_repo {
       $config_version_cmd = "git --git-dir ${::puppet::server_envs_dir}/\$environment/.git describe --all --long"
     } else {
-      $config_version_cmd = ''
+      $config_version_cmd = undef
     }
   } else {
     $config_version_cmd = $::puppet::server_config_version

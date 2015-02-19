@@ -46,13 +46,15 @@ class puppet::server::passenger (
     'unset X-Forwarded-For',
   ]
 
-  if $puppet_ca_proxy != '' {
+  if $puppet_ca_proxy and $puppet_ca_proxy != '' {
     include ::apache::mod::proxy
     include ::apache::mod::proxy_http
 
     $custom_fragment = "ProxyPassMatch ^/([^/]+/certificate.*)$ ${puppet_ca_proxy}/\$1"
+    $ssl_proxyengine = true
   } else {
-    $custom_fragment = ''
+    $custom_fragment = undef
+    $ssl_proxyengine = false
   }
 
   $ssl_crl_check = $ssl_ca_crl ? {
@@ -78,7 +80,7 @@ class puppet::server::passenger (
     ssl_verify_client    => 'optional',
     ssl_options          => '+StdEnvVars +ExportCertData',
     ssl_verify_depth     => '1',
-    ssl_proxyengine      => $puppet_ca_proxy != '',
+    ssl_proxyengine      => $ssl_proxyengine,
     custom_fragment      => $custom_fragment,
     request_headers      => $request_headers,
     options              => ['None'],

@@ -470,10 +470,14 @@ class puppet (
   validate_hash($agent_additional_settings)
   validate_hash($server_additional_settings)
 
-  validate_string($ca_server)
+  if $ca_server {
+    validate_string($ca_server)
+  }
   validate_string($hiera_config)
   validate_string($server_external_nodes)
-  validate_string($server_ca_proxy)
+  if $server_ca_proxy {
+    validate_string($server_ca_proxy)
+  }
   if $server_puppetdb_host {
     validate_string($server_puppetdb_host)
   }

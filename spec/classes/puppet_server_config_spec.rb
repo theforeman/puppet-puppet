@@ -57,7 +57,7 @@ describe 'puppet::server::config' do
       should contain_file('/usr/share/puppet/modules').with_ensure('directory')
 
       should contain_file('/etc/puppet/manifests/site.pp').with({
-        :ensure  => 'present',
+        :ensure  => 'file',
         :replace => false,
         :content => "# site.pp must exist (puppet #15106, foreman #1708)\n",
       })
@@ -255,7 +255,7 @@ describe 'puppet::server::config' do
 
       it 'should configure puppet.conf' do
         should contain_concat_fragment('puppet.conf+30-master').
-          with_content(%r{^\s+manifest\s+= /etc/puppet/environments/\$environment/manifests/site.pp\n\s+modulepath\s+= /etc/puppet/environments/\$environment/modules\n\s+config_version\s+= $})
+          with_content(%r{^\s+manifest\s+= /etc/puppet/environments/\$environment/manifests/site.pp\n\s+modulepath\s+= /etc/puppet/environments/\$environment/modules$})
       end
 
       it { should_not contain_puppet__server__env('development') }

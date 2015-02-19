@@ -19,7 +19,7 @@ class puppet::params {
   $module_repository   = undef
   $configtimeout       = 120
   $usecacheonfailure   = true
-  $ca_server           = ''
+  $ca_server           = undef
   $ca_port             = undef
   $prerun_command      = undef
   $postrun_command     = undef
@@ -112,7 +112,7 @@ class puppet::params {
   $server_enc_api             = 'v2'
   $server_report_api          = 'v2'
   $server_request_timeout     = 60
-  $server_ca_proxy            = ''
+  $server_ca_proxy            = undef
   $server_certname            = $::clientcert
   $server_strict_variables    = false
   $server_rack_arguments      = []
