@@ -148,6 +148,9 @@
 # $agent_additional_settings::     A hash of additional agent settings.
 #                                  type:hash
 #
+# $remove_lock::                   Remove the agent lock when running.
+#                                  type:boolean
+#
 # == puppet::server parameters
 #
 # $server::                        Should a puppet master be installed as well as the client
@@ -388,6 +391,7 @@ class puppet (
   $auth_allowed                  = $puppet::params::auth_allowed,
   $client_package                = $puppet::params::client_package,
   $agent                         = $puppet::params::agent,
+  $remove_lock                   = $puppet::params::remove_lock,
   $puppetmaster                  = $puppet::params::puppetmaster,
   $service_name                  = $puppet::params::service_name,
   $syslogfacility                = $puppet::params::syslogfacility,
@@ -450,6 +454,7 @@ class puppet (
   validate_bool($usecacheonfailure)
   validate_bool($agent_noop)
   validate_bool($agent)
+  validate_bool($remove_lock)
   validate_bool($server)
   validate_bool($allow_any_crl_auth)
   validate_bool($server_ca)

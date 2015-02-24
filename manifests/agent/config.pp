@@ -17,8 +17,10 @@ class puppet::agent::config {
       incl    => '/etc/default/puppet',
       lens    => 'Shellvars.lns',
     }
-    file {'/var/lib/puppet/state/agent_disabled.lock':
-      ensure => absent
+    if $::puppet::remove_lock {
+      file {'/var/lib/puppet/state/agent_disabled.lock':
+        ensure => absent
+      }
     }
   }
 }

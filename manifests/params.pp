@@ -85,6 +85,7 @@ class puppet::params {
 
   # Will this host be a puppet agent ?
   $agent                     = true
+  $remove_lock               = true
 
   # Custom puppetmaster
   $puppetmaster              = $::puppetmaster
