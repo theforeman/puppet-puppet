@@ -200,4 +200,7 @@ class puppet::params {
   $server_foreman_ssl_ca   = undef
   $server_foreman_ssl_cert = undef
   $server_foreman_ssl_key  = undef
+
+  # Which Parser do we want to use? https://docs.puppetlabs.com/references/latest/configuration.html#parser
+  $server_parser = 'current'
 }

@@ -262,6 +262,9 @@
 # $server_puppetdb_swf::           PuppetDB soft_write_failure
 #                                  type:boolean
 #
+# $server_parser::                 Sets the parser to use. Valid options are 'current' or 'future'.
+#                                  Defaults to 'current'.
+#
 # === Advanced server parameters:
 #
 # $server_httpd_service::          Apache/httpd service name to notify
@@ -446,6 +449,7 @@ class puppet (
   $server_puppetdb_host          = $puppet::params::server_puppetdb_host,
   $server_puppetdb_port          = $puppet::params::server_puppetdb_port,
   $server_puppetdb_swf           = $puppet::params::server_puppetdb_swf,
+  $server_parser                 = $puppet::params::server_parser,
 ) inherits puppet::params {
 
   validate_bool($listen)
@@ -495,6 +499,7 @@ class puppet (
   validate_absolute_path($rundir)
 
   validate_re($server_implementation, '^(master|puppetserver)$')
+  validate_re($server_parser, '^(current|future)$')
 
   include ::puppet::config
   Class['puppet::config'] -> Class['puppet']

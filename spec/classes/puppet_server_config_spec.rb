@@ -89,6 +89,7 @@ describe 'puppet::server::config' do
         with_content(/^\s+node_terminus\s+= exec$/).
         with_content(/^\s+ca\s+= true$/).
         with_content(/^\s+ssldir\s+= \/var\/lib\/puppet\/ssl$/).
+        with_content(/^\s+parser\s+=\s+current$/).
         with({}) # So we can use a trailing dot on each with_content line
 
       should contain_file('/etc/puppet/puppet.conf')
@@ -353,6 +354,20 @@ describe 'puppet::server::config' do
         should contain_concat_fragment('puppet.conf+10-main').
           with_content(%r{^\s+environmentpath\s+= /etc/puppet/environments$})
       end
+    end
+  end
+
+  describe 'with server_parser => future' do
+    let :pre_condition do
+      "class {'puppet':
+        server => true,
+        server_parser => 'future',
+      }"
+    end
+
+    it 'should configure future parser' do
+      should contain_concat_fragment('puppet.conf+30-master').
+        with_content(/^\s+parser\s+=\s+future$/)
     end
   end
 end
