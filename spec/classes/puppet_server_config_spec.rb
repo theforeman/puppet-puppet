@@ -89,6 +89,7 @@ describe 'puppet::server::config' do
         with_content(/^\s+node_terminus\s+= exec$/).
         with_content(/^\s+ca\s+= true$/).
         with_content(/^\s+ssldir\s+= \/var\/lib\/puppet\/ssl$/).
+        with_content(/^\s+parser\s+=/).
         with({}) # So we can use a trailing dot on each with_content line
 
       should contain_file('/etc/puppet/puppet.conf')
