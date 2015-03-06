@@ -26,6 +26,7 @@ class puppet::server::config inherits puppet::config {
   if $::puppet::server_foreman {
     # Include foreman components for the puppetmaster
     # ENC script, reporting script etc.
+    anchor { 'puppet::server::config_start': } ->
     class {'::foreman::puppetmaster':
       foreman_url    => $puppet::server_foreman_url,
       receive_facts  => $puppet::server_facts,
@@ -37,7 +38,7 @@ class puppet::server::config inherits puppet::config {
       ssl_ca         => pick($puppet::server_foreman_ssl_ca, $puppet::server::ssl_ca_cert),
       ssl_cert       => pick($puppet::server_foreman_ssl_cert, $puppet::server::ssl_cert),
       ssl_key        => pick($puppet::server_foreman_ssl_key, $puppet::server::ssl_cert_key),
-    }
+    } ~> anchor { 'puppet::server::config_end': }
   }
 
   $ca_server                   = $::puppet::ca_server
