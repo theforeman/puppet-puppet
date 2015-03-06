@@ -122,6 +122,9 @@
 # $additional_settings::           A hash of additional main settings.
 #                                  type:hash
 #
+# $stringify_facts::               Whether to convert facts to strings. Defaults to true.
+#                                  type: boolean
+#
 # == puppet::agent parameters
 #
 # $agent::                         Should a puppet agent be installed
@@ -247,7 +250,7 @@
 #                                  type:boolean
 #
 # $server_additional_settings::    A hash of additional settings.
-#                                  Example: {trusted_node_data => true, stringify_facts => true, ordering => 'manifest'}
+#                                  Example: {trusted_node_data => true, ordering => 'manifest'}
 #                                  type:hash
 #
 # $server_rack_arguments::         Arguments passed to rack app ARGV in addition to --confdir and
@@ -395,6 +398,7 @@ class puppet (
   $puppetmaster                  = $puppet::params::puppetmaster,
   $service_name                  = $puppet::params::service_name,
   $syslogfacility                = $puppet::params::syslogfacility,
+  $stringify_facts               = $puppet::params::stringify_facts,
   $server                        = $puppet::params::server,
   $server_user                   = $puppet::params::user,
   $server_group                  = $puppet::params::group,
@@ -457,6 +461,7 @@ class puppet (
   validate_bool($remove_lock)
   validate_bool($server)
   validate_bool($allow_any_crl_auth)
+  validate_bool($stringify_facts)
   validate_bool($server_ca)
   validate_bool($server_passenger)
   validate_bool($server_git_repo)
