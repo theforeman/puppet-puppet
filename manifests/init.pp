@@ -495,6 +495,7 @@ class puppet (
   validate_absolute_path($rundir)
 
   validate_re($server_implementation, '^(master|puppetserver)$')
+  validate_re($server_parser, '^(current|future)$')
 
   include ::puppet::config
   Class['puppet::config'] -> Class['puppet']
