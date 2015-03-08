@@ -356,4 +356,18 @@ describe 'puppet::server::config' do
       end
     end
   end
+
+  describe 'with server_parser => future' do
+    let :pre_condition do
+      "class {'puppet':
+        server => true,
+        server_parser => 'future',
+      }"
+    end
+
+    it 'should configure future parser' do
+      should contain_concat_fragment('puppet.conf+30-master').
+        with_content(/^\s+parser\s+=\s+future$/)
+    end
+  end
 end
