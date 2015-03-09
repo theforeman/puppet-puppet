@@ -191,6 +191,11 @@ class puppet::params {
 
   # Puppet service name
   $service_name = 'puppet'
+  $agent_restart_command = $::osfamily ? {
+    'Debian' => '/usr/sbin/service puppet reload',
+    'Redhat' => '/usr/sbin/service puppet reload',
+    default  => undef,
+  }
 
   # Foreman parameters
   $server_foreman          = true
