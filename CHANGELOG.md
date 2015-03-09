@@ -1,5 +1,45 @@
 # Changelog
 
+## 3.0.0
+* New or changed parameters:
+    * Add additional_settings, agent_additional_settings and
+      server_additional_settings parameters to manage miscellaneous main, agent
+      and master configuration options respectively
+    * Add ca_port parameter to change Puppet CA port
+    * Add listen_to parameter to control auth.conf entries for kick/run
+    * Add module_repository parameter to change puppet module server
+    * Add prerun/postrun_command parameters to run command after Puppet run
+    * Add puppetfactsource parameter, set default to work with SRV records
+    * Add remove_lock parameter to control auto-enabling of Puppet agent
+    * Add server_foreman parameter to control Foreman/Puppet master integration
+    * Add server_puppetdb_* parameters for PuppetDB client configuration
+    * Add server_parser parameter to change default Puppet parser
+    * Add server_rack_arguments parameter to control Puppet master startup
+    * Add server_request_timeout parameter to change Foreman ENC/report
+      processor timeouts (#9286)
+    * Add service_name parameter to override Puppet agent service name
+    * Add owner, group, mode parameters to puppet::env
+* Other features:
+    * Make Foreman integration optional, no longer rely on foreman::params
+    * theforeman/foreman module dependency is now optional, add it manually if
+      you require Foreman integration (incompatible change)
+    * theforeman/git module dependency optional, add it manually if enabling
+      server_git_repo (incompatible change)
+    * Add PuppetDB integration, configuring the master to send data to it
+    * Add support for managing agent on FreeBSD
+    * Add support for managing agent on Windows
+    * Enable CRL checking for Apache 2.4 virtual host
+* Other changes and fixes:
+    * Improvements for Puppet 4 and future parser support
+    * Manage mode on Rack application directories
+    * Move directory env configuration to main section
+    * Chain Foreman integration to ensure it refreshes the Puppet master
+    * Fix config_version being set with directory envs, causing warning
+    * Fix facts/receive_facts compatibility with theforeman/foreman 3.0.0
+    * Fix puppetmaster variable definition under strict variables
+    * Fix metadata quality, pin dependencies
+    * Refreshed README
+
 ## 2.3.1
 * Ensure that the Puppet master runs with UTF-8 locale under Rack (GH-196)
 
