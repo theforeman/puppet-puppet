@@ -4,10 +4,12 @@ class puppet::agent::service {
   case $::puppet::runmode {
     'service': {
       service {'puppet':
-        ensure    => running,
-        name      => $puppet::service_name,
-        hasstatus => true,
-        enable    => true,
+        ensure     => running,
+        name       => $puppet::service_name,
+        hasstatus  => true,
+        hasrestart => $puppet::agent_restart_command != undef,
+        enable     => true,
+        restart    => $puppet::agent_restart_command,
       }
 
       if $::osfamily != 'windows' {
