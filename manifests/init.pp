@@ -148,6 +148,7 @@
 # $agent_restart_command:          The command which gets excuted on puppet service restart
 #
 # $agent_additional_settings::     A hash of additional agent settings.
+#                                  Example: {stringify_facts => true}
 #                                  type:hash
 #
 # $remove_lock::                   Remove the agent lock when running.
@@ -249,7 +250,7 @@
 #                                  type:boolean
 #
 # $server_additional_settings::    A hash of additional settings.
-#                                  Example: {trusted_node_data => true, stringify_facts => true, ordering => 'manifest'}
+#                                  Example: {trusted_node_data => true, ordering => 'manifest'}
 #                                  type:hash
 #
 # $server_rack_arguments::         Arguments passed to rack app ARGV in addition to --confdir and
