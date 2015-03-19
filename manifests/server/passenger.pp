@@ -87,4 +87,5 @@ class puppet::server::passenger (
     require              => Class['::puppet::server::rack'],
   }
 
+  Class['puppet::server::service'] ~> Class['puppet::server::passenger']
 }
