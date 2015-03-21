@@ -117,6 +117,32 @@ as per the examples above, and the execute _puppet apply_ e.g:
     EOF
     puppet apply install.pp --modulepath /path_to/extracted_tarball
 
+# Advanced scenarios
+
+An HTTP (non-SSL) puppetmaster instance can be set up (standalone or in addition to
+the SSL instance) by setting the `server_http` parameter to `true`. This is useful for
+reverse proxy or load balancer scenarios where the proxy/load balancer takes care of SSL
+termination. The HTTP puppetmaster instance expects the `X-Client-Verify`, `X-SSL-Client-DN`
+and `X-SSL-Subject` HTTP headers to have been set on the front end server.
+
+The listening port can be configured by setting `server_http_port` (which defaults to 8139).
+
+By default, this HTTP instance accepts no connection (`deny all` in the `<Directory>`
+snippet). Allowed hosts can be configured by setting the `server_http_allow` parameter
+(which expects an array).
+
+** Note that running an HTTP puppetmaster is a huge security risk when improperly
+configured. Allowed hosts should be tightly controlled; anyone with access to an allowed
+host can access all client catalogues and client certificates. **
+
+    # Configure an HTTP puppetmaster vhost in addition to the standard SSL vhost
+    class { '::puppet':
+      server               => true,
+      server_http          => true,
+      server_http_port     => 8130, # default: 8139
+      server_http_allow    => ['10.20.30.1', 'puppetbalancer.my.corp'],
+    }
+
 # Contributing
 
 * Fork the project
