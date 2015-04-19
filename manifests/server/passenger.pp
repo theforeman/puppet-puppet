@@ -93,8 +93,15 @@ class puppet::server::passenger (
   }
 
   if $http {
+    # Order, deny and allow cannot be configured for Apache >= 2.4 using the Puppetlabs/Apache
+    # module, but they can be set to false. So, set to false and configure manually via custom fragments.
+    # We can't get rid of the 'Order allow,deny' directive and we need to support all Apache versions.
+    # Best we can do is reverse the Order directive and add our own 'Deny from all' for good measure.
     $directories_http = [
       merge($directory, {
+        'order'           => false,
+        'deny'            => false,
+        'allow'           => false,
         'custom_fragment' => join([
             'Order deny,allow',
             'Deny from all',
