@@ -2,12 +2,13 @@ fixtures:
   repositories:
     apache:           'https://github.com/puppetlabs/puppetlabs-apache'
     concat:           'https://github.com/puppetlabs/puppetlabs-concat'
+    concat_native:    'https://github.com/theforeman/puppet-concat'
+    file_concat:      'https://github.com/electrical/puppet-lib-file_concat'
     foreman:          'https://github.com/theforeman/puppet-foreman'
     git:              'https://github.com/theforeman/puppet-git'
-    concat_native:    'https://github.com/theforeman/puppet-concat'
-    stdlib:           'https://github.com/puppetlabs/puppetlabs-stdlib.git'
-    puppetdb:         'https://github.com/puppetlabs/puppetlabs-puppetdb.git'
     intfile:          'https://github.com/puppetlabs/puppetlabs-inifile.git'
+    puppetdb:         'https://github.com/puppetlabs/puppetlabs-puppetdb.git'
+    stdlib:           'https://github.com/puppetlabs/puppetlabs-stdlib.git'
 
   symlinks:
     puppet: "#{source_dir}"
