@@ -174,6 +174,7 @@ class puppet::params {
   $server_ssl_dir  = "${vardir}/ssl"
 
   $server_package     = undef
+  $server_version     = undef
   $client_package     = $::operatingsystem ? {
     /(Debian|Ubuntu)/ => ['puppet-common','puppet'],
     default           => ['puppet'],

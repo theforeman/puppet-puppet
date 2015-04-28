@@ -9,9 +9,10 @@ class puppet::server::install {
     'puppetserver' => 'puppetserver',
   }
   $server_package = pick($::puppet::server_package, $server_package_default)
+  $server_version = pick($::puppet::server_version, $::puppet::version)
 
   package { $server_package:
-    ensure => $::puppet::version,
+    ensure => $server_version,
   }
 
   if $puppet::server_git_repo {

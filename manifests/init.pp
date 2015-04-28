@@ -256,6 +256,8 @@
 #
 # $server_package::                Custom package name for puppet master
 #
+# $server_version::                Custom package version for puppet master
+#
 # $server_certname::               The name to use when handling certificates.
 #
 # $server_strict_variables::       if set to true, it will throw parse errors
@@ -450,6 +452,7 @@ class puppet (
   $server_app_root               = $puppet::params::server_app_root,
   $server_ssl_dir                = $puppet::params::server_ssl_dir,
   $server_package                = $puppet::params::server_package,
+  $server_version                = $puppet::params::server_version,
   $server_certname               = $puppet::params::server_certname,
   $server_enc_api                = $puppet::params::server_enc_api,
   $server_report_api             = $puppet::params::server_report_api,
