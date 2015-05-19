@@ -10,6 +10,9 @@
     ssldir         = <%= scope.lookupvar("puppet::server_ssl_dir") %>
     certname       = <%= scope.lookupvar("puppet::server_certname") %>
     parser         = <%= scope.lookupvar("puppet::server_parser") %>
+<% if @server_environment_timeout -%>
+    environment_timeout = <%= @server_environment_timeout %>
+<% end -%>
 <% if @server_storeconfigs_backend -%>
     storeconfigs   = true
     storeconfigs_backend = <%= @server_storeconfigs_backend %>

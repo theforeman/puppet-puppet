@@ -212,4 +212,7 @@ class puppet::params {
 
   # Which Parser do we want to use? https://docs.puppetlabs.com/references/latest/configuration.html#parser
   $server_parser = 'current'
+
+  # Timeout for cached environments, changed in puppet 3.7.x
+  $server_environment_timeout = undef
 }
