@@ -196,10 +196,23 @@ class puppet::params {
 
   # Puppet service name
   $service_name = 'puppet'
-  $agent_restart_command = $::osfamily ? {
-    'Debian' => '/usr/sbin/service puppet reload',
-    'Redhat' => '/usr/sbin/service puppet reload',
-    default  => undef,
+  # Command to reload/restart the agent
+  # If supported on the OS, reloading is prefered since it does not kill a currently active puppet run
+  case $::osfamily {
+    'Debian' : {
+      $agent_restart_command = "/usr/sbin/service ${service_name} reload"
+    }
+    'Redhat' : {
+      $osreleasemajor = regsubst($::operatingsystemrelease, '^(\d+)\..*$', '\1') # workaround for the possibly missing operatingsystemmajrelease
+      $agent_restart_command = $osreleasemajor ? {
+        '6'     => "/sbin/service ${service_name} reload",
+        '7'     => "/usr/bin/systemctl reload-or-restart ${service_name}",
+        default => undef,
+      }
+    }
+    default  : {
+      $agent_restart_command = undef
+    }
   }
 
   # Foreman parameters
