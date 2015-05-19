@@ -195,7 +195,8 @@ class puppet::params {
 
   # Puppet service name
   $service_name = 'puppet'
-  # Command to restart the agent
+  # Command to reload/restart the agent
+  # If supported on the OS, reloading is prefered since it does not kill a currently active puppet run
   case $::osfamily {
     'Debian' : {
       $agent_restart_command = "/usr/sbin/service ${service_name} reload"
@@ -203,8 +204,9 @@ class puppet::params {
     'Redhat' : {
       $osreleasemajor = regsubst($::operatingsystemrelease, '^(\d+)\..*$', '\1') # workaround for the possibly missing operatingsystemmajrelease
       $agent_restart_command = $osreleasemajor ? {
-        '7'     => "/usr/bin/systemctl restart ${service_name}",
-        default => "/sbin/service ${service_name} reload",
+        '6'     => "/sbin/service ${service_name} reload",
+        '7'     => "/usr/bin/systemctl reload-or-restart ${service_name}",
+        default => undef,
       }
     }
     default  : {
