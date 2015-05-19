@@ -2,7 +2,6 @@ fixtures:
   repositories:
     apache:           'https://github.com/puppetlabs/puppetlabs-apache'
     concat:           'https://github.com/puppetlabs/puppetlabs-concat'
-    concat_native:    'https://github.com/theforeman/puppet-concat'
     file_concat:      'https://github.com/electrical/puppet-lib-file_concat'
     foreman:          'https://github.com/theforeman/puppet-foreman'
     git:              'https://github.com/theforeman/puppet-git'

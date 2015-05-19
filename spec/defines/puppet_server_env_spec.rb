@@ -33,7 +33,7 @@ describe 'puppet::server::env' do
         })
 
         should_not contain_file('/etc/puppet/environments/foo/environment.conf')
-        should_not contain_concat_fragment('puppet.conf+40-foo')
+        should_not contain_concat__fragment('puppet.conf+40-foo')
       end
     end
 
@@ -51,7 +51,7 @@ describe 'puppet::server::env' do
           :ensure => 'directory',
         })
 
-        should contain_concat_fragment('puppet.conf+40-foo').
+        should contain_concat__fragment('puppet.conf+40-foo').
           without_content(/^\s+manifest\s+=/).
           without_content(/^\s+manifestdir\s+=/).
           with_content(%r{^\s+modulepath\s+= /etc/puppet/environments/foo/modules:/etc/puppet/environments/common:/etc/puppet/modules:/usr/share/puppet/modules$}).
@@ -83,7 +83,7 @@ describe 'puppet::server::env' do
       end
 
       it 'should add config_version to an env section' do
-        should contain_concat_fragment('puppet.conf+40-foo').
+        should contain_concat__fragment('puppet.conf+40-foo').
           without_content(/^\s+manifest\s+=/).
           without_content(/^\s+manifestdir\s+=/).
           with_content(%r{^\s+modulepath\s+= /etc/puppet/environments/foo/modules:/etc/puppet/environments/common:/etc/puppet/modules:/usr/share/puppet/modules$}).
@@ -119,7 +119,7 @@ describe 'puppet::server::env' do
       end
 
       it 'should add config_version to an env section' do
-        should contain_concat_fragment('puppet.conf+40-foo').
+        should contain_concat__fragment('puppet.conf+40-foo').
           without_content(/^\s+manifest\s+=/).
           without_content(/^\s+manifestdir\s+=/).
           with_content(%r{^\s+modulepath\s+= /etc/puppet/environments/foo/modules:/etc/puppet/environments/common:/etc/puppet/modules:/usr/share/puppet/modules$}).

@@ -4,6 +4,7 @@ describe 'puppet::config' do
 
   context "on a RedHat family OS" do
     let :facts do {
+      :concat_basedir => '/foo/bar',
       :osfamily => 'RedHat',
       :domain   => 'example.org',
     } end
@@ -145,6 +146,7 @@ describe 'puppet::config' do
         'class {"::puppet": listen => true}'
       end
       let :facts do {
+        :concat_basedir => '/foo/bar',
         :osfamily => 'RedHat',
         :fqdn => 'me.example.org',
         } end
@@ -162,7 +164,7 @@ describe 'puppet::config' do
       end
 
       it 'should configure puppet.conf' do
-        should contain_concat_fragment('puppet.conf+10-main').
+        should contain_concat__fragment('puppet.conf+10-main').
           with_content(/^\s+disable_warnings\s+= deprecations$/).
           with({}) # So we can use a trailing dot on each with_content line
       end
@@ -171,6 +173,7 @@ describe 'puppet::config' do
 
   context "on a FreeBSD family OS" do
     let :facts do {
+      :concat_basedir => '/foo/bar',
       :osfamily => 'FreeBSD',
       :domain   => 'example.org',
     } end
@@ -203,6 +206,7 @@ describe 'puppet::config' do
 
   context "on a Windows family OS" do
     let :facts do {
+      :concat_basedir => 'C:\Temp',
       :osfamily => 'windows',
       :domain   => 'example.org',
     } end
@@ -290,6 +294,7 @@ describe 'puppet::config' do
         'class {"::puppet": listen => true}'
       end
       let :facts do {
+        :concat_basedir => 'C:\Temp',
         :osfamily => 'windows',
         :fqdn     => 'me.example.org',
       } end

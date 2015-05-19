@@ -5,7 +5,9 @@ describe 'puppet::agent::config' do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
       let(:facts) do
-        facts
+        facts.merge({
+          :concat_basedir => '/foo/bar',
+        })
       end
 
       context 'with default parameters' do
@@ -14,7 +16,7 @@ describe 'puppet::agent::config' do
         end
 
         it { should compile.with_all_deps }
-        it { should contain_concat_fragment( 'puppet.conf+20-agent' ) }
+        it { should contain_concat__fragment( 'puppet.conf+20-agent' ) }
         if facts[:osfamily] == 'Debian'
           it { should contain_augeas('puppet::set_start').
                with_context('/files/etc/default/puppet').
@@ -36,7 +38,7 @@ describe 'puppet::agent::config' do
         end
 
         it { should compile.with_all_deps }
-        it { should contain_concat_fragment( 'puppet.conf+20-agent' ) }
+        it { should contain_concat__fragment( 'puppet.conf+20-agent' ) }
         if facts[:osfamily] == 'Debian'
           it { should contain_augeas('puppet::set_start').
                with_context('/files/etc/default/puppet').
@@ -58,7 +60,7 @@ describe 'puppet::agent::config' do
         end
 
         it { should compile.with_all_deps }
-        it { should contain_concat_fragment( 'puppet.conf+20-agent' ) }
+        it { should contain_concat__fragment( 'puppet.conf+20-agent' ) }
         if facts[:osfamily] == 'Debian'
           it { should contain_augeas('puppet::set_start').
                with_context('/files/etc/default/puppet').

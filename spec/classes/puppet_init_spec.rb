@@ -13,7 +13,7 @@ describe 'puppet' do
       describe 'with no custom parameters' do
         it { should contain_class('puppet::config') }
         it { should contain_file('/etc/puppet').with_ensure('directory') }
-        it { should contain_file('/etc/puppet/puppet.conf') }
+        it { should contain_concat('/etc/puppet/puppet.conf') }
         it { should contain_package('puppet').with_ensure('present') }
       end
 
@@ -22,7 +22,7 @@ describe 'puppet' do
           :ca_server => '',
         } end
 
-        it { should_not contain_concat_fragment('puppet.conf+10-main').with_content(/ca_server/) }
+        it { should_not contain_concat__fragment('puppet.conf+10-main').with_content(/ca_server/) }
       end
 
       describe 'with ca_server' do
@@ -30,7 +30,7 @@ describe 'puppet' do
           :ca_server => 'ca.example.org',
         } end
 
-        it { should contain_concat_fragment('puppet.conf+10-main').with_content(/^\s+ca_server\s+= ca.example.org$/) }
+        it { should contain_concat__fragment('puppet.conf+10-main').with_content(/^\s+ca_server\s+= ca.example.org$/) }
       end
 
       describe 'with empty ca_port' do
@@ -38,7 +38,7 @@ describe 'puppet' do
           :ca_port => '',
         } end
 
-        it { should_not contain_concat_fragment('puppet.conf+10-main').with_content(/ca_port/) }
+        it { should_not contain_concat__fragment('puppet.conf+10-main').with_content(/ca_port/) }
       end
 
       describe 'with ca_port' do
@@ -46,7 +46,7 @@ describe 'puppet' do
           :ca_port => '8140',
         } end
 
-        it { should contain_concat_fragment('puppet.conf+10-main').with_content(/^\s+ca_port\s+= 8140$/) }
+        it { should contain_concat__fragment('puppet.conf+10-main').with_content(/^\s+ca_port\s+= 8140$/) }
       end
 
       describe 'with ca_port' do
@@ -54,7 +54,7 @@ describe 'puppet' do
           :ca_port => 8140,
         } end
 
-        it { should contain_concat_fragment('puppet.conf+10-main').with_content(/^\s+ca_port\s+= 8140$/) }
+        it { should contain_concat__fragment('puppet.conf+10-main').with_content(/^\s+ca_port\s+= 8140$/) }
       end
 
       # Test validate_array parameters
@@ -101,7 +101,7 @@ describe 'puppet' do
     describe 'with no custom parameters' do
       it { should contain_class('puppet::config') }
       it { should contain_file('C:/ProgramData/PuppetLabs/puppet/etc').with_ensure('directory') }
-      it { should contain_file('C:/ProgramData/PuppetLabs/puppet/etc/puppet.conf') }
+      it { should contain_concat('C:/ProgramData/PuppetLabs/puppet/etc/puppet.conf') }
       it { should contain_package('puppet').with_ensure('present') }
     end
   end

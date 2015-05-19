@@ -16,12 +16,12 @@
   ],
   "dependencies": [
     {
-      "name": "theforeman/concat_native",
-      "version_requirement": ">= 1.3.0 < 2.0.0"
-    },
-    {
       "name": "puppetlabs/apache",
       "version_requirement": ">= 1.2.0 < 2.0.0"
+    },
+    {
+      "name": "puppetlabs/concat",
+      "version_requirement": ">= 1.0.0 < 3.0.0"
     },
     {
       "name": "puppetlabs/stdlib",

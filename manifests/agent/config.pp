@@ -1,7 +1,9 @@
 # Puppet agent configuration
 class puppet::agent::config {
-  concat_fragment { 'puppet.conf+20-agent':
+  concat::fragment { 'puppet.conf+20-agent':
+    target  => "${::puppet::dir}/puppet.conf",
     content => template($puppet::agent_template),
+    order   => '20',
   }
 
   if $::puppet::runmode == 'service' {

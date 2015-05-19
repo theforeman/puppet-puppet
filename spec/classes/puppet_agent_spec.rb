@@ -24,26 +24,26 @@ describe 'puppet::agent' do
     it { should contain_class('puppet::agent::config') }
     it { should contain_class('puppet::agent::service') }
     it { should contain_file('/etc/puppet').with_ensure('directory') }
-    it { should contain_file('/etc/puppet/puppet.conf') }
+    it { should contain_concat('/etc/puppet/puppet.conf') }
     it { should contain_package('puppet').with_ensure('present') }
     it do
-      should contain_concat_fragment('puppet.conf+20-agent').
+      should contain_concat__fragment('puppet.conf+20-agent').
         with_content(/^\[agent\]/).
         with({})
     end
 
     it do
-      should contain_concat_fragment('puppet.conf+20-agent').
+      should contain_concat__fragment('puppet.conf+20-agent').
                  with_content(/server.*puppetmaster\.example\.com/)
     end
 
     it do
-      should contain_concat_fragment('puppet.conf+20-agent').
+      should contain_concat__fragment('puppet.conf+20-agent').
         without_content(/prerun_command\s*=/)
     end
 
     it do
-      should contain_concat_fragment('puppet.conf+20-agent').
+      should contain_concat__fragment('puppet.conf+20-agent').
         without_content(/postrun_command\s*=/)
     end
   end
@@ -51,7 +51,7 @@ describe 'puppet::agent' do
   describe 'puppetmaster parameter overrides server fqdn' do
     let(:pre_condition) { "class {'puppet': agent => true, puppetmaster => 'mymaster.example.com'}" }
     it do
-      should contain_concat_fragment('puppet.conf+20-agent').
+      should contain_concat__fragment('puppet.conf+20-agent').
                  with_content(/server.*mymaster\.example\.com/)
     end
   end
@@ -62,7 +62,7 @@ describe 'puppet::agent' do
       default_facts.merge({:puppetmaster => 'mymaster.example.com'})
     end
     it do
-      should contain_concat_fragment('puppet.conf+20-agent').
+      should contain_concat__fragment('puppet.conf+20-agent').
                  with_content(/server.*mymaster\.example\.com/)
     end
   end
@@ -73,7 +73,7 @@ describe 'puppet::agent' do
       default_facts.merge({:puppetmaster => 'global.example.com'})
     end
     it do
-      should contain_concat_fragment('puppet.conf+20-agent').
+      should contain_concat__fragment('puppet.conf+20-agent').
                  with_content(/server.*mymaster\.example\.com/)
     end
   end
@@ -81,7 +81,7 @@ describe 'puppet::agent' do
   describe 'use_srv_records removes server setting' do
     let(:pre_condition) { "class {'puppet': agent => true, use_srv_records => true}" }
     it do
-      should contain_concat_fragment('puppet.conf+20-agent').
+      should contain_concat__fragment('puppet.conf+20-agent').
                  without_content(/server\s*=/)
     end
   end
@@ -89,7 +89,7 @@ describe 'puppet::agent' do
   describe 'set prerun_command will be included in config' do
     let(:pre_condition) { "class {'puppet': agent => true, prerun_command => '/my/prerun'}" }
     it do
-      should contain_concat_fragment('puppet.conf+20-agent').
+      should contain_concat__fragment('puppet.conf+20-agent').
         with_content(/prerun_command.*\/my\/prerun/)
     end
   end
@@ -97,7 +97,7 @@ describe 'puppet::agent' do
   describe 'set postrun_command will be included in config' do
     let(:pre_condition) { "class {'puppet': agent => true, postrun_command => '/my/postrun'}" }
     it do
-      should contain_concat_fragment('puppet.conf+20-agent').
+      should contain_concat__fragment('puppet.conf+20-agent').
         with_content(/postrun_command.*\/my\/postrun/)
     end
   end
@@ -110,7 +110,7 @@ describe 'puppet::agent' do
     end
 
     it 'should configure puppet.conf' do
-      should contain_concat_fragment('puppet.conf+20-agent').
+      should contain_concat__fragment('puppet.conf+20-agent').
         with_content(/^\s+ignoreschedules\s+= true$/).
         with({}) # So we can use a trailing dot on each with_content line
     end

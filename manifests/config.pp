@@ -13,9 +13,10 @@ class puppet::config(
   $syslogfacility     = $::puppet::syslogfacility,
   $module_repository  = $::puppet::module_repository,
 ) {
-  concat_build { 'puppet.conf': }
-  concat_fragment { 'puppet.conf+10-main':
+  concat::fragment { 'puppet.conf+10-main':
+    target  => "${puppet_dir}/puppet.conf",
     content => template($main_template),
+    order   => '10',
   }
 
   file { $puppet_dir:
@@ -23,19 +24,14 @@ class puppet::config(
   } ->
   case $::osfamily {
     'Windows': {
-      file { "${puppet_dir}/puppet.conf":
-        source  => concat_output('puppet.conf'),
-        require => Concat_build['puppet.conf'],
-      }
+      concat { "${puppet_dir}/puppet.conf": }
     }
 
     default: {
-      file { "${puppet_dir}/puppet.conf":
-        source  => concat_output('puppet.conf'),
-        require => Concat_build['puppet.conf'],
-        owner   => 'root',
-        group   => $::puppet::params::root_group,
-        mode    => '0644',
+      concat { "${puppet_dir}/puppet.conf":
+        owner => 'root',
+        group => $::puppet::params::root_group,
+        mode  => '0644',
       }
     }
   } ~>

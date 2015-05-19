@@ -52,8 +52,10 @@ class puppet::server::config inherits puppet::config {
     $server_node_terminus = 'plain'
   }
 
-  concat_fragment { 'puppet.conf+30-master':
+  concat::fragment { 'puppet.conf+30-master':
+    target  => "${::puppet::dir}/puppet.conf",
     content => template($puppet::server_template),
+    order   => '30',
   }
 
   ## If the ssl dir is not the default dir, it needs to be created before running
@@ -67,7 +69,7 @@ class puppet::server::config inherits puppet::config {
   exec {'puppet_server_config-generate_ca_cert':
     creates => $::puppet::server::ssl_cert,
     command => "${puppet::params::puppetca_path}/${puppet::params::puppetca_bin} --generate ${::fqdn}",
-    require => File["${puppet::server_dir}/puppet.conf"],
+    require => Concat["${puppet::server_dir}/puppet.conf"],
   }
 
   if $puppet::server_passenger and $::puppet::server_implementation == 'master' {

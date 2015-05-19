@@ -45,8 +45,10 @@ define puppet::server::env (
       }
     }
   } else {
-    concat_fragment { "puppet.conf+40-${name}":
+    concat::fragment { "puppet.conf+40-${name}":
+      target  => "${::puppet::dir}/puppet.conf",
       content => template('puppet/server/puppet.conf.env.erb'),
+      order   => '40',
     }
   }
 }

@@ -10,6 +10,7 @@ describe 'puppet::agent::install' do
     context "on a RedHat family OS" do
       let :facts do {
         :osfamily => 'RedHat',
+        :concat_basedir => '/foo/bar',
       } end
 
       it 'should not define provider' do
@@ -20,6 +21,7 @@ describe 'puppet::agent::install' do
     context "on a Windows family OS" do
       let :facts do {
         :osfamily => 'windows',
+        :concat_basedir => 'C:\Temp',
       } end
 
       it 'should define provider as chocolatey' do
@@ -37,6 +39,7 @@ describe 'puppet::agent::install' do
 
     let :facts do {
       :osfamily => 'windows',
+      :concat_basedir => 'C:\Temp',
     } end
 
     it 'should define provider as msi' do
