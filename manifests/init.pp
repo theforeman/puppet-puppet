@@ -333,6 +333,8 @@
 #                                  catalog from Foreman (in seconds).
 #                                  type:integer
 #
+# $server_environment_timeout::    Timeout for cached compiled catalogs (10s, 5m, ...)
+#
 # $server_ca_proxy::               The actual server that handles puppet CA.
 #                                  Setting this to anything non-empty causes
 #                                  the apache vhost to set up a proxy for all
@@ -472,6 +474,7 @@ class puppet (
   $server_puppetdb_port          = $puppet::params::server_puppetdb_port,
   $server_puppetdb_swf           = $puppet::params::server_puppetdb_swf,
   $server_parser                 = $puppet::params::server_parser,
+  $server_environment_timeout    = $puppet::params::server_environment_timeout,
 ) inherits puppet::params {
 
   validate_bool($listen)
@@ -527,6 +530,10 @@ class puppet (
 
   validate_re($server_implementation, '^(master|puppetserver)$')
   validate_re($server_parser, '^(current|future)$')
+
+  if $server_environment_timeout {
+    validate_re($server_environment_timeout, '^(unlimited|0|[0-9]+[smh]{1})$')
+  }
 
   include ::puppet::config
   Class['puppet::config'] -> Class['puppet']

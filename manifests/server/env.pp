@@ -6,7 +6,7 @@ define puppet::server::env (
   $manifestdir            = undef,
   $modulepath             = ["${::puppet::server_envs_dir}/${name}/modules", $::puppet::server_common_modules_path],
   $templatedir            = undef,
-  $environment_timeout    = undef,
+  $environment_timeout    = $::puppet::server_environment_timeout,
   $directory_environments = $::puppet::server_directory_environments,
   $owner                  = $::puppet::server_environments_owner,
   $group                  = $::puppet::server_environments_group,
