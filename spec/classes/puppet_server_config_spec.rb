@@ -368,4 +368,18 @@ describe 'puppet::server::config' do
         with_content(/^\s+parser\s+=\s+future$/)
     end
   end
+
+  describe 'with server_environment_timeout set' do
+    let :pre_condition do
+      "class {'puppet':
+        server => true,
+        server_environment_timeout => '10m',
+      }"
+    end
+
+    it 'should configure environment_timeout accordingly' do
+      should contain_concat__fragment('puppet.conf+30-master').
+        with_content(/^\s+environment_timeout\s+=\s+10m$/)
+    end
+  end
 end
