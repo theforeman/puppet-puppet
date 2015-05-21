@@ -197,7 +197,7 @@ class puppet::params {
   $service_name = 'puppet'
   $agent_restart_command = $::osfamily ? {
     'Debian' => '/usr/sbin/service puppet reload',
-    'Redhat' => '/usr/sbin/service puppet reload',
+    'Redhat' => '/sbin/service puppet reload',
     default  => undef,
   }
 
