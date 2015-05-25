@@ -33,6 +33,7 @@ class puppet::params {
   $classfile           = '$vardir/classes.txt'
   $hiera_config        = '$confdir/hiera.yaml'
   $syslogfacility      = undef
+  $environment         = $::environment
 
   case $::osfamily {
     'Windows' : {

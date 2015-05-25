@@ -418,6 +418,7 @@ class puppet (
   $puppetmaster                  = $puppet::params::puppetmaster,
   $service_name                  = $puppet::params::service_name,
   $syslogfacility                = $puppet::params::syslogfacility,
+  $environment                   = $puppet::params::environment,
   $server                        = $puppet::params::server,
   $server_user                   = $puppet::params::user,
   $server_group                  = $puppet::params::group,
