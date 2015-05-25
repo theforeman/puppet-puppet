@@ -45,6 +45,7 @@ class puppet::server::config inherits puppet::config {
   $ca_port                     = $::puppet::ca_port
   $server_storeconfigs_backend = $::puppet::server_storeconfigs_backend
   $server_external_nodes       = $::puppet::server_external_nodes
+  $server_environment_timeout  = $::puppet::server_environment_timeout
 
   if $server_external_nodes and $server_external_nodes != '' {
     $server_node_terminus = 'exec'
