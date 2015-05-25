@@ -46,7 +46,7 @@ class puppet::server::config inherits puppet::config {
   $server_storeconfigs_backend = $::puppet::server_storeconfigs_backend
   $server_external_nodes       = $::puppet::server_external_nodes
 
-  if $server_external_nodes {
+  if $server_external_nodes and $server_external_nodes != '' {
     $server_node_terminus = 'exec'
   } else {
     $server_node_terminus = 'plain'
