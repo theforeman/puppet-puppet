@@ -406,6 +406,7 @@ class puppet (
   $pluginfactsource              = $puppet::params::pluginfactsource,
   $additional_settings           = $puppet::params::additional_settings,
   $agent_additional_settings     = $puppet::params::agent_additional_settings,
+  $agent_restart_command         = $puppet::params::agent_restart_command,
   $classfile                     = $puppet::params::classfile,
   $hiera_config                  = $puppet::params::hiera_config,
   $main_template                 = $puppet::params::main_template,
