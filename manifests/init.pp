@@ -145,7 +145,9 @@
 #
 # $service_name::                  The name of the puppet agent service.
 #
-# $agent_restart_command:          The command which gets excuted on puppet service restart
+# $agent_restart_command::         The command which gets excuted on puppet service restart
+#
+# $environment::                   Default environment of the Puppet agent
 #
 # $agent_additional_settings::     A hash of additional agent settings.
 #                                  Example: {stringify_facts => true}
