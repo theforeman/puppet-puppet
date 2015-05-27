@@ -10,24 +10,27 @@
 #
 # include puppet::server::rack
 #
-class puppet::server::rack {
-
-  $server_rack_arguments = $puppet::server_rack_arguments
-
+class puppet::server::rack(
+  $app_root       = $::puppet::server_app_root,
+  $confdir        = $::puppet::server_dir,
+  $rack_arguments = $::puppet::server_rack_arguments,
+  $user           = $::puppet::server_user,
+  $vardir         = $::puppet::vardir,
+) {
   exec {'puppet_server_rack-restart':
-    command     => "/bin/touch ${puppet::server_app_root}/tmp/restart.txt",
+    command     => "/bin/touch ${app_root}/tmp/restart.txt",
     refreshonly => true,
-    cwd         => $puppet::server_app_root,
+    cwd         => $app_root,
     require     => [
       Class['puppet::server::install'],
-      File["${puppet::server_app_root}/tmp"]
+      File["${app_root}/tmp"]
     ],
   }
 
   file {
-    [$puppet::server_app_root, "${puppet::server_app_root}/public", "${puppet::server_app_root}/tmp"]:
+    [$app_root, "${app_root}/public", "${app_root}/tmp"]:
       ensure => directory,
-      owner  => $puppet::server_user,
+      owner  => $user,
       mode   => '0755',
   }
 
@@ -36,8 +39,8 @@ class puppet::server::rack {
     default => 'config.ru.erb'
   }
   file {
-    "${puppet::server_app_root}/config.ru":
-      owner   => $puppet::server_user,
+    "${app_root}/config.ru":
+      owner   => $user,
       content => template("puppet/server/${configru_version}"),
       notify  => Exec['puppet_server_rack-restart'],
   }

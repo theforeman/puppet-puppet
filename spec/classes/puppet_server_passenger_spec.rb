@@ -7,8 +7,12 @@ describe 'puppet::server::passenger' do
         :concat_basedir => '/foo/bar',
       })
     end
+    let(:default_params) do {
+      :app_root => '/etc/puppet/rack'
+    } end
 
     describe 'without parameters' do
+      let(:params) { default_params }
       it 'should include the puppet vhost' do
         should contain_apache__vhost('puppet').with({
           :ssl_proxyengine => false,
@@ -18,9 +22,11 @@ describe 'puppet::server::passenger' do
     end
 
     describe 'with puppet ca proxy' do
-      let :params do {
-        :puppet_ca_proxy => 'https://ca.example.org:8140',
-      }  end
+      let :params do
+        default_params.merge({
+          :puppet_ca_proxy => 'https://ca.example.org:8140',
+        })
+      end
 
       it 'should include the puppet vhost' do
         should contain_apache__vhost('puppet').with({
@@ -31,9 +37,11 @@ describe 'puppet::server::passenger' do
     end
 
     describe 'with SSL CRL' do
-      let :params do {
-        :ssl_ca_crl => '/var/lib/puppet/ssl/ca/ca_crl.pem',
-      } end
+      let :params do
+        default_params.merge({
+          :ssl_ca_crl => '/var/lib/puppet/ssl/ca/ca_crl.pem',
+        })
+      end
 
       it 'should include the puppet vhost' do
         should contain_apache__vhost('puppet').with({

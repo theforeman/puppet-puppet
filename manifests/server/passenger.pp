@@ -18,9 +18,13 @@ class puppet::server::passenger (
   $http_port          = $::puppet::server_http_port,
   $http_allow         = $::puppet::server_http_allow,
 ) {
-  include ::puppet::server::rack
   include ::apache
   include ::apache::mod::passenger
+
+  class { '::puppet::server::rack':
+    app_root => $app_root,
+    user     => $user,
+  }
 
   case $::operatingsystem {
     'Debian', 'Ubuntu': {
