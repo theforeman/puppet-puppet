@@ -114,8 +114,15 @@ class puppet::server::config inherits puppet::config {
 
   }
   elsif ! $puppet::server_dynamic_environments {
-    file { ['/usr/share/puppet', $puppet::server_common_modules_path]:
+    file { '/usr/share/puppet':
       ensure => directory,
+    }
+
+    file { $puppet::server_common_modules_path:
+      ensure => directory,
+      owner  => $::puppet::server_environments_owner,
+      group  => $::puppet::server_environments_group,
+      mode   => $::puppet::server_environments_mode,
     }
 
     # make sure your site.pp exists (puppet #15106, foreman #1708)
