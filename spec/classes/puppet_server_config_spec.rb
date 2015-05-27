@@ -51,10 +51,25 @@ describe 'puppet::server::config' do
     end
 
     it 'should set up the environments' do
-      should contain_file('/etc/puppet/environments').with_ensure('directory')
+      should contain_file('/etc/puppet/environments').with({
+        :ensure => 'directory',
+        :owner => 'puppet',
+        :group => nil,
+        :mode => '0755',
+      })
       should contain_file('/usr/share/puppet').with_ensure('directory')
-      should contain_file('/etc/puppet/environments/common').with_ensure('directory')
-      should contain_file('/usr/share/puppet/modules').with_ensure('directory')
+      should contain_file('/etc/puppet/environments/common').with({
+        :ensure => 'directory',
+        :owner => 'puppet',
+        :group => nil,
+        :mode => '0755',
+      })
+      should contain_file('/usr/share/puppet/modules').with({
+        :ensure => 'directory',
+        :owner => 'puppet',
+        :group => nil,
+        :mode => '0755',
+      })
 
       should contain_file('/etc/puppet/manifests/site.pp').with({
         :ensure  => 'file',

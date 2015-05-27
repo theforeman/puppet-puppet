@@ -22,14 +22,23 @@ describe 'puppet::server::env' do
       it 'should only deploy directories' do
         should contain_file('/etc/puppet/environments/foo').with({
           :ensure => 'directory',
+          :owner => 'puppet',
+          :group => nil,
+          :mode => '0755',
         })
 
         should contain_file('/etc/puppet/environments/foo/manifests').with({
           :ensure => 'directory',
+          :owner => 'puppet',
+          :group => nil,
+          :mode => '0755',
         })
 
         should contain_file('/etc/puppet/environments/foo/modules').with({
           :ensure => 'directory',
+          :owner => 'puppet',
+          :group => nil,
+          :mode => '0755',
         })
 
         should_not contain_file('/etc/puppet/environments/foo/environment.conf')
@@ -45,10 +54,16 @@ describe 'puppet::server::env' do
       it 'should add an env section' do
         should contain_file('/etc/puppet/environments/foo').with({
           :ensure => 'directory',
+          :owner => 'puppet',
+          :group => nil,
+          :mode => '0755',
         })
 
         should contain_file('/etc/puppet/environments/foo/modules').with({
           :ensure => 'directory',
+          :owner => 'puppet',
+          :group => nil,
+          :mode => '0755',
         })
 
         should contain_concat__fragment('puppet.conf+40-foo').
