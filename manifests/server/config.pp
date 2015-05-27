@@ -12,35 +12,7 @@ class puppet::server::config inherits puppet::config {
     Class['puppet::server::config'] ~> Class['foreman_proxy::service']
   }
 
-  # Open read permissions to private keys to puppet group for foreman, proxy etc.
-  file { "${puppet::server_ssl_dir}/private_keys":
-    group => $puppet::server_group,
-    mode  => '0750',
-  }
-
-  file { "${puppet::server_ssl_dir}/private_keys/${::fqdn}.pem":
-    group => $puppet::server_group,
-    mode  => '0640',
-  }
-
-  if $::puppet::server_foreman {
-    # Include foreman components for the puppetmaster
-    # ENC script, reporting script etc.
-    anchor { 'puppet::server::config_start': } ->
-    class {'::foreman::puppetmaster':
-      foreman_url    => $puppet::server_foreman_url,
-      receive_facts  => $puppet::server_facts,
-      puppet_home    => $puppet::vardir,
-      puppet_basedir => $puppet::server_puppet_basedir,
-      enc_api        => $puppet::server_enc_api,
-      report_api     => $puppet::server_report_api,
-      timeout        => $puppet::server_request_timeout,
-      ssl_ca         => pick($puppet::server_foreman_ssl_ca, $puppet::server::ssl_ca_cert),
-      ssl_cert       => pick($puppet::server_foreman_ssl_cert, $puppet::server::ssl_cert),
-      ssl_key        => pick($puppet::server_foreman_ssl_key, $puppet::server::ssl_cert_key),
-    } ~> anchor { 'puppet::server::config_end': }
-  }
-
+  ## General configuration
   $ca_server                   = $::puppet::ca_server
   $ca_port                     = $::puppet::ca_port
   $server_storeconfigs_backend = $::puppet::server_storeconfigs_backend
@@ -59,7 +31,24 @@ class puppet::server::config inherits puppet::config {
     order   => '30',
   }
 
-  ## If the ssl dir is not the default dir, it needs to be created before running
+  file { "${puppet::vardir}/reports":
+    ensure => directory,
+    owner  => $puppet::server_user,
+  }
+
+  ## SSL and CA configuration
+  # Open read permissions to private keys to puppet group for foreman, proxy etc.
+  file { "${puppet::server_ssl_dir}/private_keys":
+    group => $puppet::server_group,
+    mode  => '0750',
+  }
+
+  file { "${puppet::server_ssl_dir}/private_keys/${::fqdn}.pem":
+    group => $puppet::server_group,
+    mode  => '0640',
+  }
+
+  # If the ssl dir is not the default dir, it needs to be created before running
   # the generate ca cert or it will fail.
   exec {'puppet_server_config-create_ssl_dir':
     creates => $::puppet::server_ssl_dir,
@@ -67,6 +56,7 @@ class puppet::server::config inherits puppet::config {
     before  => Exec['puppet_server_config-generate_ca_cert'],
   }
 
+  # Generate a new CA and host cert if our host cert doesn't exist
   exec {'puppet_server_config-generate_ca_cert':
     creates => $::puppet::server::ssl_cert,
     command => "${puppet::params::puppetca_path}/${puppet::params::puppetca_bin} --generate ${::fqdn}",
@@ -77,11 +67,7 @@ class puppet::server::config inherits puppet::config {
     Exec['puppet_server_config-generate_ca_cert'] ~> Service[$puppet::server_httpd_service]
   }
 
-  file { "${puppet::vardir}/reports":
-    ensure => directory,
-    owner  => $puppet::server_user,
-  }
-
+  ## Environments
   # location where our puppet environments are located
   file { $puppet::server_envs_dir:
     ensure => directory,
@@ -91,7 +77,6 @@ class puppet::server::config inherits puppet::config {
   }
 
   if $puppet::server_git_repo {
-
     # need to chown the $vardir before puppet does it, or else
     # we can't write puppet.git/ on the first run
 
@@ -138,7 +123,26 @@ class puppet::server::config inherits puppet::config {
     puppet::server::env {$puppet::server_environments: }
   }
 
-  # PuppetDB
+  ## Foreman
+  if $::puppet::server_foreman {
+    # Include foreman components for the puppetmaster
+    # ENC script, reporting script etc.
+    anchor { 'puppet::server::config_start': } ->
+    class {'::foreman::puppetmaster':
+      foreman_url    => $puppet::server_foreman_url,
+      receive_facts  => $puppet::server_facts,
+      puppet_home    => $puppet::vardir,
+      puppet_basedir => $puppet::server_puppet_basedir,
+      enc_api        => $puppet::server_enc_api,
+      report_api     => $puppet::server_report_api,
+      timeout        => $puppet::server_request_timeout,
+      ssl_ca         => pick($puppet::server_foreman_ssl_ca, $puppet::server::ssl_ca_cert),
+      ssl_cert       => pick($puppet::server_foreman_ssl_cert, $puppet::server::ssl_cert),
+      ssl_key        => pick($puppet::server_foreman_ssl_key, $puppet::server::ssl_cert_key),
+    } ~> anchor { 'puppet::server::config_end': }
+  }
+
+  ## PuppetDB
   if $puppet::server_puppetdb_host {
     class { '::puppetdb::master::config':
       puppetdb_server             => $puppet::server_puppetdb_host,
