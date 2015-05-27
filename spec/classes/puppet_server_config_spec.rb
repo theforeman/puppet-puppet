@@ -8,6 +8,7 @@ describe 'puppet::server::config' do
     :rubyversion            => '1.9.3',
     :operatingsystemrelease => '6.5',
     :osfamily               => 'RedHat',
+    :puppetversion          => Puppet.version,
   } end
   let(:facts) { default_facts }
 
@@ -33,11 +34,19 @@ describe 'puppet::server::config' do
         :before  => /Exec\[puppet_server_config-generate_ca_cert\]/
       })
 
+      puppetcacmd = Puppet.version >= '3' ? '/usr/bin/puppet cert' : '/usr/sbin/puppetca'
       should contain_exec('puppet_server_config-generate_ca_cert').with({
         :creates => "/var/lib/puppet/ssl/certs/#{facts[:fqdn]}.pem",
-        :command => "/usr/sbin/puppetca --generate #{facts[:fqdn]}",
+        :command => "#{puppetcacmd} --generate #{facts[:fqdn]}",
         :require => /Concat\[\/etc\/puppet\/puppet\.conf\]/,
       }).that_notifies('Service[httpd]')
+    end
+
+    context 'on Puppet 3.4+', :if => (Puppet.version >= '3.4.0') do
+      it 'should set sane umask on execs' do
+        should contain_exec('puppet_server_config-create_ssl_dir').with_umask('0022')
+        should contain_exec('puppet_server_config-generate_ca_cert').with_umask('0022')
+      end
     end
 
     it 'should set up the ENC' do
@@ -353,16 +362,14 @@ describe 'puppet::server::config' do
        }"
     end
 
-    context 'on old Puppet' do
-      let(:facts) { default_facts.merge(:puppetversion => '3.5.3') }
+    context 'on old Puppet', :if => (Puppet.version < '3.6.0') do
       it 'should be disabled' do
         should contain_concat__fragment('puppet.conf+30-master').
           without_content(%r{^\s+environmentpath\s+=$})
       end
     end
 
-    context 'on Puppet 3.6.0+' do
-      let(:facts) { default_facts.merge(:puppetversion => '3.6.0') }
+    context 'on Puppet 3.6.0+', :if => (Puppet.version >= '3.6.0') do
       it 'should be enabled' do
         should contain_concat__fragment('puppet.conf+10-main').
           with_content(%r{^\s+environmentpath\s+= /etc/puppet/environments$})
