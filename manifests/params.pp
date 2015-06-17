@@ -30,7 +30,7 @@ class puppet::params {
   $pluginsource        = 'puppet:///plugins'
   $pluginfactsource    = 'puppet:///pluginfacts'
   # lint:endignore
-  $classfile           = '$vardir/classes.txt'
+  $classfile           = '$statedir/classes.txt'
   $hiera_config        = '$confdir/hiera.yaml'
   $syslogfacility      = undef
   $environment         = $::environment

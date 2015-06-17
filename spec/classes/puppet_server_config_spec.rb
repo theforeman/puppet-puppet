@@ -102,7 +102,7 @@ describe 'puppet::server::config' do
 
       should contain_concat__fragment('puppet.conf+20-agent').
         with_content(/^\s+configtimeout\s+= 120$/).
-        with_content(/^\s+classfile\s+= \$vardir\/classes.txt/).
+        with_content(/^\s+classfile\s+= \$statedir\/classes.txt/).
         with({}) # So we can use a trailing dot on each with_content line
 
       should contain_concat__fragment('puppet.conf+30-master').
