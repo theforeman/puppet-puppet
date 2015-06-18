@@ -8,6 +8,7 @@ describe 'puppet::server' do
     :fqdn                   => 'puppetmaster.example.com',
     :operatingsystemrelease => '6.5',
     :osfamily               => 'RedHat',
+    :rubyversion            => '1.8.7',
   } end
   let(:facts) { default_facts }
 
