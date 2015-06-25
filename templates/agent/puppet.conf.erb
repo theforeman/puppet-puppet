@@ -31,7 +31,9 @@
     splaylimit        = <%= scope.lookupvar('::puppet::splaylimit') %>
     runinterval       = <%= scope.lookupvar('::puppet::runinterval') %>
     noop              = <%= scope.lookupvar('::puppet::agent_noop') %>
+<% unless [nil, :undefined, :undef].include?(scope.lookupvar('::puppet::configtimeout')) -%>
     configtimeout     = <%= scope.lookupvar('::puppet::configtimeout') %>
+<% end -%>
     usecacheonfailure = <%= scope.lookupvar('::puppet::usecacheonfailure') %>
 <% unless [nil, :undefined, :undef].include?(scope.lookupvar('::puppet::prerun_command')) -%>
     prerun_command    = <%= scope.lookupvar('::puppet::prerun_command') %>
