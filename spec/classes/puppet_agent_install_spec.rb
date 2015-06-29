@@ -11,6 +11,7 @@ describe 'puppet::agent::install' do
       let :facts do {
         :osfamily => 'RedHat',
         :concat_basedir => '/foo/bar',
+        :operatingsystemrelease => '6.6',
       } end
 
       it 'should not define provider' do

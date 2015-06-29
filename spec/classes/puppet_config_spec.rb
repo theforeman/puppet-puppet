@@ -4,9 +4,11 @@ describe 'puppet::config' do
 
   context "on a RedHat family OS" do
     let :facts do {
-      :concat_basedir => '/foo/bar',
-      :osfamily => 'RedHat',
-      :domain   => 'example.org',
+      :concat_basedir         => '/foo/bar',
+      :domain                 => 'example.org',
+      :fqdn                   => 'host.example.com',
+      :operatingsystemrelease => '6.6',
+      :osfamily               => 'RedHat',
     } end
 
     describe 'with default parameters' do
@@ -145,14 +147,9 @@ describe 'puppet::config' do
       let :pre_condition do
         'class {"::puppet": listen => true}'
       end
-      let :facts do {
-        :concat_basedir => '/foo/bar',
-        :osfamily => 'RedHat',
-        :fqdn => 'me.example.org',
-        } end
 
       it 'should contain auth.conf with auth any' do
-        should contain_file('/etc/puppet/auth.conf').with_content(%r{^path /run\nauth any\nmethod save\nallow me.example.org$})
+        should contain_file('/etc/puppet/auth.conf').with_content(%r{^path /run\nauth any\nmethod save\nallow #{facts[:fqdn]}$})
         end
       end
 
