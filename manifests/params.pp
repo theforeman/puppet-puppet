@@ -17,7 +17,12 @@ class puppet::params {
   $agent_noop          = false
   $show_diff           = false
   $module_repository   = undef
-  $configtimeout       = 120
+  if versioncmp($::puppetversion, '4.0') < 0 {
+    $configtimeout     = 120
+  }
+  else {
+    $configtimeout     = undef
+  }
   $usecacheonfailure   = true
   $ca_server           = undef
   $ca_port             = undef

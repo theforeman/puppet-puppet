@@ -101,7 +101,6 @@ describe 'puppet::server::config' do
         with({}) # So we can use a trailing dot on each with_content line
 
       should contain_concat__fragment('puppet.conf+20-agent').
-        with_content(/^\s+configtimeout\s+= 120$/).
         with_content(/^\s+classfile\s+= \$statedir\/classes.txt/).
         with({}) # So we can use a trailing dot on each with_content line
 
@@ -117,6 +116,20 @@ describe 'puppet::server::config' do
       should contain_concat('/etc/puppet/puppet.conf')
 
       should_not contain_file('/etc/puppet/puppet.conf').with_content(/storeconfigs/)
+    end
+
+    context 'on Puppet < 4.0.0', :if => (Puppet.version < '4.0.0') do
+      it 'should set configtimeout' do
+        should contain_concat__fragment('puppet.conf+20-agent').
+          with_content(/^\s+configtimeout\s+= 120$/)
+      end
+    end
+
+    context 'on Puppet >= 4.0.0', :if => (Puppet.version >= '4.0.0') do
+      it 'should not set configtimeout' do
+        should contain_concat__fragment('puppet.conf+20-agent').
+          without_content(/^\s+configtimeout\s+= 120$/)
+      end
     end
 
     it 'should not configure PuppetDB' do
