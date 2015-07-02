@@ -1,5 +1,26 @@
 # Changelog
 
+## 4.0.0
+* New or changed parameters:
+    * Add server\_http\_* parameters to configure the master to listen on HTTP
+      for reverse proxy scenarios
+    * Add server_version parameter to control package version of Puppet master
+    * Add server\_environment\_timeout parameter to control caching of all
+      environments
+    * Add environment parameter to set the default Puppet agent environment
+* Other features:
+    * Replace theforeman/concat_native with puppetlabs/concat
+    * Reload, not restart the Puppet agent service where possible
+* Other changes and fixes:
+    * Add documentation on environment parameters used with R10K
+    * Set mode/owner/group on common module directories
+    * Fix incorrect additional_settings documentation
+    * Fix server_node_terminus behaviour under future parser
+    * Fix generation of SSL certificates with restrictive umask
+    * Fix default location of classes.txt to statedir
+    * Do not set configtimeout under Puppet 4
+    * Test under future parser and Puppet 4
+
 ## 3.0.0
 * New or changed parameters:
     * Add additional_settings, agent_additional_settings and
