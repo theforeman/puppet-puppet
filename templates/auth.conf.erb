@@ -59,13 +59,30 @@
 
 ### Authenticated ACLs - these rules apply only when the client
 ### has a valid certificate and is thus authenticated
+<% if @puppetversion.to_f >= 4.0 -%>
+path /puppet/v3/environments
+method find
+allow *
+<% end -%>
 
 # allow nodes to retrieve their own catalog
+<% if @puppetversion.to_f >= 4.0 -%>
+path ~ ^/puppet/v3/catalog/([^/]+)$
+method find
+allow <%= @auth_allowed.join(', ') %>
+<% end -%>
+
 path ~ ^/catalog/([^/]+)$
 method find
 allow <%= @auth_allowed.join(', ') %>
 
 # allow nodes to retrieve their own node definition
+<% if @puppetversion.to_f >= 4.0 -%>
+path ~ ^/puppet/v3/node/([^/]+)$
+method find
+allow <%= @auth_allowed.join(', ') %>
+<% end -%>
+
 path ~ ^/node/([^/]+)$
 method find
 allow <%= @auth_allowed.join(', ') %>
@@ -79,6 +96,12 @@ method find
 allow *
 
 # allow all nodes to store their own reports
+<% if @puppetversion.to_f >= 4.0 -%>
+path ~ ^/puppet/v3/report/([^/]+)$
+method save
+allow <%= @auth_allowed.join(', ') %>
+<% end -%>
+
 path ~ ^/report/([^/]+)$
 method save
 allow <%= @auth_allowed.join(', ') %>
@@ -88,6 +111,15 @@ allow <%= @auth_allowed.join(', ') %>
 # mount points (see fileserver.conf). Note that the `/file` prefix matches
 # requests to both the file_metadata and file_content paths. See "Examples"
 # above if you need more granular access control for custom mount points.
+<% if @puppetversion.to_f >= 4.0 -%>
+path /puppet/v3/file
+allow *
+
+path /puppet/v3/status
+method find
+allow *
+<% end -%>
+
 path /file
 allow *
 
@@ -96,18 +128,39 @@ allow *
 
 # allow access to the CA certificate; unauthenticated nodes need this
 # in order to validate the puppet master's certificate
+<% if @puppetversion.to_f >= 4.0 -%>
+path /puppet-ca/v1/certificate/ca
+auth any
+method find
+allow *
+<% end -%>
+
 path /certificate/ca
 auth any
 method find
 allow *
 
 # allow nodes to retrieve the certificate they requested earlier
+<% if @puppetversion.to_f >= 4.0 -%>
+path /puppet-ca/v1/certificate/
+auth any
+method find
+allow *
+<% end -%>
+
 path /certificate/
 auth any
 method find
 allow *
 
 # allow nodes to request a new certificate
+<% if @puppetversion.to_f >= 4.0 -%>
+path /puppet-ca/v1/certificate_request
+auth any
+method find, save
+allow *
+<% end -%>
+
 path /certificate_request
 auth any
 method find, save
