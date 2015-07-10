@@ -12,22 +12,38 @@ describe 'puppet::config' do
       :puppetversion          => Puppet.version,
     } end
 
+    if Puppet.version < '4.0'
+      codedir = '/etc/puppet'
+      confdir = '/etc/puppet'
+      logdir  = '/var/log/puppet'
+      rundir  = '/var/run/puppet'
+      ssldir  = '/var/lib/puppet/ssl'
+      vardir  = '/var/lib/puppet'
+    else
+      codedir = '/etc/puppetlabs/code'
+      confdir = '/etc/puppetlabs/puppet'
+      logdir  = '/var/log/puppetlabs/puppet'
+      rundir  = '/var/run/puppetlabs'
+      ssldir  = '/etc/puppetlabs/puppet/ssl'
+      vardir  = '/opt/puppetlabs/puppet/cache'
+    end
+
     describe 'with default parameters' do
       let :pre_condition do
         'include ::puppet'
       end
 
       it 'should contain auth.conf' do
-        should contain_file('/etc/puppet/auth.conf').with_content(%r{^path /certificate_revocation_list/ca\nmethod find$})
+        should contain_file("#{confdir}/auth.conf").with_content(%r{^path /certificate_revocation_list/ca\nmethod find$})
       end
 
       it 'should contain puppet.conf [main]' do
         concat_fragment_content = [
           '[main]',
-          '    vardir = /var/lib/puppet',
-          '    logdir = /var/log/puppet',
-          '    rundir = /var/run/puppet',
-          '    ssldir = /var/lib/puppet/ssl',
+          "    vardir = #{vardir}",
+          "    logdir = #{logdir}",
+          "    rundir = #{rundir}",
+          "    ssldir = #{ssldir}",
           '    privatekeydir = $ssldir/private_keys { group = service }',
           '    hostprivkey = $privatekeydir/$certname.pem { mode = 640 }',
           '    autosign       = $confdir/autosign.conf { mode = 664 }',
@@ -50,7 +66,7 @@ describe 'puppet::config' do
       end
 
       it 'should contain auth.conf with auth any' do
-        should contain_file('/etc/puppet/auth.conf').with_content(%r{^path /certificate_revocation_list/ca\nauth any$})
+        should contain_file("#{confdir}/auth.conf").with_content(%r{^path /certificate_revocation_list/ca\nauth any$})
       end
     end
 
@@ -60,7 +76,7 @@ describe 'puppet::config' do
       end
 
       it 'should contain auth.conf with allow' do
-        should contain_file('/etc/puppet/auth.conf').with_content(%r{^allow \$1, puppetproxy$})
+        should contain_file("#{confdir}/auth.conf").with_content(%r{^allow \$1, puppetproxy$})
       end
     end
 
@@ -138,7 +154,7 @@ describe 'puppet::config' do
       end
 
       it 'should contain auth.conf with auth any' do
-        should contain_file('/etc/puppet/auth.conf').with_content(%r{^path /run\nauth any\nmethod save\nallow node1.example.com,node2.example.com$})
+        should contain_file("#{confdir}/auth.conf").with_content(%r{^path /run\nauth any\nmethod save\nallow node1.example.com,node2.example.com$})
       end
     end
 
@@ -148,7 +164,7 @@ describe 'puppet::config' do
       end
 
       it 'should contain auth.conf with auth any' do
-        should contain_file('/etc/puppet/auth.conf').with_content(%r{^path /run\nauth any\nmethod save\nallow master.example.com$})
+        should contain_file("#{confdir}/auth.conf").with_content(%r{^path /run\nauth any\nmethod save\nallow master.example.com$})
       end
     end
 
@@ -158,7 +174,7 @@ describe 'puppet::config' do
       end
 
       it 'should contain auth.conf with auth any' do
-        should contain_file('/etc/puppet/auth.conf').with_content(%r{^path /run\nauth any\nmethod save\nallow #{facts[:fqdn]}$})
+        should contain_file("#{confdir}/auth.conf").with_content(%r{^path /run\nauth any\nmethod save\nallow #{facts[:fqdn]}$})
         end
       end
 

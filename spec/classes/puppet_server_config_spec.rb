@@ -12,33 +12,51 @@ describe 'puppet::server::config' do
   } end
   let(:facts) { default_facts }
 
+  if Puppet.version < '4.0'
+    codedir          = '/etc/puppet'
+    conf_file        = '/etc/puppet/puppet.conf'
+    environments_dir = '/etc/puppet/environments'
+    logdir           = '/var/log/puppet'
+    rundir           = '/var/run/puppet'
+    vardir           = '/var/lib/puppet'
+    ssldir           = '/var/lib/puppet/ssl'
+  else
+    codedir          = '/etc/puppetlabs/code'
+    conf_file        = '/etc/puppetlabs/puppet/puppet.conf'
+    environments_dir = '/etc/puppetlabs/code/environments'
+    logdir           = '/var/log/puppetlabs/puppet'
+    rundir           = '/var/run/puppetlabs'
+    vardir           = '/opt/puppetlabs/puppet/cache'
+    ssldir           = '/etc/puppetlabs/puppet/ssl'
+  end
+
   describe 'with no custom parameters' do
     let :pre_condition do
       "class {'puppet': server => true}"
     end
 
     it 'should set up SSL permissions' do
-      should contain_file('/var/lib/puppet/ssl/private_keys').with({
+      should contain_file("#{ssldir}/private_keys").with({
         :group => 'puppet',
         :mode  => '0750',
       })
 
-      should contain_file("/var/lib/puppet/ssl/private_keys/#{facts[:fqdn]}.pem").with({
+      should contain_file("#{ssldir}/private_keys/#{facts[:fqdn]}.pem").with({
         :group => 'puppet',
         :mode  => '0640',
       })
 
       should contain_exec('puppet_server_config-create_ssl_dir').with({
-        :creates => '/var/lib/puppet/ssl',
-        :command => '/bin/mkdir -p /var/lib/puppet/ssl',
+        :creates => ssldir,
+        :command => "/bin/mkdir -p #{ssldir}",
         :before  => /Exec\[puppet_server_config-generate_ca_cert\]/
       })
 
-      puppetcacmd = Puppet.version >= '3' ? '/usr/bin/puppet cert' : '/usr/sbin/puppetca'
+      puppetcacmd = Puppet.version >= '4' ? '/opt/puppetlabs/bin/puppet cert' : ( Puppet.version >= '3' ? '/usr/bin/puppet cert' : '/usr/sbin/puppetca' )
       should contain_exec('puppet_server_config-generate_ca_cert').with({
-        :creates => "/var/lib/puppet/ssl/certs/#{facts[:fqdn]}.pem",
+        :creates => "#{ssldir}/certs/#{facts[:fqdn]}.pem",
         :command => "#{puppetcacmd} --generate #{facts[:fqdn]}",
-        :require => /Concat\[\/etc\/puppet\/puppet\.conf\]/,
+        :require => /Concat\[#{conf_file}]/,
       }).that_notifies('Service[httpd]')
     end
 
@@ -53,48 +71,52 @@ describe 'puppet::server::config' do
       should contain_class('foreman::puppetmaster').with({
         :foreman_url    => "https://#{facts[:fqdn]}",
         :receive_facts  => true,
-        :puppet_home    => '/var/lib/puppet',
+        :puppet_home    => vardir,
         :puppet_basedir => '/usr/lib/ruby/site_ruby/1.9/puppet',
         :timeout        => 60,
       })
     end
 
     it 'should set up the environments' do
-      should contain_file('/etc/puppet/environments').with({
-        :ensure => 'directory',
-        :owner => 'puppet',
-        :group => nil,
-        :mode => '0755',
-      })
-      should contain_file('/usr/share/puppet').with_ensure('directory')
-      should contain_file('/etc/puppet/environments/common').with({
-        :ensure => 'directory',
-        :owner => 'puppet',
-        :group => nil,
-        :mode => '0755',
-      })
-      should contain_file('/usr/share/puppet/modules').with({
+      should contain_file(environments_dir).with({
         :ensure => 'directory',
         :owner => 'puppet',
         :group => nil,
         :mode => '0755',
       })
 
-      should contain_file('/etc/puppet/manifests/site.pp').with({
-        :ensure  => 'file',
-        :replace => false,
-        :content => "# site.pp must exist (puppet #15106, foreman #1708)\n",
-      })
+      if Puppet.version < '3.6'
+        should contain_file('/usr/share/puppet').with_ensure('directory')
+        should contain_file('/etc/puppet/environments/common').with({
+          :ensure => 'directory',
+          :owner => 'puppet',
+          :group => nil,
+          :mode => '0755',
+        })
 
-      should contain_puppet__server__env('development')
-      should contain_puppet__server__env('production')
+        should contain_file('/usr/share/puppet/modules').with({
+          :ensure => 'directory',
+          :owner => 'puppet',
+          :group => nil,
+          :mode => '0755',
+        })
+
+        should contain_file('/etc/puppet/manifests/site.pp').with({
+          :ensure  => 'file',
+          :replace => false,
+          :content => "# site.pp must exist (puppet #15106, foreman #1708)\n",
+        })
+
+        should contain_puppet__server__env('development')
+        should contain_puppet__server__env('production')
+      end
     end
 
     it 'should configure puppet' do
       should contain_concat__fragment('puppet.conf+10-main').
-        with_content(/^\s+logdir\s+= \/var\/log\/puppet$/).
-        with_content(/^\s+rundir\s+= \/var\/run\/puppet$/).
-        with_content(/^\s+ssldir\s+= \/var\/lib\/puppet\/ssl$/).
+        with_content(/^\s+logdir\s+= #{logdir}$/).
+        with_content(/^\s+rundir\s+= #{rundir}$/).
+        with_content(/^\s+ssldir\s+= #{ssldir}$/).
         with_content(/^\s+privatekeydir\s+= \$ssldir\/private_keys { group = service }$/).
         with_content(/^\s+hostprivkey\s+= \$privatekeydir\/\$certname.pem { mode = 640 }$/).
         with_content(/^\s+autosign\s+= \$confdir\/autosign.conf { mode = 664 }$/).
@@ -109,11 +131,11 @@ describe 'puppet::server::config' do
         with_content(/^\s+external_nodes\s+= \/etc\/puppet\/node.rb$/).
         with_content(/^\s+node_terminus\s+= exec$/).
         with_content(/^\s+ca\s+= true$/).
-        with_content(/^\s+ssldir\s+= \/var\/lib\/puppet\/ssl$/).
+        with_content(/^\s+ssldir\s+= #{ssldir}$/).
         with_content(/^\s+parser\s+=\s+current$/).
         with({}) # So we can use a trailing dot on each with_content line
 
-      should contain_concat('/etc/puppet/puppet.conf')
+      should contain_concat(conf_file)
 
       should_not contain_file('/etc/puppet/puppet.conf').with_content(/storeconfigs/)
     end
@@ -181,26 +203,26 @@ describe 'puppet::server::config' do
     end
 
     it 'should set up the environments directory' do
-      should contain_file('/etc/puppet/environments').with({
+      should contain_file(environments_dir).with({
         :ensure => 'directory',
         :owner  => 'puppet',
       })
     end
 
     it 'should create the git repo' do
-      should contain_file('/var/lib/puppet').with({
+      should contain_file(vardir).with({
         :ensure => 'directory',
         :owner  => 'puppet',
       })
 
       should contain_git__repo('puppet_repo').with({
         :bare    => true,
-        :target  => '/var/lib/puppet/puppet.git',
+        :target  => "#{vardir}/puppet.git",
         :user    => 'puppet',
-        :require => %r{File\[/etc/puppet/environments\]},
+        :require => %r{File\[#{environments_dir}\]},
       })
 
-      should contain_file('/var/lib/puppet/puppet.git/hooks/post-receive').with({
+      should contain_file("#{vardir}/puppet.git/hooks/post-receive").with({
         :owner   => 'puppet',
         :mode    => '0755',
         :require => %r{Git::Repo\[puppet_repo\]},
@@ -224,7 +246,7 @@ describe 'puppet::server::config' do
         should_not contain_concat__fragment('puppet.conf+30-master').with_content(%r{^\s+config_version\s+=$})
 
         should contain_concat__fragment('puppet.conf+10-main').
-          with_content(%r{^\s+environmentpath\s+= /etc/puppet/environments$})
+          with_content(%r{^\s+environmentpath\s+= #{environments_dir}$})
       end
     end
 
@@ -239,8 +261,8 @@ describe 'puppet::server::config' do
 
       it 'should configure puppet.conf' do
         should contain_concat__fragment('puppet.conf+30-master').
-          with_content(%r{^\s+manifest\s+= /etc/puppet/environments/\$environment/manifests/site.pp\n\s+modulepath\s+= /etc/puppet/environments/\$environment/modules$}).
-          with_content(%r{^\s+config_version\s+= git --git-dir /etc/puppet/environments/\$environment/.git describe --all --long$})
+          with_content(%r{^\s+manifest\s+= #{environments_dir}/\$environment/manifests/site.pp\n\s+modulepath\s+= #{environments_dir}/\$environment/modules$}).
+          with_content(%r{^\s+config_version\s+= git --git-dir #{environments_dir}/\$environment/.git describe --all --long$})
       end
     end
   end
@@ -257,7 +279,7 @@ describe 'puppet::server::config' do
       end
 
       it 'should set up the environments directory' do
-        should contain_file('/etc/puppet/environments').with({
+        should contain_file(environments_dir).with({
           :ensure => 'directory',
           :owner  => 'apache',
         })
@@ -265,7 +287,7 @@ describe 'puppet::server::config' do
 
       it 'should configure puppet.conf' do
         should contain_concat__fragment('puppet.conf+10-main').
-          with_content(%r{^\s+environmentpath\s+= /etc/puppet/environments\n\s+basemodulepath\s+= /etc/puppet/environments/common:/etc/puppet/modules:/usr/share/puppet/modules$})
+          with_content(%r{^\s+environmentpath\s+= #{environments_dir}\n\s+basemodulepath\s+= #{environments_dir}/common:#{codedir}/modules:/usr/share/puppet/modules$})
       end
 
       it { should_not contain_puppet__server__env('development') }
@@ -283,7 +305,7 @@ describe 'puppet::server::config' do
       end
 
       it 'should set up the environments directory' do
-        should contain_file('/etc/puppet/environments').with({
+        should contain_file(environments_dir).with({
           :ensure => 'directory',
           :owner  => 'apache',
         })
@@ -291,7 +313,7 @@ describe 'puppet::server::config' do
 
       it 'should configure puppet.conf' do
         should contain_concat__fragment('puppet.conf+30-master').
-          with_content(%r{^\s+manifest\s+= /etc/puppet/environments/\$environment/manifests/site.pp\n\s+modulepath\s+= /etc/puppet/environments/\$environment/modules$})
+          with_content(%r{^\s+manifest\s+= #{environments_dir}/\$environment/manifests/site.pp\n\s+modulepath\s+= #{environments_dir}/\$environment/modules$})
       end
 
       it { should_not contain_puppet__server__env('development') }
@@ -348,7 +370,7 @@ describe 'puppet::server::config' do
     end
 
     it 'should add the branch map to the post receive hook' do
-      should contain_file('/var/lib/puppet/puppet.git/hooks/post-receive').
+      should contain_file("#{vardir}/puppet.git/hooks/post-receive").
         with_content(/BRANCH_MAP = {\n  "a" => "b",\n  "c" => "d",\n}/)
     end
   end
@@ -385,7 +407,7 @@ describe 'puppet::server::config' do
     context 'on Puppet 3.6.0+', :if => (Puppet.version >= '3.6.0') do
       it 'should be enabled' do
         should contain_concat__fragment('puppet.conf+10-main').
-          with_content(%r{^\s+environmentpath\s+= /etc/puppet/environments$})
+          with_content(%r{^\s+environmentpath\s+= #{environments_dir}$})
       end
     end
   end

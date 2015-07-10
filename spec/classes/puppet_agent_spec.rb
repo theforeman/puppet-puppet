@@ -21,12 +21,19 @@ describe 'puppet::agent' do
     let :pre_condition do
       "class {'puppet': agent => true}"
     end
+    if Puppet.version < '4.0'
+      client_package = 'puppet'
+      confdir        = '/etc/puppet'
+    else
+      client_package = 'puppet-agent'
+      confdir        = '/etc/puppetlabs/puppet'
+    end
     it { should contain_class('puppet::agent::install') }
     it { should contain_class('puppet::agent::config') }
     it { should contain_class('puppet::agent::service') }
-    it { should contain_file('/etc/puppet').with_ensure('directory') }
-    it { should contain_concat('/etc/puppet/puppet.conf') }
-    it { should contain_package('puppet').with_ensure('present') }
+    it { should contain_file(confdir).with_ensure('directory') }
+    it { should contain_concat("#{confdir}/puppet.conf") }
+    it { should contain_package(client_package).with_ensure('present') }
     it do
       should contain_concat__fragment('puppet.conf+20-agent').
         with_content(/^\[agent\]/).
