@@ -15,8 +15,14 @@ describe 'puppet::agent::install' do
         :puppetversion => Puppet.version,
       } end
 
-      it 'should not define provider' do
-        should contain_package('puppet').without_provider(nil)
+      if Puppet.version < '4.0'
+        it 'should not define provider' do
+          should contain_package('puppet').without_provider(nil)
+        end
+      else
+        it 'should not define provider' do
+          should contain_package('puppet-agent').without_provider(nil)
+        end
       end
     end
 
@@ -27,8 +33,14 @@ describe 'puppet::agent::install' do
         :puppetversion => Puppet.version,
       } end
 
-      it 'should define provider as chocolatey' do
-        should contain_package('puppet').with_provider('chocolatey')
+      if Puppet.version < '4.0'
+        it 'should define provider as chocolatey' do
+          should contain_package('puppet').with_provider('chocolatey')
+        end
+      else
+        it 'should define provider as chocolatey' do
+          should contain_package('puppet-agent').with_provider('chocolatey')
+        end
       end
     end
 
@@ -46,8 +58,14 @@ describe 'puppet::agent::install' do
       :puppetversion => Puppet.version,
     } end
 
-    it 'should define provider as msi' do
-      should contain_package('puppet').with_provider('msi')
+    if Puppet.version < '4.0'
+      it 'should define provider as msi' do
+        should contain_package('puppet').with_provider('msi')
+      end
+    else
+      it 'should define provider as msi' do
+        should contain_package('puppet-agent').with_provider('msi')
+      end
     end
 
   end

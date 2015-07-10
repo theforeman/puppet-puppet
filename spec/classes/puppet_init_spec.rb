@@ -13,9 +13,15 @@ describe 'puppet' do
 
       describe 'with no custom parameters' do
         it { should contain_class('puppet::config') }
-        it { should contain_file('/etc/puppet').with_ensure('directory') }
-        it { should contain_concat('/etc/puppet/puppet.conf') }
-        it { should contain_package('puppet').with_ensure('present') }
+        if Puppet.version < '4.0'
+          it { should contain_file('/etc/puppet').with_ensure('directory') }
+          it { should contain_concat('/etc/puppet/puppet.conf') }
+          it { should contain_package('puppet').with_ensure('present') }
+        else
+          it { should contain_file('/etc/puppetlabs/puppet').with_ensure('directory') }
+          it { should contain_concat('/etc/puppetlabs/puppet/puppet.conf') }
+          it { should contain_package('puppet-agent').with_ensure('present') }
+        end
       end
 
       describe 'with empty ca_server' do
@@ -104,7 +110,11 @@ describe 'puppet' do
       it { should contain_class('puppet::config') }
       it { should contain_file('C:/ProgramData/PuppetLabs/puppet/etc').with_ensure('directory') }
       it { should contain_concat('C:/ProgramData/PuppetLabs/puppet/etc/puppet.conf') }
-      it { should contain_package('puppet').with_ensure('present') }
+      if Puppet.version < '4.0'
+        it { should contain_package('puppet').with_ensure('present') }
+      else
+        it { should contain_package('puppet-agent').with_ensure('present') }
+      end
     end
   end
 end

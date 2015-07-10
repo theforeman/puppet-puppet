@@ -15,6 +15,8 @@
 #
 # $dir::                           Override the puppet directory.
 #
+# $codedir::                       Override the puppet code directory.
+#
 # $vardir::                        Override the puppet var directory.
 #
 # $logdir::                        Override the log directory.
@@ -383,6 +385,7 @@ class puppet (
   $user                          = $puppet::params::user,
   $group                         = $puppet::params::group,
   $dir                           = $puppet::params::dir,
+  $codedir                       = $puppet::params::codedir,
   $vardir                        = $puppet::params::vardir,
   $logdir                        = $puppet::params::logdir,
   $rundir                        = $puppet::params::rundir,

@@ -43,8 +43,13 @@ describe 'puppet::agent::service' do
     end
 
     it do
+      if Puppet.version < '4.0'
+        confdir = '/etc/puppet'
+      else
+        confdir = '/etc/puppetlabs/puppet'
+      end
       should contain_cron('puppet').with({
-        :command  => '/usr/bin/env puppet agent --config /etc/puppet/puppet.conf --onetime --no-daemonize',
+        :command  => "/usr/bin/env puppet agent --config #{confdir}/puppet.conf --onetime --no-daemonize",
         :user     => 'root',
         :minute   => ['0','30'],
         :hour     => '*',
