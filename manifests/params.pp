@@ -45,6 +45,7 @@ class puppet::params {
       $dir_prefix = 'C:/ProgramData/PuppetLabs/puppet'
 
       $dir        = "${dir_prefix}/etc"
+      $codedir    = "${dir_prefix}/etc"
       $logdir     = "${dir_prefix}/var/log"
       $rundir     = "${dir_prefix}/var/run"
       $ssldir     = "${dir_prefix}/etc/ssl"
@@ -55,6 +56,7 @@ class puppet::params {
 
     /^(FreeBSD|DragonFly)$/ : {
       $dir        = '/usr/local/etc/puppet'
+      $codedir    = '/usr/local/etc/puppet'
       $logdir     = '/var/log/puppet'
       $rundir     = '/var/run/puppet'
       $ssldir     = '/var/puppet/ssl'
@@ -64,12 +66,23 @@ class puppet::params {
     }
 
     default : {
-      $dir        = '/etc/puppet'
-      $logdir     = '/var/log/puppet'
-      $rundir     = '/var/run/puppet'
-      $ssldir     = '/var/lib/puppet/ssl'
-      $vardir     = '/var/lib/puppet'
-      $sharedir   = '/usr/share/puppet'
+      if versioncmp($::puppetversion, '4.0') < 0 {
+        $dir        = '/etc/puppet'
+        $codedir    = '/etc/puppet'
+        $logdir     = '/var/log/puppet'
+        $rundir     = '/var/run/puppet'
+        $ssldir     = '/var/lib/puppet/ssl'
+        $vardir     = '/var/lib/puppet'
+        $sharedir   = '/usr/share/puppet'
+      } else {
+        $dir      = '/etc/puppetlabs/puppet'
+        $codedir  = '/etc/puppetlabs/code'
+        $logdir   = '/var/log/puppetlabs/puppet'
+        $rundir   = '/var/run/puppetlabs'
+        $ssldir   = '/etc/puppetlabs/puppet/ssl'
+        $vardir   = '/opt/puppetlabs/puppet/cache'
+        $sharedir = '/opt/puppetlabs/puppet/modules'
+      }
       $root_group = undef
     }
   }
@@ -154,11 +167,11 @@ class puppet::params {
   $server_environments_group   = $root_group
   $server_environments_mode    = '0755'
   # Where we store our puppet environments
-  $server_envs_dir             = "${dir}/environments"
+  $server_envs_dir             = "${codedir}/environments"
   # Where remains our manifests dir
-  $server_manifest_path        = "${dir}/manifests"
+  $server_manifest_path        = "${codedir}/manifests"
   # Modules in this directory would be shared across all environments
-  $server_common_modules_path  = ["${server_envs_dir}/common", "${dir}/modules", "${sharedir}/modules"]
+  $server_common_modules_path  = ["${server_envs_dir}/common", "${codedir}/modules", "${sharedir}/modules"]
 
   # Dynamic environments config, ignore if the git_repo is 'false'
   # Path to the repository
@@ -180,13 +193,16 @@ class puppet::params {
 
   # Passenger config
   $server_app_root = "${dir}/rack"
-  $server_ssl_dir  = "${vardir}/ssl"
+  $server_ssl_dir  = $ssldir
 
   $server_package     = undef
   $server_version     = undef
-  $client_package     = $::osfamily ? {
-    'Debian' => ['puppet-common','puppet'],
-    default  => ['puppet'],
+  $client_package     = versioncmp($::puppetversion, '4.0') ? {
+    '-1'       => $::osfamily ? {
+      'Debian' => ['puppet-common','puppet'],
+      default  => ['puppet'],
+    },
+    default => 'puppet-agent',
   }
 
   # Only use 'puppet cert' on versions where puppetca no longer exists
@@ -194,7 +210,7 @@ class puppet::params {
     $puppetca_path = '/usr/sbin'
     $puppetca_bin  = 'puppetca'
     $puppetrun_cmd = '/usr/sbin/puppetrun'
-  } else {
+  } elsif versioncmp($::puppetversion, '4.0') < 0 {
     $puppetca_path = $::osfamily ? {
       /^(FreeBSD|DragonFly)$/ => '/usr/local/bin',
       default                 => '/usr/bin'
@@ -204,6 +220,10 @@ class puppet::params {
       /^(FreeBSD|DragonFly)$/ => '/usr/local/bin/puppet kick',
       default                 => '/usr/bin/puppet kick'
     }
+  } else {
+    $puppetca_path = '/opt/puppetlabs/bin'
+    $puppetca_bin = 'puppet cert'
+    $puppetrun_cmd = '/opt/puppetlabs/bin/puppet kick'
   }
 
   $puppetca_cmd = "${puppetca_path}/${puppetca_bin}"
