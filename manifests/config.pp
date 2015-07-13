@@ -12,6 +12,7 @@ class puppet::config(
   $module_repository  = $::puppet::module_repository,
   $nsauth_template    = $::puppet::nsauth_template,
   $pluginsource       = $::puppet::pluginsource,
+  $pluginfactsource   = $::puppet::pluginfactsource,
   $puppet_dir         = $::puppet::dir,
   $puppetmaster       = $::puppet::puppetmaster,
   $syslogfacility     = $::puppet::syslogfacility,

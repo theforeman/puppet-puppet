@@ -119,6 +119,7 @@ describe 'puppet::config' do
           '    use_srv_records = true',
           '    srv_domain = example.org',
           '    pluginsource = puppet:///plugins',
+          '    pluginfactsource = puppet:///pluginfacts',
         ])
       end
     end
