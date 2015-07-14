@@ -94,7 +94,7 @@ describe 'puppet::server::config' do
       should contain_concat__fragment('puppet.conf+10-main').
         with_content(/^\s+logdir\s+= \/var\/log\/puppet$/).
         with_content(/^\s+rundir\s+= \/var\/run\/puppet$/).
-        with_content(/^\s+ssldir\s+= \$vardir\/ssl$/).
+        with_content(/^\s+ssldir\s+= \/var\/lib\/puppet\/ssl$/).
         with_content(/^\s+privatekeydir\s+= \$ssldir\/private_keys { group = service }$/).
         with_content(/^\s+hostprivkey\s+= \$privatekeydir\/\$certname.pem { mode = 640 }$/).
         with_content(/^\s+autosign\s+= \$confdir\/autosign.conf { mode = 664 }$/).
