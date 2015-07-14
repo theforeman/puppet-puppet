@@ -8,6 +8,7 @@ describe 'puppet::server::service' do
     :fqdn                   => 'puppetmaster.example.com',
     :operatingsystemrelease => '6.5',
     :osfamily               => 'RedHat',
+    :puppetversion          => Puppet.version,
   } end
 
   describe 'default_parameters' do

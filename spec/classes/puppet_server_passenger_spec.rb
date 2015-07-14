@@ -5,6 +5,7 @@ describe 'puppet::server::passenger' do
     let(:facts) do
       facts.merge({
         :concat_basedir => '/foo/bar',
+        :puppetversion  => Puppet.version,
       })
     end
     let(:default_params) do {

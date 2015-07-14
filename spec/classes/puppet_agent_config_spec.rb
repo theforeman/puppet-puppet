@@ -7,6 +7,7 @@ describe 'puppet::agent::config' do
       let(:facts) do
         facts.merge({
           :concat_basedir => '/foo/bar',
+          :puppetversion  => Puppet.version,
         })
       end
 

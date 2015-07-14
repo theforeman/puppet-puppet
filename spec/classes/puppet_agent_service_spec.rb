@@ -8,6 +8,7 @@ describe 'puppet::agent::service' do
     :fqdn                   => 'puppetmaster.example.com',
     :operatingsystemrelease => '6.5',
     :osfamily               => 'RedHat',
+    :puppetversion => Puppet.version,
   } end
 
   describe 'with no custom parameters' do

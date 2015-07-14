@@ -9,6 +9,7 @@ describe 'puppet::server' do
     :operatingsystemrelease => '6.5',
     :osfamily               => 'RedHat',
     :rubyversion            => '1.8.7',
+    :puppetversion          => Puppet.version,
   } end
   let(:facts) { default_facts }
 

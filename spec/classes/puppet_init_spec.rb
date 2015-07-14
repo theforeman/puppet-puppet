@@ -8,6 +8,7 @@ describe 'puppet' do
         :fqdn                   => 'puppetmaster.example.com',
         :operatingsystemrelease => '6.5',
         :osfamily               => 'RedHat',
+        :puppetversion          => Puppet.version,
       } end
 
       describe 'with no custom parameters' do
@@ -96,6 +97,7 @@ describe 'puppet' do
       :fqdn                   => 'puppetmaster.example.com',
       :operatingsystemrelease => '7',
       :osfamily               => 'Windows',
+      :puppetversion          => Puppet.version,
     } end
 
     describe 'with no custom parameters' do
