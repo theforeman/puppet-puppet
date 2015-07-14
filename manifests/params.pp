@@ -47,7 +47,7 @@ class puppet::params {
       $dir    = "${dir_prefix}/etc"
       $logdir = "${dir_prefix}/var/log"
       $rundir = "${dir_prefix}/var/run"
-      $ssldir = '$confdir/ssl'
+      $ssldir = "${dir_prefix}/etc/ssl"
       $vardir = "${dir_prefix}/var"
       $root_group = undef
     }
@@ -56,7 +56,7 @@ class puppet::params {
       $dir        = '/usr/local/etc/puppet'
       $logdir     = '/var/log/puppet'
       $rundir     = '/var/run/puppet'
-      $ssldir     = '$vardir/ssl'
+      $ssldir     = '/var/puppet/ssl'
       $vardir     = '/var/puppet'
       $root_group = undef
     }
@@ -65,7 +65,7 @@ class puppet::params {
       $dir        = '/etc/puppet'
       $logdir     = '/var/log/puppet'
       $rundir     = '/var/run/puppet'
-      $ssldir     = '$vardir/ssl'
+      $ssldir     = '/var/lib/puppet/ssl'
       $vardir     = '/var/lib/puppet'
       $root_group = undef
     }
