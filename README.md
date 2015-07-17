@@ -48,10 +48,10 @@ Requires [theforeman/foreman](https://forge.puppetlabs.com/theforeman/foreman).
 
 The Puppet master can be configured to export catalogs and reports to a
 PuppetDB instance, using the puppetlabs/puppetdb module.  Use its
-`puppetdb::server` class to install PuppetDB and this module to configure the
-Puppet master.
+`puppetdb::server` class to install the PuppetDB server and this module to
+configure the Puppet master to connect to PuppetDB.
 
-Requires [puppetlabs/puppetdb](https://forge.puppetlabs.com/puppetlabs/puppetdb).
+Requires [puppetlabs/puppetdb](https://forge.puppetlabs.com/puppetlabs/puppetdb) <5.0.0.
 
 # Installation
 
