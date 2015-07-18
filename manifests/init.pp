@@ -380,6 +380,7 @@ class puppet (
   $logdir                        = $puppet::params::logdir,
   $rundir                        = $puppet::params::rundir,
   $ssldir                        = $puppet::params::ssldir,
+  $sharedir                      = $puppet::params::sharedir,
   $package_provider              = $puppet::params::package_provider,
   $port                          = $puppet::params::port,
   $listen                        = $puppet::params::listen,

@@ -18,9 +18,10 @@ class puppet::server::rack(
   $vardir         = $::puppet::vardir,
 ) {
   exec {'puppet_server_rack-restart':
-    command     => "/bin/touch ${app_root}/tmp/restart.txt",
-    refreshonly => true,
+    command     => "touch ${app_root}/tmp/restart.txt",
     cwd         => $app_root,
+    path        => '/bin:/usr/bin',
+    refreshonly => true,
     require     => [
       Class['puppet::server::install'],
       File["${app_root}/tmp"]

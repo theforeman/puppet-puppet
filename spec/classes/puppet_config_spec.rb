@@ -210,7 +210,7 @@ describe 'puppet::config' do
         if Puppet.version >= '3.6'
           concat_fragment_content.concat([
             '    environmentpath  = /usr/local/etc/puppet/environments',
-            '    basemodulepath   = /usr/local/etc/puppet/environments/common:/usr/local/etc/puppet/modules:/usr/share/puppet/modules',
+            '    basemodulepath   = /usr/local/etc/puppet/environments/common:/usr/local/etc/puppet/modules:/usr/local/share/puppet/modules',
           ])
         end
         verify_concat_fragment_exact_contents(catalogue, 'puppet.conf+10-main', concat_fragment_content)
@@ -251,7 +251,7 @@ describe 'puppet::config' do
         if Puppet.version >= '3.6'
           concat_fragment_content.concat([
             '    environmentpath  = C:/ProgramData/PuppetLabs/puppet/etc/environments',
-            '    basemodulepath   = C:/ProgramData/PuppetLabs/puppet/etc/environments/common:C:/ProgramData/PuppetLabs/puppet/etc/modules:/usr/share/puppet/modules',
+            '    basemodulepath   = C:/ProgramData/PuppetLabs/puppet/etc/environments/common:C:/ProgramData/PuppetLabs/puppet/etc/modules:C:/ProgramData/PuppetLabs/puppet/share/modules',
           ])
         end
         verify_concat_fragment_exact_contents(catalogue, 'puppet.conf+10-main', concat_fragment_content)
