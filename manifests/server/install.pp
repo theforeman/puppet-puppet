@@ -2,9 +2,10 @@
 class puppet::server::install {
 
   $server_package_default = $::puppet::server_implementation ? {
-    'master'       => $::operatingsystem ? {
-      /(Debian|Ubuntu)/ => ['puppetmaster-common','puppetmaster'],
-      default           => ['puppet-server'],
+    'master'       => $::osfamily ? {
+      'Debian'                => ['puppetmaster-common','puppetmaster'],
+      /^(FreeBSD|DragonFly)$/ => [],
+      default                 => ['puppet-server'],
     },
     'puppetserver' => 'puppetserver',
   }
@@ -21,8 +22,13 @@ class puppet::server::install {
       owner  => $puppet::server_user,
     }
 
+    $git_shell = $::osfamily ? {
+      /^(FreeBSD|DragonFly)$/ => '/usr/local/bin/git-shell',
+      default                 => '/usr/bin/git-shell'
+    }
+
     user { $puppet::server_user:
-      shell   => '/usr/bin/git-shell',
+      shell   => $git_shell,
       require => Class['::git::install'],
     }
   }

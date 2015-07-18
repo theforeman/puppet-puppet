@@ -44,11 +44,12 @@ class puppet::params {
       # Windows prefixes normal paths with the Data Directory's path and leaves 'puppet' off the end
       $dir_prefix = 'C:/ProgramData/PuppetLabs/puppet'
 
-      $dir    = "${dir_prefix}/etc"
-      $logdir = "${dir_prefix}/var/log"
-      $rundir = "${dir_prefix}/var/run"
-      $ssldir = "${dir_prefix}/etc/ssl"
-      $vardir = "${dir_prefix}/var"
+      $dir        = "${dir_prefix}/etc"
+      $logdir     = "${dir_prefix}/var/log"
+      $rundir     = "${dir_prefix}/var/run"
+      $ssldir     = "${dir_prefix}/etc/ssl"
+      $vardir     = "${dir_prefix}/var"
+      $sharedir   = "${dir_prefix}/share"
       $root_group = undef
     }
 
@@ -58,6 +59,7 @@ class puppet::params {
       $rundir     = '/var/run/puppet'
       $ssldir     = '/var/puppet/ssl'
       $vardir     = '/var/puppet'
+      $sharedir   = '/usr/local/share/puppet'
       $root_group = undef
     }
 
@@ -67,6 +69,7 @@ class puppet::params {
       $rundir     = '/var/run/puppet'
       $ssldir     = '/var/lib/puppet/ssl'
       $vardir     = '/var/lib/puppet'
+      $sharedir   = '/usr/share/puppet'
       $root_group = undef
     }
   }
@@ -113,7 +116,7 @@ class puppet::params {
   $server_service_fallback    = true
   $server_passenger_max_pool  = 12
   $server_httpd_service       = 'httpd'
-  $server_external_nodes      = '/etc/puppet/node.rb'
+  $server_external_nodes      = "${dir}/node.rb"
   $server_enc_api             = 'v2'
   $server_report_api          = 'v2'
   $server_request_timeout     = 60
@@ -154,7 +157,7 @@ class puppet::params {
   # Where remains our manifests dir
   $server_manifest_path        = "${dir}/manifests"
   # Modules in this directory would be shared across all environments
-  $server_common_modules_path  = ["${server_envs_dir}/common", "${dir}/modules", '/usr/share/puppet/modules']
+  $server_common_modules_path  = ["${server_envs_dir}/common", "${dir}/modules", "${sharedir}/modules"]
 
   # Dynamic environments config, ignore if the git_repo is 'false'
   # Path to the repository
@@ -180,9 +183,9 @@ class puppet::params {
 
   $server_package     = undef
   $server_version     = undef
-  $client_package     = $::operatingsystem ? {
-    /(Debian|Ubuntu)/ => ['puppet-common','puppet'],
-    default           => ['puppet'],
+  $client_package     = $::osfamily ? {
+    'Debian' => ['puppet-common','puppet'],
+    default  => ['puppet'],
   }
 
   # Only use 'puppet cert' on versions where puppetca no longer exists
@@ -191,9 +194,15 @@ class puppet::params {
     $puppetca_bin  = 'puppetca'
     $puppetrun_cmd = '/usr/sbin/puppetrun'
   } else {
-    $puppetca_path = '/usr/bin'
+    $puppetca_path = $::osfamily ? {
+      /^(FreeBSD|DragonFly)$/ => '/usr/local/bin',
+      default                 => '/usr/bin'
+    }
     $puppetca_bin = 'puppet cert'
-    $puppetrun_cmd = '/usr/bin/puppet kick'
+    $puppetrun_cmd = $::osfamily ? {
+      /^(FreeBSD|DragonFly)$/ => '/usr/local/bin/puppet kick',
+      default                 => '/usr/bin/puppet/kick'
+    }
   }
 
   $puppetca_cmd = "${puppetca_path}/${puppetca_bin}"

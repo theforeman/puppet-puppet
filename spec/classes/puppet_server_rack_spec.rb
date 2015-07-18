@@ -14,7 +14,8 @@ describe 'puppet::server::rack' do
 
       it 'should define Exec[puppet_server_rack-restart]' do
         should contain_exec('puppet_server_rack-restart').with({
-          :command      => '/bin/touch /etc/puppet/rack/tmp/restart.txt',
+          :command      => 'touch /etc/puppet/rack/tmp/restart.txt',
+          :path         => '/bin:/usr/bin',
           :refreshonly  => true,
           :cwd          => '/etc/puppet/rack',
           :require      => ['Class[Puppet::Server::Install]', 'File[/etc/puppet/rack/tmp]'],
