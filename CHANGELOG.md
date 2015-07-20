@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.1
+* Update auth.conf for Puppet 4 API v3 endpoints
+* Expand $ssldir in puppet.conf
+* List incompatibility with puppetlabs/puppetdb 5.x
+
 ## 4.0.0
 * New or changed parameters:
     * Add server\_http\_* parameters to configure the master to listen on HTTP
