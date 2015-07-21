@@ -66,28 +66,30 @@ describe 'puppet::server::config' do
         :group => nil,
         :mode => '0755',
       })
-      should contain_file('/usr/share/puppet').with_ensure('directory')
-      should contain_file('/etc/puppet/environments/common').with({
-        :ensure => 'directory',
-        :owner => 'puppet',
-        :group => nil,
-        :mode => '0755',
-      })
-      should contain_file('/usr/share/puppet/modules').with({
-        :ensure => 'directory',
-        :owner => 'puppet',
-        :group => nil,
-        :mode => '0755',
-      })
+      if Puppet.version < '3.6'
+        should contain_file('/usr/share/puppet').with_ensure('directory')
+        should contain_file('/etc/puppet/environments/common').with({
+          :ensure => 'directory',
+          :owner => 'puppet',
+          :group => nil,
+          :mode => '0755',
+        })
+        should contain_file('/usr/share/puppet/modules').with({
+          :ensure => 'directory',
+          :owner => 'puppet',
+          :group => nil,
+          :mode => '0755',
+        })
 
-      should contain_file('/etc/puppet/manifests/site.pp').with({
-        :ensure  => 'file',
-        :replace => false,
-        :content => "# site.pp must exist (puppet #15106, foreman #1708)\n",
-      })
+        should contain_file('/etc/puppet/manifests/site.pp').with({
+          :ensure  => 'file',
+          :replace => false,
+          :content => "# site.pp must exist (puppet #15106, foreman #1708)\n",
+        })
 
-      should contain_puppet__server__env('development')
-      should contain_puppet__server__env('production')
+        should contain_puppet__server__env('development')
+        should contain_puppet__server__env('production')
+      end
     end
 
     it 'should configure puppet' do
