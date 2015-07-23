@@ -23,6 +23,8 @@
 #
 # $ssldir::                        Override where SSL certificates are kept.
 #
+# $sharedir::                      Override the system data directory.
+#
 # $package_provider::              The provider used to install the agent.
 #                                  Defaults to chocolatey on Windows
 #                                  Defaults to undef elsewhere
