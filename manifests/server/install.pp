@@ -20,6 +20,7 @@ class puppet::server::install {
     file { $puppet::vardir:
       ensure => directory,
       owner  => $puppet::server_user,
+      group  => $puppet::server_group,
     }
 
     $git_shell = $::osfamily ? {

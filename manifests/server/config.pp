@@ -34,16 +34,21 @@ class puppet::server::config inherits puppet::config {
   file { "${puppet::vardir}/reports":
     ensure => directory,
     owner  => $puppet::server_user,
+    group  => $puppet::server_group,
+    mode   => '0750',
   }
 
   ## SSL and CA configuration
   # Open read permissions to private keys to puppet group for foreman, proxy etc.
   file { "${puppet::server_ssl_dir}/private_keys":
-    group => $puppet::server_group,
-    mode  => '0750',
+    ensure => directory,
+    owner  => $puppet::server_user,
+    group  => $puppet::server_group,
+    mode   => '0750',
   }
 
   file { "${puppet::server_ssl_dir}/private_keys/${::fqdn}.pem":
+    owner => $puppet::server_user,
     group => $puppet::server_group,
     mode  => '0640',
   }

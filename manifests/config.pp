@@ -27,6 +27,8 @@ class puppet::config(
 
   file { $puppet_dir:
     ensure => directory,
+    owner  => $::puppet::user,
+    group  => $::puppet::group,
   } ->
   case $::osfamily {
     'Windows': {
