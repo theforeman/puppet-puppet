@@ -2,16 +2,28 @@ require 'spec_helper'
 
 describe 'puppet::server' do
 
-  let :default_facts do {
+  let :common_facts do on_supported_os['centos-6-x86_64'].merge({
     :concat_basedir         => '/nonexistant',
     :clientcert             => 'puppetmaster.example.com',
     :fqdn                   => 'puppetmaster.example.com',
-    :operatingsystemrelease => '6.5',
-    :osfamily               => 'RedHat',
-    :rubyversion            => '1.8.7',
     :puppetversion          => Puppet.version,
-  } end
-  let(:facts) { default_facts }
+  }) end
+
+  if Puppet.version < '4.0'
+    ssldir = '/var/lib/puppet/ssl'
+    additional_facts = {}
+  else
+    ssldir = '/etc/puppetlabs/puppet/ssl'
+    additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
+  end
+
+  let :default_facts do
+    common_facts.merge(additional_facts)
+  end
+
+  let :facts do
+    default_facts
+  end
 
   context 'basic case' do
     let :pre_condition do
@@ -44,11 +56,6 @@ describe 'puppet::server' do
     end
 
     describe 'with no custom parameters' do
-      if Puppet.version < '4.0'
-        ssldir = '/var/lib/puppet/ssl'
-      else
-        ssldir = '/etc/puppetlabs/puppet/ssl'
-      end
       it 'should use lowercase certificates' do
         should contain_class('puppet::server::passenger').
           with_ssl_cert("#{ssldir}/certs/puppetmaster.example.com.pem").

@@ -1,16 +1,13 @@
 require 'spec_helper'
 
 describe 'puppet::server::config' do
-  let :default_facts do {
+  let :default_facts do on_supported_os['centos-6-x86_64'].merge({
     :clientcert             => 'puppetmaster.example.com',
     :concat_basedir         => '/nonexistant',
     :fqdn                   => 'puppetmaster.example.com',
     :rubyversion            => '1.9.3',
-    :operatingsystemrelease => '6.5',
-    :osfamily               => 'RedHat',
     :puppetversion          => Puppet.version,
-  } end
-  let(:facts) { default_facts }
+  }) end
 
   if Puppet.version < '4.0'
     codedir          = '/etc/puppet'
@@ -20,6 +17,9 @@ describe 'puppet::server::config' do
     rundir           = '/var/run/puppet'
     vardir           = '/var/lib/puppet'
     ssldir           = '/var/lib/puppet/ssl'
+    sharedir         = '/usr/share/puppet'
+    nodepath         = '\/etc\/puppet\/node.rb'
+    additional_facts = {}
   else
     codedir          = '/etc/puppetlabs/code'
     conf_file        = '/etc/puppetlabs/puppet/puppet.conf'
@@ -28,7 +28,12 @@ describe 'puppet::server::config' do
     rundir           = '/var/run/puppetlabs'
     vardir           = '/opt/puppetlabs/puppet/cache'
     ssldir           = '/etc/puppetlabs/puppet/ssl'
+    sharedir         = '/opt/puppetlabs/puppet'
+    nodepath         = '\/etc\/puppetlabs\/puppet\/node.rb'
+    additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
   end
+
+  let(:facts) { default_facts.merge(additional_facts) }
 
   describe 'with no custom parameters' do
     let :pre_condition do
@@ -84,22 +89,22 @@ describe 'puppet::server::config' do
         :group => nil,
         :mode => '0755',
       })
-      should contain_file('/usr/share/puppet').with_ensure('directory')
-      should contain_file('/etc/puppet/environments/common').with({
+      should contain_file(sharedir).with_ensure('directory')
+      should contain_file("#{codedir}/environments/common").with({
         :ensure => 'directory',
         :owner => 'puppet',
         :group => nil,
         :mode => '0755',
       })
 
-      should contain_file('/usr/share/puppet/modules').with({
+      should contain_file("#{sharedir}/modules").with({
         :ensure => 'directory',
         :owner => 'puppet',
         :group => nil,
         :mode => '0755',
       })
 
-      should contain_file('/etc/puppet/manifests/site.pp').with({
+      should contain_file("#{codedir}/manifests/site.pp").with({
         :ensure  => 'file',
         :replace => false,
         :content => "# site.pp must exist (puppet #15106, foreman #1708)\n",
@@ -126,7 +131,7 @@ describe 'puppet::server::config' do
 
       should contain_concat__fragment('puppet.conf+30-master').
         with_content(/^\s+reports\s+= foreman$/).
-        with_content(/^\s+external_nodes\s+= \/etc\/puppet\/node.rb$/).
+        with_content(/^\s+external_nodes\s+= #{nodepath}$/).
         with_content(/^\s+node_terminus\s+= exec$/).
         with_content(/^\s+ca\s+= true$/).
         with_content(/^\s+ssldir\s+= #{ssldir}$/).
@@ -285,7 +290,7 @@ describe 'puppet::server::config' do
 
       it 'should configure puppet.conf' do
         should contain_concat__fragment('puppet.conf+10-main').
-          with_content(%r{^\s+environmentpath\s+= #{environments_dir}\n\s+basemodulepath\s+= #{environments_dir}/common:#{codedir}/modules:/usr/share/puppet/modules$})
+          with_content(%r{^\s+environmentpath\s+= #{environments_dir}\n\s+basemodulepath\s+= #{environments_dir}/common:#{codedir}/modules:#{sharedir}/modules$})
       end
 
       it { should_not contain_puppet__server__env('development') }

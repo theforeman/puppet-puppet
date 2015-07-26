@@ -25,10 +25,19 @@ class puppet::config(
     order   => '10',
   }
 
+  $dir_owner = $::puppet::server ? {
+    true    => $::puppet::user,
+    default => $::puppet::dir_owner,
+  }
+  $dir_group = $::puppet::server ? {
+    true    => $::puppet::group,
+    default => $::puppet::dir_group,
+  }
+
   file { $puppet_dir:
     ensure => directory,
-    owner  => $::puppet::user,
-    group  => $::puppet::group,
+    owner  => $dir_owner,
+    group  => $dir_group,
   } ->
   case $::osfamily {
     'Windows': {

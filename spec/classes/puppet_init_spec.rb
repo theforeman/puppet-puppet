@@ -2,14 +2,28 @@ require 'spec_helper'
 
 describe 'puppet' do
   context 'on RedHat' do
-      let :facts do {
+      let :default_facts do on_supported_os['centos-6-x86_64'].merge({
         :clientcert             => 'puppetmaster.example.com',
         :concat_basedir         => '/nonexistant',
         :fqdn                   => 'puppetmaster.example.com',
-        :operatingsystemrelease => '6.5',
-        :osfamily               => 'RedHat',
         :puppetversion          => Puppet.version,
-      } end
+      }) end
+
+      if Puppet.version < '4.0'
+        puppet_directory = '/etc/puppet'
+        puppet_concat = '/etc/puppet/puppet.conf'
+        puppet_package = 'puppet'
+        additional_facts = {}
+      else
+        puppet_directory = '/etc/puppetlabs/puppet'
+        puppet_concat = '/etc/puppetlabs/puppet/puppet.conf'
+        puppet_package = 'puppet-agent'
+        additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
+      end
+
+      let :facts do
+        default_facts.merge(additional_facts)
+      end
 
       describe 'with no custom parameters' do
         it { should contain_class('puppet::config') }
