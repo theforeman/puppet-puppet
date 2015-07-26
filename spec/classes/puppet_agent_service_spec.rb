@@ -2,14 +2,18 @@ require 'spec_helper'
 
 describe 'puppet::agent::service' do
 
-  let :facts do {
-    :clientcert             => 'puppetmaster.example.com',
-    :concat_basedir         => '/nonexistant',
-    :fqdn                   => 'puppetmaster.example.com',
-    :operatingsystemrelease => '6.5',
-    :osfamily               => 'RedHat',
-    :puppetversion => Puppet.version,
-  } end
+  if Puppet.version < '4.0'
+    additional_facts = {}
+  else
+    additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
+  end
+
+  let :facts do on_supported_os['centos-6-x86_64'].merge({
+    :clientcert     => 'puppetmaster.example.com',
+    :concat_basedir => '/nonexistant',
+    :fqdn           => 'puppetmaster.example.com',
+    :puppetversion  => Puppet.version,
+  }).merge(additional_facts) end
 
   describe 'with no custom parameters' do
     let :pre_condition do
@@ -51,7 +55,7 @@ describe 'puppet::agent::service' do
       should contain_cron('puppet').with({
         :command  => "/usr/bin/env puppet agent --config #{confdir}/puppet.conf --onetime --no-daemonize",
         :user     => 'root',
-        :minute   => ['0','30'],
+        :minute   => ['15','45'],
         :hour     => '*',
       })
     end

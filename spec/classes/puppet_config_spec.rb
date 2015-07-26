@@ -3,14 +3,12 @@ require 'spec_helper'
 describe 'puppet::config' do
 
   context "on a RedHat family OS" do
-    let :facts do {
+    let :default_facts do on_supported_os['centos-6-x86_64'].merge({
       :concat_basedir         => '/foo/bar',
       :domain                 => 'example.org',
       :fqdn                   => 'host.example.com',
-      :operatingsystemrelease => '6.6',
-      :osfamily               => 'RedHat',
       :puppetversion          => Puppet.version,
-    } end
+    }) end
 
     if Puppet.version < '4.0'
       codedir = '/etc/puppet'
@@ -19,6 +17,7 @@ describe 'puppet::config' do
       rundir  = '/var/run/puppet'
       ssldir  = '/var/lib/puppet/ssl'
       vardir  = '/var/lib/puppet'
+      additional_facts = {}
     else
       codedir = '/etc/puppetlabs/code'
       confdir = '/etc/puppetlabs/puppet'
@@ -26,6 +25,11 @@ describe 'puppet::config' do
       rundir  = '/var/run/puppetlabs'
       ssldir  = '/etc/puppetlabs/puppet/ssl'
       vardir  = '/opt/puppetlabs/puppet/cache'
+      additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
+    end
+
+    let :facts do
+      default_facts.merge(additional_facts)
     end
 
     describe 'with default parameters' do
@@ -50,10 +54,15 @@ describe 'puppet::config' do
           '    show_diff     = false',
           '    hiera_config = $confdir/hiera.yaml'
         ]
-        if Puppet.version >= '3.6'
+        if Puppet.version >= '3.6' and Puppet.version < '4.0'
           concat_fragment_content.concat([
             '    environmentpath  = /etc/puppet/environments',
             '    basemodulepath   = /etc/puppet/environments/common:/etc/puppet/modules:/usr/share/puppet/modules',
+          ])
+        elsif Puppet.version >= '4.0'
+          concat_fragment_content.concat([
+            '    environmentpath  = /etc/puppetlabs/code/environments',
+            '    basemodulepath   = /etc/puppetlabs/code/environments/common:/etc/puppetlabs/code/modules:/opt/puppetlabs/puppet/modules',
           ])
         end
         verify_concat_fragment_exact_contents(catalogue, 'puppet.conf+10-main', concat_fragment_content)
@@ -194,12 +203,11 @@ describe 'puppet::config' do
   end
 
   context "on a FreeBSD family OS" do
-    let :facts do {
+    let :facts do on_supported_os['freebsd-10-x86_64'].merge({
       :concat_basedir => '/foo/bar',
-      :osfamily => 'FreeBSD',
       :domain   => 'example.org',
       :puppetversion => Puppet.version,
-    } end
+    }) end
 
     describe 'with default parameters' do
       let :pre_condition do

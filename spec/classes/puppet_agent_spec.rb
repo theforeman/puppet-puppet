@@ -3,18 +3,20 @@ require 'spec_helper'
 describe 'puppet::agent' do
 
   let :default_facts do
-    {
+    on_supported_os['centos-6-x86_64'].merge({
         :clientcert => 'puppetmaster.example.com',
         :concat_basedir => '/nonexistant',
         :fqdn => 'puppetmaster.example.com',
-        :operatingsystemrelease => '6.5',
-        :osfamily => 'RedHat',
         :puppetversion => Puppet.version,
-    }
+    })
   end
 
   let :facts do
-    default_facts
+    if Puppet.version < '4.0'
+      default_facts
+    else
+      default_facts.merge({:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'})
+    end
   end
 
   describe 'with no custom parameters' do

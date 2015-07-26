@@ -36,6 +36,12 @@
 #                                  Defaults to chocolatey on Windows
 #                                  Defaults to undef elsewhere
 #
+# $package_source::                The location of the file to be used by the
+#                                  agent's package resource.
+#                                  Defaults to undef. If 'windows' or 'msi' are
+#                                  used as the provider then this setting is
+#                                  required.
+#
 # $port::                          Override the port of the master we connect to.
 #                                  type:integer
 #
@@ -164,6 +170,12 @@
 #
 # $remove_lock::                   Remove the agent lock when running.
 #                                  type:boolean
+#
+# $dir_owner::                     Owner of the base puppet directory, used when
+#                                  puppet::server is false.
+#
+# $dir_group::                     Group of the base puppet directory, used when
+#                                  puppet::server is false.
 #
 # == puppet::server parameters
 #
@@ -392,7 +404,10 @@ class puppet (
   $ssldir                        = $puppet::params::ssldir,
   $sharedir                      = $puppet::params::sharedir,
   $manage_packages               = $puppet::params::manage_packages,
+  $dir_owner                     = $puppet::params::dir_owner,
+  $dir_group                     = $puppet::params::dir_group,
   $package_provider              = $puppet::params::package_provider,
+  $package_source                = $puppet::params::package_source,
   $port                          = $puppet::params::port,
   $listen                        = $puppet::params::listen,
   $listen_to                     = $puppet::params::listen_to,

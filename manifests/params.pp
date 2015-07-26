@@ -38,6 +38,13 @@ class puppet::params {
   $hiera_config        = '$confdir/hiera.yaml'
   $syslogfacility      = undef
   $environment         = $::environment
+  if versioncmp($::puppetversion, '4.0') < 0 {
+    $aio_package = false
+  } elsif $::osfamily == 'Windows' or $::rubysitedir =~ /\/opt\/puppetlabs\/puppet/ {
+    $aio_package = true
+  } else {
+    $aio_package = false
+  }
 
   case $::osfamily {
     'Windows' : {
@@ -66,7 +73,15 @@ class puppet::params {
     }
 
     default : {
-      if versioncmp($::puppetversion, '4.0') < 0 {
+      if $aio_package {
+        $dir      = '/etc/puppetlabs/puppet'
+        $codedir  = '/etc/puppetlabs/code'
+        $logdir   = '/var/log/puppetlabs/puppet'
+        $rundir   = '/var/run/puppetlabs'
+        $ssldir   = '/etc/puppetlabs/puppet/ssl'
+        $vardir   = '/opt/puppetlabs/puppet/cache'
+        $sharedir = '/opt/puppetlabs/puppet'
+      } else {
         $dir        = '/etc/puppet'
         $codedir    = '/etc/puppet'
         $logdir     = '/var/log/puppet'
@@ -74,24 +89,30 @@ class puppet::params {
         $ssldir     = '/var/lib/puppet/ssl'
         $vardir     = '/var/lib/puppet'
         $sharedir   = '/usr/share/puppet'
-      } else {
-        $dir      = '/etc/puppetlabs/puppet'
-        $codedir  = '/etc/puppetlabs/code'
-        $logdir   = '/var/log/puppetlabs/puppet'
-        $rundir   = '/var/run/puppetlabs'
-        $ssldir   = '/etc/puppetlabs/puppet/ssl'
-        $vardir   = '/opt/puppetlabs/puppet/cache'
-        $sharedir = '/opt/puppetlabs/puppet/modules'
       }
       $root_group = undef
     }
   }
 
   $manage_packages = true
+
+  if $aio_package and $::osfamily != 'Windows' {
+    $dir_owner = 'root'
+    $dir_group = $root_group
+  } elsif $::osfamily == 'Windows' {
+    $dir_owner = undef
+    $dir_group = undef
+  } else {
+    $dir_owner = $user
+    $dir_group = $group
+  }
+
   $package_provider = $::osfamily ? {
     'windows' => 'chocolatey',
     default   => undef,
   }
+
+  $package_source = undef
 
   # Need your own config templates? Specify here:
   $main_template   = 'puppet/puppet.conf.erb'
@@ -197,12 +218,12 @@ class puppet::params {
 
   $server_package     = undef
   $server_version     = undef
-  $client_package     = versioncmp($::puppetversion, '4.0') ? {
-    '-1'       => $::osfamily ? {
+  $client_package     = $aio_package ? {
+    true       => ['puppet-agent'],
+    default    => $::osfamily ? {
       'Debian' => ['puppet-common','puppet'],
       default  => ['puppet'],
     },
-    default => 'puppet-agent',
   }
 
   # Only use 'puppet cert' on versions where puppetca no longer exists
@@ -210,7 +231,11 @@ class puppet::params {
     $puppetca_path = '/usr/sbin'
     $puppetca_bin  = 'puppetca'
     $puppetrun_cmd = '/usr/sbin/puppetrun'
-  } elsif versioncmp($::puppetversion, '4.0') < 0 {
+  } elsif $aio_package {
+    $puppetca_path = '/opt/puppetlabs/bin'
+    $puppetca_bin = 'puppet cert'
+    $puppetrun_cmd = '/opt/puppetlabs/bin/puppet kick'
+  } else {
     $puppetca_path = $::osfamily ? {
       /^(FreeBSD|DragonFly)$/ => '/usr/local/bin',
       default                 => '/usr/bin'
@@ -220,10 +245,6 @@ class puppet::params {
       /^(FreeBSD|DragonFly)$/ => '/usr/local/bin/puppet kick',
       default                 => '/usr/bin/puppet kick'
     }
-  } else {
-    $puppetca_path = '/opt/puppetlabs/bin'
-    $puppetca_bin = 'puppet cert'
-    $puppetrun_cmd = '/opt/puppetlabs/bin/puppet kick'
   }
 
   $puppetca_cmd = "${puppetca_path}/${puppetca_bin}"
