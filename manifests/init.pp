@@ -25,6 +25,11 @@
 #
 # $sharedir::                      Override the system data directory.
 #
+# $manage_packages::               Should this module install packages or not.
+#                                  Can also install only server packages with value
+#                                  of 'server' or only agent packages with 'agent'.
+#                                  Defaults to true
+#
 # $package_provider::              The provider used to install the agent.
 #                                  Defaults to chocolatey on Windows
 #                                  Defaults to undef elsewhere
@@ -383,6 +388,7 @@ class puppet (
   $rundir                        = $puppet::params::rundir,
   $ssldir                        = $puppet::params::ssldir,
   $sharedir                      = $puppet::params::sharedir,
+  $manage_packages               = $puppet::params::manage_packages,
   $package_provider              = $puppet::params::package_provider,
   $port                          = $puppet::params::port,
   $listen                        = $puppet::params::listen,
@@ -518,7 +524,7 @@ class puppet (
   if $server_puppetdb_host {
     validate_string($server_puppetdb_host)
   }
-  
+
   if $server_http {
     validate_array($server_http_allow)
   }
@@ -537,11 +543,15 @@ class puppet (
 
   validate_re($server_implementation, '^(master|puppetserver)$')
   validate_re($server_parser, '^(current|future)$')
-
+  
   if $server_environment_timeout {
     validate_re($server_environment_timeout, '^(unlimited|0|[0-9]+[smh]{1})$')
   }
 
+  if $manage_packages != true and $manage_packages != false {
+    validate_re($manage_packages, '^(server|agent)$')
+  }
+  
   include ::puppet::config
   Class['puppet::config'] -> Class['puppet']
 

@@ -1,19 +1,21 @@
 # Install the puppet server
 class puppet::server::install {
 
-  $server_package_default = $::puppet::server_implementation ? {
-    'master'       => $::osfamily ? {
-      'Debian'                => ['puppetmaster-common','puppetmaster'],
-      /^(FreeBSD|DragonFly)$/ => [],
-      default                 => ['puppet-server'],
-    },
-    'puppetserver' => 'puppetserver',
-  }
-  $server_package = pick($::puppet::server_package, $server_package_default)
-  $server_version = pick($::puppet::server_version, $::puppet::version)
+  if $::puppet::manage_packages == true or $::puppet::manage_packages == 'server' {
+    $server_package_default = $::puppet::server_implementation ? {
+      'master'       => $::osfamily ? {
+        'Debian'                => ['puppetmaster-common','puppetmaster'],
+        /^(FreeBSD|DragonFly)$/ => [],
+        default                 => ['puppet-server'],
+      },
+      'puppetserver' => 'puppetserver',
+    }
+    $server_package = pick($::puppet::server_package, $server_package_default)
+    $server_version = pick($::puppet::server_version, $::puppet::version)
 
-  package { $server_package:
-    ensure => $server_version,
+    package { $server_package:
+      ensure => $server_version,
+    }
   }
 
   if $puppet::server_git_repo {
