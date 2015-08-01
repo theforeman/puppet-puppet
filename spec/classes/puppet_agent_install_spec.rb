@@ -52,4 +52,54 @@ describe 'puppet::agent::install' do
 
   end
 
+  describe "when manage_packages => false" do
+    let :pre_condition do
+      "class { 'puppet': manage_packages => false }"
+    end
+
+    let :facts do {
+      :osfamily => 'RedHat',
+      :concat_basedir => '/foo/bar',
+      :operatingsystemrelease => '6.6',
+      :puppetversion => Puppet.version,
+    } end
+
+    it 'should not contain Package[puppet]' do
+      should_not contain_package('puppet')
+    end
+  end
+
+  describe "when manage_packages => 'agent'" do
+    let :pre_condition do
+      "class { 'puppet': manage_packages => 'agent' }"
+    end
+
+    let :facts do {
+      :osfamily => 'RedHat',
+      :concat_basedir => '/foo/bar',
+      :operatingsystemrelease => '6.6',
+      :puppetversion => Puppet.version,
+    } end
+
+    it 'should contain Package[puppet]' do
+      should contain_package('puppet')
+    end
+  end
+
+  describe "when manage_packages => 'server'" do
+    let :pre_condition do
+      "class { 'puppet': manage_packages => 'server' }"
+    end
+
+    let :facts do {
+      :osfamily => 'RedHat',
+      :concat_basedir => '/foo/bar',
+      :operatingsystemrelease => '6.6',
+      :puppetversion => Puppet.version,
+    } end
+
+    it 'should not contain Package[puppet]' do
+      should_not contain_package('puppet')
+    end
+  end
 end

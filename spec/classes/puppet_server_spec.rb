@@ -102,4 +102,39 @@ describe 'puppet::server' do
     it { should raise_error(Puppet::Error, /"golang" does not match/) }
   end
 
+  describe "when manage_packages => false" do
+    let :pre_condition do
+      "class { 'puppet': server => true, manage_packages => false,
+                         server_implementation => 'master' }"
+    end
+
+    it { should compile.with_all_deps }
+    it 'should not contain Package[puppet-server]' do
+      should_not contain_package('puppet-server')
+    end
+  end
+
+  describe "when manage_packages => 'agent'" do
+    let :pre_condition do
+      "class { 'puppet': server => true, manage_packages => 'agent',
+                         server_implementation => 'master' }"
+    end
+
+    it { should compile.with_all_deps }
+    it 'should not contain Package[puppet-server]' do
+      should_not contain_package('puppet-server')
+    end
+  end
+
+  describe "when manage_packages => 'server'" do
+    let :pre_condition do
+      "class { 'puppet': server => true, manage_packages => 'server',
+                         server_implementation => 'master' }"
+    end
+
+    it { should compile.with_all_deps }
+    it 'should contain Package[puppet-server]' do
+      should contain_package('puppet-server')
+    end
+  end
 end

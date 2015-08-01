@@ -74,6 +74,7 @@ class puppet::params {
     }
   }
 
+  $manage_packages = true
   $package_provider = $::osfamily ? {
     'windows' => 'chocolatey',
     default   => undef,
