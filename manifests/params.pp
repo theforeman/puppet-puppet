@@ -201,7 +201,7 @@ class puppet::params {
     $puppetca_bin = 'puppet cert'
     $puppetrun_cmd = $::osfamily ? {
       /^(FreeBSD|DragonFly)$/ => '/usr/local/bin/puppet kick',
-      default                 => '/usr/bin/puppet/kick'
+      default                 => '/usr/bin/puppet kick'
     }
   }
 
