@@ -6,7 +6,9 @@ fixtures:
     git:              'https://github.com/theforeman/puppet-git'
     intfile:          'https://github.com/puppetlabs/puppetlabs-inifile.git'
     puppetdb:         'https://github.com/puppetlabs/puppetlabs-puppetdb.git'
-    stdlib:           'https://github.com/puppetlabs/puppetlabs-stdlib.git'
+    stdlib:
+      repo: 'https://github.com/puppetlabs/puppetlabs-stdlib.git'
+      branch: '4.7.x'
 
   symlinks:
     puppet: "#{source_dir}"
