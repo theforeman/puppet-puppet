@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.1.0
+* New or changed parameters:
+    * Add sharedir parameter to configure /usr/share/puppet location
+    * Add manage\_packages parameter to change whether to manage agent,
+      master, both packages (true) or none (false)
+* Other features:
+    * Support Puppet master setup on FreeBSD
+* Other changes and fixes:
+    * Explicitly set permissions and ownership where necessary to stop
+      site-wide defaults applying
+
 ## 4.0.1
 * Update auth.conf for Puppet 4 API v3 endpoints
 * Expand $ssldir in puppet.conf
