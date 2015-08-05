@@ -284,4 +284,17 @@ class puppet::params {
 
   # Timeout for cached environments, changed in puppet 3.7.x
   $server_environment_timeout = undef
+
+  # puppet server configuration file
+  $server_jvm_config = $::osfamily ? {
+    'RedHat' => '/etc/sysconfig/puppetserver',
+    'Debian' => '/etc/default/puppetserver',
+    default  => '/etc/default/puppetserver',
+  }
+
+  $server_jvm_java_bin = '/usr/bin/java'
+  $server_jvm_min_heap_size = '2G'
+  $server_jvm_max_heap_size = '2G'
+  $server_jvm_extra_args = '' # lint:ignore:empty_string_assignment
+
 }

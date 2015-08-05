@@ -363,6 +363,19 @@
 #                                  the apache vhost to set up a proxy for all
 #                                  certificates pointing to the value.
 #
+# $server_jvm_java_bin::           Set the default java to use.
+#
+# $server_jvm_config::             Specify the puppetserver jvm configuration file.
+#
+# $server_jvm_min_heap_size::      Specify the minimum jvm heap space.
+#
+# $server_jvm_max_heap_size::      Specify the maximum jvm heap space.
+#
+# $server_jvm_extra_args::         Additional java options to pass through.
+#                                  This can be used for Java versions prior to
+#                                  Java 8 to specify the max perm space to use:
+#                                  For example: '-XX:MaxPermSpace=128m'.
+#
 # $allow_any_crl_auth::            Allow any authentication for the CRL. This
 #                                  is needed on the puppet CA to accept clients
 #                                  from a the puppet CA proxy.
@@ -506,6 +519,12 @@ class puppet (
   $server_puppetdb_swf           = $puppet::params::server_puppetdb_swf,
   $server_parser                 = $puppet::params::server_parser,
   $server_environment_timeout    = $puppet::params::server_environment_timeout,
+  $server_jvm_java_bin           = $puppet::params::server_jvm_java_bin,
+  $server_jvm_config             = $puppet::params::server_jvm_config,
+  $server_jvm_min_heap_size      = $puppet::params::server_jvm_min_heap_size,
+  $server_jvm_max_heap_size      = $puppet::params::server_jvm_max_heap_size,
+  $server_jvm_extra_args         = $puppet::params::server_jvm_extra_args,
+
 ) inherits puppet::params {
 
   validate_bool($listen)
@@ -568,6 +587,11 @@ class puppet (
 
   if $manage_packages != true and $manage_packages != false {
     validate_re($manage_packages, '^(server|agent)$')
+  }
+
+  if $server_implementation == 'puppetserver' {
+    validate_re($server_jvm_min_heap_size, '^[0-9]+[kKmMgG]$')
+    validate_re($server_jvm_max_heap_size, '^[0-9]+[kKmMgG]$')
   }
 
   include ::puppet::config

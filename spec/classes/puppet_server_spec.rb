@@ -104,6 +104,7 @@ describe 'puppet::server' do
         with_puppetmaster(nil).
         with_puppetserver(true)
     end
+    it { should contain_class('puppet::server::puppetserver') }
     it { should contain_package('puppetserver') }
   end
 

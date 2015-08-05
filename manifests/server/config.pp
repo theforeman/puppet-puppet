@@ -5,6 +5,12 @@ class puppet::server::config inherits puppet::config {
     class { '::puppet::server::passenger': } -> Class['puppet::server::config']
   }
 
+  if $puppet::server_implementation == 'puppetserver' {
+    anchor {'::puppet::server::puppetserver_start': } ->
+    class { '::puppet::server::puppetserver': } ~>
+    anchor {'::puppet::server::puppetserver_end': }
+  }
+
   # Mirror the relationship, as defined() is parse-order dependent
   # Ensures puppetmasters certs are generated before the proxy is needed
   if defined(Class['foreman_proxy::config']) and $foreman_proxy::ssl {
