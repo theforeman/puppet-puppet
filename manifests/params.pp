@@ -11,6 +11,7 @@ class puppet::params {
   $pluginsync          = true
   $splay               = false
   $splaylimit          = '1800'
+  $autosign            = '$confdir/autosign.conf { mode = 664 }'
   $runinterval         = '1800'
   $runmode             = 'service'
   $cron_cmd            = undef
