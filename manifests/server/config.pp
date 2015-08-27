@@ -146,7 +146,7 @@ class puppet::server::config inherits puppet::config {
       owner  => $puppet::server_user,
       group  => $puppet::server_group,
       mode   => '0755',
-    } ->
+    }
     file { "${puppet::server_manifest_path}/site.pp":
       ensure  => file,
       replace => false,
