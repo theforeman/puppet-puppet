@@ -89,6 +89,20 @@ describe 'puppet::config' do
       end
     end
 
+    context 'when splay = true and splaylimit = 60s' do
+      let :pre_condition do
+        'class {"::puppet": splay => true, splaylimit => \'60s\'}'
+      end
+
+      it 'should contain puppet.conf [main] with splay and splaylimit' do
+        verify_concat_fragment_contents(catalogue, 'puppet.conf+10-main', [
+          '[main]',
+          '    splay      = true',
+          '    splaylimit = 60s',
+        ])
+      end
+    end
+
     context "when dns_alt_names => ['foo','bar']" do
       let :pre_condition do
         "class { 'puppet': dns_alt_names => ['foo','bar'] }"
@@ -299,6 +313,20 @@ describe 'puppet::config' do
 
       it 'should contain auth.conf with allow' do
         should contain_file('C:/ProgramData/PuppetLabs/puppet/etc/auth.conf').with_content(%r{^allow \$1, puppetproxy$})
+      end
+    end
+
+    context 'when splay = true and splaylimit = 60s' do
+      let :pre_condition do
+        'class {"::puppet": splay => true, splaylimit => \'60s\'}'
+      end
+
+      it 'should contain puppet.conf [main] with splay and splaylimit' do
+        verify_concat_fragment_contents(catalogue, 'puppet.conf+10-main', [
+          '[main]',
+          '    splay      = true',
+          '    splaylimit = 60s',
+        ])
       end
     end
 
