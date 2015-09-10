@@ -5,6 +5,7 @@ class puppet::params {
   $version             = 'present'
   $user                = 'puppet'
   $group               = 'puppet'
+  $ip                  = undef
   $port                = 8140
   $listen              = false
   $listen_to           = []
