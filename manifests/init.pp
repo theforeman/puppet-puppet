@@ -308,83 +308,104 @@
 #
 # === Advanced server parameters:
 #
-# $server_httpd_service::          Apache/httpd service name to notify
-#                                  on configuration changes. Defaults
-#                                  to 'httpd' based on the default
-#                                  apache module included with foreman-installer.
+# $server_httpd_service::              Apache/httpd service name to notify
+#                                      on configuration changes. Defaults
+#                                      to 'httpd' based on the default
+#                                      apache module included with foreman-installer.
 #
-# $server_service_fallback::       If passenger is not used, do we want to fallback
-#                                  to using the puppetmaster service? Set to false
-#                                  if you disabled passenger and you do NOT want to
-#                                  use the puppetmaster service. Defaults to true.
-#                                  type:boolean
+# $server_service_fallback::           If passenger is not used, do we want to fallback
+#                                      to using the puppetmaster service? Set to false
+#                                      if you disabled passenger and you do NOT want to
+#                                      use the puppetmaster service. Defaults to true.
+#                                      type:boolean
 #
-# $server_passenger_max_pool::     The PassengerMaxPoolSize parameter. If your
-#                                  host is low on memory, it may be a good thing
-#                                  to lower this. Defaults to 12.
-#                                  type:integer
+# $server_passenger_max_pool_size::    The PassengerMaxPoolSize parameter. If your
+#                                      host is low on memory, it may be a good thing
+#                                      to lower this. Defaults to 12.
+#                                      type:integer
 #
-# $server_config_version::         How to determine the configuration version. When
-#                                  using git_repo, by default a git describe
-#                                  approach will be installed.
+# $server_passenger_max_requests::     The PassengerMaxRequests parameter. 
+#                                      Defaults to 0, which means there is no maximum.
+#                                      type:integer
 #
-# $server_facts::                  Should foreman receive facts from puppet
-#                                  type:boolean
+# $server_passenger_high_performance:: The PassengerHighPerformance parameter. 
+#                                      Defaults to Off. By default, Passenger is compatible 
+#                                      with mod_rewrite and most other Apache modules. 
+#                                      However, a lot of effort is required in order 
+#                                      to be compatible. If you turn PassengerHighPerformance on, 
+#                                      then Passenger will be a little faster, in return for 
+#                                      reduced compatibility with other Apache modules. 
+#                                      type:string
 #
-# $server_foreman::                Should foreman integration be installed
-#                                  type:boolean
+# $server_passenger_pool_idle_time::   The PassengerPoolIdleTime parameter. 
+#                                      Defaults to 300. The maximum number of seconds that 
+#                                      an application process may be idle. That is, if an 
+#                                      application process hasn't received any traffic after
+#                                      the given number of seconds, then it will be shutdown 
+#                                      in order to conserve memory. 
+#                                      type:integer
 #
-# $server_foreman_url::            Foreman URL
+# $server_config_version::             How to determine the configuration version. When
+#                                      using git_repo, by default a git describe
+#                                      approach will be installed.
 #
-# $server_foreman_ssl_ca::         SSL CA of the Foreman server
+# $server_facts::                      Should foreman receive facts from puppet
+#                                      type:boolean
 #
-# $server_foreman_ssl_cert::       Client certificate for authenticating against Foreman server
+# $server_foreman::                    Should foreman integration be installed
+#                                      type:boolean
 #
-# $server_foreman_ssl_key::        Key for authenticating against Foreman server
+# $server_foreman_url::                Foreman URL
 #
-# $server_puppet_basedir::         Where is the puppet code base located
+# $server_foreman_ssl_ca::             SSL CA of the Foreman server
 #
-# $server_enc_api::                What version of enc script to deploy. Valid
-#                                  values are 'v2' for latest, and 'v1'
-#                                  for Foreman =< 1.2
+# $server_foreman_ssl_cert::           Client certificate for authenticating against Foreman server
 #
-# $server_report_api::             What version of report processor to deploy.
-#                                  Valid values are 'v2' for latest, and 'v1'
-#                                  for Foreman =< 1.2
+# $server_foreman_ssl_key::            Key for authenticating against Foreman server
 #
-# $server_request_timeout::        Timeout in node.rb script for fetching
-#                                  catalog from Foreman (in seconds).
-#                                  type:integer
+# $server_puppet_basedir::             Where is the puppet code base located
 #
-# $server_environment_timeout::    Timeout for cached compiled catalogs (10s, 5m, ...)
+# $server_enc_api::                    What version of enc script to deploy. Valid
+#                                      values are 'v2' for latest, and 'v1'
+#                                      for Foreman =< 1.2
 #
-# $server_ca_proxy::               The actual server that handles puppet CA.
-#                                  Setting this to anything non-empty causes
-#                                  the apache vhost to set up a proxy for all
-#                                  certificates pointing to the value.
+# $server_report_api::                 What version of report processor to deploy.
+#                                      Valid values are 'v2' for latest, and 'v1'
+#                                      for Foreman =< 1.2
 #
-# $server_jvm_java_bin::           Set the default java to use.
+# $server_request_timeout::            Timeout in node.rb script for fetching
+#                                      catalog from Foreman (in seconds).
+#                                      type:integer
 #
-# $server_jvm_config::             Specify the puppetserver jvm configuration file.
+# $server_environment_timeout::        Timeout for cached compiled catalogs (10s, 5m, ...)
 #
-# $server_jvm_min_heap_size::      Specify the minimum jvm heap space.
+# $server_ca_proxy::                   The actual server that handles puppet CA.
+#                                      Setting this to anything non-empty causes
+#                                      the apache vhost to set up a proxy for all
+#                                      certificates pointing to the value.
 #
-# $server_jvm_max_heap_size::      Specify the maximum jvm heap space.
+# $server_jvm_java_bin::               Set the default java to use.
 #
-# $server_jvm_extra_args::         Additional java options to pass through.
-#                                  This can be used for Java versions prior to
-#                                  Java 8 to specify the max perm space to use:
-#                                  For example: '-XX:MaxPermSpace=128m'.
+# $server_jvm_config::                 Specify the puppetserver jvm configuration file.
 #
-# $allow_any_crl_auth::            Allow any authentication for the CRL. This
-#                                  is needed on the puppet CA to accept clients
-#                                  from a the puppet CA proxy.
-#                                  type:boolean
+# $server_jvm_min_heap_size::          Specify the minimum jvm heap space.
 #
-# $auth_allowed::                  An array of authenticated nodes allowed to
-#                                  access all catalog and node endpoints.
-#                                  default to ['$1']
-#                                  type:array
+# $server_jvm_max_heap_size::          Specify the maximum jvm heap space.
+#
+# $server_jvm_extra_args::             Additional java options to pass through.
+#                                      This can be used for Java versions prior to
+#                                      Java 8 to specify the max perm space to use:
+#                                      For example: '-XX:MaxPermSpace=128m'.
+#
+# $allow_any_crl_auth::                Allow any authentication for the CRL. This
+#                                      is needed on the puppet CA to accept clients
+#                                      from a the puppet CA proxy.
+#                                      type:boolean
+#
+# $auth_allowed::                      An array of authenticated nodes allowed to
+#                                      access all catalog and node endpoints.
+#                                      default to ['$1']
+#                                      type:array
 #
 # === Usage:
 #
@@ -406,124 +427,127 @@
 #   }
 #
 class puppet (
-  $version                       = $puppet::params::version,
-  $user                          = $puppet::params::user,
-  $group                         = $puppet::params::group,
-  $dir                           = $puppet::params::dir,
-  $codedir                       = $puppet::params::codedir,
-  $vardir                        = $puppet::params::vardir,
-  $logdir                        = $puppet::params::logdir,
-  $rundir                        = $puppet::params::rundir,
-  $ssldir                        = $puppet::params::ssldir,
-  $sharedir                      = $puppet::params::sharedir,
-  $manage_packages               = $puppet::params::manage_packages,
-  $dir_owner                     = $puppet::params::dir_owner,
-  $dir_group                     = $puppet::params::dir_group,
-  $package_provider              = $puppet::params::package_provider,
-  $package_source                = $puppet::params::package_source,
-  $port                          = $puppet::params::port,
-  $listen                        = $puppet::params::listen,
-  $listen_to                     = $puppet::params::listen_to,
-  $pluginsync                    = $puppet::params::pluginsync,
-  $splay                         = $puppet::params::splay,
-  $splaylimit                    = $puppet::params::splaylimit,
-  $runinterval                   = $puppet::params::runinterval,
-  $usecacheonfailure             = $puppet::params::usecacheonfailure,
-  $runmode                       = $puppet::params::runmode,
-  $cron_cmd                      = $puppet::params::cron_cmd,
-  $agent_noop                    = $puppet::params::agent_noop,
-  $show_diff                     = $puppet::params::show_diff,
-  $module_repository             = $puppet::params::module_repository,
-  $configtimeout                 = $puppet::params::configtimeout,
-  $ca_server                     = $puppet::params::ca_server,
-  $ca_port                       = $puppet::params::ca_port,
-  $prerun_command                = $puppet::params::prerun_command,
-  $postrun_command               = $puppet::params::postrun_command,
-  $dns_alt_names                 = $puppet::params::dns_alt_names,
-  $use_srv_records               = $puppet::params::use_srv_records,
-  $srv_domain                    = $puppet::params::srv_domain,
-  $pluginsource                  = $puppet::params::pluginsource,
-  $pluginfactsource              = $puppet::params::pluginfactsource,
-  $additional_settings           = $puppet::params::additional_settings,
-  $agent_additional_settings     = $puppet::params::agent_additional_settings,
-  $agent_restart_command         = $puppet::params::agent_restart_command,
-  $classfile                     = $puppet::params::classfile,
-  $hiera_config                  = $puppet::params::hiera_config,
-  $main_template                 = $puppet::params::main_template,
-  $agent_template                = $puppet::params::agent_template,
-  $auth_template                 = $puppet::params::auth_template,
-  $nsauth_template               = $puppet::params::nsauth_template,
-  $allow_any_crl_auth            = $puppet::params::allow_any_crl_auth,
-  $auth_allowed                  = $puppet::params::auth_allowed,
-  $client_package                = $puppet::params::client_package,
-  $agent                         = $puppet::params::agent,
-  $remove_lock                   = $puppet::params::remove_lock,
-  $puppetmaster                  = $puppet::params::puppetmaster,
-  $service_name                  = $puppet::params::service_name,
-  $syslogfacility                = $puppet::params::syslogfacility,
-  $environment                   = $puppet::params::environment,
-  $server                        = $puppet::params::server,
-  $server_user                   = $puppet::params::user,
-  $server_group                  = $puppet::params::group,
-  $server_dir                    = $puppet::params::dir,
-  $server_port                   = $puppet::params::port,
-  $server_ca                     = $puppet::params::server_ca,
-  $server_http                   = $puppet::params::server_http,
-  $server_http_port              = $puppet::params::server_http_port,
-  $server_http_allow             = $puppet::params::server_http_allow,
-  $server_reports                = $puppet::params::server_reports,
-  $server_implementation         = $puppet::params::server_implementation,
-  $server_passenger              = $puppet::params::server_passenger,
-  $server_service_fallback       = $puppet::params::server_service_fallback,
-  $server_passenger_max_pool     = $puppet::params::server_passenger_max_pool,
-  $server_httpd_service          = $puppet::params::server_httpd_service,
-  $server_external_nodes         = $puppet::params::server_external_nodes,
-  $server_template               = $puppet::params::server_template,
-  $server_config_version         = $puppet::params::server_config_version,
-  $server_git_repo               = $puppet::params::server_git_repo,
-  $server_dynamic_environments   = $puppet::params::server_dynamic_environments,
-  $server_directory_environments = $puppet::params::server_directory_environments,
-  $server_environments           = $puppet::params::server_environments,
-  $server_environments_owner     = $puppet::params::server_environments_owner,
-  $server_environments_group     = $puppet::params::server_environments_group,
-  $server_environments_mode      = $puppet::params::server_environments_mode,
-  $server_envs_dir               = $puppet::params::server_envs_dir,
-  $server_manifest_path          = $puppet::params::server_manifest_path,
-  $server_common_modules_path    = $puppet::params::server_common_modules_path,
-  $server_git_repo_path          = $puppet::params::server_git_repo_path,
-  $server_git_branch_map         = $puppet::params::server_git_branch_map,
-  $server_post_hook_content      = $puppet::params::server_post_hook_content,
-  $server_post_hook_name         = $puppet::params::server_post_hook_name,
-  $server_storeconfigs_backend   = $puppet::params::server_storeconfigs_backend,
-  $server_app_root               = $puppet::params::server_app_root,
-  $server_ssl_dir                = $puppet::params::server_ssl_dir,
-  $server_package                = $puppet::params::server_package,
-  $server_version                = $puppet::params::server_version,
-  $server_certname               = $puppet::params::server_certname,
-  $server_enc_api                = $puppet::params::server_enc_api,
-  $server_report_api             = $puppet::params::server_report_api,
-  $server_request_timeout        = $puppet::params::server_request_timeout,
-  $server_ca_proxy               = $puppet::params::server_ca_proxy,
-  $server_strict_variables       = $puppet::params::server_strict_variables,
-  $server_additional_settings    = $puppet::params::server_additional_settings,
-  $server_rack_arguments         = $puppet::params::server_rack_arguments,
-  $server_foreman                = $puppet::params::server_foreman,
-  $server_foreman_url            = $puppet::params::server_foreman_url,
-  $server_foreman_ssl_ca         = $puppet::params::server_foreman_ssl_ca,
-  $server_foreman_ssl_cert       = $puppet::params::server_foreman_ssl_cert,
-  $server_foreman_ssl_key        = $puppet::params::server_foreman_ssl_key,
-  $server_facts                  = $puppet::params::server_facts,
-  $server_puppet_basedir         = $puppet::params::server_puppet_basedir,
-  $server_puppetdb_host          = $puppet::params::server_puppetdb_host,
-  $server_puppetdb_port          = $puppet::params::server_puppetdb_port,
-  $server_puppetdb_swf           = $puppet::params::server_puppetdb_swf,
-  $server_parser                 = $puppet::params::server_parser,
-  $server_environment_timeout    = $puppet::params::server_environment_timeout,
-  $server_jvm_java_bin           = $puppet::params::server_jvm_java_bin,
-  $server_jvm_config             = $puppet::params::server_jvm_config,
-  $server_jvm_min_heap_size      = $puppet::params::server_jvm_min_heap_size,
-  $server_jvm_max_heap_size      = $puppet::params::server_jvm_max_heap_size,
-  $server_jvm_extra_args         = $puppet::params::server_jvm_extra_args,
+  $version                           = $puppet::params::version,
+  $user                              = $puppet::params::user,
+  $group                             = $puppet::params::group,
+  $dir                               = $puppet::params::dir,
+  $codedir                           = $puppet::params::codedir,
+  $vardir                            = $puppet::params::vardir,
+  $logdir                            = $puppet::params::logdir,
+  $rundir                            = $puppet::params::rundir,
+  $ssldir                            = $puppet::params::ssldir,
+  $sharedir                          = $puppet::params::sharedir,
+  $manage_packages                   = $puppet::params::manage_packages,
+  $dir_owner                         = $puppet::params::dir_owner,
+  $dir_group                         = $puppet::params::dir_group,
+  $package_provider                  = $puppet::params::package_provider,
+  $package_source                    = $puppet::params::package_source,
+  $port                              = $puppet::params::port,
+  $listen                            = $puppet::params::listen,
+  $listen_to                         = $puppet::params::listen_to,
+  $pluginsync                        = $puppet::params::pluginsync,
+  $splay                             = $puppet::params::splay,
+  $splaylimit                        = $puppet::params::splaylimit,
+  $runinterval                       = $puppet::params::runinterval,
+  $usecacheonfailure                 = $puppet::params::usecacheonfailure,
+  $runmode                           = $puppet::params::runmode,
+  $cron_cmd                          = $puppet::params::cron_cmd,
+  $agent_noop                        = $puppet::params::agent_noop,
+  $show_diff                         = $puppet::params::show_diff,
+  $module_repository                 = $puppet::params::module_repository,
+  $configtimeout                     = $puppet::params::configtimeout,
+  $ca_server                         = $puppet::params::ca_server,
+  $ca_port                           = $puppet::params::ca_port,
+  $prerun_command                    = $puppet::params::prerun_command,
+  $postrun_command                   = $puppet::params::postrun_command,
+  $dns_alt_names                     = $puppet::params::dns_alt_names,
+  $use_srv_records                   = $puppet::params::use_srv_records,
+  $srv_domain                        = $puppet::params::srv_domain,
+  $pluginsource                      = $puppet::params::pluginsource,
+  $pluginfactsource                  = $puppet::params::pluginfactsource,
+  $additional_settings               = $puppet::params::additional_settings,
+  $agent_additional_settings         = $puppet::params::agent_additional_settings,
+  $agent_restart_command             = $puppet::params::agent_restart_command,
+  $classfile                         = $puppet::params::classfile,
+  $hiera_config                      = $puppet::params::hiera_config,
+  $main_template                     = $puppet::params::main_template,
+  $agent_template                    = $puppet::params::agent_template,
+  $auth_template                     = $puppet::params::auth_template,
+  $nsauth_template                   = $puppet::params::nsauth_template,
+  $allow_any_crl_auth                = $puppet::params::allow_any_crl_auth,
+  $auth_allowed                      = $puppet::params::auth_allowed,
+  $client_package                    = $puppet::params::client_package,
+  $agent                             = $puppet::params::agent,
+  $remove_lock                       = $puppet::params::remove_lock,
+  $puppetmaster                      = $puppet::params::puppetmaster,
+  $service_name                      = $puppet::params::service_name,
+  $syslogfacility                    = $puppet::params::syslogfacility,
+  $environment                       = $puppet::params::environment,
+  $server                            = $puppet::params::server,
+  $server_user                       = $puppet::params::user,
+  $server_group                      = $puppet::params::group,
+  $server_dir                        = $puppet::params::dir,
+  $server_port                       = $puppet::params::port,
+  $server_ca                         = $puppet::params::server_ca,
+  $server_http                       = $puppet::params::server_http,
+  $server_http_port                  = $puppet::params::server_http_port,
+  $server_http_allow                 = $puppet::params::server_http_allow,
+  $server_reports                    = $puppet::params::server_reports,
+  $server_implementation             = $puppet::params::server_implementation,
+  $server_passenger                  = $puppet::params::server_passenger,
+  $server_service_fallback           = $puppet::params::server_service_fallback,
+  $server_passenger_max_pool_size    = $puppet::params::server_passenger_max_pool_size,
+  $server_passenger_max_requests     = $puppet::params::server_passenger_max_requests,
+  $server_passenger_high_performance = $puppet::params::server_passenger_high_performance,
+  $server_passenger_pool_idle_time   = $puppet::params::server_passenger_pool_idle_time,
+  $server_httpd_service              = $puppet::params::server_httpd_service,
+  $server_external_nodes             = $puppet::params::server_external_nodes,
+  $server_template                   = $puppet::params::server_template,
+  $server_config_version             = $puppet::params::server_config_version,
+  $server_git_repo                   = $puppet::params::server_git_repo,
+  $server_dynamic_environments       = $puppet::params::server_dynamic_environments,
+  $server_directory_environments     = $puppet::params::server_directory_environments,
+  $server_environments               = $puppet::params::server_environments,
+  $server_environments_owner         = $puppet::params::server_environments_owner,
+  $server_environments_group         = $puppet::params::server_environments_group,
+  $server_environments_mode          = $puppet::params::server_environments_mode,
+  $server_envs_dir                   = $puppet::params::server_envs_dir,
+  $server_manifest_path              = $puppet::params::server_manifest_path,
+  $server_common_modules_path        = $puppet::params::server_common_modules_path,
+  $server_git_repo_path              = $puppet::params::server_git_repo_path,
+  $server_git_branch_map             = $puppet::params::server_git_branch_map,
+  $server_post_hook_content          = $puppet::params::server_post_hook_content,
+  $server_post_hook_name             = $puppet::params::server_post_hook_name,
+  $server_storeconfigs_backend       = $puppet::params::server_storeconfigs_backend,
+  $server_app_root                   = $puppet::params::server_app_root,
+  $server_ssl_dir                    = $puppet::params::server_ssl_dir,
+  $server_package                    = $puppet::params::server_package,
+  $server_version                    = $puppet::params::server_version,
+  $server_certname                   = $puppet::params::server_certname,
+  $server_enc_api                    = $puppet::params::server_enc_api,
+  $server_report_api                 = $puppet::params::server_report_api,
+  $server_request_timeout            = $puppet::params::server_request_timeout,
+  $server_ca_proxy                   = $puppet::params::server_ca_proxy,
+  $server_strict_variables           = $puppet::params::server_strict_variables,
+  $server_additional_settings        = $puppet::params::server_additional_settings,
+  $server_rack_arguments             = $puppet::params::server_rack_arguments,
+  $server_foreman                    = $puppet::params::server_foreman,
+  $server_foreman_url                = $puppet::params::server_foreman_url,
+  $server_foreman_ssl_ca             = $puppet::params::server_foreman_ssl_ca,
+  $server_foreman_ssl_cert           = $puppet::params::server_foreman_ssl_cert,
+  $server_foreman_ssl_key            = $puppet::params::server_foreman_ssl_key,
+  $server_facts                      = $puppet::params::server_facts,
+  $server_puppet_basedir             = $puppet::params::server_puppet_basedir,
+  $server_puppetdb_host              = $puppet::params::server_puppetdb_host,
+  $server_puppetdb_port              = $puppet::params::server_puppetdb_port,
+  $server_puppetdb_swf               = $puppet::params::server_puppetdb_swf,
+  $server_parser                     = $puppet::params::server_parser,
+  $server_environment_timeout        = $puppet::params::server_environment_timeout,
+  $server_jvm_java_bin               = $puppet::params::server_jvm_java_bin,
+  $server_jvm_config                 = $puppet::params::server_jvm_config,
+  $server_jvm_min_heap_size          = $puppet::params::server_jvm_min_heap_size,
+  $server_jvm_max_heap_size          = $puppet::params::server_jvm_max_heap_size,
+  $server_jvm_extra_args             = $puppet::params::server_jvm_extra_args,
 
 ) inherits puppet::params {
 

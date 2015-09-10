@@ -37,6 +37,33 @@ describe 'puppet::server::passenger' do
       end
     end
 
+    describe 'with passenger settings' do
+      let :pre_condition do
+        "class {'puppet':
+           server                          => true,
+           server_passenger                => true,
+           server_implementation           => 'master',
+           server_app_root                 => '/etc/puppet/rack',
+           server_passenger_max_pool_size  => 20,
+           server_passenger_max_requests   => 1000,
+           server_passenger_pool_idle_time => 1000,
+         }"
+      end
+
+      it 'should include the mod passenger' do
+        should contain_apache__mod('passenger')
+      end
+
+      it 'should have passenger.conf' do
+        is_expected.to contain_file('passenger.conf').with({
+          'path' => '/etc/apache2/mods-available/passenger.conf'}).
+          with_content(/PassengerHighPerformance Off$/).
+          with_content(/PassengerMaxPoolSize 20$/).
+          with_content(/PassengerMaxRequests 1000$/).
+          with_content(/PassengerPoolIdleTime 1000$/)
+      end
+    end
+
     describe 'with SSL CRL' do
       let :params do
         default_params.merge({

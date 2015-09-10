@@ -3,23 +3,32 @@
 # Set up the puppet server using passenger and apache.
 #
 class puppet::server::passenger (
-  $app_root           = $::puppet::server_app_root,
-  $passenger_max_pool = $::puppet::server_passenger_max_pool,
-  $port               = $::puppet::server_port,
-  $ssl_ca_cert        = $::puppet::server::ssl_ca_cert,
-  $ssl_ca_crl         = $::puppet::server::ssl_ca_crl,
-  $ssl_cert           = $::puppet::server::ssl_cert,
-  $ssl_cert_key       = $::puppet::server::ssl_cert_key,
-  $ssl_chain          = $::puppet::server::ssl_chain,
-  $ssl_dir            = $::puppet::server_ssl_dir,
-  $puppet_ca_proxy    = $::puppet::server_ca_proxy,
-  $user               = $::puppet::server_user,
-  $http               = $::puppet::server_http,
-  $http_port          = $::puppet::server_http_port,
-  $http_allow         = $::puppet::server_http_allow,
+  $app_root                   = $::puppet::server_app_root,
+  $passenger_max_pool_size    = $::puppet::server_passenger_max_pool_size,
+  $passenger_max_requests     = $::puppet::server_passenger_max_requests,
+  $passenger_high_performance = $::puppet::server_passenger_high_performance,
+  $passenger_pool_idle_time   = $::puppet::server_passenger_pool_idle_time,
+  $port                       = $::puppet::server_port,
+  $ssl_ca_cert                = $::puppet::server::ssl_ca_cert,
+  $ssl_ca_crl                 = $::puppet::server::ssl_ca_crl,
+  $ssl_cert                   = $::puppet::server::ssl_cert,
+  $ssl_cert_key               = $::puppet::server::ssl_cert_key,
+  $ssl_chain                  = $::puppet::server::ssl_chain,
+  $ssl_dir                    = $::puppet::server_ssl_dir,
+  $puppet_ca_proxy            = $::puppet::server_ca_proxy,
+  $user                       = $::puppet::server_user,
+  $http                       = $::puppet::server_http,
+  $http_port                  = $::puppet::server_http_port,
+  $http_allow                 = $::puppet::server_http_allow,
 ) {
   include ::apache
-  include ::apache::mod::passenger
+
+  class { '::apache::mod::passenger':
+    passenger_max_pool_size    => $passenger_max_pool_size,
+    passenger_max_requests     => $passenger_max_requests,
+    passenger_high_performance => $passenger_high_performance,
+    passenger_pool_idle_time   => $passenger_pool_idle_time,
+  }
 
   class { '::puppet::server::rack':
     app_root => $app_root,
