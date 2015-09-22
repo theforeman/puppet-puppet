@@ -89,6 +89,32 @@ describe 'puppet::config' do
       end
     end
 
+    context "when autosign => true" do
+      let :pre_condition do
+        'class { "::puppet": autosign => true }'
+      end
+
+      it 'should contain puppet.conf [main] with autosign = true' do
+        verify_concat_fragment_contents(catalogue, 'puppet.conf+10-main', [
+          '[main]',
+          '    autosign       = true',
+        ])
+      end
+    end
+
+    context 'when autosign => $confdir/custom_autosign {mode = 664}' do
+      let :pre_condition do
+        %q{class { "::puppet": autosign => '$confdir/custom_autosign {mode = 664}'}}
+      end
+
+      it 'should contain puppet.conf [main] with autosign = $confdir/custom_autosign {mode = 664}' do
+        verify_concat_fragment_contents(catalogue, 'puppet.conf+10-main', [
+          '[main]',
+          '    autosign       = $confdir/custom_autosign {mode = 664}',
+        ])
+      end
+    end
+
     context "when dns_alt_names => ['foo','bar']" do
       let :pre_condition do
         "class { 'puppet': dns_alt_names => ['foo','bar'] }"
@@ -299,6 +325,32 @@ describe 'puppet::config' do
 
       it 'should contain auth.conf with allow' do
         should contain_file('C:/ProgramData/PuppetLabs/puppet/etc/auth.conf').with_content(%r{^allow \$1, puppetproxy$})
+      end
+    end
+
+    context "when autosign => true" do
+      let :pre_condition do
+        'class { "::puppet": autosign => true }'
+      end
+
+      it 'should contain puppet.conf [main] with autosign = true' do
+        verify_concat_fragment_contents(catalogue, 'puppet.conf+10-main', [
+          '[main]',
+          '    autosign       = true',
+        ])
+      end
+    end
+
+    context 'when autosign => $confdir/custom_autosign {mode = 664}' do
+      let :pre_condition do
+        %q{class { "::puppet": autosign => '$confdir/custom_autosign {mode = 664}'}}
+      end
+
+      it 'should contain puppet.conf [main] with autosign = $confdir/custom_autosign {mode = 664}' do
+        verify_concat_fragment_contents(catalogue, 'puppet.conf+10-main', [
+          '[main]',
+          '    autosign       = $confdir/custom_autosign {mode = 664}',
+        ])
       end
     end
 
