@@ -71,12 +71,14 @@
 #                                  This setting can be a time interval in seconds
 #                                  (30 or 30s), minutes (30m), hours (6h), days (2d),
 #                                  or years (5y).
-# $autosign::                      Change location of autosign.conf or autosign
-#                                  script. If this is set to a script, make sure
-#                                  that script considers the content of
-#                                  autosign.conf, as it might break Foreman
-#                                  functionality if it doesn't.
-#                                  type:string
+#
+# $autosign::                      Enable or disable autosign or change location
+#                                  of autosign.conf or autosign script.  If this
+#                                  is set to a script, make sure that script
+#                                  considers the content of autosign.conf, as it
+#                                  might break Foreman functionality if it
+#                                  doesn't. If this is set to a boolean, it can
+#                                  be cast as a string or a boolean.
 #
 # $runinterval::                   Set up the interval (in seconds) to run
 #                                  the puppet agent.
@@ -574,7 +576,10 @@ class puppet (
   }
 
   validate_string($service_name)
-  validate_string($autosign)
+
+  if ! is_bool($autosign) {
+    validate_string($autosign)
+  }
 
   validate_array($listen_to)
   validate_array($dns_alt_names)
