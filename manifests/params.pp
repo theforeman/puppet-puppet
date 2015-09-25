@@ -219,12 +219,15 @@ class puppet::params {
 
   $server_package     = undef
   $server_version     = undef
-  $client_package     = $aio_package ? {
-    true       => ['puppet-agent'],
-    default    => $::osfamily ? {
-      'Debian' => ['puppet-common','puppet'],
-      default  => ['puppet'],
-    },
+
+  if $aio_package {
+    $client_package = ['puppet-agent']
+  } elsif ($::osfamily == 'Debian') {
+    $client_package = ['puppet-common','puppet']
+  } elsif ($::osfamily =~ /(FreeBSD|DragonFly)/) and (versioncmp($::puppetversion, '4.0') > 0) {
+    $client_package = ['puppet4']
+  } else {
+    $client_package = ['puppet']
   }
 
   # Only use 'puppet cert' on versions where puppetca no longer exists
