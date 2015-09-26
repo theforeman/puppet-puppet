@@ -442,4 +442,16 @@ describe 'puppet::server::config' do
         with_content(/^\s+environment_timeout\s+=\s+10m$/)
     end
   end
+
+  describe 'with no ssldir managed for master' do
+    let :pre_condition do
+      "class {'puppet': server => true, server_ssl_dir_manage => false}"
+    end
+
+    it 'should not contain ssl_dir configuration setting in the master section' do
+      should_not contain_concat__fragment('puppet.conf+30-master').
+        with_content(/^\s+ssl_dir\s+=\s+.*$/)
+    end
+  end
+
 end

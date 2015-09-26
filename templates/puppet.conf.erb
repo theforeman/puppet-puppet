@@ -64,3 +64,6 @@
 <% scope.lookupvar("puppet::additional_settings").sort_by {|k, v| k}.each do |key, value| -%>
     <%= key %> = <%= value %>
 <% end -%>
+<% if scope.lookupvar("puppet::server_default_manifest") -%>
+    default_manifest = <%= scope.lookupvar("puppet::server_default_manifest_path") %>
+<% end -%>

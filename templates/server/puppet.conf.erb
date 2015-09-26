@@ -7,7 +7,9 @@
     external_nodes = <%= @server_external_nodes %>
     node_terminus  = <%= @server_node_terminus %>
     ca             = <%= scope.lookupvar("puppet::server_ca") %>
+<% if scope.lookupvar("puppet::server_ssl_dir_manage") -%>
     ssldir         = <%= scope.lookupvar("puppet::server_ssl_dir") %>
+<% end -%>
     certname       = <%= scope.lookupvar("puppet::server_certname") %>
     parser         = <%= scope.lookupvar("puppet::server_parser") %>
 <% if @server_environment_timeout -%>
@@ -18,7 +20,7 @@
     storeconfigs_backend = <%= @server_storeconfigs_backend %>
 <% end -%>
     strict_variables = <%= scope.lookupvar("puppet::server_strict_variables") %>
-<% if !scope.lookupvar("puppet::server_directory_environments")  && 
+<% if !scope.lookupvar("puppet::server_directory_environments")  &&
     ( scope.lookupvar("puppet::server_git_repo") || scope.lookupvar("puppet::server_dynamic_environments") ) -%>
     manifest       = <%= scope.lookupvar("puppet::server_envs_dir") %>/$environment/manifests/site.pp
     modulepath     = <%= scope.lookupvar("puppet::server_envs_dir") %>/$environment/modules
