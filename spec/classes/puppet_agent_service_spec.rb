@@ -44,6 +44,23 @@ describe 'puppet::agent::service' do
         end
 
         it { should contain_cron('puppet').with_ensure('absent') }
+
+        it 'should disable systemd timer' do
+          should contain_service('puppetcron.timer').with({
+            :provider => 'systemd',
+            :ensure   => 'stopped',
+            :name     => 'puppetcron.timer',
+            :enable   => 'false',
+          })
+
+          should contain_file('/etc/systemd/system/puppetcron.timer').with_ensure(:absent)
+          should contain_file('/etc/systemd/system/puppetcron.service').with_ensure(:absent)
+
+          should contain_exec('systemctl-daemon-reload').with({
+            :refreshonly => true,
+            :command     => 'systemctl daemon-reload',
+          })
+        end
       end
 
       describe 'when runmode => cron' do
@@ -68,6 +85,65 @@ describe 'puppet::agent::service' do
             :hour     => '*',
           })
         end
+
+        it 'should disable systemd timer' do
+          should contain_service('puppetcron.timer').with({
+            :provider => 'systemd',
+            :ensure   => 'stopped',
+            :name     => 'puppetcron.timer',
+            :enable   => 'false',
+          })
+
+          should contain_file('/etc/systemd/system/puppetcron.timer').with_ensure(:absent)
+          should contain_file('/etc/systemd/system/puppetcron.service').with_ensure(:absent)
+
+          should contain_exec('systemctl-daemon-reload').with({
+            :refreshonly => true,
+            :command     => 'systemctl daemon-reload',
+          })
+        end
+      end
+
+      describe 'when runmode => systemd.timer' do
+        let :pre_condition do
+          "class {'puppet': agent => true, runmode => 'systemd.timer'}"
+        end
+
+        it do
+          should contain_service('puppet').with({
+            :ensure     => 'stopped',
+            :name       => 'puppet',
+            :hasstatus  => 'true',
+            :enable     => 'false',
+          })
+        end
+
+        it { should contain_cron('puppet').with_ensure('absent') }
+
+        it 'should enable systemd timer' do
+          if Puppet.version < '4.0'
+            confdir = '/etc/puppet'
+          else
+            confdir = '/etc/puppetlabs/puppet'
+          end
+
+          should contain_file('/etc/systemd/system/puppetcron.timer')
+          .with_content(/.*OnCalendar\=\*\:15,45.*/)
+          should contain_file('/etc/systemd/system/puppetcron.service')
+          .with_content(/.*ExecStart=\/usr\/bin\/env puppet agent --config #{confdir}\/puppet.conf --onetime --no-daemonize.*/)
+
+          should contain_exec('systemctl-daemon-reload').with({
+            :refreshonly => true,
+            :command     => 'systemctl daemon-reload',
+          })
+
+          should contain_service('puppetcron.timer').with({
+            :provider => 'systemd',
+            :ensure   => 'running',
+            :name     => 'puppetcron.timer',
+            :enable   => 'true',
+          })
+        end
       end
 
       describe 'when runmode => none' do
@@ -85,6 +161,23 @@ describe 'puppet::agent::service' do
         end
 
         it { should contain_cron('puppet').with_ensure('absent') }
+
+        it 'should disable systemd timer' do
+          should contain_service('puppetcron.timer').with({
+            :provider => 'systemd',
+            :ensure   => 'stopped',
+            :name     => 'puppetcron.timer',
+            :enable   => 'false',
+          })
+
+          should contain_file('/etc/systemd/system/puppetcron.timer').with_ensure(:absent)
+          should contain_file('/etc/systemd/system/puppetcron.service').with_ensure(:absent)
+
+          should contain_exec('systemctl-daemon-reload').with({
+            :refreshonly => true,
+            :command     => 'systemctl daemon-reload',
+          })
+        end
       end
 
       describe 'when runmode => foo' do
