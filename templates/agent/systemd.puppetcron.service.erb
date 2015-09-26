@@ -1,0 +1,8 @@
+[Unit]
+Description=Systemd Timer Service for Puppet Agent
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/puppet agent --no-daemonize --onetime
+User=root
+Group=root

@@ -43,6 +43,42 @@ class puppet::agent::service {
         }
       }
     }
+    'systemd.timer': {
+      # Use the same times as for cron
+      $times = ip_to_cron($puppet::runinterval)
+
+      file { '/etc/systemd/system/puppetcron.timer':
+        content => template('puppet/agent/systemd.puppetcron.timer.erb'),
+        notify  => Exec['systemctl-daemon-reload'],
+      }
+
+      file { '/etc/systemd/system/puppetcron.service':
+        content => template('puppet/agent/systemd.puppetcron.service.erb'),
+        notify  => Exec['systemctl-daemon-reload'],
+      }
+
+      exec { 'systemctl-daemon-reload':
+        refreshonly => true,
+        path        => $::path,
+        command     => 'systemctl daemon-reload',
+        subscribe   => [
+          File['/etc/systemd/system/puppetcron.service'],
+          File['/etc/systemd/system/puppetcron.timer'],
+        ],
+      }
+
+      service { 'puppetcron.timer':
+        provider  => 'systemd',
+        ensure    => running,
+        enable    => true,
+        subscribe => [
+          File['/etc/systemd/system/puppetcron.timer'],
+          File['/etc/systemd/system/puppetcron.service'],
+          Exec['systemctl-daemon-reload'],
+        ],
+      }
+
+    }
     'none': {
       service { 'puppet':
         ensure    => stopped,
