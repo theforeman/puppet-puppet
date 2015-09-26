@@ -1,0 +1,8 @@
+[Unit]
+Description=Systemd Timer Service for Puppet Agent
+
+[Service]
+Type=oneshot
+ExecStart=<%= @command %>
+User=root
+Group=root

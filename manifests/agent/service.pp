@@ -3,59 +3,24 @@ class puppet::agent::service {
 
   case $::puppet::runmode {
     'service': {
-      service {'puppet':
-        ensure     => running,
-        name       => $puppet::service_name,
-        hasstatus  => true,
-        hasrestart => $puppet::agent_restart_command != undef,
-        enable     => true,
-        restart    => $puppet::agent_restart_command,
-      }
-
-      if $::osfamily != 'windows' {
-        cron { 'puppet':
-          ensure => absent,
-        }
-      }
+      class { 'puppet::agent::service::daemon':  enabled => true  }
+      class { 'puppet::agent::service::cron':    enabled => false }
+      class { 'puppet::agent::service::systemd': enabled => false }
     }
     'cron': {
-      service {'puppet':
-        ensure    => stopped,
-        name      => $puppet::service_name,
-        hasstatus => true,
-        enable    => false,
-      }
-
-      $command = $puppet::cron_cmd ? {
-        undef   => "/usr/bin/env puppet agent --config ${puppet::dir}/puppet.conf --onetime --no-daemonize",
-        default => $puppet::cron_cmd,
-      }
-
-      if $::osfamily == 'windows' {
-        fail("Currently we don't support setting cron on windows.")
-      } else {
-        $times = ip_to_cron($puppet::runinterval)
-        cron { 'puppet':
-          command => $command,
-          user    => root,
-          hour    => $times[0],
-          minute  => $times[1],
-        }
-      }
+      class { 'puppet::agent::service::daemon':  enabled => false }
+      class { 'puppet::agent::service::cron':    enabled => true  }
+      class { 'puppet::agent::service::systemd': enabled => false }
+    }
+    'systemd.timer': {
+      class { 'puppet::agent::service::daemon':  enabled => false }
+      class { 'puppet::agent::service::cron':    enabled => false }
+      class { 'puppet::agent::service::systemd': enabled => true  }
     }
     'none': {
-      service { 'puppet':
-        ensure    => stopped,
-        name      => $puppet::service_name,
-        hasstatus => true,
-        enable    => false,
-      }
-
-      if $::osfamily != 'windows' {
-        cron { 'puppet':
-          ensure => absent,
-        }
-      }
+      class { 'puppet::agent::service::daemon':  enabled => false }
+      class { 'puppet::agent::service::cron':    enabled => false }
+      class { 'puppet::agent::service::systemd': enabled => false }
     }
     default: {
       fail("Runmode of ${puppet::runmode} not supported by puppet::agent::config!")
