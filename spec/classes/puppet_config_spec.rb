@@ -265,7 +265,7 @@ describe 'puppet::config' do
   end
 
   context "on a FreeBSD family OS" do
-    let :facts do on_supported_os['freebsd-10-amd64'].merge({
+    let :facts do on_supported_os(supported_os_opts)['freebsd-10-amd64'].merge({
       :concat_basedir => '/foo/bar',
       :domain   => 'example.org',
       :puppetversion => Puppet.version,

@@ -13,7 +13,9 @@ end
 
 # Workaround for slow rspec-puppet-facts
 def supported_os_opts
-    { :supported_os => [ { "operatingsystem" => "CentOS", "operatingsystemrelease" => [ "6" ] } ] }
+    { :supported_os => [ { "operatingsystem" => "CentOS", "operatingsystemrelease" => [ "6" ] },
+                         { "operatingsystem" => "FreeBSD", "operatingsystemrelease" => [ "10" ] }
+    ] }
 end
 
 def get_content(subject, title)
