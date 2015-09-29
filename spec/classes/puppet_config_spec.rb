@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'puppet::config' do
 
   context "on a RedHat family OS" do
-    let :default_facts do on_supported_os['centos-6-x86_64'].merge({
+    let :default_facts do on_supported_os(supported_os_opts)['centos-6-x86_64'].merge({
       :concat_basedir         => '/foo/bar',
       :domain                 => 'example.org',
       :fqdn                   => 'host.example.com',

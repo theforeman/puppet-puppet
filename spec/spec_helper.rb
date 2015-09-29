@@ -11,6 +11,11 @@ class Undef
   def inspect; 'undef'; end
 end
 
+# Workaround for slow rspec-puppet-facts
+def supported_os_opts
+    { :supported_os => [ { "operatingsystem" => "CentOS", "operatingsystemrelease" => [ "6" ] } ] }
+end
+
 def get_content(subject, title)
   content = subject.resource('file', title).send(:parameters)[:content]
   content.split(/\n/).reject { |line| line =~ /(^#|^$|^\s+#)/ }
