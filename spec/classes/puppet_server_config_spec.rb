@@ -61,7 +61,7 @@ describe 'puppet::server::config' do
       should contain_exec('puppet_server_config-generate_ca_cert').with({
         :creates => "#{ssldir}/certs/#{facts[:fqdn]}.pem",
         :command => "#{puppetcacmd} --generate #{facts[:fqdn]}",
-        :require => /Concat\[#{conf_file}]/,
+        :require => /Concat\[#{conf_file}\]/,
       }).that_notifies('Service[httpd]')
     end
 
