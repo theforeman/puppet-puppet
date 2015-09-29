@@ -67,32 +67,38 @@ class puppet::server::config inherits puppet::config {
       creates => $::puppet::server_ssl_dir,
       command => "/bin/mkdir -p ${::puppet::server_ssl_dir}",
       umask   => '0022',
-      before  => Exec['puppet_server_config-generate_ca_cert'],
     }
 
     # Generate a new CA and host cert if our host cert doesn't exist
-    exec {'puppet_server_config-generate_ca_cert':
-      creates => $::puppet::server::ssl_cert,
-      command => "${puppet::puppetca_path}/${puppet::puppetca_bin} --generate ${::fqdn}",
-      umask   => '0022',
-      require => Concat["${puppet::server_dir}/puppet.conf"],
+    if $::puppet::server_ca {
+      exec {'puppet_server_config-generate_ca_cert':
+        creates => $::puppet::server::ssl_cert,
+        command => "${puppet::puppetca_path}/${puppet::puppetca_bin} --generate ${::fqdn}",
+        umask   => '0022',
+        require => [Concat["${puppet::server_dir}/puppet.conf"],
+                    Exec['puppet_server_config-create_ssl_dir'],
+                    ],
+      }
     }
   } else {
     # Copy of above without umask for pre-3.4
     exec {'puppet_server_config-create_ssl_dir':
       creates => $::puppet::server_ssl_dir,
       command => "/bin/mkdir -p ${::puppet::server_ssl_dir}",
-      before  => Exec['puppet_server_config-generate_ca_cert'],
     }
 
-    exec {'puppet_server_config-generate_ca_cert':
-      creates => $::puppet::server::ssl_cert,
-      command => "${puppet::puppetca_path}/${puppet::puppetca_bin} --generate ${::fqdn}",
-      require => Concat["${puppet::server_dir}/puppet.conf"],
+    if $::puppet::server_ca {
+      exec {'puppet_server_config-generate_ca_cert':
+        creates => $::puppet::server::ssl_cert,
+        command => "${puppet::puppetca_path}/${puppet::puppetca_bin} --generate ${::fqdn}",
+        require => [Concat["${puppet::server_dir}/puppet.conf"],
+                    Exec['puppet_server_config-create_ssl_dir'],
+                    ],
+      }
     }
   }
 
-  if $puppet::server_passenger and $::puppet::server_implementation == 'master' {
+  if $puppet::server_passenger and $::puppet::server_implementation == 'master' and $::puppet::server_ca {
     Exec['puppet_server_config-generate_ca_cert'] ~> Service[$puppet::server_httpd_service]
   }
 

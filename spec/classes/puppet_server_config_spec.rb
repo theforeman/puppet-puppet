@@ -54,14 +54,13 @@ describe 'puppet::server::config' do
       should contain_exec('puppet_server_config-create_ssl_dir').with({
         :creates => ssldir,
         :command => "/bin/mkdir -p #{ssldir}",
-        :before  => /Exec\[puppet_server_config-generate_ca_cert\]/
       })
 
       puppetcacmd = Puppet.version >= '4' ? '/opt/puppetlabs/bin/puppet cert' : ( Puppet.version >= '3' ? '/usr/bin/puppet cert' : '/usr/sbin/puppetca' )
       should contain_exec('puppet_server_config-generate_ca_cert').with({
         :creates => "#{ssldir}/certs/#{facts[:fqdn]}.pem",
         :command => "#{puppetcacmd} --generate #{facts[:fqdn]}",
-        :require => /Concat\[#{conf_file}\]/,
+        :require => ["Concat[#{conf_file}]", "Exec[puppet_server_config-create_ssl_dir]"],
       }).that_notifies('Service[httpd]')
     end
 
@@ -451,6 +450,25 @@ describe 'puppet::server::config' do
     it 'should not contain ssl_dir configuration setting in the master section' do
       should_not contain_concat__fragment('puppet.conf+30-master').
         with_content(/^\s+ssl_dir\s+=\s+.*$/)
+    end
+  end
+
+  describe 'with nondefault CA settings' do
+    context 'with server_ca => false' do
+      let :pre_condition do
+        "class {'puppet':
+          server => true,
+          server_ca => false,
+        }"
+      end
+
+      it 'should create the ssl directory' do
+        should contain_exec('puppet_server_config-create_ssl_dir')
+      end
+
+      it 'should not generate CA certificates' do
+        should_not contain_exec('puppet_server_config-generate_ca_cert')
+      end
     end
   end
 
