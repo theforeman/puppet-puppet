@@ -8,7 +8,7 @@ describe 'puppet::agent::service' do
     additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
   end
 
-  let :facts do on_supported_os['centos-6-x86_64'].merge({
+  let :facts do on_supported_os(supported_os_opts)['centos-6-x86_64'].merge({
     :clientcert     => 'puppetmaster.example.com',
     :concat_basedir => '/nonexistant',
     :fqdn           => 'puppetmaster.example.com',
