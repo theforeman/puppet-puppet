@@ -8,7 +8,12 @@ describe 'puppet::server::service' do
     additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
   end
 
-  let :facts do on_supported_os['centos-6-x86_64'].merge({
+on_supported_os.each do |os, os_facts|
+  next if not os == "centos-6-x86_64"
+  context "on #{os}" do
+
+  let (:facts) do
+    os_facts.merge({
     :clientcert     => 'puppetmaster.example.com',
     :concat_basedir => '/nonexistant',
     :fqdn           => 'puppetmaster.example.com',
@@ -75,4 +80,6 @@ describe 'puppet::server::service' do
     it { should raise_error(Puppet::Error, /Both puppetmaster and puppetserver cannot be enabled simultaneously/) }
   end
 
+end
+end
 end

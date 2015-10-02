@@ -8,7 +8,12 @@ describe 'puppet::agent::install' do
     additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
   end
 
-  let :common_centos_facts do on_supported_os['centos-6-x86_64'].merge({
+on_supported_os.each do |os, os_facts|
+  next if not os == "centos-6-x86_64"
+  context "on #{os}" do
+
+  let (:common_centos_facts) do
+    os_facts.merge({
     :concat_basedir => '/nonexistant',
     :puppetversion  => Puppet.version,
   }).merge(additional_facts) end
@@ -167,4 +172,6 @@ describe 'puppet::agent::install' do
       end
     end
   end
+end
+end
 end
