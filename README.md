@@ -111,11 +111,10 @@ wrapper classes or even your ENC (if it supports param classes). For example:
 
     # Want to integrate with an existing PuppetDB?
     class { '::puppet':
-      server               => true,
-      server_puppetdb_host => 'mypuppetdb.example.com',
-      server_reports       => 'puppetdb,foreman',
-      storeconfigs         => true,
-      storeconfigs_backend => 'puppetdb',
+      server                      => true,
+      server_puppetdb_host        => 'mypuppetdb.example.com',
+      server_reports              => 'puppetdb,foreman',
+      server_storeconfigs_backend => 'puppetdb',
     }
 
 Look in _init.pp_ for what can be configured this way, see Contributing if anything
