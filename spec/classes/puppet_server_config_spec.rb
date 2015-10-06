@@ -53,7 +53,9 @@ describe 'puppet::server::config' do
         vardir           = '/var/puppet'
         ssldir           = '/var/puppet/ssl'
         sharedir         = '/usr/local/share/puppet'
-        puppetcacmd      = '/usr/local/bin/puppet cert'
+        if Puppet.version < '4.0'
+          puppetcacmd      = '/usr/local/bin/puppet cert'
+        end
         nodepath         = '\/usr\/local\/etc\/puppet\/node.rb'
       end
 
