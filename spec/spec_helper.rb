@@ -11,12 +11,21 @@ class Undef
   def inspect; 'undef'; end
 end
 
-# Running tests with the LIMIT_OS environment variable set
+# Running tests with the ONLY_OS environment variable set
 # limits the tested platforms to the specified values.
-# Example: LIMIT_OS=centos-7-x86_64,ubuntu-14-x86_64
-def limit_test_os
-  if ENV.key?('LIMIT_OS')
-    ENV['LIMIT_OS'].split(',')
+# Example: ONLY_OS=centos-7-x86_64,ubuntu-14-x86_64
+def only_test_os
+  if ENV.key?('ONLY_OS')
+    ENV['ONLY_OS'].split(',')
+  end
+end
+
+# Running tests with the EXCLUDE_OS environment variable set
+# limits the tested platforms to all but the specified values.
+# Example: EXCLUDE_OS=centos-7-x86_64,ubuntu-14-x86_64
+def exclude_test_os
+  if ENV.key?('EXCLUDE_OS')
+    ENV['EXCLUDE_OS'].split(',')
   end
 end
 
