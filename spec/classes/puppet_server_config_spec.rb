@@ -23,6 +23,7 @@ describe 'puppet::server::config' do
         ssldir           = '/var/lib/puppet/ssl'
         sharedir         = '/usr/share/puppet'
         nodepath         = '\/etc\/puppet\/node.rb'
+        puppetcacmd      = '/usr/bin/puppet cert'
         additional_facts = {}
       else
         codedir          = '/etc/puppetlabs/code'
@@ -34,7 +35,12 @@ describe 'puppet::server::config' do
         ssldir           = '/etc/puppetlabs/puppet/ssl'
         sharedir         = '/opt/puppetlabs/puppet'
         nodepath         = '\/etc\/puppetlabs\/puppet\/node.rb'
+        puppetcacmd      = '/opt/puppetlabs/bin/puppet cert'
         additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
+      end
+
+      if Puppet.version < '3.0'
+        puppetcacmd      = '/usr/sbin/puppetca'
       end
 
       if os_facts[:osfamily] == 'FreeBSD'
@@ -46,6 +52,7 @@ describe 'puppet::server::config' do
         vardir           = '/var/puppet'
         ssldir           = '/var/puppet/ssl'
         sharedir         = '/usr/local/share/puppet'
+        puppetcacmd      = '/usr/local/bin/puppet cert'
         nodepath         = '\/usr\/local\/etc\/puppet\/node.rb'
       end
 
@@ -72,7 +79,6 @@ describe 'puppet::server::config' do
             :command => "/bin/mkdir -p #{ssldir}",
           })
 
-          puppetcacmd = Puppet.version >= '4' ? '/opt/puppetlabs/bin/puppet cert' : ( Puppet.version >= '3' ? '/usr/bin/puppet cert' : '/usr/sbin/puppetca' )
           should contain_exec('puppet_server_config-generate_ca_cert').with({
             :creates => "#{ssldir}/certs/puppetmaster.example.com.pem",
             :command => "#{puppetcacmd} --generate puppetmaster.example.com",
