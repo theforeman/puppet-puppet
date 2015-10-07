@@ -10,7 +10,7 @@ describe 'puppet::server::config' do
           :clientcert             => 'puppetmaster.example.com',
           :concat_basedir         => '/nonexistant',
           :fqdn                   => 'puppetmaster.example.com',
-          :rubyversion            => '1.9.3',
+#          :rubyversion            => '1.9.3',
           :puppetversion          => Puppet.version,
       }) end
 
