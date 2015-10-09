@@ -2,6 +2,7 @@ fixtures:
   repositories:
     apache:           'https://github.com/puppetlabs/puppetlabs-apache'
     concat:           'https://github.com/puppetlabs/puppetlabs-concat'
+    extlib:           'https://github.com/puppet-community/puppet-extlib.git'
     foreman:          'https://github.com/theforeman/puppet-foreman'
     git:              'https://github.com/theforeman/puppet-git'
     intfile:          'https://github.com/puppetlabs/puppetlabs-inifile.git'
