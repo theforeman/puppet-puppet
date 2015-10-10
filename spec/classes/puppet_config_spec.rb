@@ -77,10 +77,12 @@ describe 'puppet::config' do
             '    show_diff     = false',
             '    hiera_config = $confdir/hiera.yaml'
           ]
-          concat_fragment_content.concat([
-            "    environmentpath  = #{codedir}/environments",
-            "    basemodulepath   = #{codedir}/environments/common:#{codedir}/modules:#{sharedir}/modules",
-          ])
+          if Puppet.version >= '3.6'
+              concat_fragment_content.concat([
+                "    environmentpath  = #{codedir}/environments",
+                "    basemodulepath   = #{codedir}/environments/common:#{codedir}/modules:#{sharedir}/modules",
+              ])
+          end
           verify_concat_fragment_exact_contents(catalogue, 'puppet.conf+10-main', concat_fragment_content)
         end
       end
