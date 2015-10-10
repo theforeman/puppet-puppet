@@ -69,31 +69,45 @@ describe 'puppet::server::rack' do
           })
         end
 
-        it 'should manage config.ru contents' do
-          verify_exact_contents(catalogue, '/etc/puppet/rack/config.ru', [
-            '$0 = "master"',
-            'ARGV << "--rack"',
-            'ARGV << "--confdir" << "/etc/puppet"',
-            'ARGV << "--vardir"  << "/var/lib/puppet"',
-            'Encoding.default_external = Encoding::UTF_8 if defined? Encoding',
-            'require \'puppet/util/command_line\'',
-            'run Puppet::Util::CommandLine.new.execute',
-          ])
+        if Puppet.version >= '3.0'
+          it 'should manage config.ru contents' do
+            verify_exact_contents(catalogue, '/etc/puppet/rack/config.ru', [
+              '$0 = "master"',
+              'ARGV << "--rack"',
+              'ARGV << "--confdir" << "/etc/puppet"',
+              'ARGV << "--vardir"  << "/var/lib/puppet"',
+              'Encoding.default_external = Encoding::UTF_8 if defined? Encoding',
+              'require \'puppet/util/command_line\'',
+              'run Puppet::Util::CommandLine.new.execute',
+            ])
+          end
+        else
+          it 'should manage config.ru contents' do
+            verify_exact_contents(catalogue, '/etc/puppet/rack/config.ru', [
+              '$0 = "master"',
+              'ARGV << "--rack"',
+              'require \'puppet/application/master\'',
+              'run Puppet::Application[:master].run',
+            ])
+          end
         end
       end
 
-      describe 'when rack_arguments defined' do
-        let(:params) { default_params.merge(:rack_arguments => ['--profile', '--logdest', '/dne/log']) }
+      # The Puppet 2.X template does not support rack_arguments
+      if Puppet.version >= '3.0'
+        describe 'when rack_arguments defined' do
+          let(:params) { default_params.merge(:rack_arguments => ['--profile', '--logdest', '/dne/log']) }
 
-        it 'should set ARGV values' do
-          verify_contents(catalogue, '/etc/puppet/rack/config.ru', [
-            'ARGV << "--rack"',
-            'ARGV << "--confdir" << "/etc/puppet"',
-            'ARGV << "--vardir"  << "/var/lib/puppet"',
-            'ARGV << "--profile"',
-            'ARGV << "--logdest"',
-            'ARGV << "/dne/log"',
-          ])
+          it 'should set ARGV values' do
+            verify_contents(catalogue, '/etc/puppet/rack/config.ru', [
+              'ARGV << "--rack"',
+              'ARGV << "--confdir" << "/etc/puppet"',
+              'ARGV << "--vardir"  << "/var/lib/puppet"',
+              'ARGV << "--profile"',
+              'ARGV << "--logdest"',
+              'ARGV << "/dne/log"',
+            ])
+          end
         end
       end
 
