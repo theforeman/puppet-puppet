@@ -1,5 +1,23 @@
 # Changelog
 
+## 4.2.0
+* New or changed parameters:
+    * Add codedir parameter, for Puppet code directory
+    * Add package_source parameter to provide package location on Windows
+    * Add dir_owner/dir_group parameters for base Puppet agent dir ownership
+    * Add various server_jvm parameters to manage Puppet Server JVM settings
+    * Add autosign parameter to override autosign.conf location or script
+    * Add server_default_manifest parameters to manage the Puppet master's
+      default manifest
+    * Add server_ssl_dir_manage parameter to control presence of ssl_dir
+* Other features:
+    * Add Puppet agent AIO support
+    * Manage Puppet 4 on FreeBSD
+* Other changes and fixes:
+    * Ensure server_manifest_path directory exists
+    * Disable generation of Puppet CA when server_ca parameter is false
+    * Fix parameter names in README example
+
 ## 4.1.0
 * New or changed parameters:
     * Add sharedir parameter to configure /usr/share/puppet location
