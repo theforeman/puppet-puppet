@@ -3,7 +3,10 @@ require 'spec_helper'
 describe 'puppet::config' do
 
   context "on a RedHat family OS" do
-    let :default_facts do on_supported_os['centos-6-x86_64'].merge({
+  on_supported_os.each do |os, os_facts|
+    next if not os == "centos-6-x86_64"
+    let :default_facts do
+      os_facts.merge({
       :concat_basedir         => '/foo/bar',
       :domain                 => 'example.org',
       :fqdn                   => 'host.example.com',
@@ -263,9 +266,13 @@ describe 'puppet::config' do
       end
     end
   end
+  end
 
   context "on a FreeBSD family OS" do
-    let :facts do on_supported_os['freebsd-10-amd64'].merge({
+  on_supported_os.each do |os, os_facts|
+    next if not os == "freebsd-10-amd64"
+    let :facts do
+      os_facts.merge({
       :concat_basedir => '/foo/bar',
       :domain   => 'example.org',
       :puppetversion => Puppet.version,
@@ -339,6 +346,7 @@ describe 'puppet::config' do
       end
     end
 
+  end
   end
 
   context "on a Windows family OS" do

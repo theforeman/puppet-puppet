@@ -2,7 +2,12 @@ require 'spec_helper'
 
 describe 'puppet::server' do
 
-  let :common_facts do on_supported_os['centos-6-x86_64'].merge({
+on_supported_os.each do |os, os_facts|
+  next if not os == "centos-6-x86_64"
+  context "on #{os}" do
+
+  let (:common_facts) do
+    os_facts.merge({
     :concat_basedir         => '/nonexistant',
     :clientcert             => 'puppetmaster.example.com',
     :fqdn                   => 'puppetmaster.example.com',
@@ -150,4 +155,6 @@ describe 'puppet::server' do
       should contain_package('puppet-server')
     end
   end
+end
+end
 end

@@ -2,8 +2,12 @@ require 'spec_helper'
 
 describe 'puppet::agent' do
 
-  let :default_facts do
-    on_supported_os['centos-6-x86_64'].merge({
+on_supported_os.each do |os, os_facts|
+  next if not os == "centos-6-x86_64"
+  context "on #{os}" do
+
+  let (:default_facts) do
+    os_facts.merge({
         :clientcert => 'puppetmaster.example.com',
         :concat_basedir => '/nonexistant',
         :fqdn => 'puppetmaster.example.com',
@@ -127,4 +131,5 @@ describe 'puppet::agent' do
   end
 
 end
-
+end
+end
