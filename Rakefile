@@ -18,7 +18,7 @@ PuppetLint.configuration.log_format = '%{path}:%{linenumber}:%{KIND}: %{message}
 
 require 'puppet-lint-param-docs/tasks'
 PuppetLintParamDocs.define_selective do |config|
-  config.pattern = ['manifests/init.pp']
+  config.pattern = ["manifests/init.pp"]
 end
 
 task :default => [:validate, :lint, :spec]
