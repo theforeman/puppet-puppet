@@ -40,12 +40,12 @@ end
 
 def verify_concat_fragment_contents(subject, title, expected_lines)
   content = subject.resource('concat::fragment', title).send(:parameters)[:content]
-    (content.split("\n") & expected_lines).should == expected_lines
+  expect(content.split("\n") & expected_lines).to eq(expected_lines)
 end
 
 def verify_concat_fragment_exact_contents(subject, title, expected_lines)
   content = subject.resource('concat::fragment', title).send(:parameters)[:content]
-    content.split(/\n/).reject { |line| line =~ /(^#|^$|^\s+#)/ }.should == expected_lines
+  expect(content.split(/\n/).reject { |line| line =~ /(^#|^$|^\s+#)/ }).to eq(expected_lines)
 end
 
 # See https://github.com/rodjek/rspec-puppet/issues/215
