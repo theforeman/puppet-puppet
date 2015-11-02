@@ -39,7 +39,9 @@ class puppet::params {
   $hiera_config        = '$confdir/hiera.yaml'
   $syslogfacility      = undef
   $environment         = $::environment
-  if versioncmp($::puppetversion, '4.0') < 0 {
+  if versioncmp($::puppetversion, '4.0') >= 0 {
+    $aio_package = true
+  } elsif versioncmp($::puppetversion, '4.0') < 0 {
     $aio_package = false
   } elsif $::osfamily == 'Windows' or $::rubysitedir =~ /\/opt\/puppetlabs\/puppet/ {
     $aio_package = true
@@ -305,5 +307,4 @@ class puppet::params {
   $server_default_manifest = false
   $server_default_manifest_path = '/etc/puppet/manifests/default_manifest.pp'
   $server_default_manifest_content = '' # lint:ignore:empty_string_assignment
-
 }

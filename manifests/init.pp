@@ -145,6 +145,9 @@
 # $additional_settings::              A hash of additional main settings.
 #                                     type:hash
 #
+# $aio_package::                      Use the aio package. Defaults to false on puppet < 4
+#                                     type:boolean
+#
 # == puppet::agent parameters
 #
 # $agent::                            Should a puppet agent be installed
@@ -445,6 +448,7 @@ class puppet (
   $dir_group                       = $puppet::params::dir_group,
   $package_provider                = $puppet::params::package_provider,
   $package_source                  = $puppet::params::package_source,
+  $aio_package                     = $puppet::params::aio_package,
   $port                            = $puppet::params::port,
   $listen                          = $puppet::params::listen,
   $listen_to                       = $puppet::params::listen_to,
@@ -576,6 +580,7 @@ class puppet (
   validate_bool($server_puppetdb_swf)
   validate_bool($server_default_manifest)
   validate_bool($server_ssl_dir_manage)
+  validate_bool($aio_package)
 
   validate_hash($additional_settings)
   validate_hash($agent_additional_settings)
