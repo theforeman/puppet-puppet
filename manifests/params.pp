@@ -144,25 +144,34 @@ class puppet::params {
   $server_additional_settings = {}
 
   # Will this host be a puppetmaster?
-  $server                     = false
-  $server_ca                  = true
-  $server_reports             = 'foreman'
-  $server_implementation      = 'master'
-  $server_passenger           = true
-  $server_service_fallback    = true
-  $server_passenger_max_pool  = 12
-  $server_httpd_service       = 'httpd'
-  $server_external_nodes      = "${dir}/node.rb"
-  $server_enc_api             = 'v2'
-  $server_report_api          = 'v2'
-  $server_request_timeout     = 60
-  $server_ca_proxy            = undef
-  $server_certname            = $::clientcert
-  $server_strict_variables    = false
-  $server_rack_arguments      = []
-  $server_http                = false
-  $server_http_port           = 8139
-  $server_http_allow          = []
+  $server                              = false
+  $server_ca                           = true
+  $server_reports                      = 'foreman'
+  $server_implementation               = 'master'
+  $server_passenger                    = true
+  $server_service_fallback             = true
+  $server_passenger_max_pool           = 12
+  $server_passenger_high_performance   = undef
+  $server_passenger_pool_idle_time     = undef
+  $server_passenger_max_requests       = undef
+  $server_passenger_stat_throttle_rate = undef
+  $server_rack_autodetect              = undef
+  $server_rails_autodetect             = undef
+  $server_passenger_min_instances      = undef
+  $server_passenger_use_global_queue   = undef
+  $server_passenger_app_env            = undef
+  $server_httpd_service                = 'httpd'
+  $server_external_nodes               = "${dir}/node.rb"
+  $server_enc_api                      = 'v2'
+  $server_report_api                   = 'v2'
+  $server_request_timeout              = 60
+  $server_ca_proxy                     = undef
+  $server_certname                     = $::clientcert
+  $server_strict_variables             = false
+  $server_rack_arguments               = []
+  $server_http                         = false
+  $server_http_port                    = 8139
+  $server_http_allow                   = []
 
   # Need a new master template for the server?
   $server_template = 'puppet/server/puppet.conf.erb'
