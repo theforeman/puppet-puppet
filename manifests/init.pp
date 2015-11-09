@@ -89,10 +89,14 @@
 #                                     type: boolean
 #
 # $runmode::                          Select the mode to setup the puppet agent.
-#                                     Can be either 'cron', 'service', or 'none'.
+#                                     Can be either 'cron', 'service', 'systend', or
+#                                     'none'.
 #
 # $cron_cmd::                         Specify command to launch when runmode is
 #                                     set 'cron'.
+#
+# $systemd_cmd::                      Specify command to launch when runmode is
+#                                     set 'systemd'.
 #
 # $show_diff::                        Show and report changed files with diff output
 #
@@ -167,6 +171,8 @@
 # $postrun_command::                  A command which gets excuted after each Puppet run
 #
 # $service_name::                     The name of the puppet agent service.
+#
+# $systemd_service_name::             The name of the puppet agent service with systemd.
 #
 # $agent_restart_command::            The command which gets excuted on puppet service restart
 #
@@ -456,6 +462,7 @@ class puppet (
   $usecacheonfailure               = $puppet::params::usecacheonfailure,
   $runmode                         = $puppet::params::runmode,
   $cron_cmd                        = $puppet::params::cron_cmd,
+  $systemd_cmd                     = $puppet::params::systemd_cmd,
   $agent_noop                      = $puppet::params::agent_noop,
   $show_diff                       = $puppet::params::show_diff,
   $module_repository               = $puppet::params::module_repository,
@@ -485,6 +492,7 @@ class puppet (
   $remove_lock                     = $puppet::params::remove_lock,
   $puppetmaster                    = $puppet::params::puppetmaster,
   $service_name                    = $puppet::params::service_name,
+  $systemd_service_name            = $puppet::params::systemd_service_name,
   $syslogfacility                  = $puppet::params::syslogfacility,
   $environment                     = $puppet::params::environment,
   $server                          = $puppet::params::server,

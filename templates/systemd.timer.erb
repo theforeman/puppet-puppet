@@ -1,0 +1,8 @@
+[Unit]
+Description=Run Puppet Agent on a regular basis
+
+[Timer]
+OnCalendar=*-*-* <%= Array(@times[0]).join(',') %>:<%= Array(@times[1]).join(',') %>:00
+
+[Install]
+WantedBy=timers.target
