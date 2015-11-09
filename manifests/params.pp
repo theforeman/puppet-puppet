@@ -15,6 +15,7 @@ class puppet::params {
   $runinterval         = '1800'
   $runmode             = 'service'
   $cron_cmd            = undef
+  $systemd_cmd         = undef
   $agent_noop          = false
   $show_diff           = false
   $module_repository   = undef
@@ -255,6 +256,8 @@ class puppet::params {
 
   # Puppet service name
   $service_name = 'puppet'
+
+  $systemd_service_name = 'puppet-run'
   # Command to reload/restart the agent
   # If supported on the OS, reloading is prefered since it does not kill a currently active puppet run
   case $::osfamily {

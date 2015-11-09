@@ -1,0 +1,8 @@
+[Unit]
+Description=Run Puppet Agent --onetime
+
+[Service]
+ExecStart=<%= @command %>
+SuccessExitStatus=2
+Type=oneshot
+

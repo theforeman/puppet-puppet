@@ -43,7 +43,18 @@ describe 'puppet::agent::service' do
           })
         end
 
+        it do
+          should contain_service('puppet-run.timer').with({
+            :ensure     => 'stopped',
+            :name       => 'puppet-run.timer',
+            :hasstatus  => 'true',
+            :enable     => 'false',
+          })
+        end
+
         it { should contain_cron('puppet').with_ensure('absent') }
+        it { should contain_file('/etc/systemd/system/puppet-run.service').with_ensure('absent') }
+        it { should contain_file('/etc/systemd/system/puppet-run.timer').with_ensure('absent') }
       end
 
       describe 'when runmode => cron' do
@@ -61,6 +72,15 @@ describe 'puppet::agent::service' do
         end
 
         it do
+          should contain_service('puppet-run.timer').with({
+            :ensure     => 'stopped',
+            :name       => 'puppet-run.timer',
+            :hasstatus  => 'true',
+            :enable     => 'false',
+          })
+        end
+
+        it do
           should contain_cron('puppet').with({
             :command  => "/usr/bin/env puppet agent --config #{confdir}/puppet.conf --onetime --no-daemonize",
             :user     => 'root',
@@ -68,6 +88,37 @@ describe 'puppet::agent::service' do
             :hour     => '*',
           })
         end
+
+        it { should contain_file('/etc/systemd/system/puppet-run.service').with_ensure('absent') }
+        it { should contain_file('/etc/systemd/system/puppet-run.timer').with_ensure('absent') }
+      end
+
+      describe 'when runmode => systemd' do
+        let :pre_condition do
+          "class {'puppet': agent => true, runmode => 'systemd'}"
+        end
+
+        it do
+          should contain_service('puppet-run.timer').with({
+            :ensure     => 'running',
+            :name       => 'puppet-run.timer',
+            :hasstatus  => 'true',
+            :enable     => 'true',
+          })
+        end
+
+        it do
+          should contain_service('puppet').with({
+            :ensure     => 'stopped',
+            :name       => 'puppet',
+            :hasstatus  => 'true',
+            :enable     => 'false',
+          })
+        end
+
+        it { should contain_cron('puppet').with_ensure('absent') }
+        it { should contain_file('/etc/systemd/system/puppet-run.service').with_ensure('file') }
+        it { should contain_file('/etc/systemd/system/puppet-run.timer').with_ensure('file') }
       end
 
       describe 'when runmode => none' do
@@ -85,6 +136,8 @@ describe 'puppet::agent::service' do
         end
 
         it { should contain_cron('puppet').with_ensure('absent') }
+        it { should contain_file('/etc/systemd/system/puppet-run.service').with_ensure('absent') }
+        it { should contain_file('/etc/systemd/system/puppet-run.timer').with_ensure('absent') }
       end
 
       describe 'when runmode => foo' do
