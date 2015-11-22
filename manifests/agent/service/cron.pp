@@ -1,17 +1,14 @@
 class puppet::agent::service::cron (
   $enabled = false,
 ) {
+  if ! ('cron' in $::puppet::unavailable_runmodes) {
+    case $enabled {
+      true: {
+        $command = $puppet::cron_cmd ? {
+          undef   => "/usr/bin/env puppet agent --config ${puppet::dir}/puppet.conf --onetime --no-daemonize",
+          default => $puppet::cron_cmd,
+        }
 
-  case $enabled {
-    true: {
-      $command = $puppet::cron_cmd ? {
-        undef   => "/usr/bin/env puppet agent --config ${puppet::dir}/puppet.conf --onetime --no-daemonize",
-        default => $puppet::cron_cmd,
-      }
-
-      if $::osfamily == 'windows' {
-        fail("Currently we don't support setting cron on windows.")
-      } else {
         $times = ip_to_cron($puppet::runinterval)
         cron { 'puppet':
           command => $command,
@@ -20,9 +17,7 @@ class puppet::agent::service::cron (
           minute  => $times[1],
         }
       }
-    }
-    false: {
-      if $::osfamily != 'windows' {
+      false: {
         cron { 'puppet':
           ensure => absent,
         }

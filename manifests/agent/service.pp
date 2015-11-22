@@ -3,27 +3,43 @@ class puppet::agent::service {
 
   case $::puppet::runmode {
     'service': {
-      class { 'puppet::agent::service::daemon':  enabled => true  }
-      class { 'puppet::agent::service::cron':    enabled => false }
-      class { 'puppet::agent::service::systemd': enabled => false }
+      $service_enabled = true
+      $cron_enabled = false
+      $systemd_enabled = false
     }
     'cron': {
-      class { 'puppet::agent::service::daemon':  enabled => false }
-      class { 'puppet::agent::service::cron':    enabled => true  }
-      class { 'puppet::agent::service::systemd': enabled => false }
+      $service_enabled = false
+      $cron_enabled = true
+      $systemd_enabled = false
     }
-    'systemd.timer': {
-      class { 'puppet::agent::service::daemon':  enabled => false }
-      class { 'puppet::agent::service::cron':    enabled => false }
-      class { 'puppet::agent::service::systemd': enabled => true  }
+    'systemd.timer', 'systemd': {
+      $service_enabled = false
+      $cron_enabled = false
+      $systemd_enabled = true
     }
     'none': {
-      class { 'puppet::agent::service::daemon':  enabled => false }
-      class { 'puppet::agent::service::cron':    enabled => false }
-      class { 'puppet::agent::service::systemd': enabled => false }
+      $service_enabled = false
+      $cron_enabled = false
+      $systemd_enabled = false
     }
     default: {
       fail("Runmode of ${puppet::runmode} not supported by puppet::agent::config!")
     }
+  }
+
+  if $::puppet::runmode in $::puppet::unavailable_runmodes {
+    fail("Runmode of ${puppet::runmode} not supported on ${::kernel} operating systems!")
+  }
+
+  class { '::puppet::agent::service::daemon':
+    enabled => $service_enabled,
+  }
+
+  class { '::puppet::agent::service::systemd':
+    enabled => $systemd_enabled,
+  }
+
+  class { '::puppet::agent::service::cron':
+    enabled => $cron_enabled,
   }
 }

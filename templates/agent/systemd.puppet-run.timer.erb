@@ -1,0 +1,9 @@
+[Unit]
+Description=Systemd Timer for Puppet Agent
+
+[Timer]
+OnCalendar=*-*-* <%= Array(@times[0]).join(',') %>:<%= Array(@times[1]).join(',') %>:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
