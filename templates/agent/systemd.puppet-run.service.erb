@@ -4,5 +4,6 @@ Description=Systemd Timer Service for Puppet Agent
 [Service]
 Type=oneshot
 ExecStart=<%= @command %>
+SuccessExitStatus=2
 User=root
 Group=root

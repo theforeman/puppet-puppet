@@ -1,70 +1,68 @@
 class puppet::agent::service::systemd (
   $enabled = false,
 ) {
-  case $enabled {
-    true: {
-      # Use the same times as for cron
-      $times = ip_to_cron($puppet::runinterval)
-
-      $command = $puppet::cron_cmd ? {
-        undef   => "/usr/bin/env puppet agent --config ${puppet::dir}/puppet.conf --onetime --no-daemonize",
-        default => $puppet::cron_cmd,
-      }
-
-      file { '/etc/systemd/system/puppetcron.timer':
-        content => template('puppet/agent/systemd.puppetcron.timer.erb'),
-        notify  => Exec['systemctl-daemon-reload'],
-      }
-
-      file { '/etc/systemd/system/puppetcron.service':
-        content => template('puppet/agent/systemd.puppetcron.service.erb'),
-        notify  => Exec['systemctl-daemon-reload'],
-      }
-
-      exec { 'systemctl-daemon-reload':
-        refreshonly => true,
-        path        => $::path,
-        command     => 'systemctl daemon-reload',
-      }
-
-      service { 'puppetcron.timer':
-        provider  => 'systemd',
-        ensure    => running,
-        enable    => true,
-        subscribe => [
-          File['/etc/systemd/system/puppetcron.timer'],
-          File['/etc/systemd/system/puppetcron.service'],
-          Exec['systemctl-daemon-reload'],
-        ],
-      }
+  if ! ('systemd.timer' in $::puppet::unavailable_runmodes) {
+    exec { 'systemctl-daemon-reload-puppet':
+      refreshonly => true,
+      path        => $::path,
+      command     => 'systemctl daemon-reload',
     }
-    false: {
-      # Reverse order - stop, delete files, exec
-      service { 'puppetcron.timer':
-        provider => 'systemd',
-        ensure   => stopped,
-        enable   => false,
-        before   => [
-          File['/etc/systemd/system/puppetcron.timer'],
-          File['/etc/systemd/system/puppetcron.service'],
-        ],
-      }
 
-      file { '/etc/systemd/system/puppetcron.timer':
-        ensure => absent,
-        notify => Exec['systemctl-daemon-reload'],
-      }
+    case $enabled {
+      true: {
+        # Use the same times as for cron
+        $times = ip_to_cron($puppet::runinterval)
 
-      file { '/etc/systemd/system/puppetcron.service':
-        ensure => absent,
-        notify  => Exec['systemctl-daemon-reload'],
-      }
+        $command = $puppet::systemd_cmd ? {
+          undef   => "/usr/bin/env puppet agent --config ${puppet::dir}/puppet.conf --onetime --no-daemonize --detailed-exitcode --no-usecacheonfailure",
+          default => $puppet::systemd_cmd,
+        }
 
-      exec { 'systemctl-daemon-reload':
-        refreshonly => true,
-        path        => $::path,
-        command     => 'systemctl daemon-reload',
+        file { "/etc/systemd/system/${::puppet::systemd_unit_name}.timer":
+          content => template('puppet/agent/systemd.puppet-run.timer.erb'),
+          notify  => [
+            Exec['systemctl-daemon-reload-puppet'],
+            Service['puppet-run.timer'],
+          ],
+        }
+
+        file { "/etc/systemd/system/${::puppet::systemd_unit_name}.service":
+          content => template('puppet/agent/systemd.puppet-run.service.erb'),
+          notify  => Exec['systemctl-daemon-reload-puppet'],
+        }
+
+        service { 'puppet-run.timer':
+          ensure   => running,
+          provider => 'systemd',
+          name     => "${::puppet::systemd_unit_name}.timer",
+          enable   => true,
+          require  => Exec['systemctl-daemon-reload-puppet'],
+        }
       }
+      false: {
+        # Reverse order - stop, delete files, exec
+        service { 'puppet-run.timer':
+          ensure   => stopped,
+          provider => 'systemd',
+          name     => "${::puppet::systemd_unit_name}.timer",
+          enable   => false,
+          before   => [
+            File["/etc/systemd/system/${::puppet::systemd_unit_name}.timer"],
+            File["/etc/systemd/system/${::puppet::systemd_unit_name}.service"],
+          ],
+        }
+
+        file { "/etc/systemd/system/${::puppet::systemd_unit_name}.timer":
+          ensure => absent,
+          notify => Exec['systemctl-daemon-reload-puppet'],
+        }
+
+        file { "/etc/systemd/system/${::puppet::systemd_unit_name}.service":
+          ensure => absent,
+          notify => Exec['systemctl-daemon-reload-puppet'],
+        }
+      }
+      default: { fail('puppet::agent::service::systemd::enabled should be true or false') }
     }
   }
 }

@@ -89,10 +89,22 @@
 #                                     type: boolean
 #
 # $runmode::                          Select the mode to setup the puppet agent.
-#                                     Can be either 'cron', 'service', or 'none'.
+#                                     Can be either 'cron', 'service',
+#                                     'systemd.timer', or 'none'.
+#
+# $unavailable_runmodes::             Runmodes that are not available for the
+#                                     current system. This module will not try
+#                                     to disable these modes. Default is []
+#                                     on Linux, ['cron', 'systemd.timer'] on
+#                                     Windows and ['systemd.timer'] on other
+#                                     systems.
+#                                     type: array
 #
 # $cron_cmd::                         Specify command to launch when runmode is
 #                                     set 'cron'.
+#
+# $systemd_cmd::                      Specify command to launch when runmode is
+#                                     set 'systemd.timer'.
 #
 # $show_diff::                        Show and report changed files with diff output
 #
@@ -165,6 +177,8 @@
 # $prerun_command::                   A command which gets excuted before each Puppet run
 #
 # $postrun_command::                  A command which gets excuted after each Puppet run
+#
+# $systemd_unit_name::                The name of the puppet systemd units.
 #
 # $service_name::                     The name of the puppet agent service.
 #
@@ -455,7 +469,9 @@ class puppet (
   $runinterval                     = $puppet::params::runinterval,
   $usecacheonfailure               = $puppet::params::usecacheonfailure,
   $runmode                         = $puppet::params::runmode,
+  $unavailable_runmodes            = $puppet::params::unavailable_runmodes,
   $cron_cmd                        = $puppet::params::cron_cmd,
+  $systemd_cmd                     = $puppet::params::systemd_cmd,
   $agent_noop                      = $puppet::params::agent_noop,
   $show_diff                       = $puppet::params::show_diff,
   $module_repository               = $puppet::params::module_repository,
@@ -484,6 +500,7 @@ class puppet (
   $agent                           = $puppet::params::agent,
   $remove_lock                     = $puppet::params::remove_lock,
   $puppetmaster                    = $puppet::params::puppetmaster,
+  $systemd_unit_name               = $puppet::params::systemd_unit_name,
   $service_name                    = $puppet::params::service_name,
   $syslogfacility                  = $puppet::params::syslogfacility,
   $environment                     = $puppet::params::environment,
@@ -601,6 +618,8 @@ class puppet (
   if $server_http {
     validate_array($server_http_allow)
   }
+
+  validate_string($systemd_unit_name)
 
   validate_string($service_name)
 

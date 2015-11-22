@@ -97,6 +97,18 @@ class puppet::params {
 
   $manage_packages = true
 
+  case $::kernel {
+    'windows': {
+      $unavailable_runmodes = ['cron', 'systemd.timer']
+    }
+    'Linux': {
+      $unavailable_runmodes = []
+    }
+    default: {
+      $unavailable_runmodes = ['systemd.timer']
+    }
+  }
+
   if $aio_package and $::osfamily != 'Windows' {
     $dir_owner = 'root'
     $dir_group = $root_group
@@ -255,6 +267,8 @@ class puppet::params {
 
   # Puppet service name
   $service_name = 'puppet'
+  # Puppet onedshot systemd service and timer name
+  $systemd_unit_name = 'puppet-run'
   # Command to reload/restart the agent
   # If supported on the OS, reloading is prefered since it does not kill a currently active puppet run
   case $::osfamily {

@@ -35,31 +35,20 @@ describe 'puppet::agent::service' do
         end
 
         it do
-          should contain_service('puppet').with({
-            :ensure     => 'running',
-            :name       => 'puppet',
-            :hasstatus  => 'true',
-            :enable     => 'true',
-          })
+          should contain_class('puppet::agent::service::daemon').with(:enabled => true)
+          should contain_class('puppet::agent::service::cron').with(:enabled => false)
         end
-
-        it { should contain_cron('puppet').with_ensure('absent') }
-
-        it 'should disable systemd timer' do
-          should contain_service('puppetcron.timer').with({
-            :provider => 'systemd',
-            :ensure   => 'stopped',
-            :name     => 'puppetcron.timer',
-            :enable   => 'false',
-          })
-
-          should contain_file('/etc/systemd/system/puppetcron.timer').with_ensure(:absent)
-          should contain_file('/etc/systemd/system/puppetcron.service').with_ensure(:absent)
-
-          should contain_exec('systemctl-daemon-reload').with({
-            :refreshonly => true,
-            :command     => 'systemctl daemon-reload',
-          })
+        case os_facts[:kernel]
+        when 'Linux'
+          it do
+            should contain_class('puppet::agent::service::systemd').with(:enabled => false)
+            should contain_service('puppet-run.timer').with(:ensure => :stopped)
+          end
+        else
+          it do
+            should contain_class('puppet::agent::service::systemd').with(:enabled => false)
+            should_not contain_service('puppet-run.timer')
+          end
         end
       end
 
@@ -67,40 +56,21 @@ describe 'puppet::agent::service' do
         let :pre_condition do
           "class {'puppet': agent => true, runmode => 'cron'}"
         end
-
         it do
-          should contain_service('puppet').with({
-            :ensure     => 'stopped',
-            :name       => 'puppet',
-            :hasstatus  => 'true',
-            :enable     => 'false',
-          })
+          should contain_class('puppet::agent::service::daemon').with(:enabled => false)
+          should contain_class('puppet::agent::service::cron').with(:enabled => true)
         end
-
-        it do
-          should contain_cron('puppet').with({
-            :command  => "/usr/bin/env puppet agent --config #{confdir}/puppet.conf --onetime --no-daemonize",
-            :user     => 'root',
-            :minute   => ['15','45'],
-            :hour     => '*',
-          })
-        end
-
-        it 'should disable systemd timer' do
-          should contain_service('puppetcron.timer').with({
-            :provider => 'systemd',
-            :ensure   => 'stopped',
-            :name     => 'puppetcron.timer',
-            :enable   => 'false',
-          })
-
-          should contain_file('/etc/systemd/system/puppetcron.timer').with_ensure(:absent)
-          should contain_file('/etc/systemd/system/puppetcron.service').with_ensure(:absent)
-
-          should contain_exec('systemctl-daemon-reload').with({
-            :refreshonly => true,
-            :command     => 'systemctl daemon-reload',
-          })
+        case os_facts[:kernel]
+        when 'Linux'
+          it do
+            should contain_class('puppet::agent::service::systemd').with(:enabled => false)
+            should contain_service('puppet-run.timer').with(:ensure => :stopped)
+          end
+        else
+          it do
+            should contain_class('puppet::agent::service::systemd').with(:enabled => false)
+            should_not contain_service('puppet-run.timer')
+          end
         end
       end
 
@@ -108,41 +78,26 @@ describe 'puppet::agent::service' do
         let :pre_condition do
           "class {'puppet': agent => true, runmode => 'systemd.timer'}"
         end
+        case os_facts[:kernel]
+        when 'Linux'
+          it do
+            should contain_class('puppet::agent::service::daemon').with(:enabled => false)
+            should contain_class('puppet::agent::service::cron').with(:enabled => false)
+            should contain_class('puppet::agent::service::systemd').with(:enabled => true)
+            should contain_service('puppet-run.timer').with(:ensure => :running)
+          end
+        else
+          it { should raise_error(Puppet::Error, /Runmode of systemd.timer not supported on #{os_facts[:kernel]} operating systems!/) }
+        end
+      end
 
-        it do
-          should contain_service('puppet').with({
-            :ensure     => 'stopped',
-            :name       => 'puppet',
-            :hasstatus  => 'true',
-            :enable     => 'false',
-          })
+      describe 'when unavailable_runmodes => ["cron"]' do
+        let :pre_condition do
+          "class {'puppet': agent => true, unavailable_runmodes => ['cron']}"
         end
 
-        it { should contain_cron('puppet').with_ensure('absent') }
-
-        it 'should enable systemd timer' do
-          if Puppet.version < '4.0'
-            confdir = '/etc/puppet'
-          else
-            confdir = '/etc/puppetlabs/puppet'
-          end
-
-          should contain_file('/etc/systemd/system/puppetcron.timer')
-          .with_content(/.*OnCalendar\=\*\:15,45.*/)
-          should contain_file('/etc/systemd/system/puppetcron.service')
-          .with_content(/.*ExecStart=\/usr\/bin\/env puppet agent --config #{confdir}\/puppet.conf --onetime --no-daemonize.*/)
-
-          should contain_exec('systemctl-daemon-reload').with({
-            :refreshonly => true,
-            :command     => 'systemctl daemon-reload',
-          })
-
-          should contain_service('puppetcron.timer').with({
-            :provider => 'systemd',
-            :ensure   => 'running',
-            :name     => 'puppetcron.timer',
-            :enable   => 'true',
-          })
+        it do
+          should_not contain_cron('puppet')
         end
       end
 
@@ -152,31 +107,20 @@ describe 'puppet::agent::service' do
         end
 
         it do
-          should contain_service('puppet').with({
-            :ensure     => 'stopped',
-            :name       => 'puppet',
-            :hasstatus  => 'true',
-            :enable     => 'false',
-          })
+          should contain_class('puppet::agent::service::daemon').with(:enabled => false)
+          should contain_class('puppet::agent::service::cron').with(:enabled => false)
         end
-
-        it { should contain_cron('puppet').with_ensure('absent') }
-
-        it 'should disable systemd timer' do
-          should contain_service('puppetcron.timer').with({
-            :provider => 'systemd',
-            :ensure   => 'stopped',
-            :name     => 'puppetcron.timer',
-            :enable   => 'false',
-          })
-
-          should contain_file('/etc/systemd/system/puppetcron.timer').with_ensure(:absent)
-          should contain_file('/etc/systemd/system/puppetcron.service').with_ensure(:absent)
-
-          should contain_exec('systemctl-daemon-reload').with({
-            :refreshonly => true,
-            :command     => 'systemctl daemon-reload',
-          })
+        case os_facts[:kernel]
+        when 'Linux'
+          it do
+            should contain_class('puppet::agent::service::systemd').with(:enabled => false)
+            should contain_service('puppet-run.timer').with(:ensure => :stopped)
+          end
+        else
+          it do
+            should contain_class('puppet::agent::service::systemd').with(:enabled => false)
+            should_not contain_service('puppet-run.timer')
+          end
         end
       end
 
@@ -186,22 +130,6 @@ describe 'puppet::agent::service' do
         end
 
         it { should raise_error(Puppet::Error, /Runmode of foo not supported by puppet::agent::config!/) }
-      end
-
-      describe 'with custom service_name' do
-        let :pre_condition do
-          "class {'puppet': agent => true, service_name => 'pe-puppet'}"
-        end
-
-        it do
-          should contain_service('puppet').with({
-            :ensure     => 'running',
-            :name       => 'pe-puppet',
-            :hasstatus  => 'true',
-            :enable     => 'true',
-          })
-        end
-
       end
     end
   end
