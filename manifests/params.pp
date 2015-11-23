@@ -275,10 +275,11 @@ class puppet::params {
   }
 
   # Foreman parameters
+  $lower_fqdn              = downcase($::fqdn)
   $server_foreman          = true
   $server_facts            = true
   $server_puppet_basedir   = undef
-  $server_foreman_url      = "https://${::fqdn}"
+  $server_foreman_url      = "https://${lower_fqdn}"
   $server_foreman_ssl_ca   = undef
   $server_foreman_ssl_cert = undef
   $server_foreman_ssl_key  = undef
