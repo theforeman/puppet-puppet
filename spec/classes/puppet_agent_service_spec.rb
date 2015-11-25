@@ -38,8 +38,8 @@ describe 'puppet::agent::service' do
           should contain_class('puppet::agent::service::daemon').with(:enabled => true)
           should contain_class('puppet::agent::service::cron').with(:enabled => false)
         end
-        case os_facts[:kernel]
-        when 'Linux'
+        case os
+        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/
           it do
             should contain_class('puppet::agent::service::systemd').with(:enabled => false)
             should contain_service('puppet-run.timer').with(:ensure => :stopped)
@@ -60,8 +60,8 @@ describe 'puppet::agent::service' do
           should contain_class('puppet::agent::service::daemon').with(:enabled => false)
           should contain_class('puppet::agent::service::cron').with(:enabled => true)
         end
-        case os_facts[:kernel]
-        when 'Linux'
+        case os
+        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/
           it do
             should contain_class('puppet::agent::service::systemd').with(:enabled => false)
             should contain_service('puppet-run.timer').with(:ensure => :stopped)
@@ -78,8 +78,8 @@ describe 'puppet::agent::service' do
         let :pre_condition do
           "class {'puppet': agent => true, runmode => 'systemd.timer'}"
         end
-        case os_facts[:kernel]
-        when 'Linux'
+        case os
+        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/
           it do
             should contain_class('puppet::agent::service::daemon').with(:enabled => false)
             should contain_class('puppet::agent::service::cron').with(:enabled => false)
@@ -110,8 +110,8 @@ describe 'puppet::agent::service' do
           should contain_class('puppet::agent::service::daemon').with(:enabled => false)
           should contain_class('puppet::agent::service::cron').with(:enabled => false)
         end
-        case os_facts[:kernel]
-        when 'Linux'
+        case os
+        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/
           it do
             should contain_class('puppet::agent::service::systemd').with(:enabled => false)
             should contain_service('puppet-run.timer').with(:ensure => :stopped)

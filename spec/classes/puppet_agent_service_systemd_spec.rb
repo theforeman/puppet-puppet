@@ -34,8 +34,8 @@ describe 'puppet::agent::service::systemd' do
           "class {'puppet': agent => true}"
         end
 
-        case os_facts[:kernel]
-        when 'Linux'
+        case os
+        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/
           it 'should disable systemd timer' do
             should contain_class('puppet::agent::service::systemd').with({
               'enabled' => false,
@@ -71,8 +71,8 @@ describe 'puppet::agent::service::systemd' do
           "class {'puppet': agent => true, runmode => 'systemd.timer'}"
         end
 
-        case os_facts[:kernel]
-        when 'Linux'
+        case os
+        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/
           it 'should enable systemd timer' do
             should contain_class('puppet::agent::service::systemd').with({
               'enabled' => true,
