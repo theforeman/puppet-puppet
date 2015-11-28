@@ -24,6 +24,9 @@
     autosign       = <%= scope.lookupvar('::puppet::autosign') %>
 
     show_diff     = <%= scope.lookupvar('::puppet::show_diff') %>
+<% if scope.lookupvar('::puppet::server') -%>
+    reports     = <%= scope.lookupvar('::puppet::server_reports') %>
+<% end -%>
 
 <% if @module_repository and !@module_repository.empty? -%>
     module_repository = <%= @module_repository %>

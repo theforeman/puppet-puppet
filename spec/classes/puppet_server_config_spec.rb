@@ -10,7 +10,6 @@ describe 'puppet::server::config' do
           :clientcert             => 'puppetmaster.example.com',
           :concat_basedir         => '/nonexistant',
           :fqdn                   => 'puppetmaster.example.com',
-#          :rubyversion            => '1.9.3',
           :puppetversion          => Puppet.version,
       }) end
 
@@ -146,6 +145,7 @@ describe 'puppet::server::config' do
             with_content(/^\s+logdir\s+= #{logdir}$/).
             with_content(/^\s+rundir\s+= #{rundir}$/).
             with_content(/^\s+ssldir\s+= #{ssldir}$/).
+            with_content(/^\s+reports\s+= foreman$/).
             with_content(/^\s+privatekeydir\s+= \$ssldir\/private_keys { group = service }$/).
             with_content(/^\s+hostprivkey\s+= \$privatekeydir\/\$certname.pem { mode = 640 }$/).
             with_content(/^\s+autosign\s+= \$confdir\/autosign.conf { mode = 664 }$/).
@@ -156,7 +156,6 @@ describe 'puppet::server::config' do
             with({}) # So we can use a trailing dot on each with_content line
 
           should contain_concat__fragment('puppet.conf+30-master').
-            with_content(/^\s+reports\s+= foreman$/).
             with_content(/^\s+external_nodes\s+= #{nodepath}$/).
             with_content(/^\s+node_terminus\s+= exec$/).
             with_content(/^\s+ca\s+= true$/).
@@ -196,10 +195,6 @@ describe 'puppet::server::config' do
               server_reports        => 'store',
               server_external_nodes => '',
            }"
-        end
-
-        it 'should store reports' do
-          should contain_concat__fragment('puppet.conf+30-master').with_content(/^\s+reports\s+= store$/)
         end
 
         it 'should contain an empty external_nodes' do
