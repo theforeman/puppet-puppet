@@ -31,4 +31,8 @@ gem 'mime-types', '~> 1.0', {"platforms"=>["ruby_18"], "groups"=>["development"]
 gem 'rspec-puppet-facts'
 gem 'metadata-json-lint'
 
+group :system_tests do
+  gem 'beaker-rspec'
+end
+
 # vim:ft=ruby
