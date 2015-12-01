@@ -257,11 +257,18 @@ class puppet::params {
 
   # Puppet service name
   $service_name = 'puppet'
-  # Command to reload/restart the agent
+  # Puppet onedshot systemd service and timer name
+  $systemd_unit_name = 'puppet-run'
+  # Mechanisms to manage and reload/restart the agent
   # If supported on the OS, reloading is prefered since it does not kill a currently active puppet run
   case $::osfamily {
     'Debian' : {
       $agent_restart_command = "/usr/sbin/service ${service_name} reload"
+      if ($::operatingsystem == 'Debian') and (versioncmp($::operatingsystemrelease, '8.0') >= 0) {
+        $unavailable_runmodes = []
+      } else {
+        $unavailable_runmodes = ['systemd.timer']
+      }
     }
     'Redhat' : {
       $osreleasemajor = regsubst($::operatingsystemrelease, '^(\d+)\..*$', '\1') # workaround for the possibly missing operatingsystemmajrelease
@@ -270,17 +277,27 @@ class puppet::params {
         '7'     => "/usr/bin/systemctl reload-or-restart ${service_name}",
         default => undef,
       }
+      $unavailable_runmodes = $osreleasemajor ? {
+        '6'     => ['systemd.timer'],
+        default => [],
+      }
+    }
+    'Windows': {
+      $agent_restart_command = undef
+      $unavailable_runmodes = ['cron', 'systemd.timer']
     }
     default  : {
       $agent_restart_command = undef
+      $unavailable_runmodes = ['systemd.timer']
     }
   }
 
   # Foreman parameters
+  $lower_fqdn              = downcase($::fqdn)
   $server_foreman          = true
   $server_facts            = true
   $server_puppet_basedir   = undef
-  $server_foreman_url      = "https://${::fqdn}"
+  $server_foreman_url      = "https://${lower_fqdn}"
   $server_foreman_ssl_ca   = undef
   $server_foreman_ssl_cert = undef
   $server_foreman_ssl_key  = undef

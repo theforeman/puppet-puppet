@@ -35,38 +35,69 @@ describe 'puppet::agent::service' do
         end
 
         it do
-          should contain_service('puppet').with({
-            :ensure     => 'running',
-            :name       => 'puppet',
-            :hasstatus  => 'true',
-            :enable     => 'true',
-          })
+          should contain_class('puppet::agent::service::daemon').with(:enabled => true)
+          should contain_class('puppet::agent::service::cron').with(:enabled => false)
         end
-
-        it { should contain_cron('puppet').with_ensure('absent') }
+        case os
+        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/
+          it do
+            should contain_class('puppet::agent::service::systemd').with(:enabled => false)
+            should contain_service('puppet-run.timer').with(:ensure => :stopped)
+          end
+        else
+          it do
+            should contain_class('puppet::agent::service::systemd').with(:enabled => false)
+            should_not contain_service('puppet-run.timer')
+          end
+        end
       end
 
       describe 'when runmode => cron' do
         let :pre_condition do
           "class {'puppet': agent => true, runmode => 'cron'}"
         end
-
         it do
-          should contain_service('puppet').with({
-            :ensure     => 'stopped',
-            :name       => 'puppet',
-            :hasstatus  => 'true',
-            :enable     => 'false',
-          })
+          should contain_class('puppet::agent::service::daemon').with(:enabled => false)
+          should contain_class('puppet::agent::service::cron').with(:enabled => true)
+        end
+        case os
+        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/
+          it do
+            should contain_class('puppet::agent::service::systemd').with(:enabled => false)
+            should contain_service('puppet-run.timer').with(:ensure => :stopped)
+          end
+        else
+          it do
+            should contain_class('puppet::agent::service::systemd').with(:enabled => false)
+            should_not contain_service('puppet-run.timer')
+          end
+        end
+      end
+
+      describe 'when runmode => systemd.timer' do
+        let :pre_condition do
+          "class {'puppet': agent => true, runmode => 'systemd.timer'}"
+        end
+        case os
+        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/
+          it do
+            should contain_class('puppet::agent::service::daemon').with(:enabled => false)
+            should contain_class('puppet::agent::service::cron').with(:enabled => false)
+            should contain_class('puppet::agent::service::systemd').with(:enabled => true)
+            should contain_service('puppet-run.timer').with(:ensure => :running)
+          end
+        else
+          it { should raise_error(Puppet::Error, /Runmode of systemd.timer not supported on #{os_facts[:kernel]} operating systems!/) }
+        end
+      end
+
+      describe 'when unavailable_runmodes => ["cron"]' do
+        let :pre_condition do
+          "class {'puppet': agent => true, unavailable_runmodes => ['cron']}"
         end
 
         it do
-          should contain_cron('puppet').with({
-            :command  => "/usr/bin/env puppet agent --config #{confdir}/puppet.conf --onetime --no-daemonize",
-            :user     => 'root',
-            :minute   => ['15','45'],
-            :hour     => '*',
-          })
+          should_not contain_cron('puppet')
         end
       end
 
@@ -76,15 +107,21 @@ describe 'puppet::agent::service' do
         end
 
         it do
-          should contain_service('puppet').with({
-            :ensure     => 'stopped',
-            :name       => 'puppet',
-            :hasstatus  => 'true',
-            :enable     => 'false',
-          })
+          should contain_class('puppet::agent::service::daemon').with(:enabled => false)
+          should contain_class('puppet::agent::service::cron').with(:enabled => false)
         end
-
-        it { should contain_cron('puppet').with_ensure('absent') }
+        case os
+        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/
+          it do
+            should contain_class('puppet::agent::service::systemd').with(:enabled => false)
+            should contain_service('puppet-run.timer').with(:ensure => :stopped)
+          end
+        else
+          it do
+            should contain_class('puppet::agent::service::systemd').with(:enabled => false)
+            should_not contain_service('puppet-run.timer')
+          end
+        end
       end
 
       describe 'when runmode => foo' do
@@ -93,22 +130,6 @@ describe 'puppet::agent::service' do
         end
 
         it { should raise_error(Puppet::Error, /Runmode of foo not supported by puppet::agent::config!/) }
-      end
-
-      describe 'with custom service_name' do
-        let :pre_condition do
-          "class {'puppet': agent => true, service_name => 'pe-puppet'}"
-        end
-
-        it do
-          should contain_service('puppet').with({
-            :ensure     => 'running',
-            :name       => 'pe-puppet',
-            :hasstatus  => 'true',
-            :enable     => 'true',
-          })
-        end
-
       end
     end
   end

@@ -64,6 +64,10 @@ describe 'puppet::config' do
           should_not contain_file('/etc/puppet/manifests/default_manifest.pp')
         end
 
+        it 'should_not contain reports setting in puppet.conf' do
+          should_not contain_concat__fragment('puppet.conf+10-main').with_content(/\s+reports = .*/)
+        end
+
         it 'should contain puppet.conf [main]' do
           concat_fragment_content = [
             '[main]',

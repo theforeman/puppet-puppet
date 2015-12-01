@@ -3,7 +3,6 @@
 
 [master]
     autosign       = <%= scope.lookupvar('::puppet::autosign') %>
-    reports        = <%= scope.lookupvar("puppet::server_reports") %>
     external_nodes = <%= @server_external_nodes %>
     node_terminus  = <%= @server_node_terminus %>
     ca             = <%= scope.lookupvar("puppet::server_ca") %>
