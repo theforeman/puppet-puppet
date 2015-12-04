@@ -114,13 +114,19 @@ allow <%= @auth_allowed.join(', ') %>
 <% if @puppetversion.to_f >= 4.0 -%>
 path /puppet/v3/file
 allow *
+<% end -%>
 
+path /file
+allow *
+
+<% if @puppetversion.to_f >= 4.0 -%>
 path /puppet/v3/status
 method find
 allow *
 <% end -%>
 
-path /file
+path /status
+method find
 allow *
 
 ### Unauthenticated ACLs, for clients without valid certificates; authenticated
