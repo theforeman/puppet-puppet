@@ -283,6 +283,12 @@
 #
 # $server_git_repo_path::             Git repository path
 #
+# $server_git_repo_mode::             Git repository mode
+#
+# $server_git_repo_group::            Git repository group
+#
+# $server_git_repo_user::             Git repository user
+#
 # $server_git_branch_map::            Git branch to puppet env mapping for the
 #                                     default post receive hook
 #                                     type:hash
@@ -535,7 +541,10 @@ class puppet (
   $server_envs_dir                 = $puppet::params::server_envs_dir,
   $server_manifest_path            = $puppet::params::server_manifest_path,
   $server_common_modules_path      = $puppet::params::server_common_modules_path,
+  $server_git_repo_mode            = $puppet::params::server_git_repo_mode,
   $server_git_repo_path            = $puppet::params::server_git_repo_path,
+  $server_git_repo_group           = $puppet::params::server_git_repo_group,
+  $server_git_repo_user            = $puppet::params::server_git_repo_user,
   $server_git_branch_map           = $puppet::params::server_git_branch_map,
   $server_post_hook_content        = $puppet::params::server_post_hook_content,
   $server_post_hook_name           = $puppet::params::server_post_hook_name,

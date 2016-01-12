@@ -198,6 +198,12 @@ class puppet::params {
   # Dynamic environments config, ignore if the git_repo is 'false'
   # Path to the repository
   $server_git_repo_path       = "${vardir}/puppet.git"
+  # mode of the repository
+  $server_git_repo_mode       = '0755'
+  # user of the repository
+  $server_git_repo_user       = $user
+  # group of the repository
+  $server_git_repo_group      = $user
   # Override these if you need your own hooks
   $server_post_hook_content   = 'puppet/server/post-receive.erb'
   $server_post_hook_name      = 'post-receive'

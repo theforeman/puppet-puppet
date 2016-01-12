@@ -120,7 +120,9 @@ class puppet::server::config inherits puppet::config {
     git::repo { 'puppet_repo':
       bare    => true,
       target  => $puppet::server_git_repo_path,
-      user    => $puppet::server_user,
+      mode    => $puppet::server_git_repo_mode,
+      user    => $puppet::server_git_repo_user,
+      group   => $puppet::server_git_repo_group,
       require => File[$puppet::server_envs_dir],
     }
 
@@ -128,8 +130,9 @@ class puppet::server::config inherits puppet::config {
     # git post hook to auto generate an environment per branch
     file { "${puppet::server_git_repo_path}/hooks/${puppet::server_post_hook_name}":
       content => template($puppet::server_post_hook_content),
-      owner   => $puppet::server_user,
-      mode    => '0755',
+      owner   => $puppet::server_git_repo_user,
+      group   => $puppet::server_git_repo_group,
+      mode    => $puppet::server_git_repo_mode,
       require => Git::Repo['puppet_repo'],
     }
 
