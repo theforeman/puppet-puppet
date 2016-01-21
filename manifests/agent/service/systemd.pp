@@ -11,11 +11,11 @@ class puppet::agent::service::systemd (
     case $enabled {
       true: {
         # Use the same times as for cron
-        $times = ip_to_cron($puppet::runinterval)
+        $times = ip_to_cron($::puppet::runinterval)
 
-        $command = $puppet::systemd_cmd ? {
-          undef   => "/usr/bin/env puppet agent --config ${puppet::dir}/puppet.conf --onetime --no-daemonize --detailed-exitcode --no-usecacheonfailure",
-          default => $puppet::systemd_cmd,
+        $command = $::puppet::systemd_cmd ? {
+          undef   => "${::puppet::puppet_cmd} agent --config ${::puppet::dir}/puppet.conf --onetime --no-daemonize --detailed-exitcode --no-usecacheonfailure",
+          default => $::puppet::systemd_cmd,
         }
 
         file { "/etc/systemd/system/${::puppet::systemd_unit_name}.timer":

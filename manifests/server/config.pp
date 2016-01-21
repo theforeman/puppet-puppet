@@ -73,7 +73,7 @@ class puppet::server::config inherits puppet::config {
     if $::puppet::server_ca {
       exec {'puppet_server_config-generate_ca_cert':
         creates => $::puppet::server::ssl_cert,
-        command => "${puppet::puppetca_path}/${puppet::puppetca_bin} --generate ${::fqdn}",
+        command => "${::puppet::puppetca_cmd} --generate ${::fqdn}",
         umask   => '0022',
         require => [Concat["${puppet::server_dir}/puppet.conf"],
                     Exec['puppet_server_config-create_ssl_dir'],
@@ -90,7 +90,7 @@ class puppet::server::config inherits puppet::config {
     if $::puppet::server_ca {
       exec {'puppet_server_config-generate_ca_cert':
         creates => $::puppet::server::ssl_cert,
-        command => "${puppet::puppetca_path}/${puppet::puppetca_bin} --generate ${::fqdn}",
+        command => "${::puppet::puppetca_cmd} --generate ${::fqdn}",
         require => [Concat["${puppet::server_dir}/puppet.conf"],
                     Exec['puppet_server_config-create_ssl_dir'],
                     ],

@@ -14,7 +14,11 @@ class puppet::params {
   $autosign            = '$confdir/autosign.conf { mode = 664 }'
   $runinterval         = '1800'
   $runmode             = 'service'
+
+  # Not defined here as the commands depend on module parameter "dir"
   $cron_cmd            = undef
+  $systemd_cmd         = undef
+
   $agent_noop          = false
   $show_diff           = false
   $module_repository   = undef
@@ -59,6 +63,7 @@ class puppet::params {
       $ssldir     = "${dir_prefix}/etc/ssl"
       $vardir     = "${dir_prefix}/var"
       $sharedir   = "${dir_prefix}/share"
+      $bindir     = "${dir_prefix}/bin"
       $root_group = undef
     }
 
@@ -70,6 +75,7 @@ class puppet::params {
       $ssldir     = '/var/puppet/ssl'
       $vardir     = '/var/puppet'
       $sharedir   = '/usr/local/share/puppet'
+      $bindir     = '/usr/local/bin'
       $root_group = undef
     }
 
@@ -82,18 +88,22 @@ class puppet::params {
         $ssldir   = '/etc/puppetlabs/puppet/ssl'
         $vardir   = '/opt/puppetlabs/puppet/cache'
         $sharedir = '/opt/puppetlabs/puppet'
+        $bindir   = '/opt/puppetlabs/bin'
       } else {
-        $dir        = '/etc/puppet'
-        $codedir    = '/etc/puppet'
-        $logdir     = '/var/log/puppet'
-        $rundir     = '/var/run/puppet'
-        $ssldir     = '/var/lib/puppet/ssl'
-        $vardir     = '/var/lib/puppet'
-        $sharedir   = '/usr/share/puppet'
+        $dir      = '/etc/puppet'
+        $codedir  = '/etc/puppet'
+        $logdir   = '/var/log/puppet'
+        $rundir   = '/var/run/puppet'
+        $ssldir   = '/var/lib/puppet/ssl'
+        $vardir   = '/var/lib/puppet'
+        $sharedir = '/usr/share/puppet'
+        $bindir   = '/usr/bin'
       }
       $root_group = undef
     }
   }
+
+  $puppet_cmd = "${bindir}/puppet"
 
   $manage_packages = true
 
@@ -236,28 +246,8 @@ class puppet::params {
     $client_package = ['puppet']
   }
 
-  # Only use 'puppet cert' on versions where puppetca no longer exists
-  if versioncmp($::puppetversion, '3.0') < 0 {
-    $puppetca_path = '/usr/sbin'
-    $puppetca_bin  = 'puppetca'
-    $puppetrun_cmd = '/usr/sbin/puppetrun'
-  } elsif $aio_package {
-    $puppetca_path = '/opt/puppetlabs/bin'
-    $puppetca_bin = 'puppet cert'
-    $puppetrun_cmd = '/opt/puppetlabs/bin/puppet kick'
-  } else {
-    $puppetca_path = $::osfamily ? {
-      /^(FreeBSD|DragonFly)$/ => '/usr/local/bin',
-      default                 => '/usr/bin'
-    }
-    $puppetca_bin = 'puppet cert'
-    $puppetrun_cmd = $::osfamily ? {
-      /^(FreeBSD|DragonFly)$/ => '/usr/local/bin/puppet kick',
-      default                 => '/usr/bin/puppet kick'
-    }
-  }
-
-  $puppetca_cmd = "${puppetca_path}/${puppetca_bin}"
+  $puppetrun_cmd = "${puppet_cmd} kick"
+  $puppetca_cmd  = "${puppet_cmd} cert"
 
   # Puppet service name
   $service_name = 'puppet'

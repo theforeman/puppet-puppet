@@ -71,6 +71,14 @@ describe 'puppet::agent::service::systemd' do
           "class {'puppet': agent => true, runmode => 'systemd.timer'}"
         end
 
+        if Puppet.version < '4.0'
+          bindir = '/usr/bin'
+        elsif os_facts[:osfamily] == 'FreeBSD'
+          bindir = '/usr/local/bin'
+        else
+          bindir = '/opt/puppetlabs/bin'
+        end
+
         case os
         when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/
           it 'should enable systemd timer' do
@@ -82,7 +90,7 @@ describe 'puppet::agent::service::systemd' do
             with_content(/.*OnCalendar\=\*-\*-\* \*\:15,45:00.*/)
 
             should contain_file('/etc/systemd/system/puppet-run.service').
-            with_content(/.*ExecStart=\/usr\/bin\/env puppet agent --config #{confdir}\/puppet.conf --onetime --no-daemonize.*/)
+            with_content(/.*ExecStart=#{bindir}\/puppet agent --config #{confdir}\/puppet.conf --onetime --no-daemonize.*/)
 
             should contain_exec('systemctl-daemon-reload-puppet').with({
               :refreshonly => true,

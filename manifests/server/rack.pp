@@ -35,14 +35,10 @@ class puppet::server::rack(
       mode   => '0755',
   }
 
-  $configru_version = $::puppetversion ? {
-    /^2.*/  => 'config.ru.2.erb',
-    default => 'config.ru.erb'
-  }
   file {
     "${app_root}/config.ru":
       owner   => $user,
-      content => template("puppet/server/${configru_version}"),
+      content => template('puppet/server/config.ru.erb'),
       notify  => Exec['puppet_server_rack-restart'],
   }
 

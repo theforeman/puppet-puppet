@@ -39,10 +39,6 @@ describe 'puppet::server::config' do
         additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
       end
 
-      if Puppet.version < '3.0'
-        puppetcacmd      = '/usr/sbin/puppetca'
-      end
-
       if os_facts[:osfamily] == 'FreeBSD'
         codedir          = '/usr/local/etc/puppet'
         conf_file        = '/usr/local/etc/puppet/puppet.conf'
@@ -52,9 +48,7 @@ describe 'puppet::server::config' do
         vardir           = '/var/puppet'
         ssldir           = '/var/puppet/ssl'
         sharedir         = '/usr/local/share/puppet'
-        if Puppet.version < '4.0'
-          puppetcacmd      = '/usr/local/bin/puppet cert'
-        end
+        puppetcacmd      = '/usr/local/bin/puppet cert'
         nodepath         = '\/usr\/local\/etc\/puppet\/node.rb'
       end
 
