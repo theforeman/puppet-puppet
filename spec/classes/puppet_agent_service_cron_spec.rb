@@ -15,13 +15,16 @@ describe 'puppet::agent::service::cron' do
 
       if Puppet.version < '4.0'
         confdir = '/etc/puppet'
+        bindir = '/usr/bin'
         additional_facts = {}
       else
         confdir = '/etc/puppetlabs/puppet'
+        bindir = '/opt/puppetlabs/bin'
         additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
       end
 
       if os_facts[:osfamily] == 'FreeBSD'
+        bindir = '/usr/local/bin'
         confdir = '/usr/local/etc/puppet'
       end
 
@@ -44,7 +47,7 @@ describe 'puppet::agent::service::cron' do
 
         it do
           should contain_cron('puppet').with({
-            :command  => "/usr/bin/env puppet agent --config #{confdir}/puppet.conf --onetime --no-daemonize",
+            :command  => "#{bindir}/puppet agent --config #{confdir}/puppet.conf --onetime --no-daemonize",
             :user     => 'root',
             :minute   => ['15','45'],
             :hour     => '*',

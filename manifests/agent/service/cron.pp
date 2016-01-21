@@ -4,12 +4,12 @@ class puppet::agent::service::cron (
   if ! ('cron' in $::puppet::unavailable_runmodes) {
     case $enabled {
       true: {
-        $command = $puppet::cron_cmd ? {
-          undef   => "/usr/bin/env puppet agent --config ${puppet::dir}/puppet.conf --onetime --no-daemonize",
-          default => $puppet::cron_cmd,
+        $command = $::puppet::cron_cmd ? {
+          undef   => "${::puppet::puppet_cmd} agent --config ${::puppet::dir}/puppet.conf --onetime --no-daemonize",
+          default => $::puppet::cron_cmd,
         }
 
-        $times = ip_to_cron($puppet::runinterval)
+        $times = ip_to_cron($::puppet::runinterval)
         cron { 'puppet':
           command => $command,
           user    => root,
