@@ -1,0 +1,69 @@
+# configuration for the JRuby interpreters
+jruby-puppet: {
+<%- if scope.function_versioncmp([@puppetversion, '4.0']) >= 0 -%>
+    # Where the puppet-agent dependency places puppet, facter, etc...
+    # Puppet server expects to load Puppet from this location
+    ruby-load-path: [
+    <%- @server_ruby_load_paths.each do |ruby_load_path| -%>
+        <%= ruby_load_path %>,
+    <%- end -%>
+    ]
+<%- end %>
+    # This setting determines where JRuby will look for gems.  It is also
+    # used by the `puppetserver gem` command line tool.
+    gem-home: <%= @server_jruby_gem_home %>
+
+    # (optional) path to puppet conf dir; if not specified, will use the puppet default
+    master-conf-dir: <%= @server_dir %>
+
+    # (optional) path to puppet var dir; if not specified, will use the puppet default
+    master-var-dir: <%= @vardir %>
+
+    # (optional) maximum number of JRuby instances to allow
+    max-active-instances: <%= @server_max_active_instances %>
+}
+
+# settings related to HTTP client requests made by Puppet Server
+http-client: {
+    # A list of acceptable protocols for making HTTP requests
+    ssl-protocols: [
+    <%- @server_ssl_protocols.each do |protocol| -%>
+        <%= protocol %>,
+    <%- end -%>
+    ]
+
+    # A list of acceptable cipher suites for making HTTP requests
+    cipher-suites: [
+    <%- @server_cipher_suites.each do |cipher| -%>
+        <%= cipher %>,
+    <%- end -%>
+    ]
+
+    # The amount of time, in milliseconds, that an outbound HTTP connection
+    # will wait for data to be available before closing the socket. If not
+    # defined, defaults to 20 minutes. If 0, the timeout is infinite and if
+    # negative, the value is undefined by the application and governed by the
+    # system default behavior.
+    idle-timeout-milliseconds: <%= @server_idle_timeout %>
+
+    # The amount of time, in milliseconds, that an outbound HTTP connection will
+    # wait to connect before giving up. Defaults to 2 minutes if not set. If 0,
+    # the timeout is infinite and if negative, the value is undefined in the
+    # application and governed by the system default behavior.
+    connect-timeout-milliseconds: <%= @server_connect_timeout %>
+}
+
+# settings related to profiling the puppet Ruby code
+profiler: {
+    # enable or disable profiling for the Ruby code; defaults to 'false'.
+    enabled: <%= @server_enable_ruby_profiler %>
+}
+
+# Settings related to the puppet-admin HTTP API
+puppet-admin: {
+    client-whitelist: [
+    <%- @server_admin_api_whitelist.each do |certname| -%>
+        "<%= certname %>",
+    <%- end -%>
+    ]
+}

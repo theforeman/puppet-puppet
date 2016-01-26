@@ -23,9 +23,15 @@ class puppet::params {
   $show_diff           = false
   $module_repository   = undef
   if versioncmp($::puppetversion, '4.0') < 0 {
-    $configtimeout     = 120
+    $configtimeout           = 120
+    $server_puppetserver_dir = '/etc/puppetserver'
+    $server_ruby_load_paths  = []
+    $server_jruby_gem_home   = '/var/lib/puppet/jruby-gems'
   } else {
-    $configtimeout     = undef
+    $configtimeout           = undef
+    $server_puppetserver_dir = '/etc/puppetlabs/puppetserver'
+    $server_ruby_load_paths  = ['/opt/puppetlabs/puppet/lib/ruby/vendor_ruby']
+    $server_jruby_gem_home   = '/opt/puppetlabs/server/data/puppetserver/jruby-gems'
   }
   $usecacheonfailure   = true
   $ca_server           = undef
@@ -54,50 +60,53 @@ class puppet::params {
   case $::osfamily {
     'Windows' : {
       # Windows prefixes normal paths with the Data Directory's path and leaves 'puppet' off the end
-      $dir_prefix = 'C:/ProgramData/PuppetLabs/puppet'
-
-      $dir        = "${dir_prefix}/etc"
-      $codedir    = "${dir_prefix}/etc"
-      $logdir     = "${dir_prefix}/var/log"
-      $rundir     = "${dir_prefix}/var/run"
-      $ssldir     = "${dir_prefix}/etc/ssl"
-      $vardir     = "${dir_prefix}/var"
-      $sharedir   = "${dir_prefix}/share"
-      $bindir     = "${dir_prefix}/bin"
-      $root_group = undef
+      $dir_prefix        = 'C:/ProgramData/PuppetLabs/puppet'
+      $dir               = "${dir_prefix}/etc"
+      $codedir           = "${dir_prefix}/etc"
+      $logdir            = "${dir_prefix}/var/log"
+      $rundir            = "${dir_prefix}/var/run"
+      $ssldir            = "${dir_prefix}/etc/ssl"
+      $vardir            = "${dir_prefix}/var"
+      $sharedir          = "${dir_prefix}/share"
+      $bindir            = "${dir_prefix}/bin"
+      $root_group        = undef
+      $server_lenses_dir = "${dir_prefix}/share/augeas/lenses"
     }
 
     /^(FreeBSD|DragonFly)$/ : {
-      $dir        = '/usr/local/etc/puppet'
-      $codedir    = '/usr/local/etc/puppet'
-      $logdir     = '/var/log/puppet'
-      $rundir     = '/var/run/puppet'
-      $ssldir     = '/var/puppet/ssl'
-      $vardir     = '/var/puppet'
-      $sharedir   = '/usr/local/share/puppet'
-      $bindir     = '/usr/local/bin'
-      $root_group = undef
+      $dir               = '/usr/local/etc/puppet'
+      $codedir           = '/usr/local/etc/puppet'
+      $logdir            = '/var/log/puppet'
+      $rundir            = '/var/run/puppet'
+      $ssldir            = '/var/puppet/ssl'
+      $vardir            = '/var/puppet'
+      $sharedir          = '/usr/local/share/puppet'
+      $bindir            = '/usr/local/bin'
+      $root_group        = undef
+      $server_lenses_dir = '/usr/local/share/augeas/lenses'
     }
 
     default : {
       if $aio_package {
-        $dir      = '/etc/puppetlabs/puppet'
-        $codedir  = '/etc/puppetlabs/code'
-        $logdir   = '/var/log/puppetlabs/puppet'
-        $rundir   = '/var/run/puppetlabs'
-        $ssldir   = '/etc/puppetlabs/puppet/ssl'
-        $vardir   = '/opt/puppetlabs/puppet/cache'
-        $sharedir = '/opt/puppetlabs/puppet'
-        $bindir   = '/opt/puppetlabs/bin'
+        $dir               = '/etc/puppetlabs/puppet'
+        $codedir           = '/etc/puppetlabs/code'
+        $logdir            = '/var/log/puppetlabs/puppet'
+        $rundir            = '/var/run/puppetlabs'
+        $ssldir            = '/etc/puppetlabs/puppet/ssl'
+        $vardir            = '/opt/puppetlabs/puppet/cache'
+        $sharedir          = '/opt/puppetlabs/puppet'
+        $bindir            = '/opt/puppetlabs/bin'
+        $server_lenses_dir = '/opt/puppetlabs/puppet/share/augeas/lenses'
       } else {
-        $dir      = '/etc/puppet'
-        $codedir  = '/etc/puppet'
-        $logdir   = '/var/log/puppet'
-        $rundir   = '/var/run/puppet'
-        $ssldir   = '/var/lib/puppet/ssl'
-        $vardir   = '/var/lib/puppet'
-        $sharedir = '/usr/share/puppet'
-        $bindir   = '/usr/bin'
+        $dir               = '/etc/puppet'
+        $codedir           = '/etc/puppet'
+        $logdir            = '/var/log/puppet'
+        $rundir            = '/var/run/puppet'
+        $ssldir            = '/var/lib/puppet/ssl'
+        $vardir            = '/var/lib/puppet'
+        $sharedir          = '/usr/share/puppet'
+        $bindir            = '/usr/bin'
+        $server_lenses_dir = '/usr/share/augeas/lenses'
       }
       $root_group = undef
     }
@@ -315,14 +324,23 @@ class puppet::params {
     default  => '/etc/default/puppetserver',
   }
 
-  $server_jvm_java_bin = '/usr/bin/java'
+  $server_jvm_java_bin      = '/usr/bin/java'
   $server_jvm_min_heap_size = '2G'
   $server_jvm_max_heap_size = '2G'
-  $server_jvm_extra_args = '' # lint:ignore:empty_string_assignment
+  $server_jvm_extra_args    = '-XX:MaxPermSize=256m'
 
-  $server_ssl_dir_manage = true
-  $server_default_manifest = false
-  $server_default_manifest_path = '/etc/puppet/manifests/default_manifest.pp'
+  $server_ssl_dir_manage           = true
+  $server_default_manifest         = false
+  $server_default_manifest_path    = '/etc/puppet/manifests/default_manifest.pp'
   $server_default_manifest_content = '' # lint:ignore:empty_string_assignment
+  $server_max_active_instances     = $::processorcount
+  $server_idle_timeout             = 1200000
+  $server_connect_timeout          = 120000
+  $server_enable_ruby_profiler     = false
+  $server_ca_auth_required         = true
+  $server_admin_api_whitelist      = [ '127.0.0.1', '::1', $::ipaddress ]
+  $server_ca_client_whitelist      = [ '127.0.0.1', '::1', $::ipaddress ]
+  $server_cipher_suites            = [ 'TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA', 'TLS_RSA_WITH_AES_128_CBC_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA', ]
+  $server_ssl_protocols            = [ 'TLSv1.2', ]
 
 }

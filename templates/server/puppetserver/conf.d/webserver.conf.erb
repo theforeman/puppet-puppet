@@ -1,0 +1,13 @@
+webserver: {
+    access-log-config = <%= scope.lookupvar('puppet::server_puppetserver_dir') %>/request-logging.xml
+    client-auth       = want
+    ssl-host          = 0.0.0.0
+    ssl-port          = <%= scope.lookupvar('puppet::server_port') %>
+    ssl-cert          = <%= scope.lookupvar('puppet::server::ssl_cert') %>
+    ssl-key           = <%= scope.lookupvar('puppet::server::ssl_cert_key') %>
+    ssl-ca-cert       = <%= scope.lookupvar('puppet::server::ssl_ca_cert') %>
+<%- if scope.lookupvar('puppet::server_ca') -%>
+    ssl-cert-chain    = <%= scope.lookupvar('puppet::server::ssl_chain') %>
+    ssl-crl-path      = <%= scope.lookupvar('puppet::server::ssl_ca_crl') %>
+<%- end -%>
+}

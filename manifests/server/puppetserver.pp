@@ -22,6 +22,20 @@
 # Custom options to pass through to the java binary. These get added to
 # the end of the JAVA_ARGS variable
 #
+# * `server_puppetserver_dir`
+# Puppetserver config directory
+#
+# * `server_jruby_gem_home`
+# Puppetserver jruby gemhome
+#
+# * `server_cipher_suites`
+# Puppetserver array of acceptable ciphers
+#
+# * `server_ssl_protocols`
+# Puppetserver array of acceptable ssl protocols
+#
+# * `server_max_active_instances`
+# Puppetserver number of max jruby instances
 #
 # === Example
 #
@@ -35,19 +49,34 @@
 #   }
 #
 class puppet::server::puppetserver (
-  $java_bin          = $::puppet::server_jvm_java_bin,
-  $config            = $::puppet::server_jvm_config,
-  $jvm_min_heap_size = $::puppet::server_jvm_min_heap_size,
-  $jvm_max_heap_size = $::puppet::server_jvm_max_heap_size,
-  $jvm_extra_args    = $::puppet::server_jvm_extra_args,
+  $java_bin                    = $::puppet::server_jvm_java_bin,
+  $config                      = $::puppet::server_jvm_config,
+  $jvm_min_heap_size           = $::puppet::server_jvm_min_heap_size,
+  $jvm_max_heap_size           = $::puppet::server_jvm_max_heap_size,
+  $jvm_extra_args              = $::puppet::server_jvm_extra_args,
+  $server_puppetserver_dir     = $::puppet::server_puppetserver_dir,
+  $server_jruby_gem_home       = $::puppet::server_jruby_gem_home,
+  $server_ruby_load_paths      = $::puppet::server_ruby_load_paths,
+  $server_cipher_suites        = $::puppet::server_cipher_suites,
+  $server_max_active_instances = $::puppet::server_max_active_instances,
+  $server_ssl_protocols        = $::puppet::server_ssl_protocols,
+  $server_ca                   = $::puppet::server_ca,
+  $server_dir                  = $::puppet::server_dir,
+  $server_idle_timeout         = $::puppet::server_idle_timeout,
+  $server_connect_timeout      = $::puppet::server_connect_timeout,
+  $server_enable_ruby_profiler = $::puppet::server_enable_ruby_profiler,
+  $vardir                      = $::puppet::vardir,
+  $server_ca_client_whitelist  = $::puppet::server_ca_client_whitelist,
+  $server_admin_api_whitelist  = $::puppet::server_admin_api_whitelist,
 ) {
+  require ::puppet::server::augeaslens
 
   $puppetserver_package = pick($::puppet::server_package, 'puppetserver')
 
   $jvm_cmd_arr = ["-Xms${jvm_min_heap_size}", "-Xmx${jvm_max_heap_size}", $jvm_extra_args]
   $jvm_cmd = strip(join(flatten($jvm_cmd_arr),' '))
 
-  augeas {'puppet::server::puppetserver::jvm':
+  augeas { 'puppet::server::puppetserver::jvm':
     lens    => 'Shellvars.lns',
     incl    => $config,
     context => "/files${config}",
@@ -57,4 +86,44 @@ class puppet::server::puppetserver (
     ],
   }
 
+  $augcmds = $server_ca ? {
+    true    => ['rm @simple[. = "puppetlabs.services.ca.certificate-authority-disabled-service"]',
+                'set @simple[. = "puppetlabs.services.ca.certificate-authority-service"] puppetlabs.services.ca.certificate-authority-service',
+                'set @simple[. = "puppetlabs.services.ca.certificate-authority-service"]/@value certificate-authority-service',],
+    default => ['rm @simple[. = "puppetlabs.services.ca.certificate-authority-service"]',
+                'set @simple[. = "puppetlabs.services.ca.certificate-authority-disabled-service"] puppetlabs.services.ca.certificate-authority-disabled-service',
+                'set @simple[. = "puppetlabs.services.ca.certificate-authority-disabled-service"]/@value certificate-authority-disabled-service',],
+  }
+
+  augeas { 'puppet::server::puppetserver::server_ca':
+    context => "/files${server_puppetserver_dir}/bootstrap.cfg",
+    changes => $augcmds,
+    incl    => "${server_puppetserver_dir}/bootstrap.cfg",
+    lens    => 'Trapperkeeper.lns',
+  }
+
+  file { "${server_puppetserver_dir}/conf.d/ca.conf":
+    ensure  => file,
+    content => template('puppet/server/puppetserver/conf.d/ca.conf.erb'),
+  }
+
+  file { "${server_puppetserver_dir}/conf.d/puppetserver.conf":
+    ensure  => file,
+    content => template('puppet/server/puppetserver/conf.d/puppetserver.conf.erb'),
+  }
+
+  file { "${server_puppetserver_dir}/conf.d/web-routes.conf":
+    ensure  => file,
+    content => template('puppet/server/puppetserver/conf.d/web-routes.conf.erb'),
+  }
+
+  file { "${server_puppetserver_dir}/conf.d/webserver.conf":
+    ensure  => file,
+    content => template('puppet/server/puppetserver/conf.d/webserver.conf.erb'),
+  }
+
+  file { "${server_puppetserver_dir}/conf.d/auth.conf":
+    ensure  => file,
+    content => template('puppet/server/puppetserver/conf.d/auth.conf.erb'),
+  }
 }
