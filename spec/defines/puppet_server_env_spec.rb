@@ -11,7 +11,6 @@ describe 'puppet::server::env' do
           :concat_basedir   => '/nonexistant',
           :fqdn             => 'puppetmaster.example.com',
           :rubyversion      => '1.9.3',
-          :concat_basedir   => '/foo/bar',
           :puppetversion    => Puppet.version,
         })
       end
