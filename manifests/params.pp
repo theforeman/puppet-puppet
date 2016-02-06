@@ -268,7 +268,7 @@ class puppet::params {
       $osreleasemajor = regsubst($::operatingsystemrelease, '^(\d+)\..*$', '\1') # workaround for the possibly missing operatingsystemmajrelease
       $agent_restart_command = $osreleasemajor ? {
         '6'     => "/sbin/service ${service_name} reload",
-        '7'     => "/usr/bin/systemctl reload-or-restart ${service_name}",
+        '7'     => "/usr/bin/systemctl kill --signal SIGHUP --kill-who=main ${service_name}",
         default => undef,
       }
       $unavailable_runmodes = $osreleasemajor ? {
