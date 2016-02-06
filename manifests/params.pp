@@ -240,8 +240,12 @@ class puppet::params {
     $client_package = ['puppet-agent']
   } elsif ($::osfamily == 'Debian') {
     $client_package = ['puppet-common','puppet']
-  } elsif ($::osfamily =~ /(FreeBSD|DragonFly)/) and (versioncmp($::puppetversion, '4.0') > 0) {
-    $client_package = ['puppet4']
+  } elsif ($::osfamily =~ /(FreeBSD|DragonFly)/) {
+    if (versioncmp($::puppetversion, '4.0') > 0) {
+      $client_package = ['puppet4']
+    } else {
+      $client_package = ['puppet38']
+    }
   } else {
     $client_package = ['puppet']
   }

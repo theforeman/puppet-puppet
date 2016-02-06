@@ -12,11 +12,20 @@ describe 'puppet::agent::install' do
       }) end
 
       if Puppet.version < '4.0'
-        client_package = 'puppet'
+        if os_facts[:osfamily] == 'FreeBSD'
+          client_package = 'puppet38'
+        else
+          client_package = 'puppet'
+        end
         additional_facts = {}
       else
-        client_package = 'puppet-agent'
-        additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
+        if os_facts[:osfamily] == 'FreeBSD'
+          client_package = 'puppet4'
+          additional_facts = {}
+        else
+          client_package = 'puppet-agent'
+          additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
+        end
       end
 
       let (:facts) do

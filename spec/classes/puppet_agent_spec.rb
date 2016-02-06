@@ -16,15 +16,20 @@ describe 'puppet::agent' do
       if Puppet.version < '4.0'
         client_package = 'puppet'
         confdir        = '/etc/puppet'
+        if os_facts[:osfamily] == 'FreeBSD'
+          client_package = 'puppet38'
+          confdir        = '/usr/local/etc/puppet'
+        end
         additional_facts = {}
       else
         client_package = 'puppet-agent'
         confdir        = '/etc/puppetlabs/puppet'
         additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
-      end
-
-      if os_facts[:osfamily] == 'FreeBSD'
-        confdir = '/usr/local/etc/puppet'
+        if os_facts[:osfamily] == 'FreeBSD'
+          client_package = 'puppet4'
+          confdir        = '/usr/local/etc/puppet'
+          additional_facts = {}
+        end
       end
 
       let :facts do
