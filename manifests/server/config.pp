@@ -137,7 +137,7 @@ class puppet::server::config inherits puppet::config {
     }
 
   }
-  elsif ! $puppet::server_dynamic_environments {
+  elsif ! $puppet::server_dynamic_environments and ! $::server_directory_environments {
     file { $puppet::sharedir:
       ensure => directory,
     }
