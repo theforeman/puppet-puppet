@@ -38,8 +38,8 @@ define puppet::server::env (
     if $manifest or $config_version or $custom_modulepath or $environment_timeout {
       file { "${basedir}/${name}/environment.conf":
         ensure  => file,
-        owner   => 'root',
-        group   => $::puppet::params::root_group,
+        owner   => $owner,
+        group   => $group,
         mode    => '0644',
         content => template('puppet/server/environment.conf.erb'),
       }
