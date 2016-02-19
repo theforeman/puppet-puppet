@@ -1,5 +1,24 @@
 # Changelog
 
+## 4.3.0
+* New or changed parameters:
+    * Add server_git_repo_mode, group and user parameters for repo ownership
+    * Add systemd.timer value to runmode parameter to run the agent from
+      systemd timers, add systemd_cmd and systemd_unit_name parameters
+    * Add unavailable_runmodes parameter to limit which _other_ runmodes are
+      not possible when configuring the agent
+* Other features:
+    * Support Ubuntu 16.04
+* Other changes and fixes:
+    * Support Puppet 3.0 minimum
+    * Use lower case FQDN to access Foreman from ENC/report processors (#8389)
+    * Move reports setting to main puppet.conf section (GH-311)
+    * Expose v1 /status endpoint in auth.conf (GH-338)
+    * Update Puppet 3.8.x package name on FreeBSD
+    * Fix default systemd and cron commands with AIO package (GH-340)
+    * Fix ownership of environment.conf (GH-349, GH-350)
+    * Support Fedora 21, remove Debian 6 (Squeeze)
+
 ## 4.2.0
 * New or changed parameters:
     * Add codedir parameter, for Puppet code directory
