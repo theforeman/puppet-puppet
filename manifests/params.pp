@@ -306,7 +306,7 @@ class puppet::params {
   $server_foreman          = true
   $server_facts            = true
   $server_puppet_basedir   = $aio_package ? {
-    true  => "${::rubysitedir}/puppet",
+    true  => '/opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet',
     false => undef,
   }
   $server_foreman_url      = "https://${lower_fqdn}"
