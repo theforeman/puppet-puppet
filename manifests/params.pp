@@ -305,7 +305,10 @@ class puppet::params {
   $lower_fqdn              = downcase($::fqdn)
   $server_foreman          = true
   $server_facts            = true
-  $server_puppet_basedir   = undef
+  $server_puppet_basedir   = $aio_package ? {
+    true  => "${::rubysitedir}/puppet",
+    false => undef,
+  }
   $server_foreman_url      = "https://${lower_fqdn}"
   $server_foreman_ssl_ca   = undef
   $server_foreman_ssl_cert = undef
