@@ -27,11 +27,13 @@ class puppet::params {
     $server_puppetserver_dir = '/etc/puppetserver'
     $server_ruby_load_paths  = []
     $server_jruby_gem_home   = '/var/lib/puppet/jruby-gems'
+    $hiera_config            = '$codedir/hiera.yaml'
   } else {
     $configtimeout           = undef
     $server_puppetserver_dir = '/etc/puppetlabs/puppetserver'
     $server_ruby_load_paths  = ['/opt/puppetlabs/puppet/lib/ruby/vendor_ruby']
     $server_jruby_gem_home   = '/opt/puppetlabs/server/data/puppetserver/jruby-gems'
+    $hiera_config            = '$confdir/hiera.yaml'
   }
   $usecacheonfailure   = true
   $ca_server           = undef
@@ -46,7 +48,6 @@ class puppet::params {
   $pluginfactsource    = 'puppet:///pluginfacts'
   # lint:endignore
   $classfile           = '$statedir/classes.txt'
-  $hiera_config        = '$confdir/hiera.yaml'
   $syslogfacility      = undef
   $environment         = $::environment
   if versioncmp($::puppetversion, '4.0') < 0 {
