@@ -24,8 +24,10 @@ class puppet::params {
   $module_repository   = undef
   if versioncmp($::puppetversion, '4.0') < 0 {
     $configtimeout     = 120
+    $hiera_config      = '$codedir/hiera.yaml'
   } else {
     $configtimeout     = undef
+    $hiera_config      = '$confdir/hiera.yaml'
   }
   $usecacheonfailure   = true
   $ca_server           = undef
@@ -40,7 +42,6 @@ class puppet::params {
   $pluginfactsource    = 'puppet:///pluginfacts'
   # lint:endignore
   $classfile           = '$statedir/classes.txt'
-  $hiera_config        = '$confdir/hiera.yaml'
   $syslogfacility      = undef
   $environment         = $::environment
   if versioncmp($::puppetversion, '4.0') < 0 {

@@ -21,6 +21,7 @@ describe 'puppet::config' do
         ssldir  = '/var/lib/puppet/ssl'
         vardir  = '/var/lib/puppet'
         sharedir = '/usr/share/puppet'
+        hiera_config = '$codedir/hiera.yaml'
         additional_facts = {}
       else
         codedir = '/etc/puppetlabs/code'
@@ -30,6 +31,7 @@ describe 'puppet::config' do
         ssldir  = '/etc/puppetlabs/puppet/ssl'
         vardir  = '/opt/puppetlabs/puppet/cache'
         sharedir = '/opt/puppetlabs/puppet'
+        hiera_config = '$confdir/hiera.yaml'
         additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
       end
 
@@ -79,7 +81,7 @@ describe 'puppet::config' do
             '    hostprivkey = $privatekeydir/$certname.pem { mode = 640 }',
             '    autosign       = $confdir/autosign.conf { mode = 664 }',
             '    show_diff     = false',
-            '    hiera_config = $confdir/hiera.yaml'
+            "    hiera_config = #{hiera_config}",
           ]
           if Puppet.version >= '3.6'
               concat_fragment_content.concat([
@@ -288,6 +290,12 @@ describe 'puppet::config' do
       :puppetversion => Puppet.version,
     } end
 
+    if Puppet.version < '4.0'
+      hiera_config = '$codedir/hiera.yaml'
+    else
+      hiera_config = '$confdir/hiera.yaml'
+    end
+
     describe 'with default parameters' do
       let :pre_condition do
         'include ::puppet'
@@ -316,7 +324,7 @@ describe 'puppet::config' do
           '    hostprivkey = $privatekeydir/$certname.pem { mode = 640 }',
           '    autosign       = $confdir/autosign.conf { mode = 664 }',
           '    show_diff     = false',
-          '    hiera_config = $confdir/hiera.yaml'
+          "    hiera_config = #{hiera_config}",
         ]
         if Puppet.version >= '3.6'
           concat_fragment_content.concat([
