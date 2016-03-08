@@ -152,7 +152,6 @@
 #                                     type:string
 #
 # $hiera_config::                     The hiera configuration file.
-#                                     Defaults to '$confdir/hiera.yaml'.
 #                                     type:string
 #
 # $syslogfacility::                   Facility name to use when logging to syslog
