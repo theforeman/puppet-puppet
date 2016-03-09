@@ -52,16 +52,4 @@ class puppet::config(
       content => template($nsauth_template),
     }
   }
-
-  # only manage this file if we provide content
-  if $puppet::server_default_manifest and $puppet::server_default_manifest_content != '' {
-    file { $::puppet::server_default_manifest_path:
-      ensure  => file,
-      owner   => $puppet::user,
-      group   => $puppet::group,
-      mode    => '0644',
-      content => $puppet::server_default_manifest_content,
-    }
-  }
-
 }

@@ -102,6 +102,17 @@ class puppet::server::config inherits puppet::config {
     Exec['puppet_server_config-generate_ca_cert'] ~> Service[$puppet::server_httpd_service]
   }
 
+  # only manage this file if we provide content
+  if $puppet::server_default_manifest and $puppet::server_default_manifest_content != '' {
+    file { $::puppet::server_default_manifest_path:
+      ensure  => file,
+      owner   => $puppet::user,
+      group   => $puppet::group,
+      mode    => '0644',
+      content => $puppet::server_default_manifest_content,
+    }
+  }
+
   ## Environments
   # location where our puppet environments are located
   file { $puppet::server_envs_dir:

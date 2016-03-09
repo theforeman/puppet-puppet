@@ -212,6 +212,42 @@ describe 'puppet::server::config' do
         end
       end
 
+
+      describe 'with server_default_manifest => true and undef content' do
+        let :pre_condition do
+          'class { "::puppet":
+              server_default_manifest => true,
+              server => true
+          }'
+        end
+
+        it 'should contain default_manifest setting in puppet.conf' do
+          should contain_concat__fragment('puppet.conf+10-main').with_content(/\s+default_manifest = \/etc\/puppet\/manifests\/default_manifest\.pp$/)
+        end
+
+        it 'should_not contain default manifest /etc/puppet/manifests/default_manifest.pp' do
+          should_not contain_file('/etc/puppet/manifests/default_manifest.pp')
+        end
+      end
+
+      describe 'with server_default_manifest => true and server_default_manifest_content => "include foo"' do
+        let :pre_condition do
+          'class { "::puppet":
+              server_default_manifest => true,
+              server_default_manifest_content => "include foo",
+              server => true
+          }'
+        end
+
+        it 'should contain default_manifest setting in puppet.conf' do
+          should contain_concat__fragment('puppet.conf+10-main').with_content(/\s+default_manifest = \/etc\/puppet\/manifests\/default_manifest\.pp$/)
+        end
+
+        it 'should contain default manifest /etc/puppet/manifests/default_manifest.pp' do
+          should contain_file('/etc/puppet/manifests/default_manifest.pp').with_content(/include foo/)
+        end
+      end
+
       describe 'with git repo' do
         let :pre_condition do
           "class {'puppet':
