@@ -368,6 +368,7 @@ describe 'puppet::server::config' do
         end
 
         it 'should configure PuppetDB' do
+          should compile.with_all_deps
           should contain_class('puppetdb::master::config').with({
             :puppetdb_server             => 'mypuppetdb.example.com',
             :puppetdb_port               => 8081,
