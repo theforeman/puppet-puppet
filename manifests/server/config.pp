@@ -195,5 +195,6 @@ class puppet::server::config inherits puppet::config {
       manage_storeconfigs         => false,
       restart_puppet              => false,
     }
+    Class['puppetdb::master::puppetdb_conf'] ~> Class['puppet::server::service']
   }
 }
