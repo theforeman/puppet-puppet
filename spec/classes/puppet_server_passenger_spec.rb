@@ -45,7 +45,7 @@ describe 'puppet::server::passenger' do
         it 'should include the puppet vhost' do
           should contain_apache__vhost('puppet').with({
             :ssl_proxyengine => true,
-            :custom_fragment => "ProxyPassMatch ^/([^/]+/certificate.*)$ https://ca.example.org:8140/$1",
+            :custom_fragment => "ProxyPassMatch ^/[^/]+/(certificate.*)$ https://ca.example.org:8140/production/$1",
           })
         end
       end
