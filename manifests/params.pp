@@ -24,10 +24,10 @@ class puppet::params {
   $module_repository   = undef
   if versioncmp($::puppetversion, '4.0') < 0 {
     $configtimeout     = 120
-    $hiera_config      = '$codedir/hiera.yaml'
+    $hiera_config      = '$confdir/hiera.yaml'
   } else {
     $configtimeout     = undef
-    $hiera_config      = '$confdir/hiera.yaml'
+    $hiera_config      = '$codedir/hiera.yaml'
   }
   $usecacheonfailure   = true
   $ca_server           = undef
