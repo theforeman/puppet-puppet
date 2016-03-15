@@ -22,7 +22,7 @@ describe 'puppet::server::config' do
         vardir           = '/var/lib/puppet'
         ssldir           = '/var/lib/puppet/ssl'
         sharedir         = '/usr/share/puppet'
-        nodepath         = '\/etc\/puppet\/node.rb'
+        etcdir           = '/etc/puppet'
         puppetcacmd      = '/usr/bin/puppet cert'
         additional_facts = {}
       else
@@ -34,7 +34,7 @@ describe 'puppet::server::config' do
         vardir           = '/opt/puppetlabs/puppet/cache'
         ssldir           = '/etc/puppetlabs/puppet/ssl'
         sharedir         = '/opt/puppetlabs/puppet'
-        nodepath         = '\/etc\/puppetlabs\/puppet\/node.rb'
+        etcdir           = '/etc/puppetlabs/puppet'
         puppetcacmd      = '/opt/puppetlabs/bin/puppet cert'
         additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
       end
@@ -48,8 +48,8 @@ describe 'puppet::server::config' do
         vardir           = '/var/puppet'
         ssldir           = '/var/puppet/ssl'
         sharedir         = '/usr/local/share/puppet'
+        etcdir           = '/usr/local/etc/puppet'
         puppetcacmd      = '/usr/local/bin/puppet cert'
-        nodepath         = '\/usr\/local\/etc\/puppet\/node.rb'
       end
 
       let(:facts) { default_facts.merge(additional_facts) }
@@ -94,6 +94,7 @@ describe 'puppet::server::config' do
             :foreman_url    => "https://puppetmaster.example.com",
             :receive_facts  => true,
             :puppet_home    => vardir,
+            :puppet_etcdir  => etcdir,
             # Since this is managed inside the foreman module it does not
             # make sense to test it here
             #:puppet_basedir => '/usr/lib/ruby/site_ruby/1.9/puppet',
@@ -150,7 +151,7 @@ describe 'puppet::server::config' do
             with({}) # So we can use a trailing dot on each with_content line
 
           should contain_concat__fragment('puppet.conf+30-master').
-            with_content(/^\s+external_nodes\s+= #{nodepath}$/).
+            with_content(/^\s+external_nodes\s+= #{etcdir}\/node.rb$/).
             with_content(/^\s+node_terminus\s+= exec$/).
             with_content(/^\s+ca\s+= true$/).
             with_content(/^\s+ssldir\s+= #{ssldir}$/).

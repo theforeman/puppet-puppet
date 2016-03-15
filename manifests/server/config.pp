@@ -177,6 +177,7 @@ class puppet::server::config inherits puppet::config {
       receive_facts  => $puppet::server_facts,
       puppet_home    => $puppet::vardir,
       puppet_basedir => $puppet::server_puppet_basedir,
+      puppet_etcdir  => $puppet::dir,
       enc_api        => $puppet::server_enc_api,
       report_api     => $puppet::server_report_api,
       timeout        => $puppet::server_request_timeout,
