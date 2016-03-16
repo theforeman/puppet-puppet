@@ -300,6 +300,10 @@
 #                                     configuration
 #                                     type:string
 #
+# $server_main_template::             Which template should be used for master
+#                                     related configuration in the [main] section
+#                                     type:string
+#
 # $server_git_repo::                  Use git repository as a source of modules
 #                                     type:boolean
 #
@@ -686,6 +690,7 @@ class puppet (
   $server_httpd_service            = $puppet::params::server_httpd_service,
   $server_external_nodes           = $puppet::params::server_external_nodes,
   $server_template                 = $puppet::params::server_template,
+  $server_main_template            = $puppet::params::server_main_template,
   $server_cipher_suites            = $puppet::params::server_cipher_suites,
   $server_config_version           = $puppet::params::server_config_version,
   $server_connect_timeout          = $puppet::params::server_connect_timeout,

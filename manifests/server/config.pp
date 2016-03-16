@@ -37,6 +37,12 @@ class puppet::server::config inherits puppet::config {
     content => template($puppet::server_template),
     order   => '30',
   }
+  concat::fragment { 'puppet.conf+15-main-master':
+    target  => "${::puppet::dir}/puppet.conf",
+    content => template($::puppet::server_main_template),
+    order   => '15',
+  }
+
 
   file { "${puppet::vardir}/reports":
     ensure => directory,
