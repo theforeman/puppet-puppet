@@ -6,7 +6,6 @@ class puppet::config(
   $ca_server          = $::puppet::ca_server,
   $ca_port            = $::puppet::ca_port,
   $dns_alt_names      = $::puppet::dns_alt_names,
-  $hiera_config       = $::puppet::hiera_config,
   $listen_to          = $::puppet::listen_to,
   $main_template      = $::puppet::main_template,
   $module_repository  = $::puppet::module_repository,

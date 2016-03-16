@@ -21,7 +21,6 @@ describe 'puppet::config' do
         ssldir           = '/var/lib/puppet/ssl'
         vardir           = '/var/lib/puppet'
         sharedir         = '/usr/share/puppet'
-        hiera_config     = '$confdir/hiera.yaml'
         additional_facts = {}
       else
         codedir          = '/etc/puppetlabs/code'
@@ -31,7 +30,6 @@ describe 'puppet::config' do
         ssldir           = '/etc/puppetlabs/puppet/ssl'
         vardir           = '/opt/puppetlabs/puppet/cache'
         sharedir         = '/opt/puppetlabs/puppet'
-        hiera_config     = '$codedir/hiera.yaml'
         additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
       end
 
@@ -89,14 +87,7 @@ describe 'puppet::config' do
             '    privatekeydir = $ssldir/private_keys { group = service }',
             '    hostprivkey = $privatekeydir/$certname.pem { mode = 640 }',
             '    show_diff     = false',
-            "    hiera_config = #{hiera_config}",
           ]
-          if Puppet.version >= '3.6'
-              concat_fragment_content.concat([
-                "    environmentpath  = #{codedir}/environments",
-                "    basemodulepath   = #{codedir}/environments/common:#{codedir}/modules:#{sharedir}/modules",
-              ])
-          end
           verify_concat_fragment_exact_contents(catalogue, 'puppet.conf+10-main', concat_fragment_content)
         end
       end
@@ -156,19 +147,6 @@ describe 'puppet::config' do
           verify_concat_fragment_contents(catalogue, 'puppet.conf+10-main', [
             '[main]',
             '    module_repository = https://myforgeapi.example.com',
-          ])
-        end
-      end
-
-      describe "when hiera_config => '$confdir/hiera.yaml'" do
-        let :pre_condition do
-          "class { 'puppet': hiera_config => '/etc/puppet/hiera/production/hiera.yaml' }"
-        end
-
-        it 'should contain puppet.conf [main] with non-default hiera_config' do
-          verify_concat_fragment_contents(catalogue, 'puppet.conf+10-main', [
-            '[main]',
-            '    hiera_config = /etc/puppet/hiera/production/hiera.yaml',
           ])
         end
       end

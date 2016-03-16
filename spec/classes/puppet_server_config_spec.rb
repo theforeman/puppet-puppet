@@ -153,10 +153,20 @@ describe 'puppet::server::config' do
             with_content(/^\s+logdir\s+= #{logdir}$/).
             with_content(/^\s+rundir\s+= #{rundir}$/).
             with_content(/^\s+ssldir\s+= #{ssldir}$/).
-            with_content(/^\s+reports\s+= foreman$/).
             with_content(/^\s+privatekeydir\s+= \$ssldir\/private_keys \{ group = service \}$/).
             with_content(/^\s+hostprivkey\s+= \$privatekeydir\/\$certname.pem \{ mode = 640 \}$/).
             with({}) # So we can use a trailing dot on each with_content line
+
+          should contain_concat__fragment('puppet.conf+15-main-master').
+            with_content(/^\s+reports\s+= foreman$/).
+            with({}) # So we can use a trailing dot on each with_content line
+
+          if Puppet.version >= '3.6'
+            should contain_concat__fragment('puppet.conf+15-main-master').
+              with_content(/^\s+environmentpath\s+= #{codedir}\/environments$/).
+              with_content(/^\s+basemodulepath\s+= #{codedir}\/environments\/common:#{codedir}\/modules:#{sharedir}\/modules$/).
+              with({}) # So we can use a trailing dot on each with_content line
+          end
 
           should contain_concat__fragment('puppet.conf+20-agent').
             with_content(/^\s+classfile\s+= \$statedir\/classes.txt/).
@@ -229,6 +239,21 @@ describe 'puppet::server::config' do
         end
       end
 
+      describe "when hiera_config => '$confdir/hiera.yaml'" do
+        let :pre_condition do
+          "class {'puppet':
+              server        => true,
+              hiera_config => '/etc/puppet/hiera/production/hiera.yaml',
+           }"
+        end
+
+        it 'should contain puppet.conf [main] with non-default hiera_config' do
+          should contain_concat__fragment('puppet.conf+15-main-master').
+            with_content(/^\s+hiera_config\s+= \/etc\/puppet\/hiera\/production\/hiera.yaml$/).
+            with({}) # So we can use a trailing dot on each with_content line
+        end
+      end
+
       describe 'without foreman' do
         let :pre_condition do
           "class {'puppet':
@@ -269,7 +294,7 @@ describe 'puppet::server::config' do
         end
 
         it 'should contain default_manifest setting in puppet.conf' do
-          should contain_concat__fragment('puppet.conf+10-main').with_content(/\s+default_manifest = \/etc\/puppet\/manifests\/default_manifest\.pp$/)
+          should contain_concat__fragment('puppet.conf+15-main-master').with_content(/\s+default_manifest = \/etc\/puppet\/manifests\/default_manifest\.pp$/)
         end
 
         it 'should_not contain default manifest /etc/puppet/manifests/default_manifest.pp' do
@@ -287,7 +312,7 @@ describe 'puppet::server::config' do
         end
 
         it 'should contain default_manifest setting in puppet.conf' do
-          should contain_concat__fragment('puppet.conf+10-main').with_content(/\s+default_manifest = \/etc\/puppet\/manifests\/default_manifest\.pp$/)
+          should contain_concat__fragment('puppet.conf+15-main-master').with_content(/\s+default_manifest = \/etc\/puppet\/manifests\/default_manifest\.pp$/)
         end
 
         it 'should contain default manifest /etc/puppet/manifests/default_manifest.pp' do
@@ -346,7 +371,7 @@ describe 'puppet::server::config' do
           it 'should configure puppet.conf' do
             should_not contain_concat__fragment('puppet.conf+30-master').with_content(%r{^\s+config_version\s+=$})
 
-            should contain_concat__fragment('puppet.conf+10-main').
+            should contain_concat__fragment('puppet.conf+15-main-master').
               with_content(%r{^\s+environmentpath\s+= #{environments_dir}$})
           end
         end
@@ -387,7 +412,7 @@ describe 'puppet::server::config' do
           end
 
           it 'should configure puppet.conf' do
-            should contain_concat__fragment('puppet.conf+10-main').
+            should contain_concat__fragment('puppet.conf+15-main-master').
               with_content(%r{^\s+environmentpath\s+= #{environments_dir}\n\s+basemodulepath\s+= #{environments_dir}/common:#{codedir}/modules:#{sharedir}/modules$})
           end
 
@@ -508,7 +533,7 @@ describe 'puppet::server::config' do
 
         context 'on Puppet 3.6.0+', :if => (Puppet.version >= '3.6.0') do
           it 'should be enabled' do
-            should contain_concat__fragment('puppet.conf+10-main').
+            should contain_concat__fragment('puppet.conf+15-main-master').
               with_content(%r{^\s+environmentpath\s+= #{environments_dir}$})
           end
         end
