@@ -21,7 +21,9 @@
     hostprivkey = $privatekeydir/$certname.pem { mode = 640 }
 
     # Puppet 3.0.x requires this in both [main] and [master] - harmless on agents
-    autosign       = <%= scope.lookupvar('::puppet::autosign') %>
+<% if scope.lookupvar("puppet::autosign") != false -%>
+    autosign       = <%= scope.lookupvar("puppet::config::autosign_target") %>
+<% end -%>
 
     show_diff     = <%= scope.lookupvar('::puppet::show_diff') %>
 <% if scope.lookupvar('::puppet::server') -%>

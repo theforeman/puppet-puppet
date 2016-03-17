@@ -11,7 +11,8 @@ class puppet::params {
   $pluginsync          = true
   $splay               = false
   $splaylimit          = '1800'
-  $autosign            = '$confdir/autosign.conf { mode = 664 }'
+  $autosign            = true
+  $autosign_rules      = []
   $runinterval         = '1800'
   $runmode             = 'service'
 
@@ -140,6 +141,7 @@ class puppet::params {
   $agent_template  = 'puppet/agent/puppet.conf.erb'
   $auth_template   = 'puppet/auth.conf.erb'
   $nsauth_template = 'puppet/namespaceauth.conf.erb'
+  $autosign_template = 'puppet/server/autosign.conf.erb'
 
   # Allow any to the CRL. Needed in case of puppet CA proxy
   $allow_any_crl_auth = false

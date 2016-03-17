@@ -2,7 +2,9 @@
 ## Module:           '<%= scope.to_hash['module_name'] %>'
 
 [master]
-    autosign       = <%= scope.lookupvar('::puppet::autosign') %>
+<% if scope.lookupvar("puppet::autosign") != false -%>
+    autosign       = <%= scope.lookupvar("puppet::config::autosign_target") %>
+<% end -%>
     external_nodes = <%= @server_external_nodes %>
     node_terminus  = <%= @server_node_terminus %>
     ca             = <%= scope.lookupvar("puppet::server_ca") %>
