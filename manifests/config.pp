@@ -22,14 +22,10 @@ class puppet::config(
 ) {
   #autosign config
       case $::puppet::autosign {
-        true: {
+        true,false: {
           $ensure           = present
           $autosign_target  =  "${::puppet::dir}/autosign.conf"
         }
-        false: {
-          $ensure           = present
-          $autosign_target  =  "${::puppet::dir}/autosign.conf"
-   	    }
         default: {
           $ensure           = present
           $autosign_target  =  $::puppet::autosign
