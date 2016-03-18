@@ -79,7 +79,19 @@ describe 'puppet::server::config' do
             :creates => "#{ssldir}/certs/puppetmaster.example.com.pem",
             :command => "#{puppetcacmd} --generate puppetmaster.example.com",
             :require => ["Concat[#{conf_file}]", "Exec[puppet_server_config-create_ssl_dir]"],
-          }).that_notifies('Service[httpd]')
+          })
+        end
+
+        context 'with non-AIO packages', :if => (Puppet.version < '4.0') do
+          it 'CA cert generation should notify the Apache service' do
+            should contain_exec('puppet_server_config-generate_ca_cert').that_notifies('Service[httpd]')
+          end
+        end
+
+        context 'with AIO packages', :if => (Puppet.version > '4.0') do
+          it 'CA cert generation should notify the puppetserver service' do
+            should contain_exec('puppet_server_config-generate_ca_cert').that_notifies('Service[puppetserver]')
+          end
         end
 
         context 'on Puppet 3.4+', :if => (Puppet.version >= '3.4.0') do

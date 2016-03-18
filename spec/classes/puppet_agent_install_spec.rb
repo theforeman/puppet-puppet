@@ -90,6 +90,7 @@ describe 'puppet::agent::install' do
         :osfamily => 'windows',
         :concat_basedir => 'C:\Temp',
         :puppetversion => Puppet.version,
+        :processorcount => 2,
       }
     end
 

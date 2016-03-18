@@ -153,6 +153,7 @@ describe 'puppet' do
       :operatingsystemrelease => '7',
       :osfamily               => 'Windows',
       :puppetversion          => Puppet.version,
+      :processorcount => 2,
     } end
 
     describe 'with no custom parameters' do

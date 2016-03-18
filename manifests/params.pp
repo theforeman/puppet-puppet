@@ -168,7 +168,6 @@ class puppet::params {
   $server                     = false
   $server_ca                  = true
   $server_reports             = 'foreman'
-  $server_implementation      = 'master'
   $server_passenger           = true
   $server_service_fallback    = true
   $server_passenger_max_pool  = 12
@@ -184,6 +183,12 @@ class puppet::params {
   $server_http                = false
   $server_http_port           = 8139
   $server_http_allow          = []
+
+  # use puppetserver (JVM) or puppet master (Ruby)?
+  $server_implementation = $aio_package ? {
+    true    => 'puppetserver',
+    default => 'master',
+  }
 
   # Need a new master template for the server?
   $server_template = 'puppet/server/puppet.conf.erb'

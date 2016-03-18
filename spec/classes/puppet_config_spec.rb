@@ -260,6 +260,7 @@ describe 'puppet::config' do
       :osfamily => 'windows',
       :domain   => 'example.org',
       :puppetversion => Puppet.version,
+      :processorcount => 2,
     } end
 
     if Puppet.version < '4.0'
@@ -397,6 +398,7 @@ describe 'puppet::config' do
         :osfamily => 'windows',
         :fqdn     => 'me.example.org',
         :puppetversion => Puppet.version,
+        :processorcount => 2,
       } end
 
       it 'should contain auth.conf with auth any' do

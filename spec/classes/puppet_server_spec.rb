@@ -13,16 +13,10 @@ describe 'puppet::server' do
           :puppetversion          => Puppet.version,
       }) end
 
-      if Puppet.version < '4.0'
-        ssldir           = '/var/lib/puppet/ssl'
-        additional_facts = {}
-      else
-        ssldir           = '/etc/puppetlabs/puppet/ssl'
-        additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
-      end
-
       if os_facts[:osfamily] == 'FreeBSD'
         ssldir = '/var/puppet/ssl'
+      else
+        ssldir = '/var/lib/puppet/ssl'
       end
 
       server_package = 'puppet-server'
@@ -30,7 +24,7 @@ describe 'puppet::server' do
         server_package = 'puppetmaster'
       end
 
-      let(:facts) { default_facts.merge(additional_facts) }
+      let(:facts) { default_facts }
 
       describe 'basic case' do
         let :pre_condition do
