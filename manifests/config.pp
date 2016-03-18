@@ -31,7 +31,7 @@ class puppet::config(
           $autosign_target  =  $::puppet::autosign
         }
       }
-  file { "${autosign_target}":
+  file { $autosign_target:
     ensure  => $ensure,
     mode    => '0644',
     owner   => $puppet::server_user,
