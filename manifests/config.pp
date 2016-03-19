@@ -20,17 +20,18 @@ class puppet::config(
   $use_srv_records    = $::puppet::use_srv_records,
   $autosign_rules     = $::puppet::autosign_rules,
 ) {
-  #autosign config
+  # Autosign.conf path case
       case $::puppet::autosign {
         true,false: {
           $ensure           = present
-          $autosign_target  =  "${::puppet::dir}/autosign.conf"
+          $autosign_target  = "${::puppet::server_dir}/autosign.conf"
         }
         default: {
           $ensure           = present
-          $autosign_target  =  $::puppet::autosign
+          $autosign_target  = $::puppet::autosign
         }
       }
+
   file { $autosign_target:
     ensure  => $ensure,
     mode    => '0644',
