@@ -36,6 +36,15 @@ class puppet::server::config inherits puppet::config {
     content => template($puppet::server_template),
     order   => '30',
   }
+  
+  # Autosign config
+  file { "${autosign_target}":
+    ensure  => $ensure,
+    mode    => '0644',
+    owner   => $puppet::server_user,
+    group   => $puppet::server_group,
+    content => template($::puppet::autosign_template),
+  }
 
   file { "${puppet::vardir}/reports":
     ensure => directory,
