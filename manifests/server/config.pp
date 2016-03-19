@@ -38,8 +38,8 @@ class puppet::server::config inherits puppet::config {
   }
   
   # Autosign config
-  file { "${autosign_target}":
-    ensure  => $ensure,
+  file { $autosign_target:
+    ensure  => $puppet::config::ensure,
     mode    => '0644',
     owner   => $puppet::server_user,
     group   => $puppet::server_group,
