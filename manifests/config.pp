@@ -32,14 +32,6 @@ class puppet::config(
         }
       }
 
-  file { $autosign_target:
-    ensure  => $ensure,
-    mode    => '0644',
-    owner   => $puppet::server_user,
-    group   => $puppet::server_group,
-    content => template($::puppet::autosign_template),
-  }
-
   concat::fragment { 'puppet.conf+10-main':
     target  => "${puppet_dir}/puppet.conf",
     content => template($main_template),
