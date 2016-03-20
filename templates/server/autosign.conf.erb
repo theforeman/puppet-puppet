@@ -1,0 +1,8 @@
+<% if scope.lookupvar("puppet::autosign") != false and !@autosign_rules.empty? -%>
+<%   @autosign_rules.each do |rule| -%>
+<%=       rule %>
+<%      end -%>
+<% elsif scope.lookupvar("puppet::autosign") == false %>
+<% else %>
+*
+<% end -%>
