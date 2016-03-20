@@ -18,7 +18,20 @@ class puppet::config(
   $syslogfacility     = $::puppet::syslogfacility,
   $srv_domain         = $::puppet::srv_domain,
   $use_srv_records    = $::puppet::use_srv_records,
+  $autosign_rules     = $::puppet::autosign_rules,
 ) {
+  # Autosign.conf path case
+      case $::puppet::autosign {
+        true,false: {
+          $ensure           = present
+          $autosign_target  = "${::puppet::server_dir}/autosign.conf"
+        }
+        default: {
+          $ensure           = present
+          $autosign_target  = $::puppet::autosign
+        }
+      }
+
   concat::fragment { 'puppet.conf+10-main':
     target  => "${puppet_dir}/puppet.conf",
     content => template($main_template),
