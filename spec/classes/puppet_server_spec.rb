@@ -46,6 +46,7 @@ describe 'puppet::server' do
               with_puppetmaster(false).
               with_puppetserver(nil)
           end
+          it { should_not contain_notify('ip_not_supported') }
           # No server_package for FreeBSD
           if not os_facts[:osfamily] == 'FreeBSD'
             it { should contain_package(server_package) }
@@ -72,6 +73,28 @@ describe 'puppet::server' do
               with_ssl_cert_key("#{ssldir}/private_keys/puppetmaster.example.com.pem").
               with_ssl_ca_crl("#{ssldir}/ca/ca_crl.pem")
           end
+        end
+      end
+
+      describe 'with ip parameter' do
+        describe 'with default server implementation' do
+          let :pre_condition do
+            "class {'puppet': server_ip => '127.0.0.1'}"
+          end
+
+          it 'should issue a warning because server_ip is not supported by default implementation' do
+            should contain_notify('ip_not_supported').
+              with_message('Bind IP address is unsupported for the master implementation.').
+              with_loglevel('warning')
+          end
+        end
+
+        describe 'with server_implementation => "puppetserver"' do
+          let :pre_condition do
+            "class {'puppet': server_ip => '127.0.0.1', server_implementation => 'puppetserver'}"
+          end
+
+          it { should_not contain_notify('ip_not_supported') }
         end
       end
 
@@ -109,6 +132,7 @@ describe 'puppet::server' do
 
         it { should compile.with_all_deps }
         it { should_not contain_class('apache') }
+        it { should_not contain_notify('ip_not_supported') }
         it do
           should contain_class('puppet::server::service').
             with_puppetmaster(nil).

@@ -251,6 +251,9 @@
 # $server_dir::                       Puppet configuration directory
 #                                     type:string
 #
+# $server_ip::                        Bind ip address of the puppetmaster
+#                                     type:string
+#
 # $server_port::                      Puppet master port
 #                                     type:integer
 #
@@ -645,6 +648,7 @@ class puppet (
   $server_user                     = $puppet::params::user,
   $server_group                    = $puppet::params::group,
   $server_dir                      = $puppet::params::dir,
+  $server_ip                       = $puppet::params::ip,
   $server_port                     = $puppet::params::port,
   $server_ca                       = $puppet::params::server_ca,
   $server_ca_auth_required         = $puppet::params::server_ca_auth_required,
@@ -815,6 +819,14 @@ class puppet (
     validate_array($server_admin_api_whitelist)
     validate_bool($server_enable_ruby_profiler)
     validate_bool($server_ca_auth_required)
+  } else {
+    if $server_ip != $puppet::params::ip {
+      notify {
+        'ip_not_supported':
+          message  => "Bind IP address is unsupported for the ${server_implementation} implementation.",
+          loglevel => 'warning',
+      }
+    }
   }
 
   include ::puppet::config

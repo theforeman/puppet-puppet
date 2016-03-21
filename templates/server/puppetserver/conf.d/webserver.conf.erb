@@ -1,7 +1,7 @@
 webserver: {
     access-log-config = <%= scope.lookupvar('puppet::server_puppetserver_dir') %>/request-logging.xml
     client-auth       = want
-    ssl-host          = 0.0.0.0
+    ssl-host          = <%= scope.lookupvar('puppet::server_ip') %>
     ssl-port          = <%= scope.lookupvar('puppet::server_port') %>
     ssl-cert          = <%= scope.lookupvar('puppet::server::ssl_cert') %>
     ssl-key           = <%= scope.lookupvar('puppet::server::ssl_cert_key') %>
