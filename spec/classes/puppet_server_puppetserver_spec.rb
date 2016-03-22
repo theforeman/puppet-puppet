@@ -77,6 +77,44 @@ describe 'puppet::server::puppetserver' do
         it { should contain_file('/etc/custom/puppetserver/conf.d/auth.conf') }
       end
 
+      describe 'use-legacy-auth-conf' do
+        context 'with default parameters' do
+          let(:params) do
+            default_params.merge({
+              :server_puppetserver_dir => '/etc/custom/puppetserver',
+            })
+          end
+          it 'should have use-legacy-auth-conf: false in puppetserver.conf' do
+            content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
+            expect(content).to include(%Q[    use-legacy-auth-conf: false\n])
+          end
+        end
+        context 'when use-legacy-auth-conf = true' do
+          let(:params) do
+            default_params.merge({
+              :server_use_legacy_auth_conf => true,
+              :server_puppetserver_dir     => '/etc/custom/puppetserver',
+            })
+          end
+          it 'should have use-legacy-auth-conf: true in puppetserver.conf' do
+            content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
+            expect(content).to include(%Q[    use-legacy-auth-conf: true\n])
+          end
+        end
+        context 'when server_puppetserver_version < 2.2' do
+          let(:params) do
+            default_params.merge({
+              :server_puppetserver_version => '2.1.2',
+              :server_puppetserver_dir     => '/etc/custom/puppetserver',
+            })
+          end
+          it 'should not have a use-legacy-auth-conf setting in puppetserver.conf' do
+            content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
+            expect(content).not_to include('use-legacy-auth-conf')
+          end
+        end
+      end
+
       describe 'with extra_args parameter' do
         let :params do
           default_params.merge({

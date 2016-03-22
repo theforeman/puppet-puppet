@@ -68,6 +68,8 @@ class puppet::server::puppetserver (
   $vardir                      = $::puppet::vardir,
   $server_ca_client_whitelist  = $::puppet::server_ca_client_whitelist,
   $server_admin_api_whitelist  = $::puppet::server_admin_api_whitelist,
+  $server_puppetserver_version = $::puppet::server_puppetserver_version,
+  $server_use_legacy_auth_conf = $::puppet::server_use_legacy_auth_conf,
 ) {
   include ::puppet::server
 

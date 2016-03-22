@@ -523,6 +523,12 @@
 # $server_puppetserver_dir::          The path of the puppetserver config dir
 #                                     type:string
 #
+# $server_puppetserver_version::      The version of puppetserver 2 installed (or being installed)
+#                                     Unfortunately, different versions of puppetserver need configuring differently,
+#                                     and there's no easy way of determining which version is being installed.
+#                                     Defaults to '2.3.1' but can be overriden if you're installing an older version.
+#                                     type:string
+#
 # $server_max_active_instances::      Max number of active jruby instances. Defaults to
 #                                     processor count
 #                                     type:integer
@@ -562,6 +568,10 @@
 #
 # $server_ca_auth_required::          Whether client certificates are needed to access the puppet-admin api
 #                                     Defaults to true
+#                                     type:boolean
+#
+# $server_use_legacy_auth_conf::      Should the puppetserver use the legacy puppet auth.conf?
+#                                     Defaults to false (the puppetserver will use its own conf.d/auth.conf)
 #                                     type:boolean
 #
 # === Usage:
@@ -662,6 +672,7 @@ class puppet (
   $server_implementation           = $puppet::params::server_implementation,
   $server_passenger                = $puppet::params::server_passenger,
   $server_puppetserver_dir         = $puppet::params::server_puppetserver_dir,
+  $server_puppetserver_version     = $puppet::params::server_puppetserver_version,
   $server_service_fallback         = $puppet::params::server_service_fallback,
   $server_passenger_max_pool       = $puppet::params::server_passenger_max_pool,
   $server_httpd_service            = $puppet::params::server_httpd_service,
@@ -727,6 +738,7 @@ class puppet (
   $server_jvm_extra_args           = $puppet::params::server_jvm_extra_args,
   $server_jruby_gem_home           = $puppet::params::server_jruby_gem_home,
   $server_max_active_instances     = $puppet::params::server_max_active_instances,
+  $server_use_legacy_auth_conf     = $puppet::params::server_use_legacy_auth_conf,
 ) inherits puppet::params {
 
   validate_bool($listen)
@@ -819,6 +831,8 @@ class puppet (
     validate_array($server_admin_api_whitelist)
     validate_bool($server_enable_ruby_profiler)
     validate_bool($server_ca_auth_required)
+    validate_bool($server_use_legacy_auth_conf)
+    validate_re($server_puppetserver_version, '^[\d]\.[\d]\.[\d]$')
   } else {
     if $server_ip != $puppet::params::ip {
       notify {
