@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.3.1
+* Other changes and fixes:
+    * set hiera_config correctly on puppet 4
+    * let puppetdb_conf notify the puppetmaster service
+
 ## 4.3.0
 * New or changed parameters:
     * Add server_git_repo_mode, group and user parameters for repo ownership
