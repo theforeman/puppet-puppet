@@ -1,15 +1,15 @@
 ## Server config
 
-    reports          = <%= scope.lookupvar('::puppet::server_reports') %>
+    reports          = <%= scope.lookupvar('::puppet::server::reports') %>
 
-<% if scope.lookupvar("puppet::server_directory_environments") -%>
-    environmentpath  = <%= scope.lookupvar("puppet::server_envs_dir") %>
-    basemodulepath   = <%= [scope.lookupvar("puppet::server_common_modules_path")].flatten.join(':') %>
+<% if scope.lookupvar("puppet::server::directory_environments") -%>
+    environmentpath  = <%= scope.lookupvar("puppet::server::envs_dir") %>
+    basemodulepath   = <%= [scope.lookupvar("puppet::server::common_modules_path")].flatten.join(':') %>
 <% end -%>
-<% if scope.lookupvar("puppet::server_default_manifest") -%>
-    default_manifest = <%= scope.lookupvar("puppet::server_default_manifest_path") %>
+<% if scope.lookupvar("puppet::server::default_manifest") -%>
+    default_manifest = <%= scope.lookupvar("puppet::server::default_manifest_path") %>
 <% end -%>
 
-<% if scope.lookupvar("puppet::hiera_config") and !scope.lookupvar("puppet::hiera_config").empty? -%>
-    hiera_config     = <%= scope.lookupvar("puppet::hiera_config") %>
+<% if scope.lookupvar("puppet::server::hiera_config") and !scope.lookupvar("puppet::server::hiera_config").empty? -%>
+    hiera_config     = <%= scope.lookupvar("puppet::server::hiera_config") %>
 <% end -%>

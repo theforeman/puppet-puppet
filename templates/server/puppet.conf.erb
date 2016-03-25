@@ -2,20 +2,20 @@
 ## Module:           '<%= scope.to_hash['module_name'] %>'
 
 [master]
-<% autosign = scope.lookupvar('::puppet::autosign') -%>
+<% autosign = scope.lookupvar('::puppet::server::autosign') -%>
 <% if !!autosign == autosign -%>
     autosign       = <%= autosign %>
 <% else -%>
-    autosign       = <%= autosign %> { mode = <%= scope.lookupvar('::puppet::autosign_mode') -%> }
+    autosign       = <%= autosign %> { mode = <%= scope.lookupvar('::puppet::server::autosign_mode') -%> }
 <% end -%>
     external_nodes = <%= @server_external_nodes %>
     node_terminus  = <%= @server_node_terminus %>
-    ca             = <%= scope.lookupvar("puppet::server_ca") %>
-<% if scope.lookupvar("puppet::server_ssl_dir_manage") -%>
-    ssldir         = <%= scope.lookupvar("puppet::server_ssl_dir") %>
+    ca             = <%= scope.lookupvar("::puppet::server::ca") %>
+<% if scope.lookupvar("::puppet::server::ssl_dir_manage") -%>
+    ssldir         = <%= scope.lookupvar("::puppet::server::ssl_dir") %>
 <% end -%>
-    certname       = <%= scope.lookupvar("puppet::server_certname") %>
-    parser         = <%= scope.lookupvar("puppet::server_parser") %>
+    certname       = <%= scope.lookupvar("::puppet::server::certname") %>
+    parser         = <%= scope.lookupvar("::puppet::server::parser") %>
 <% if @server_environment_timeout -%>
     environment_timeout = <%= @server_environment_timeout %>
 <% end -%>
@@ -23,15 +23,15 @@
     storeconfigs   = true
     storeconfigs_backend = <%= @server_storeconfigs_backend %>
 <% end -%>
-    strict_variables = <%= scope.lookupvar("puppet::server_strict_variables") %>
-<% if !scope.lookupvar("puppet::server_directory_environments")  &&
-    ( scope.lookupvar("puppet::server_git_repo") || scope.lookupvar("puppet::server_dynamic_environments") ) -%>
-    manifest       = <%= scope.lookupvar("puppet::server_envs_dir") %>/$environment/manifests/site.pp
-    modulepath     = <%= scope.lookupvar("puppet::server_envs_dir") %>/$environment/modules
-<% if scope.lookupvar("puppet::server::config_version_cmd") -%>
-    config_version = <%= scope.lookupvar("puppet::server::config_version_cmd") %>
+    strict_variables = <%= scope.lookupvar("::puppet::server::strict_variables") %>
+<% if !scope.lookupvar("::puppet::server::directory_environments")  &&
+    ( scope.lookupvar("::puppet::server::git_repo") || scope.lookupvar("::puppet::server::dynamic_environments") ) -%>
+    manifest       = <%= scope.lookupvar("::puppet::server::envs_dir") %>/$environment/manifests/site.pp
+    modulepath     = <%= scope.lookupvar("::puppet::server::envs_dir") %>/$environment/modules
+<% if scope.lookupvar("::puppet::server::config_version_cmd") -%>
+    config_version = <%= scope.lookupvar("::puppet::server::config_version_cmd") %>
 <% end -%>
 <% end -%>
-<% scope.lookupvar("puppet::server_additional_settings").sort_by {|k, v| k}.each do |key, value| -%>
+<% scope.lookupvar("::puppet::server::additional_settings").sort_by {|k, v| k}.each do |key, value| -%>
     <%= key %> = <%= value %>
 <% end -%>

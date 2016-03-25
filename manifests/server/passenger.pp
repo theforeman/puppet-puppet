@@ -3,21 +3,21 @@
 # Set up the puppet server using passenger and apache.
 #
 class puppet::server::passenger (
-  $app_root                = $::puppet::server_app_root,
-  $passenger_min_instances = $::puppet::server_passenger_min_instances,
-  $passenger_pre_start     = $::puppet::server_passenger_pre_start,
-  $port                    = $::puppet::server_port,
+  $app_root                = $::puppet::server::app_root,
+  $passenger_min_instances = $::puppet::server::passenger_min_instances,
+  $passenger_pre_start     = $::puppet::server::passenger_pre_start,
+  $port                    = $::puppet::server::port,
   $ssl_ca_cert             = $::puppet::server::ssl_ca_cert,
   $ssl_ca_crl              = $::puppet::server::ssl_ca_crl,
   $ssl_cert                = $::puppet::server::ssl_cert,
   $ssl_cert_key            = $::puppet::server::ssl_cert_key,
   $ssl_chain               = $::puppet::server::ssl_chain,
-  $ssl_dir                 = $::puppet::server_ssl_dir,
-  $puppet_ca_proxy         = $::puppet::server_ca_proxy,
-  $user                    = $::puppet::server_user,
-  $http                    = $::puppet::server_http,
-  $http_port               = $::puppet::server_http_port,
-  $http_allow              = $::puppet::server_http_allow,
+  $ssl_dir                 = $::puppet::server::ssl_dir,
+  $puppet_ca_proxy         = $::puppet::server::ca_proxy,
+  $user                    = $::puppet::server::user,
+  $http                    = $::puppet::server::http,
+  $http_port               = $::puppet::server::http_port,
+  $http_allow              = $::puppet::server::http_allow,
 ) {
   include ::apache
   include ::apache::mod::passenger

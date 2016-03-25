@@ -11,10 +11,10 @@
 # include puppet::server::rack
 #
 class puppet::server::rack(
-  $app_root       = $::puppet::server_app_root,
-  $confdir        = $::puppet::server_dir,
-  $rack_arguments = $::puppet::server_rack_arguments,
-  $user           = $::puppet::server_user,
+  $app_root       = $::puppet::server::app_root,
+  $confdir        = $::puppet::server::dir,
+  $rack_arguments = $::puppet::server::rack_arguments,
+  $user           = $::puppet::server::user,
   $vardir         = $::puppet::vardir,
 ) {
   exec {'puppet_server_rack-restart':
