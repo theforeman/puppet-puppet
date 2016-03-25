@@ -1,6 +1,360 @@
 # == Class: puppet::server
 #
 # Sets up a puppet master.
+#
+# == puppet::server parameters
+#
+# $autosign::                  If set to a boolean, autosign is enabled or disabled
+#                              for all incoming requests. Otherwise this has to be
+#                              set to the full file path of an autosign.conf file or
+#                              an autosign script. If this is set to a script, make
+#                              sure that script considers the content of autosign.conf
+#                              as otherwise Foreman functionality might be broken.
+#
+# $autosign_mode::             mode of the autosign file/script
+#
+# $hiera_config::              The hiera configuration file.
+#                              type:string
+#
+# $user::                      Name of the puppetmaster user.
+#                              type:string
+#
+# $group::                     Name of the puppetmaster group.
+#                              type:string
+#
+# $dir::                       Puppet configuration directory
+#                              type:string
+#
+# $ip::                        Bind ip address of the puppetmaster
+#                              type:string
+#
+# $port::                      Puppet master port
+#                              type:integer
+#
+# $ca::                        Provide puppet CA
+#                              type:boolean
+#
+# $http::                      Should the puppet master listen on HTTP as well as HTTPS.
+#                              Useful for load balancer or reverse proxy scenarios. Note that
+#                              the HTTP puppet master denies access from all clients by default,
+#                              allowed clients must be specified with $http_allow.
+#                              type:boolean
+#
+# $http_port::                 Puppet master HTTP port; defaults to 8139.
+#                              type:integer
+#
+# $http_allow::                Array of allowed clients for the HTTP puppet master. Passed
+#                              to Apache's 'Allow' directive.
+#                              type:array
+#
+# $reports::                   List of report types to include on the puppetmaster
+#                              type:string
+#
+# $implementation::            Puppet master implementation, either "master" (traditional
+#                              Ruby) or "puppetserver" (JVM-based)
+#                              type:string
+#
+# $passenger::                 If set to true, we will configure apache with
+#                              passenger. If set to false, we will enable the
+#                              default puppetmaster service unless
+#                              service_fallback is set to false. See 'Advanced
+#                              server parameters' for more information.
+#                              Only applicable when server_implementation is "master".
+#                              type:boolean
+#
+# $external_nodes::            External nodes classifier executable
+#                              type:string
+#
+# $template::                  Which template should be used for master
+#                              configuration
+#                              type:string
+#
+# $main_template::             Which template should be used for master
+#                              related configuration in the [main] section
+#                              type:string
+#
+# $git_repo::                  Use git repository as a source of modules
+#                              type:boolean
+#
+# $dynamic_environments::      Use $environment in the modulepath
+#                              Deprecated when $directory_environments is true,
+#                              set $environments to [] instead.
+#                              type:boolean
+#
+# $directory_environments::    Enable directory environments, defaulting to true
+#                              with Puppet 3.6.0 or higher
+#                              type:boolean
+#
+# $environments::              Environments to setup (creates directories).
+#                              Applies only when $dynamic_environments
+#                              is false
+#                              type:array
+#
+# $environments_owner::        The owner of the environments directory
+#                              type:string
+#
+# $environments_group::        The group owning the environments directory
+#                              type:string
+#
+# $environments_mode::         Environments directory mode.
+#                              type:string
+#
+# $envs_dir::                  Directory that holds puppet environments
+#                              type:string
+#
+# $manifest_path::             Path to puppet site.pp manifest (only when
+#                              $git_repo_path and $dynamic_environments
+#                              are false)
+#                              type:string
+#
+# $common_modules_path::       Common modules paths (only when
+#                              $git_repo_path and $dynamic_environments
+#                              are false)
+#                              type:array
+#
+# $git_repo_path::             Git repository path
+#                              type:string
+#
+# $git_repo_mode::             Git repository mode
+#                              type:string
+#
+# $git_repo_group::            Git repository group
+#                              type:string
+#
+# $git_repo_user::             Git repository user
+#                              type:string
+#
+# $git_branch_map::            Git branch to puppet env mapping for the
+#                              default post receive hook
+#                              type:hash
+#
+# $post_hook_content::         Which template to use for git post hook
+#                              type:string
+#
+# $post_hook_name::            Name of a git hook
+#                              type:string
+#
+# $storeconfigs_backend::      Do you use storeconfigs? (note: not required)
+#                              false if you don't, "active_record" for 2.X
+#                              style db, "puppetdb" for puppetdb
+#                              type:string
+#
+# $app_root::                  Directory where the application lives
+#                              type:string
+#
+# $ssl_dir::                   SSL directory
+#                              type:string
+#
+# $package::                   Custom package name for puppet master
+#                              type:string
+#
+# $version::                   Custom package version for puppet master
+#                              type:string
+#
+# $certname::                  The name to use when handling certificates.
+#                              type:string
+#
+# $strict_variables::          if set to true, it will throw parse errors
+#                              when accessing undeclared variables.
+#                              type:boolean
+#
+# $additional_settings::       A hash of additional settings.
+#                              Example: {trusted_node_data => true, ordering => 'manifest'}
+#                              type:hash
+#
+# $rack_arguments::            Arguments passed to rack app ARGV in addition to --confdir and
+#                              --vardir.  The default is an empty array.
+#                              type:array
+#
+# $puppetdb_host::             PuppetDB host
+#                              type:string
+#
+# $puppetdb_port::             PuppetDB port
+#                              type:integer
+#
+# $puppetdb_swf::              PuppetDB soft_write_failure
+#                              type:boolean
+#
+# $parser::                    Sets the parser to use. Valid options are 'current' or 'future'.
+#                              Defaults to 'current'.
+#                              type:string
+#
+# === Advanced server parameters:
+#
+# $httpd_service::             Apache/httpd service name to notify
+#                              on configuration changes. Defaults
+#                              to 'httpd' based on the default
+#                              apache module included with foreman-installer.
+#                              type:string
+#
+# $service_fallback::          If passenger is not used, do we want to fallback
+#                              to using the puppetmaster service? Set to false
+#                              if you disabled passenger and you do NOT want to
+#                              use the puppetmaster service. Defaults to true.
+#                              type:boolean
+#
+# $passenger_min_instances::   The PassengerMinInstances parameter. Sets the
+#                              minimum number of application processes to run.
+#                              Defaults to the number of processors on your
+#                              system.
+#                              type:integer
+#
+# $passenger_pre_start::       Pre-start the first passenger worker instance
+#                              process during httpd start.
+#                              type:boolean
+#
+# $config_version::            How to determine the configuration version. When
+#                              using git_repo, by default a git describe
+#                              approach will be installed.
+#                              type:string
+#
+# $server_facts::              Should foreman receive facts from puppet
+#                              type:boolean
+#
+# $foreman::                   Should foreman integration be installed
+#                              type:boolean
+#
+# $foreman_url::               Foreman URL
+#                              type:string
+#
+# $foreman_ssl_ca::            SSL CA of the Foreman server
+#                              type:string
+#
+# $foreman_ssl_cert::          Client certificate for authenticating against Foreman server
+#                              type:string
+#
+# $foreman_ssl_key::           Key for authenticating against Foreman server
+#                              type:string
+#
+# $puppet_basedir::            Where is the puppet code base located
+#                              type:string
+#
+# $enc_api::                   What version of enc script to deploy. Valid
+#                              values are 'v2' for latest, and 'v1'
+#                              for Foreman =< 1.2
+#                              type:string
+#
+# $report_api::                What version of report processor to deploy.
+#                              Valid values are 'v2' for latest, and 'v1'
+#                              for Foreman =< 1.2
+#                              type:string
+#
+# $request_timeout::           Timeout in node.rb script for fetching
+#                              catalog from Foreman (in seconds).
+#                              type:integer
+#
+# $environment_timeout::       Timeout for cached compiled catalogs (10s, 5m, ...)
+#                              type:string
+#
+# $ca_proxy::                  The actual server that handles puppet CA.
+#                              Setting this to anything non-empty causes
+#                              the apache vhost to set up a proxy for all
+#                              certificates pointing to the value.
+#                              type:string
+#
+# $jvm_java_bin::              Set the default java to use.
+#                              type:string
+#
+# $jvm_config::                Specify the puppetserver jvm configuration file.
+#                              type:string
+#
+# $jvm_min_heap_size::         Specify the minimum jvm heap space.
+#                              type:string
+#
+# $jvm_max_heap_size::         Specify the maximum jvm heap space.
+#                              type:string
+#
+# $jvm_extra_args::            Additional java options to pass through.
+#                              This can be used for Java versions prior to
+#                              Java 8 to specify the max perm space to use:
+#                              For example: '-XX:MaxPermSpace=128m'.
+#                              type:string
+#
+# $jruby_gem_home::            Where jruby gems are located for puppetserver
+#                              type:string
+#
+# $allow_any_crl_auth::        Allow any authentication for the CRL. This
+#                              is needed on the puppet CA to accept clients
+#                              from a the puppet CA proxy.
+#                              type:boolean
+#
+# $auth_allowed::              An array of authenticated nodes allowed to
+#                              access all catalog and node endpoints.
+#                              default to ['$1']
+#                              type:array
+#
+# $default_manifest::          Toggle if default_manifest setting should
+#                              be added to the [main] section
+#                              type:boolean
+#
+# $default_manifest_path::     A string setting the path to the default_manifest
+#                              type:string
+#
+# $default_manifest_content::  A string to set the content of the default_manifest
+#                              If set to '' it will not manage the file
+#                              type:string
+#
+# $ssl_dir_manage::            Toggle if ssl_dir should be added to the [master]
+#                              configuration section. This is necessary to
+#                              disable in case CA is delegated to a separate instance
+#                              type:boolean
+#
+# $puppetserver_dir::          The path of the puppetserver config dir
+#                              type:string
+#
+# $puppetserver_version::      The version of puppetserver 2 installed (or being installed)
+#                              Unfortunately, different versions of puppetserver need configuring differently,
+#                              and there's no easy way of determining which version is being installed.
+#                              Defaults to '2.3.1' but can be overriden if you're installing an older version.
+#                              type:string
+#
+# $max_active_instances::      Max number of active jruby instances. Defaults to
+#                              processor count
+#                              type:integer
+#
+# $idle_timeout::              How long the server will wait for a response on an existing connection
+#                              type:integer
+#
+# $connect_timeout::           How long the server will wait for a response to a connection attempt
+#                              type:integer
+#
+# $ssl_protocols::             Array of SSL protocols to use.
+#                              Defaults to [ 'TLSv1.2' ]
+#                              type:array
+#
+# $cipher_suites::             List of SSL ciphers to use in negotiation
+#                              Defaults to [ 'TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA',
+#                              'TLS_RSA_WITH_AES_128_CBC_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA', ]
+#                              type:array
+#
+# $ruby_load_paths::           List of ruby paths
+#                              Defaults based on $::puppetversion
+#                              type:array
+#
+# $ca_client_whitelist::       The whitelist of client certificates that
+#                              can query the certificate-status endpoint
+#                              Defaults to [ '127.0.0.1', '::1', $::ipaddress ]
+#                              type:array
+#
+# $admin_api_whitelist::       The whitelist of clients that
+#                              can query the puppet-admin-api endpoint
+#                              Defaults to [ '127.0.0.1', '::1', $::ipaddress ]
+#                              type:array
+#
+# $enable_ruby_profiler::      Should the puppetserver ruby profiler be enabled?
+#                              Defaults to false
+#                              type:boolean
+#
+# $ca_auth_required::          Whether client certificates are needed to access the puppet-admin api
+#                              Defaults to true
+#                              type:boolean
+#
+# $use_legacy_auth_conf::      Should the puppetserver use the legacy puppet auth.conf?
+#                              Defaults to false (the puppetserver will use its own conf.d/auth.conf)
+#                              type:boolean
+#
+
+
 class puppet::server(
   $autosign                 = $::puppet::autosign,
   $autosign_mode            = $::puppet::autosign_mode,
@@ -91,6 +445,81 @@ class puppet::server(
   $max_active_instances     = $::puppet::server_max_active_instances,
   $use_legacy_auth_conf     = $::puppet::server_use_legacy_auth_conf,
 ) {
+
+  validate_bool($ca)
+  validate_bool($http)
+  validate_bool($passenger)
+  validate_bool($git_repo)
+  validate_bool($service_fallback)
+  validate_bool($server_facts)
+  validate_bool($strict_variables)
+  validate_bool($foreman)
+  validate_bool($puppetdb_swf)
+  validate_bool($default_manifest)
+  validate_bool($ssl_dir_manage)
+  validate_bool($passenger_pre_start)
+  validate_integer($passenger_min_instances)
+
+  validate_hash($additional_settings)
+
+  if $default_manifest {
+    validate_absolute_path($default_manifest_path)
+    validate_string($default_manifest_content)
+  }
+
+  validate_string($hiera_config)
+  validate_string($external_nodes)
+  if $ca_proxy {
+    validate_string($ca_proxy)
+  }
+  if $puppetdb_host {
+    validate_string($puppetdb_host)
+  }
+
+  if $http {
+    validate_array($http_allow)
+  }
+
+  if ! is_bool($autosign) {
+    validate_absolute_path($autosign)
+    validate_string($autosign_mode)
+  }
+
+  validate_array($rack_arguments)
+
+  validate_re($implementation, '^(master|puppetserver)$')
+  validate_re($parser, '^(current|future)$')
+
+  if $environment_timeout {
+    validate_re($environment_timeout, '^(unlimited|0|[0-9]+[smh]{1})$')
+  }
+
+  if $implementation == 'puppetserver' {
+    validate_re($jvm_min_heap_size, '^[0-9]+[kKmMgG]$')
+    validate_re($jvm_max_heap_size, '^[0-9]+[kKmMgG]$')
+    validate_absolute_path($puppetserver_dir)
+    validate_absolute_path($jruby_gem_home)
+    validate_integer($max_active_instances)
+    validate_integer($idle_timeout)
+    validate_integer($connect_timeout)
+    validate_array($ssl_protocols)
+    validate_array($cipher_suites)
+    validate_array($ruby_load_paths)
+    validate_array($ca_client_whitelist)
+    validate_array($admin_api_whitelist)
+    validate_bool($enable_ruby_profiler)
+    validate_bool($ca_auth_required)
+    validate_bool($use_legacy_auth_conf)
+    validate_re($puppetserver_version, '^[\d]\.[\d]\.[\d]$')
+  } else {
+    if $ip != $puppet::params::ip {
+      notify {
+        'ip_not_supported':
+          message  => "Bind IP address is unsupported for the ${implementation} implementation.",
+          loglevel => 'warning',
+      }
+    }
+  }
 
   if $ca {
     $ssl_ca_cert   = "${ssl_dir}/ca/ca_crt.pem"
