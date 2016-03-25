@@ -273,7 +273,7 @@ describe 'puppet::server::config' do
         end
 
         it 'should contain an empty external_nodes' do
-          should contain_puppet__config__master('external_nodes').with({'value' => ''})
+          should_not contain_puppet__config__master('external_nodes')
         end
       end
 
@@ -286,8 +286,8 @@ describe 'puppet::server::config' do
         end
 
         it 'should not contain external_nodes' do
-          should contain_puppet__config__master('external_nodes').with({'value' => ''})
-          should contain_puppet__config__master('node_terminus').with({'value' => 'plain'})
+          should_not contain_puppet__config__master('external_nodes')
+          should_not contain_puppet__config__master('node_terminus')
         end
       end
 

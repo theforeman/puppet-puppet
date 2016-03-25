@@ -27,9 +27,9 @@ class puppet::server::config inherits puppet::config {
   $server_environment_timeout  = $::puppet::server::environment_timeout
 
   if $server_external_nodes and $server_external_nodes != '' {
-    $server_node_terminus = 'exec'
-  } else {
-    $server_node_terminus = 'plain'
+    class{ '::puppet::server::enc':
+      enc_path => $server_external_nodes,
+    }
   }
 
   $autosign = is_bool($::puppet::server::autosign)? {
@@ -63,8 +63,6 @@ class puppet::server::config inherits puppet::config {
 
   puppet::config::master {
     'autosign':           value => $autosign;
-    'external_nodes':     value => $server_external_nodes;
-    'node_terminus':      value => $server_node_terminus;
     'ca':                 value => $::puppet::server::ca;
     'certname':           value => $::puppet::server::certname;
     'parser':             value => $::puppet::server::parser;
