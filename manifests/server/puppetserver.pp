@@ -49,31 +49,31 @@
 #   }
 #
 class puppet::server::puppetserver (
-  $java_bin                    = $::puppet::server_jvm_java_bin,
-  $config                      = $::puppet::server_jvm_config,
-  $jvm_min_heap_size           = $::puppet::server_jvm_min_heap_size,
-  $jvm_max_heap_size           = $::puppet::server_jvm_max_heap_size,
-  $jvm_extra_args              = $::puppet::server_jvm_extra_args,
-  $server_puppetserver_dir     = $::puppet::server_puppetserver_dir,
-  $server_jruby_gem_home       = $::puppet::server_jruby_gem_home,
-  $server_ruby_load_paths      = $::puppet::server_ruby_load_paths,
-  $server_cipher_suites        = $::puppet::server_cipher_suites,
-  $server_max_active_instances = $::puppet::server_max_active_instances,
-  $server_ssl_protocols        = $::puppet::server_ssl_protocols,
-  $server_ca                   = $::puppet::server_ca,
-  $server_dir                  = $::puppet::server_dir,
-  $server_idle_timeout         = $::puppet::server_idle_timeout,
-  $server_connect_timeout      = $::puppet::server_connect_timeout,
-  $server_enable_ruby_profiler = $::puppet::server_enable_ruby_profiler,
+  $java_bin                    = $::puppet::server::jvm_java_bin,
+  $config                      = $::puppet::server::jvm_config,
+  $jvm_min_heap_size           = $::puppet::server::jvm_min_heap_size,
+  $jvm_max_heap_size           = $::puppet::server::jvm_max_heap_size,
+  $jvm_extra_args              = $::puppet::server::jvm_extra_args,
+  $server_puppetserver_dir     = $::puppet::server::puppetserver_dir,
+  $server_jruby_gem_home       = $::puppet::server::jruby_gem_home,
+  $server_ruby_load_paths      = $::puppet::server::ruby_load_paths,
+  $server_cipher_suites        = $::puppet::server::cipher_suites,
+  $server_max_active_instances = $::puppet::server::max_active_instances,
+  $server_ssl_protocols        = $::puppet::server::ssl_protocols,
+  $server_ca                   = $::puppet::server::ca,
+  $server_dir                  = $::puppet::server::dir,
+  $server_idle_timeout         = $::puppet::server::idle_timeout,
+  $server_connect_timeout      = $::puppet::server::connect_timeout,
+  $server_enable_ruby_profiler = $::puppet::server::enable_ruby_profiler,
   $vardir                      = $::puppet::vardir,
-  $server_ca_client_whitelist  = $::puppet::server_ca_client_whitelist,
-  $server_admin_api_whitelist  = $::puppet::server_admin_api_whitelist,
-  $server_puppetserver_version = $::puppet::server_puppetserver_version,
-  $server_use_legacy_auth_conf = $::puppet::server_use_legacy_auth_conf,
+  $server_ca_client_whitelist  = $::puppet::server::ca_client_whitelist,
+  $server_admin_api_whitelist  = $::puppet::server::admin_api_whitelist,
+  $server_puppetserver_version = $::puppet::server::puppetserver_version,
+  $server_use_legacy_auth_conf = $::puppet::server::use_legacy_auth_conf,
 ) {
   include ::puppet::server
 
-  $puppetserver_package = pick($::puppet::server_package, 'puppetserver')
+  $puppetserver_package = pick($::puppet::server::package, 'puppetserver')
 
   $jvm_cmd_arr = ["-Xms${jvm_min_heap_size}", "-Xmx${jvm_max_heap_size}", $jvm_extra_args]
   $jvm_cmd = strip(join(flatten($jvm_cmd_arr),' '))

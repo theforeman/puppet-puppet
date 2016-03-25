@@ -1,16 +1,16 @@
 # Set up a puppet environment
 define puppet::server::env (
-  $basedir                = $::puppet::server_envs_dir,
+  $basedir                = $::puppet::server::envs_dir,
   $config_version         = $::puppet::server::config_version_cmd,
   $manifest               = undef,
   $manifestdir            = undef,
-  $modulepath             = ["${::puppet::server_envs_dir}/${name}/modules", $::puppet::server_common_modules_path],
+  $modulepath             = ["${::puppet::server::envs_dir}/${name}/modules", $::puppet::server::common_modules_path],
   $templatedir            = undef,
-  $environment_timeout    = $::puppet::server_environment_timeout,
-  $directory_environments = $::puppet::server_directory_environments,
-  $owner                  = $::puppet::server_environments_owner,
-  $group                  = $::puppet::server_environments_group,
-  $mode                   = $::puppet::server_environments_mode,
+  $environment_timeout    = $::puppet::server::environment_timeout,
+  $directory_environments = $::puppet::server::directory_environments,
+  $owner                  = $::puppet::server::environments_owner,
+  $group                  = $::puppet::server::environments_group,
+  $mode                   = $::puppet::server::environments_mode,
 ) {
   file { "${basedir}/${name}":
     ensure => directory,
@@ -34,7 +34,7 @@ define puppet::server::env (
       mode   => $mode,
     }
 
-    $custom_modulepath = $modulepath and ($modulepath != ["${basedir}/${name}/modules", $::puppet::server_common_modules_path])
+    $custom_modulepath = $modulepath and ($modulepath != ["${basedir}/${name}/modules", $::puppet::server::common_modules_path])
     if $manifest or $config_version or $custom_modulepath or $environment_timeout {
       file { "${basedir}/${name}/environment.conf":
         ensure  => file,
