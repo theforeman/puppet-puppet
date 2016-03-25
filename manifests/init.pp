@@ -763,57 +763,20 @@ class puppet (
   validate_bool($remove_lock)
   validate_bool($server)
   validate_bool($allow_any_crl_auth)
-  validate_bool($server_ca)
-  validate_bool($server_http)
-  validate_bool($server_passenger)
-  validate_bool($server_git_repo)
-  validate_bool($server_service_fallback)
-  validate_bool($server_facts)
-  validate_bool($server_strict_variables)
-  validate_bool($server_foreman)
-  validate_bool($server_puppetdb_swf)
-  validate_bool($server_default_manifest)
-  validate_bool($server_ssl_dir_manage)
-  validate_bool($server_passenger_pre_start)
-  validate_integer($server_passenger_min_instances)
 
   validate_hash($additional_settings)
   validate_hash($agent_additional_settings)
-  validate_hash($server_additional_settings)
-
-  if $server_default_manifest {
-    validate_absolute_path($server_default_manifest_path)
-    validate_string($server_default_manifest_content)
-  }
 
   if $ca_server {
     validate_string($ca_server)
-  }
-  validate_string($hiera_config)
-  validate_string($server_external_nodes)
-  if $server_ca_proxy {
-    validate_string($server_ca_proxy)
-  }
-  if $server_puppetdb_host {
-    validate_string($server_puppetdb_host)
-  }
-
-  if $server_http {
-    validate_array($server_http_allow)
   }
 
   validate_string($systemd_unit_name)
 
   validate_string($service_name)
 
-  if ! is_bool($autosign) {
-    validate_absolute_path($autosign)
-    validate_string($autosign_mode)
-  }
-
   validate_array($listen_to)
   validate_array($dns_alt_names)
-  validate_array($server_rack_arguments)
   validate_array($auth_allowed)
 
   validate_absolute_path($dir)
@@ -821,42 +784,8 @@ class puppet (
   validate_absolute_path($logdir)
   validate_absolute_path($rundir)
 
-  validate_re($server_implementation, '^(master|puppetserver)$')
-  validate_re($server_parser, '^(current|future)$')
-
-  if $server_environment_timeout {
-    validate_re($server_environment_timeout, '^(unlimited|0|[0-9]+[smh]{1})$')
-  }
-
   if $manage_packages != true and $manage_packages != false {
     validate_re($manage_packages, '^(server|agent)$')
-  }
-
-  if $server_implementation == 'puppetserver' {
-    validate_re($server_jvm_min_heap_size, '^[0-9]+[kKmMgG]$')
-    validate_re($server_jvm_max_heap_size, '^[0-9]+[kKmMgG]$')
-    validate_absolute_path($server_puppetserver_dir)
-    validate_absolute_path($server_jruby_gem_home)
-    validate_integer($server_max_active_instances)
-    validate_integer($server_idle_timeout)
-    validate_integer($server_connect_timeout)
-    validate_array($server_ssl_protocols)
-    validate_array($server_cipher_suites)
-    validate_array($server_ruby_load_paths)
-    validate_array($server_ca_client_whitelist)
-    validate_array($server_admin_api_whitelist)
-    validate_bool($server_enable_ruby_profiler)
-    validate_bool($server_ca_auth_required)
-    validate_bool($server_use_legacy_auth_conf)
-    validate_re($server_puppetserver_version, '^[\d]\.[\d]\.[\d]$')
-  } else {
-    if $server_ip != $puppet::params::ip {
-      notify {
-        'ip_not_supported':
-          message  => "Bind IP address is unsupported for the ${server_implementation} implementation.",
-          loglevel => 'warning',
-      }
-    }
   }
 
   include ::puppet::config
