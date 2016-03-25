@@ -6,8 +6,9 @@ class puppet::server::config inherits puppet::config {
   }
 
   if $puppet::server_implementation == 'puppetserver' {
+    include ::puppet::server::puppetserver
     anchor {'::puppet::server::puppetserver_start': } ->
-    class { '::puppet::server::puppetserver': } ~>
+    Class['::puppet::server::puppetserver'] ~>
     anchor {'::puppet::server::puppetserver_end': }
   }
 

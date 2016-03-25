@@ -70,6 +70,7 @@ class puppet::server::puppetserver (
   $server_admin_api_whitelist  = $::puppet::server_admin_api_whitelist,
 ) {
   require ::puppet::server::augeaslens
+  include ::puppet::server
 
   $puppetserver_package = pick($::puppet::server_package, 'puppetserver')
 
