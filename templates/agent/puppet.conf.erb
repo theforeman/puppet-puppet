@@ -22,7 +22,7 @@
     pluginsync        = <%= scope.lookupvar('::puppet::pluginsync') %>
     masterport        = <%= scope.lookupvar("::puppet::port") rescue 8140 %>
     environment       = <%= scope.lookupvar("::puppet::environment") %>
-    certname          = <%= @clientcert %>
+    certname          = <%= scope.lookupvar("::puppet::client_certname") %>
 <% if !@use_srv_records -%>
     server            = <%= if ( @puppetmaster and !@puppetmaster.empty? ) then @puppetmaster else @fqdn end %>
 <% end -%>
