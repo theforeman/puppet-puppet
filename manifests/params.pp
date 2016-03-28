@@ -151,6 +151,7 @@ class puppet::params {
   # Will this host be a puppet agent ?
   $agent                     = true
   $remove_lock               = true
+  $client_certname           = $::clientcert
 
   # Custom puppetmaster
   if defined('$trusted') and $::trusted['authenticated'] == 'local' {

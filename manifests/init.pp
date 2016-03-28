@@ -229,6 +229,10 @@
 # $remove_lock::                      Remove the agent lock when running.
 #                                     type:boolean
 #
+# $client_certname::                  The node’s certificate name, and the unique
+#                                     identifier it uses when requesting catalogs.
+#                                     type:string
+#
 # $dir_owner::                        Owner of the base puppet directory, used when
 #                                     puppet::server is false.
 #                                     type:string
@@ -638,6 +642,7 @@ class puppet (
   $client_package                  = $puppet::params::client_package,
   $agent                           = $puppet::params::agent,
   $remove_lock                     = $puppet::params::remove_lock,
+  $client_certname                 = $puppet::params::client_certname,
   $puppetmaster                    = $puppet::params::puppetmaster,
   $systemd_unit_name               = $puppet::params::systemd_unit_name,
   $service_name                    = $puppet::params::service_name,
