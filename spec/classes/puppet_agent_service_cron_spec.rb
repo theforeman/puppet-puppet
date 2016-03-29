@@ -37,7 +37,11 @@ describe 'puppet::agent::service::cron' do
           "class {'puppet': agent => true}"
         end
 
-        it { should contain_cron('puppet').with_ensure('absent') }
+        if os =~ /\Awindows/
+          it { should_not contain_cron('puppet') }
+        else
+          it { should contain_cron('puppet').with_ensure('absent') }
+        end
       end
 
       describe 'when runmode => cron' do
@@ -46,12 +50,17 @@ describe 'puppet::agent::service::cron' do
         end
 
         it do
-          should contain_cron('puppet').with({
-            :command  => "#{bindir}/puppet agent --config #{confdir}/puppet.conf --onetime --no-daemonize",
-            :user     => 'root',
-            :minute   => ['15','45'],
-            :hour     => '*',
-          })
+          case os
+          when /\Awindows/
+            should raise_error(Puppet::Error, /Runmode of cron not supported on #{os_facts[:kernel]} operating systems!/)
+          else
+            should contain_cron('puppet').with({
+              :command  => "#{bindir}/puppet agent --config #{confdir}/puppet.conf --onetime --no-daemonize",
+              :user     => 'root',
+              :minute   => ['15','45'],
+              :hour     => '*',
+            })
+          end
         end
       end
     end

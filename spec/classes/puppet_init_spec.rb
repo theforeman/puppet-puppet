@@ -7,31 +7,42 @@ describe 'puppet' do
     context "on #{os}" do
       let (:default_facts) do
         os_facts.merge({
-          :clientcert             => 'puppetmaster.example.com',
-          :concat_basedir         => '/nonexistant',
-          :fqdn                   => 'puppetmaster.example.com',
-          :puppetversion          => Puppet.version,
+          :clientcert     => 'puppetmaster.example.com',
+          :concat_basedir => '/nonexistant',
+          :fqdn           => 'puppetmaster.example.com',
+          :puppetversion  => Puppet.version,
       }) end
 
       if Puppet.version < '4.0'
+        puppet_concat    = '/etc/puppet/puppet.conf'
         puppet_directory = '/etc/puppet'
-        puppet_concat = '/etc/puppet/puppet.conf'
-        puppet_package = 'puppet'
-        if os_facts[:osfamily] == 'FreeBSD'
-          puppet_directory = '/usr/local/etc/puppet'
-          puppet_concat    = '/usr/local/etc/puppet/puppet.conf'
-          puppet_package   = 'puppet38'
-        end
+        puppet_package   = 'puppet'
         additional_facts = {}
-      else
-        puppet_directory = '/etc/puppetlabs/puppet'
-        puppet_concat = '/etc/puppetlabs/puppet/puppet.conf'
-        puppet_package = 'puppet-agent'
-        additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
-        if os_facts[:osfamily] == 'FreeBSD'
-          puppet_directory = '/usr/local/etc/puppet'
+        case os_facts[:osfamily]
+        when 'FreeBSD'
           puppet_concat    = '/usr/local/etc/puppet/puppet.conf'
+          puppet_directory = '/usr/local/etc/puppet'
+          puppet_package   = 'puppet38'
+        when 'windows'
+          puppet_concat    = 'C:/ProgramData/PuppetLabs/puppet/etc/puppet.conf'
+          puppet_directory = 'C:/ProgramData/PuppetLabs/puppet/etc'
+          puppet_package   = 'puppet'
+        end
+      else
+        puppet_concat    = '/etc/puppetlabs/puppet/puppet.conf'
+        puppet_directory = '/etc/puppetlabs/puppet'
+        puppet_package   = 'puppet-agent'
+        additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
+        case os_facts[:osfamily]
+        when 'FreeBSD'
+          puppet_concat    = '/usr/local/etc/puppet/puppet.conf'
+          puppet_directory = '/usr/local/etc/puppet'
           puppet_package   = 'puppet4'
+          additional_facts = {}
+        when 'windows'
+          puppet_concat    = 'C:/ProgramData/PuppetLabs/puppet/etc/puppet.conf'
+          puppet_directory = 'C:/ProgramData/PuppetLabs/puppet/etc'
+          puppet_package   = 'puppet-agent'
           additional_facts = {}
         end
       end
@@ -141,29 +152,6 @@ describe 'puppet' do
           }}
           it { should raise_error(Puppet::Error, /does not match "\^\[0-9\]\+\[kKmMgG\]\$"/) }
         end
-      end
-    end
-  end
-
-  context 'on Windows' do
-    let :facts do {
-      :clientcert             => 'puppetmaster.example.com',
-      :concat_basedir         => '/nonexistant',
-      :fqdn                   => 'puppetmaster.example.com',
-      :operatingsystemrelease => '7',
-      :osfamily               => 'Windows',
-      :puppetversion          => Puppet.version,
-      :processorcount => 2,
-    } end
-
-    describe 'with no custom parameters' do
-      it { should contain_class('puppet::config') }
-      it { should contain_file('C:/ProgramData/PuppetLabs/puppet/etc').with_ensure('directory') }
-      it { should contain_concat('C:/ProgramData/PuppetLabs/puppet/etc/puppet.conf') }
-      if Puppet.version < '4.0'
-        it { should contain_package('puppet').with_ensure('present') }
-      else
-        it { should contain_package('puppet-agent').with_ensure('present') }
       end
     end
   end

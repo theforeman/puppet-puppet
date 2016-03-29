@@ -4,6 +4,7 @@ describe 'puppet::server::config' do
   on_supported_os.each do |os, os_facts|
     next if only_test_os() and not only_test_os.include?(os)
     next if exclude_test_os() and exclude_test_os.include?(os)
+    next if os_facts[:osfamily] == 'windows'
     context "on #{os}" do
       let (:default_facts) do
         os_facts.merge({
@@ -537,7 +538,6 @@ describe 'puppet::server::config' do
           end
         end
       end
-
     end
   end
 end

@@ -36,6 +36,6 @@ matrix:
       env: PUPPET_VERSION=3.5 ONLY_OS=ubuntu-12-x86_64,redhat-6-x86_64,scientific-6-x86_64,centos-6-x86_64,debian-6-x86_64 FUTURE_PARSER=yes TRUSTED_NODE_DATA=yes
     # Only Puppet 4.x supports Ruby 2.2. Also limit the OS set we test Ruby 2.2 with.
     - rvm: 2.2.3
-      env: PUPPET_VERSION=4.0 ONLY_OS=debian-8-x86_64,centos-7-x86_64,ubuntu-14-x86_64,freebsd-10-amd64
+      env: PUPPET_VERSION=4.0 ONLY_OS="debian-8-x86_64,centos-7-x86_64,ubuntu-14-x86_64,freebsd-10-amd64,windows-2012 R2-x64"
 bundler_args: --without development
 sudo: false

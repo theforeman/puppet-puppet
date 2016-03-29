@@ -56,18 +56,22 @@ describe 'puppet::agent::service' do
         let :pre_condition do
           "class {'puppet': agent => true, runmode => 'cron'}"
         end
-        it do
-          should contain_class('puppet::agent::service::daemon').with(:enabled => false)
-          should contain_class('puppet::agent::service::cron').with(:enabled => true)
-        end
         case os
+        when /\Awindows/
+          it do
+            should raise_error(Puppet::Error, /Runmode of cron not supported on #{os_facts[:kernel]} operating systems!/)
+          end
         when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-16/
           it do
+            should contain_class('puppet::agent::service::cron').with(:enabled => true)
+            should contain_class('puppet::agent::service::daemon').with(:enabled => false)
             should contain_class('puppet::agent::service::systemd').with(:enabled => false)
             should contain_service('puppet-run.timer').with(:ensure => :stopped)
           end
         else
           it do
+            should contain_class('puppet::agent::service::cron').with(:enabled => true)
+            should contain_class('puppet::agent::service::daemon').with(:enabled => false)
             should contain_class('puppet::agent::service::systemd').with(:enabled => false)
             should_not contain_service('puppet-run.timer')
           end
