@@ -24,7 +24,11 @@ describe 'puppet::agent::install' do
           additional_facts = {}
         else
           client_package = 'puppet-agent'
-          additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
+          if os_facts[:osfamily] == 'windows'
+            additional_facts = {}
+          else
+            additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
+          end
         end
       end
 
@@ -37,8 +41,14 @@ describe 'puppet::agent::install' do
           'include ::puppet'
         end
 
-        it 'should not define provider' do
-          should contain_package(client_package).without_provider(nil)
+        if os_facts[:osfamily] == 'windows'
+          it 'should define provider as chocolatey on Windows' do
+            should contain_package(client_package).with_provider('chocolatey')
+          end
+        else
+          it 'should not define provider on non-Windows' do
+            should contain_package(client_package).without_provider(nil)
+          end
         end
       end
 
@@ -80,65 +90,31 @@ describe 'puppet::agent::install' do
         end
       end
 
-    end
-  end
+      if os_facts[:osfamily] == 'windows'
+        describe "when package_provider => 'msi'" do
+          let :pre_condition do
+            "class { 'puppet': package_provider => 'msi', }"
+          end
 
-  # Windows is currently not supported by rspec-puppet-facts
-  context "on Windows" do
-    let :default_facts do
-      {
-        :osfamily => 'windows',
-        :concat_basedir => 'C:\Temp',
-        :puppetversion => Puppet.version,
-        :processorcount => 2,
-      }
-    end
+          it 'should define provider as msi' do
+            should contain_package(client_package).with_provider('msi')
+          end
+        end
 
-    if Puppet.version < '4.0'
-      client_package = 'puppet'
-      additional_facts = {}
-    else
-      client_package = 'puppet-agent'
-      additional_facts = {}
-    end
+        describe "when package_provider => 'windows' and source is defined" do
+          let :pre_condition do
+            "class { 'puppet': package_provider => 'windows', package_source => 'C:\\Temp\\puppet.exe' }"
+          end
 
-    let (:facts) do
-      default_facts.merge(additional_facts)
-    end
+          it 'should define provider as windows' do
+            should contain_package(client_package).with_provider('windows')
+          end
 
-    describe 'with default parameters' do
-      let :pre_condition do
-        'include ::puppet'
-      end
-
-      it 'should define provider as chocolatey' do
-        should contain_package(client_package).with_provider('chocolatey')
-      end
-    end
-
-    describe "when package_provider => 'msi'" do
-      let :pre_condition do
-        "class { 'puppet': package_provider => 'msi', }"
-      end
-
-      it 'should define provider as msi' do
-        should contain_package(client_package).with_provider('msi')
-      end
-    end
-
-    describe "when package_provider => 'windows' and source is defined" do
-      let :pre_condition do
-        "class { 'puppet': package_provider => 'windows', package_source => 'C:\\Temp\\puppet.exe' }"
-      end
-
-      it 'should define provider as windows' do
-        should contain_package(client_package).with_provider('windows')
-      end
-
-      it 'should define source as C:\Temp\puppet.exe' do
-        should contain_package(client_package).with_source('C:\Temp\puppet.exe')
+          it 'should define source as C:\Temp\puppet.exe' do
+            should contain_package(client_package).with_source('C:\Temp\puppet.exe')
+          end
+        end
       end
     end
   end
-
 end

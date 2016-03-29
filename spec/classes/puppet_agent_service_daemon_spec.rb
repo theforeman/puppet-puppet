@@ -49,12 +49,17 @@ describe 'puppet::agent::service::daemon' do
           end
 
           it do
-            should contain_service('puppet').with({
-              :ensure     => 'stopped',
-              :name       => 'puppet',
-              :hasstatus  => 'true',
-              :enable     => 'false',
-            })
+            case os
+            when /\Awindows/
+              should raise_error(Puppet::Error, /Runmode of cron not supported on #{os_facts[:kernel]} operating systems!/)
+            else
+              should contain_service('puppet').with({
+                :ensure     => 'stopped',
+                :name       => 'puppet',
+                :hasstatus  => 'true',
+                :enable     => 'false',
+              })
+            end
           end
         end
       end
