@@ -36,7 +36,7 @@ describe 'puppet::agent::config' do
         end
       end
 
-      context 'with runmode => cron' do
+      context 'with runmode => cron', :unless => (facts[:osfamily] == 'Archlinux') do
         let :pre_condition do
           'class { "::puppet": runmode => "cron" }'
         end

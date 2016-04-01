@@ -89,6 +89,22 @@ class puppet::params {
       $server_jruby_gem_home      = undef
     }
 
+    'Archlinux' : {
+      $dir                        = '/etc/puppetlabs/puppet'
+      $codedir                    = '/etc/puppetlabs/code'
+      $logdir                     = '/var/log/puppetlabs/puppet'
+      $rundir                     = '/var/run/puppetlabs'
+      $ssldir                     = '/etc/puppetlabs/puppet/ssl'
+      $vardir                     = '/opt/puppetlabs/puppet/cache'
+      $sharedir                   = '/opt/puppetlabs/puppet'
+      $bindir                     = '/usr/bin'
+      $root_group                 = undef
+      $server_puppetserver_dir    = undef
+      $server_puppetserver_vardir = undef
+      $server_ruby_load_paths     = []
+      $server_jruby_gem_home      = undef
+    }
+
     default : {
       if $aio_package {
         $dir                        = '/etc/puppetlabs/puppet'
@@ -332,6 +348,10 @@ class puppet::params {
     'Windows': {
       $agent_restart_command = undef
       $unavailable_runmodes = ['cron', 'systemd.timer']
+    }
+    'Archlinux': {
+      $agent_restart_command = "/usr/bin/systemctl reload-or-restart ${service_name}"
+      $unavailable_runmodes = ['cron']
     }
     default  : {
       $agent_restart_command = undef

@@ -39,7 +39,7 @@ describe 'puppet::agent::service' do
           should contain_class('puppet::agent::service::cron').with(:enabled => false)
         end
         case os
-        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-16/
+        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-16/, /\Aarchlinux-/
           it do
             should contain_class('puppet::agent::service::systemd').with(:enabled => false)
             should contain_service('puppet-run.timer').with(:ensure => :stopped)
@@ -57,7 +57,7 @@ describe 'puppet::agent::service' do
           "class {'puppet': agent => true, runmode => 'cron'}"
         end
         case os
-        when /\Awindows/
+        when /\A(windows|archlinux)/
           it do
             should raise_error(Puppet::Error, /Runmode of cron not supported on #{os_facts[:kernel]} operating systems!/)
           end
@@ -83,7 +83,7 @@ describe 'puppet::agent::service' do
           "class {'puppet': agent => true, runmode => 'systemd.timer'}"
         end
         case os
-        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-16/
+        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-16/, /\Aarchlinux-/
           it do
             should contain_class('puppet::agent::service::daemon').with(:enabled => false)
             should contain_class('puppet::agent::service::cron').with(:enabled => false)
@@ -115,7 +115,7 @@ describe 'puppet::agent::service' do
           should contain_class('puppet::agent::service::cron').with(:enabled => false)
         end
         case os
-        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-16/
+        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-16/, /\Aarchlinux-/
           it do
             should contain_class('puppet::agent::service::systemd').with(:enabled => false)
             should contain_service('puppet-run.timer').with(:ensure => :stopped)

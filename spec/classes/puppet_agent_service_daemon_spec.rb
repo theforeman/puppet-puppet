@@ -50,7 +50,7 @@ describe 'puppet::agent::service::daemon' do
 
           it do
             case os
-            when /\Awindows/
+            when /\A(windows|archlinux)/
               should raise_error(Puppet::Error, /Runmode of cron not supported on #{os_facts[:kernel]} operating systems!/)
             else
               should contain_service('puppet').with({

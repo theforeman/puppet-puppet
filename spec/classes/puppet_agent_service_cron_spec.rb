@@ -37,7 +37,7 @@ describe 'puppet::agent::service::cron' do
           "class {'puppet': agent => true}"
         end
 
-        if os =~ /\Awindows/
+        if os =~ /\A(windows|archlinux)/
           it { should_not contain_cron('puppet') }
         else
           it { should contain_cron('puppet').with_ensure('absent') }
@@ -51,7 +51,7 @@ describe 'puppet::agent::service::cron' do
 
         it do
           case os
-          when /\Awindows/
+          when /\A(windows|archlinux)/
             should raise_error(Puppet::Error, /Runmode of cron not supported on #{os_facts[:kernel]} operating systems!/)
           else
             should contain_cron('puppet').with({

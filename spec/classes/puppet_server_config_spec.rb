@@ -5,6 +5,7 @@ describe 'puppet::server::config' do
     next if only_test_os() and not only_test_os.include?(os)
     next if exclude_test_os() and exclude_test_os.include?(os)
     next if os_facts[:osfamily] == 'windows'
+    next if os_facts[:osfamily] == 'Archlinux'
     context "on #{os}" do
       let (:default_facts) do
         os_facts.merge({

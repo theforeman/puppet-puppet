@@ -97,6 +97,9 @@
       ]
     },
     {
+      "operatingsystem": "Archlinux"
+    },
+    {
       "operatingsystem": "windows",
       "operatingsystemrelease": [
         "Vista",

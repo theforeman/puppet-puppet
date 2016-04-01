@@ -6,6 +6,7 @@ describe 'puppet::server::puppetserver' do
     next if exclude_test_os() and exclude_test_os.include?(os)
     next if os_facts[:osfamily] == 'windows'
     next if os_facts[:osfamily] == 'FreeBSD'
+    next if os_facts[:osfamily] == 'Archlinux'
     context "on #{os}" do
       let (:default_facts) do
         os_facts.merge({
