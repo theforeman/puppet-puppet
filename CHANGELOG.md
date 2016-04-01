@@ -3,6 +3,7 @@
 ## 5.0.0
 * New or changed parameters:
     * Add server_ip for configuring the listen IP (puppetserver only)
+    * Add passenger_min_instances and passenger_pre_start for passenger tuning
 * Other features:
     * Support puppetserver 2.x
 * Other changes and fixes:

@@ -10,6 +10,7 @@ describe 'puppet::server::passenger' do
         os_facts.merge({
           :concat_basedir         => '/foo/bar',
           :puppetversion          => Puppet.version,
+          :fqdn                   => 'puppet.example.com',
       }) end
 
       if Puppet.version < '4.0'
@@ -23,7 +24,11 @@ describe 'puppet::server::passenger' do
       end
 
       let(:default_params) do {
-        :app_root => '/etc/puppet/rack'
+        :app_root => '/etc/puppet/rack',
+        :passenger_pre_start => true,
+        :passenger_min_instances => 12,
+        :port => 8140,
+        :http_port => 8139,
       } end
 
       describe 'without parameters' do
@@ -66,6 +71,29 @@ describe 'puppet::server::passenger' do
         end
       end
 
+      describe 'with passenger settings' do
+        let :params do
+          default_params.merge({
+            :http => true,
+            :passenger_min_instances => 10,
+            :passenger_pre_start => true,
+          })
+        end
+
+        it 'should include the puppet https vhost' do
+          should contain_apache__vhost('puppet').with({
+            :passenger_min_instances => 10,
+            :passenger_pre_start     => 'https://puppet.example.com:8140',
+          })
+        end
+
+        it 'should include the puppet http vhost' do
+          should contain_apache__vhost('puppet-http').with({
+            :passenger_min_instances => 10,
+            :passenger_pre_start     => 'http://puppet.example.com:8139',
+          })
+        end
+      end
     end
   end
 end
