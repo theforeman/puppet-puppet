@@ -171,6 +171,8 @@ class puppet::params {
   $server_passenger           = true
   $server_service_fallback    = true
   $server_passenger_max_pool  = 12
+  $server_passenger_min_instances = $::processorcount
+  $server_passenger_pre_start = true
   $server_httpd_service       = 'httpd'
   $server_external_nodes      = "${dir}/node.rb"
   $server_enc_api             = 'v2'

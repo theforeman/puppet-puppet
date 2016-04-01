@@ -420,6 +420,16 @@
 #                                     to lower this. Defaults to 12.
 #                                     type:integer
 #
+# $server_passenger_min_instances::   The PassengerMinInstances parameter. Sets the
+#                                     minimum number of application processes to run.
+#                                     Defaults to the number of processors on your
+#                                     system.
+#                                     type:integer
+#
+# $server_passenger_pre_start::       Pre-start the first passenger worker instance
+#                                     process during httpd start.
+#                                     type:boolean
+#
 # $server_config_version::            How to determine the configuration version. When
 #                                     using git_repo, by default a git describe
 #                                     approach will be installed.
@@ -662,6 +672,8 @@ class puppet (
   $server_puppetserver_dir         = $puppet::params::server_puppetserver_dir,
   $server_service_fallback         = $puppet::params::server_service_fallback,
   $server_passenger_max_pool       = $puppet::params::server_passenger_max_pool,
+  $server_passenger_min_instances  = $puppet::params::server_passenger_min_instances,
+  $server_passenger_pre_start      = $puppet::params::server_passenger_pre_start,
   $server_httpd_service            = $puppet::params::server_httpd_service,
   $server_external_nodes           = $puppet::params::server_external_nodes,
   $server_template                 = $puppet::params::server_template,
@@ -748,6 +760,8 @@ class puppet (
   validate_bool($server_puppetdb_swf)
   validate_bool($server_default_manifest)
   validate_bool($server_ssl_dir_manage)
+  validate_bool($server_passenger_pre_start)
+  validate_integer($server_passenger_min_instances)
 
   validate_hash($additional_settings)
   validate_hash($agent_additional_settings)

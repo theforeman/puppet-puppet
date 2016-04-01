@@ -3,20 +3,22 @@
 # Set up the puppet server using passenger and apache.
 #
 class puppet::server::passenger (
-  $app_root           = $::puppet::server_app_root,
-  $passenger_max_pool = $::puppet::server_passenger_max_pool,
-  $port               = $::puppet::server_port,
-  $ssl_ca_cert        = $::puppet::server::ssl_ca_cert,
-  $ssl_ca_crl         = $::puppet::server::ssl_ca_crl,
-  $ssl_cert           = $::puppet::server::ssl_cert,
-  $ssl_cert_key       = $::puppet::server::ssl_cert_key,
-  $ssl_chain          = $::puppet::server::ssl_chain,
-  $ssl_dir            = $::puppet::server_ssl_dir,
-  $puppet_ca_proxy    = $::puppet::server_ca_proxy,
-  $user               = $::puppet::server_user,
-  $http               = $::puppet::server_http,
-  $http_port          = $::puppet::server_http_port,
-  $http_allow         = $::puppet::server_http_allow,
+  $app_root                = $::puppet::server_app_root,
+  $passenger_max_pool      = $::puppet::server_passenger_max_pool,
+  $passenger_min_instances = $::puppet::server_passenger_min_instances,
+  $passenger_pre_start     = $::puppet::server_passenger_pre_start,
+  $port                    = $::puppet::server_port,
+  $ssl_ca_cert             = $::puppet::server::ssl_ca_cert,
+  $ssl_ca_crl              = $::puppet::server::ssl_ca_crl,
+  $ssl_cert                = $::puppet::server::ssl_cert,
+  $ssl_cert_key            = $::puppet::server::ssl_cert_key,
+  $ssl_chain               = $::puppet::server::ssl_chain,
+  $ssl_dir                 = $::puppet::server_ssl_dir,
+  $puppet_ca_proxy         = $::puppet::server_ca_proxy,
+  $user                    = $::puppet::server_user,
+  $http                    = $::puppet::server_http,
+  $http_port               = $::puppet::server_http_port,
+  $http_allow              = $::puppet::server_http_allow,
 ) {
   include ::apache
   include ::apache::mod::passenger
@@ -42,10 +44,20 @@ class puppet::server::passenger (
     'path'              => "${app_root}/public/",
     'passenger_enabled' => 'On',
   }
-  
+
   $directories = [
     $directory,
   ]
+
+  $http_pre_start = $passenger_pre_start ? {
+    true  => "http://${::fqdn}:${http_port}",
+    false => undef,
+  }
+
+  $https_pre_start = $passenger_pre_start ? {
+    true  => "https://${::fqdn}:${port}",
+    false => undef,
+  }
 
   # The following client headers allow the same configuration to work with Pound.
   $request_headers = [
@@ -73,27 +85,29 @@ class puppet::server::passenger (
   }
 
   apache::vhost { 'puppet':
-    docroot              => "${app_root}/public/",
-    directories          => $directories,
-    port                 => $port,
-    ssl                  => true,
-    ssl_cert             => $ssl_cert,
-    ssl_key              => $ssl_cert_key,
-    ssl_ca               => $ssl_ca_cert,
-    ssl_crl              => $ssl_ca_crl,
-    ssl_crl_check        => $ssl_crl_check,
-    ssl_chain            => $ssl_chain,
-    ssl_protocol         => 'ALL -SSLv2 -SSLv3',
-    ssl_cipher           => 'EDH+CAMELLIA:EDH+aRSA:EECDH+aRSA+AESGCM:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH:+CAMELLIA256:+AES256:+CAMELLIA128:+AES128:+SSLv3:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!DSS:!RC4:!SEED:!IDEA:!ECDSA:kEDH:CAMELLIA256-SHA:AES256-SHA:CAMELLIA128-SHA:AES128-SHA',
-    ssl_honorcipherorder => 'on',
-    ssl_verify_client    => 'optional',
-    ssl_options          => '+StdEnvVars +ExportCertData',
-    ssl_verify_depth     => '1',
-    ssl_proxyengine      => $ssl_proxyengine,
-    custom_fragment      => $custom_fragment,
-    request_headers      => $request_headers,
-    options              => ['None'],
-    require              => Class['::puppet::server::rack'],
+    docroot                 => "${app_root}/public/",
+    directories             => $directories,
+    port                    => $port,
+    ssl                     => true,
+    ssl_cert                => $ssl_cert,
+    ssl_key                 => $ssl_cert_key,
+    ssl_ca                  => $ssl_ca_cert,
+    ssl_crl                 => $ssl_ca_crl,
+    ssl_crl_check           => $ssl_crl_check,
+    ssl_chain               => $ssl_chain,
+    ssl_protocol            => 'ALL -SSLv2 -SSLv3',
+    ssl_cipher              => 'EDH+CAMELLIA:EDH+aRSA:EECDH+aRSA+AESGCM:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH:+CAMELLIA256:+AES256:+CAMELLIA128:+AES128:+SSLv3:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!DSS:!RC4:!SEED:!IDEA:!ECDSA:kEDH:CAMELLIA256-SHA:AES256-SHA:CAMELLIA128-SHA:AES128-SHA',
+    ssl_honorcipherorder    => 'on',
+    ssl_verify_client       => 'optional',
+    ssl_options             => '+StdEnvVars +ExportCertData',
+    ssl_verify_depth        => '1',
+    ssl_proxyengine         => $ssl_proxyengine,
+    custom_fragment         => $custom_fragment,
+    request_headers         => $request_headers,
+    options                 => ['None'],
+    passenger_pre_start     => $https_pre_start,
+    passenger_min_instances => $passenger_min_instances,
+    require                 => Class['::puppet::server::rack'],
   }
 
   if $http {
@@ -113,12 +127,12 @@ class puppet::server::passenger (
           ], "\n")
       }),
     ]
-    
+
     apache::vhost { 'puppet-http':
-      docroot         => "${app_root}/public/",
-      directories     => $directories_http,
-      port            => $http_port,
-      custom_fragment => join([
+      docroot                 => "${app_root}/public/",
+      directories             => $directories_http,
+      port                    => $http_port,
+      custom_fragment         => join([
           $custom_fragment ? {
             undef   => '',
             default => $custom_fragment
@@ -126,8 +140,10 @@ class puppet::server::passenger (
           'SetEnvIf X-Client-Verify "(.*)" SSL_CLIENT_VERIFY=$1',
           'SetEnvIf X-SSL-Client-DN "(.*)" SSL_CLIENT_S_DN=$1',
         ], "\n"),
-      options         => ['None'],
-      require         => Class['::puppet::server::rack'],
+      options                 => ['None'],
+      passenger_pre_start     => $http_pre_start,
+      passenger_min_instances => $passenger_min_instances,
+      require                 => Class['::puppet::server::rack'],
     }
   }
 }
