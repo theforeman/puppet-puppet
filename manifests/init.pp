@@ -520,9 +520,6 @@
 #                                     disable in case CA is delegated to a separate instance
 #                                     type:boolean
 #
-# $server_lenses_dir::                The path of the augeas lenses directory
-#                                     type:string
-#
 # $server_puppetserver_dir::          The path of the puppetserver config dir
 #                                     type:string
 #
@@ -728,7 +725,6 @@ class puppet (
   $server_jvm_min_heap_size        = $puppet::params::server_jvm_min_heap_size,
   $server_jvm_max_heap_size        = $puppet::params::server_jvm_max_heap_size,
   $server_jvm_extra_args           = $puppet::params::server_jvm_extra_args,
-  $server_lenses_dir               = $puppet::params::server_lenses_dir,
   $server_jruby_gem_home           = $puppet::params::server_jruby_gem_home,
   $server_max_active_instances     = $puppet::params::server_max_active_instances,
 ) inherits puppet::params {
@@ -811,7 +807,6 @@ class puppet (
   if $server_implementation == 'puppetserver' {
     validate_re($server_jvm_min_heap_size, '^[0-9]+[kKmMgG]$')
     validate_re($server_jvm_max_heap_size, '^[0-9]+[kKmMgG]$')
-    validate_absolute_path($server_lenses_dir)
     validate_absolute_path($server_puppetserver_dir)
     validate_absolute_path($server_jruby_gem_home)
     validate_integer($server_max_active_instances)

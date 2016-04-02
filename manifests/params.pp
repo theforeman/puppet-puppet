@@ -72,7 +72,6 @@ class puppet::params {
       $sharedir          = "${dir_prefix}/share"
       $bindir            = "${dir_prefix}/bin"
       $root_group        = undef
-      $server_lenses_dir = "${dir_prefix}/share/augeas/lenses"
     }
 
     /^(FreeBSD|DragonFly)$/ : {
@@ -85,7 +84,6 @@ class puppet::params {
       $sharedir          = '/usr/local/share/puppet'
       $bindir            = '/usr/local/bin'
       $root_group        = undef
-      $server_lenses_dir = '/usr/local/share/augeas/lenses'
     }
 
     default : {
@@ -98,7 +96,6 @@ class puppet::params {
         $vardir            = '/opt/puppetlabs/puppet/cache'
         $sharedir          = '/opt/puppetlabs/puppet'
         $bindir            = '/opt/puppetlabs/bin'
-        $server_lenses_dir = '/opt/puppetlabs/puppet/share/augeas/lenses'
       } else {
         $dir               = '/etc/puppet'
         $codedir           = '/etc/puppet'
@@ -108,7 +105,6 @@ class puppet::params {
         $vardir            = '/var/lib/puppet'
         $sharedir          = '/usr/share/puppet'
         $bindir            = '/usr/bin'
-        $server_lenses_dir = '/usr/share/augeas/lenses'
       }
       $root_group = undef
     }
@@ -353,5 +349,4 @@ class puppet::params {
   $server_ca_client_whitelist      = [ '127.0.0.1', '::1', $::ipaddress ]
   $server_cipher_suites            = [ 'TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA', 'TLS_RSA_WITH_AES_128_CBC_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA', ]
   $server_ssl_protocols            = [ 'TLSv1.2', ]
-
 }

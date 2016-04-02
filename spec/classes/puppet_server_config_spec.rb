@@ -154,9 +154,9 @@ describe 'puppet::server::config' do
             with_content(/^\s+rundir\s+= #{rundir}$/).
             with_content(/^\s+ssldir\s+= #{ssldir}$/).
             with_content(/^\s+reports\s+= foreman$/).
-            with_content(/^\s+privatekeydir\s+= \$ssldir\/private_keys { group = service }$/).
-            with_content(/^\s+hostprivkey\s+= \$privatekeydir\/\$certname.pem { mode = 640 }$/).
-            with_content(/^\s+autosign\s+= \$confdir\/autosign.conf { mode = 664 }$/).
+            with_content(/^\s+privatekeydir\s+= \$ssldir\/private_keys \{ group = service \}$/).
+            with_content(/^\s+hostprivkey\s+= \$privatekeydir\/\$certname.pem \{ mode = 640 \}$/).
+            with_content(/^\s+autosign\s+= \$confdir\/autosign.conf \{ mode = 664 \}$/).
             with({}) # So we can use a trailing dot on each with_content line
 
           should contain_concat__fragment('puppet.conf+20-agent').
@@ -440,7 +440,7 @@ describe 'puppet::server::config' do
 
         it 'should add the branch map to the post receive hook' do
           should contain_file("#{vardir}/puppet.git/hooks/post-receive").
-            with_content(/BRANCH_MAP = {\n  "a" => "b",\n  "c" => "d",\n}/)
+            with_content(/BRANCH_MAP = \{\n  "a" => "b",\n  "c" => "d",\n\}/)
         end
       end
 

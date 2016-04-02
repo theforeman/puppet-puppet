@@ -49,16 +49,15 @@ describe 'puppet::server::puppetserver' do
             :server_puppetserver_dir => '/etc/custom/puppetserver',
           })
         end
-        it { should contain_augeas('puppet::server::puppetserver::server_ca').
-                with_changes([
-                  'rm @simple[. = "puppetlabs.services.ca.certificate-authority-disabled-service"]',
-                  'set @simple[. = "puppetlabs.services.ca.certificate-authority-service"] puppetlabs.services.ca.certificate-authority-service',
-                  'set @simple[. = "puppetlabs.services.ca.certificate-authority-service"]/@value certificate-authority-service',
-                ]).
-                with_context('/files/etc/custom/puppetserver/bootstrap.cfg').
-                with_incl('/etc/custom/puppetserver/bootstrap.cfg').
-                with_lens('Trapperkeeper.lns').
-                with({})
+        it {
+          should contain_file_line('ca_enabled').
+            with_ensure('present').
+            with_line('puppetlabs.services.ca.certificate-authority-service/certificate-authority-service')
+        }
+        it {
+          should contain_file_line('ca_disabled').
+            with_ensure('absent').
+            with_line('puppetlabs.services.ca.certificate-authority-disabled-service/certificate-authority-disabled-service')
         }
         it { should contain_augeas('puppet::server::puppetserver::jvm').
                 with_changes([
