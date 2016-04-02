@@ -69,7 +69,6 @@ class puppet::server::puppetserver (
   $server_ca_client_whitelist  = $::puppet::server_ca_client_whitelist,
   $server_admin_api_whitelist  = $::puppet::server_admin_api_whitelist,
 ) {
-  require ::puppet::server::augeaslens
   include ::puppet::server
 
   $puppetserver_package = pick($::puppet::server_package, 'puppetserver')
@@ -87,20 +86,26 @@ class puppet::server::puppetserver (
     ],
   }
 
-  $augcmds = $server_ca ? {
-    true    => ['rm @simple[. = "puppetlabs.services.ca.certificate-authority-disabled-service"]',
-                'set @simple[. = "puppetlabs.services.ca.certificate-authority-service"] puppetlabs.services.ca.certificate-authority-service',
-                'set @simple[. = "puppetlabs.services.ca.certificate-authority-service"]/@value certificate-authority-service',],
-    default => ['rm @simple[. = "puppetlabs.services.ca.certificate-authority-service"]',
-                'set @simple[. = "puppetlabs.services.ca.certificate-authority-disabled-service"] puppetlabs.services.ca.certificate-authority-disabled-service',
-                'set @simple[. = "puppetlabs.services.ca.certificate-authority-disabled-service"]/@value certificate-authority-disabled-service',],
+  $ca_enabled_ensure = $server_ca ? {
+    true    => present,
+    default => absent,
   }
 
-  augeas { 'puppet::server::puppetserver::server_ca':
-    context => "/files${server_puppetserver_dir}/bootstrap.cfg",
-    changes => $augcmds,
-    incl    => "${server_puppetserver_dir}/bootstrap.cfg",
-    lens    => 'Trapperkeeper.lns',
+  $ca_disabled_ensure = $server_ca ? {
+    false   => present,
+    default => absent,
+  }
+
+  file_line { 'ca_enabled':
+    ensure => $ca_enabled_ensure,
+    path   => "${server_puppetserver_dir}/bootstrap.cfg",
+    line   => 'puppetlabs.services.ca.certificate-authority-service/certificate-authority-service',
+  }
+
+  file_line { 'ca_disabled':
+    ensure => $ca_disabled_ensure,
+    path   => "${server_puppetserver_dir}/bootstrap.cfg",
+    line   => 'puppetlabs.services.ca.certificate-authority-disabled-service/certificate-authority-disabled-service',
   }
 
   file { "${server_puppetserver_dir}/conf.d/ca.conf":
