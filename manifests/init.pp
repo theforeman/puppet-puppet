@@ -90,13 +90,14 @@
 #                                     the puppet agent.
 #                                     type:integer
 #
-# $autosign::                         Enable or disable autosign or change location
-#                                     of autosign.conf or autosign script.  If this
-#                                     is set to a script, make sure that script
-#                                     considers the content of autosign.conf, as it
-#                                     might break Foreman functionality if it
-#                                     doesn't. If this is set to a boolean, it can
-#                                     be cast as a string or a boolean.
+# $autosign::                         If set to a boolean, autosign is enabled or disabled
+#                                     for all incoming requests. Otherwise this has to be
+#                                     set to the full file path of an autosign.conf file or
+#                                     an autosign script. If this is set to a script, make
+#                                     sure that script considers the content of autosign.conf
+#                                     as otherwise Foreman functionality might be broken.
+#
+# $autosign_mode::                    mode of the autosign file/script
 #
 # $usecacheonfailure::                Switch to enable use of cached catalog on
 #                                     failure of run.
@@ -621,6 +622,7 @@ class puppet (
   $splay                           = $puppet::params::splay,
   $splaylimit                      = $puppet::params::splaylimit,
   $autosign                        = $puppet::params::autosign,
+  $autosign_mode                   = $puppet::params::autosign_mode,
   $runinterval                     = $puppet::params::runinterval,
   $usecacheonfailure               = $puppet::params::usecacheonfailure,
   $runmode                         = $puppet::params::runmode,
@@ -800,7 +802,8 @@ class puppet (
   validate_string($service_name)
 
   if ! is_bool($autosign) {
-    validate_string($autosign)
+    validate_absolute_path($autosign)
+    validate_string($autosign_mode)
   }
 
   validate_array($listen_to)

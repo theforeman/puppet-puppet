@@ -12,7 +12,6 @@ class puppet::params {
   $pluginsync          = true
   $splay               = false
   $splaylimit          = '1800'
-  $autosign            = '$confdir/autosign.conf { mode = 664 }'
   $runinterval         = '1800'
   $runmode             = 'service'
 
@@ -109,6 +108,9 @@ class puppet::params {
       $root_group = undef
     }
   }
+
+  $autosign      = "${dir}/autosign.conf"
+  $autosign_mode = '0664'
 
   $puppet_cmd = "${bindir}/puppet"
 

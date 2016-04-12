@@ -2,7 +2,12 @@
 ## Module:           '<%= scope.to_hash['module_name'] %>'
 
 [master]
-    autosign       = <%= scope.lookupvar('::puppet::autosign') %>
+<% autosign = scope.lookupvar('::puppet::autosign') -%>
+<% if !!autosign == autosign -%>
+    autosign       = <%= autosign %>
+<% else -%>
+    autosign       = <%= autosign %> { mode = <%= scope.lookupvar('::puppet::autosign_mode') -%> }
+<% end -%>
     external_nodes = <%= @server_external_nodes %>
     node_terminus  = <%= @server_node_terminus %>
     ca             = <%= scope.lookupvar("puppet::server_ca") %>

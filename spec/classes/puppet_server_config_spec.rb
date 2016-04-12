@@ -156,7 +156,7 @@ describe 'puppet::server::config' do
             with_content(/^\s+reports\s+= foreman$/).
             with_content(/^\s+privatekeydir\s+= \$ssldir\/private_keys \{ group = service \}$/).
             with_content(/^\s+hostprivkey\s+= \$privatekeydir\/\$certname.pem \{ mode = 640 \}$/).
-            with_content(/^\s+autosign\s+= \$confdir\/autosign.conf \{ mode = 664 \}$/).
+            with_content(/^\s+autosign\s+= #{etcdir}\/autosign.conf \{ mode = 0664 \}$/).
             with({}) # So we can use a trailing dot on each with_content line
 
           should contain_concat__fragment('puppet.conf+20-agent').
@@ -174,6 +174,8 @@ describe 'puppet::server::config' do
           should contain_concat(conf_file)
 
           should_not contain_file('/etc/puppet/puppet.conf').with_content(/storeconfigs/)
+
+          should contain_file("#{etcdir}/autosign.conf")
         end
 
         context 'on Puppet < 4.0.0', :if => (Puppet.version < '4.0.0') do

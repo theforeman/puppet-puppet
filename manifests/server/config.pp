@@ -103,6 +103,16 @@ class puppet::server::config inherits puppet::config {
     Exec['puppet_server_config-generate_ca_cert'] ~> Service[$puppet::server_httpd_service]
   }
 
+  # autosign file
+  if $::puppet::server_ca and ! is_bool($puppet::autosign) {
+    file { $puppet::autosign:
+      ensure => file,
+      owner  => $puppet::user,
+      group  => $puppet::group,
+      mode   => $puppet::autosign_mode,
+    }
+  }
+
   # only manage this file if we provide content
   if $puppet::server_default_manifest and $puppet::server_default_manifest_content != '' {
     file { $::puppet::server_default_manifest_path:
