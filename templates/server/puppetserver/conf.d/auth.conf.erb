@@ -30,7 +30,7 @@ authorization: {
                 type: path
                 method: get
             }
-            allow: "*"
+            allow-unauthenticated: true
             sort-order: 500
             name: "puppetlabs crl"
         },
@@ -54,6 +54,16 @@ authorization: {
             allow: "*"
             sort-order: 500
             name: "puppetlabs environments"
+        },
+        {
+            match-request: {
+                path: "/puppet/v3/resource_type"
+                type: path
+                method: [get, post]
+            }
+            allow: "*"
+            sort-order: 500
+            name: "puppetlabs resource type"
         },
         {
             # Allow nodes to access all file services; this is necessary for
@@ -100,6 +110,16 @@ authorization: {
             allow-unauthenticated: true
             sort-order: 500
             name: "puppetlabs status"
+        },
+        {
+            match-request: {
+                path: "/puppet/v3/static_file_content"
+                type: path
+                method: get
+            }
+            allow: "*"
+            sort-order: 500
+            name: "puppetlabs static file content"
         },
         {
           # Deny everything else. This ACL is not strictly
