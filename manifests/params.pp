@@ -351,4 +351,10 @@ class puppet::params {
   $server_ca_client_whitelist      = [ '127.0.0.1', '::1', $::ipaddress ]
   $server_cipher_suites            = [ 'TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA', 'TLS_RSA_WITH_AES_128_CBC_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA', ]
   $server_ssl_protocols            = [ 'TLSv1.2', ]
+
+  # Puppetserver >= 2.2  Which auth.conf shall we use? https://docs.puppetlabs.com/puppetserver/latest/config_file_auth.html#aside-changes-to-authorization-in-puppet-server-220
+  $server_use_legacy_auth_conf     = false
+
+  # For puppetserver 2, certain configuration parameters are version specific.  We assume a particular version here.
+  $server_puppetserver_version     = '2.3.1'
 }
