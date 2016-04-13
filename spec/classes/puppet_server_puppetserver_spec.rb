@@ -115,6 +115,35 @@ describe 'puppet::server::puppetserver' do
         end
       end
 
+      describe 'versioned-code-service' do
+        context 'when server_puppetserver_version >= 2.3' do
+          let(:params) do
+            default_params.merge({
+                                     :server_puppetserver_dir => '/etc/custom/puppetserver',
+                                 })
+          end
+          it 'should have versioned-code-service in bootstrap.cfg' do
+            should contain_file_line('versioned_code_service').
+                with_ensure('present').
+                with_line('puppetlabs.services.versioned-code-service.versioned-code-service/versioned-code-service')
+          end
+        end
+
+        context 'when server_puppetserver_version < 2.3' do
+          let(:params) do
+            default_params.merge({
+                                     :server_puppetserver_version => '2.2.2',
+                                     :server_puppetserver_dir     => '/etc/custom/puppetserver',
+                                 })
+          end
+          it 'should not have versioned-code-service in bootstrap.cfg' do
+            should contain_file_line('versioned_code_service').
+                with_ensure('absent').
+                with_line('puppetlabs.services.versioned-code-service.versioned-code-service/versioned-code-service')
+          end
+        end
+      end
+
       describe 'with extra_args parameter' do
         let :params do
           default_params.merge({

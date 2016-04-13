@@ -110,6 +110,18 @@ class puppet::server::puppetserver (
     line   => 'puppetlabs.services.ca.certificate-authority-disabled-service/certificate-authority-disabled-service',
   }
 
+  if versioncmp($server_puppetserver_version, '2.3') >= 0 {
+    $versioned_code_service_ensure = present
+  } else {
+    $versioned_code_service_ensure = absent
+  }
+
+  file_line { 'versioned_code_service':
+    ensure => $versioned_code_service_ensure,
+    path   => "${server_puppetserver_dir}/bootstrap.cfg",
+    line   => 'puppetlabs.services.versioned-code-service.versioned-code-service/versioned-code-service',
+  }
+
   file { "${server_puppetserver_dir}/conf.d/ca.conf":
     ensure  => file,
     content => template('puppet/server/puppetserver/conf.d/ca.conf.erb'),
