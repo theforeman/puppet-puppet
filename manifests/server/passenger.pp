@@ -4,7 +4,6 @@
 #
 class puppet::server::passenger (
   $app_root                = $::puppet::server_app_root,
-  $passenger_max_pool      = $::puppet::server_passenger_max_pool,
   $passenger_min_instances = $::puppet::server_passenger_min_instances,
   $passenger_pre_start     = $::puppet::server_passenger_pre_start,
   $port                    = $::puppet::server_port,

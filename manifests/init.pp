@@ -419,11 +419,6 @@
 #                                     use the puppetmaster service. Defaults to true.
 #                                     type:boolean
 #
-# $server_passenger_max_pool::        The PassengerMaxPoolSize parameter. If your
-#                                     host is low on memory, it may be a good thing
-#                                     to lower this. Defaults to 12.
-#                                     type:integer
-#
 # $server_passenger_min_instances::   The PassengerMinInstances parameter. Sets the
 #                                     minimum number of application processes to run.
 #                                     Defaults to the number of processors on your
@@ -684,7 +679,6 @@ class puppet (
   $server_puppetserver_dir         = $puppet::params::server_puppetserver_dir,
   $server_puppetserver_version     = $puppet::params::server_puppetserver_version,
   $server_service_fallback         = $puppet::params::server_service_fallback,
-  $server_passenger_max_pool       = $puppet::params::server_passenger_max_pool,
   $server_passenger_min_instances  = $puppet::params::server_passenger_min_instances,
   $server_passenger_pre_start      = $puppet::params::server_passenger_pre_start,
   $server_httpd_service            = $puppet::params::server_httpd_service,
