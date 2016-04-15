@@ -91,12 +91,13 @@
 #                                     type:integer
 #
 # $autosign::                         Enable or disable autosign or change location
-#                                     of autosign.conf or autosign script.  If this
-#                                     is set to a script, make sure that script
-#                                     considers the content of autosign.conf, as it
-#                                     might break Foreman functionality if it
-#                                     doesn't. If this is set to a boolean, it can
-#                                     be cast as a string or a boolean.
+#                                     of autosign.conf. If 'true' then
+#                                     ${::puppet::dir}/autosign.conf is used as autosign.conf
+#                                     path, if 'false' then ${::puppet::dir}/autosign.conf is absent,
+#                                     if path is set then this file is used autosign.conf location.
+#                                     Puppet conf file updates respectively
+#
+# $autosign_rules::                   Array of white rules
 #
 # $usecacheonfailure::                Switch to enable use of cached catalog on
 #                                     failure of run.
@@ -621,6 +622,7 @@ class puppet (
   $splay                           = $puppet::params::splay,
   $splaylimit                      = $puppet::params::splaylimit,
   $autosign                        = $puppet::params::autosign,
+  $autosign_rules                  = $puppet::params::autosign_rules,
   $runinterval                     = $puppet::params::runinterval,
   $usecacheonfailure               = $puppet::params::usecacheonfailure,
   $runmode                         = $puppet::params::runmode,
@@ -802,6 +804,7 @@ class puppet (
   if ! is_bool($autosign) {
     validate_string($autosign)
   }
+  validate_array($autosign_rules)
 
   validate_array($listen_to)
   validate_array($dns_alt_names)
