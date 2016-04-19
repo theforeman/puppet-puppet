@@ -156,7 +156,6 @@ describe 'puppet::server::config' do
             with_content(/^\s+reports\s+= foreman$/).
             with_content(/^\s+privatekeydir\s+= \$ssldir\/private_keys \{ group = service \}$/).
             with_content(/^\s+hostprivkey\s+= \$privatekeydir\/\$certname.pem \{ mode = 640 \}$/).
-            with_content(/^\s+autosign\s+= #{etcdir}\/autosign.conf \{ mode = 0664 \}$/).
             with({}) # So we can use a trailing dot on each with_content line
 
           should contain_concat__fragment('puppet.conf+20-agent').
@@ -169,6 +168,7 @@ describe 'puppet::server::config' do
             with_content(/^\s+ca\s+= true$/).
             with_content(/^\s+ssldir\s+= #{ssldir}$/).
             with_content(/^\s+parser\s+=\s+current$/).
+            with_content(/^\s+autosign\s+= #{etcdir}\/autosign.conf \{ mode = 0664 \}$/).
             with({}) # So we can use a trailing dot on each with_content line
 
           should contain_concat(conf_file)
@@ -195,6 +195,37 @@ describe 'puppet::server::config' do
         it 'should not configure PuppetDB' do
           should_not contain_class('puppetdb')
           should_not contain_class('puppetdb::master::config')
+        end
+      end
+
+      describe "when autosign => true" do
+        let :pre_condition do
+          "class {'puppet':
+              server   => true,
+              autosign => true,
+           }"
+        end
+
+        it 'should contain puppet.conf [main] with autosign = true' do
+          should contain_concat__fragment('puppet.conf+30-master').
+            with_content(/^\s+autosign\s+= true$/).
+            with({}) # So we can use a trailing dot on each with_content line
+        end
+      end
+
+      describe 'when autosign => /somedir/custom_autosign, autosign_mode => 664' do
+        let :pre_condition do
+          "class {'puppet':
+              server        => true,
+              autosign      => '/somedir/custom_autosign',
+              autosign_mode => '664',
+           }"
+        end
+
+        it 'should contain puppet.conf [main] with autosign = /somedir/custom_autosign { mode = 664 }' do
+          should contain_concat__fragment('puppet.conf+30-master').
+            with_content(/^\s+autosign\s+= \/somedir\/custom_autosign { mode = 664 }$/).
+            with({}) # So we can use a trailing dot on each with_content line
         end
       end
 
