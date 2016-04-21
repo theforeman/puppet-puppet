@@ -13,9 +13,8 @@ class puppet::server {
     $ssl_chain   = false
   }
 
-  $lower_fqdn    = downcase($::fqdn)
-  $ssl_cert      = "${::puppet::server_ssl_dir}/certs/${lower_fqdn}.pem"
-  $ssl_cert_key  = "${::puppet::server_ssl_dir}/private_keys/${lower_fqdn}.pem"
+  $ssl_cert      = "${::puppet::server_ssl_dir}/certs/${::puppet::server_certname}.pem"
+  $ssl_cert_key  = "${::puppet::server_ssl_dir}/private_keys/${::puppet::server_certname}.pem"
 
   if $::puppet::server_config_version == undef {
     if $::puppet::server_git_repo {

@@ -56,8 +56,9 @@ describe 'puppet::server' do
 
         let(:facts) do
           super().merge({
-            :clientcert => 'PUPPETMASTER.example.com',
             :fqdn       => 'PUPPETMASTER.example.com',
+            # clientcert is always lowercase by Puppet design
+            :clientcert => 'puppetmaster.example.com',
           })
         end
 

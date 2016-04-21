@@ -191,6 +191,28 @@ describe 'puppet::server::puppetserver' do
           should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').with_content(/ssl-host\s+=\s127\.0\.0\.1/)
         end
       end
+
+      describe 'with server_certname parameter given to the puppet class' do
+        let(:params) do
+          default_params.merge({
+            :server_puppetserver_dir => '/etc/custom/puppetserver',
+          })
+        end
+
+        let :pre_condition do
+          "class {'puppet': server_certname => 'puppetserver43.example.com', server_implementation => 'puppetserver', server_ssl_dir => '/etc/custom/puppet/ssl'}"
+        end
+
+        it 'should put the correct ssl key path in webserver.conf' do
+          should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
+            with_content(/ssl-key\s+=\s\/etc\/custom\/puppet\/ssl\/private_keys\/puppetserver43\.example\.com\.pem/)
+        end
+
+        it 'should put the correct ssl cert path in webserver.conf' do
+          should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
+            with_content(/ssl-cert\s+=\s\/etc\/custom\/puppet\/ssl\/certs\/puppetserver43\.example\.com\.pem/)
+        end
+      end
     end
   end
 end

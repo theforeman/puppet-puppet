@@ -54,7 +54,7 @@ class puppet::server::config inherits puppet::config {
     mode   => '0750',
   }
 
-  file { "${puppet::server_ssl_dir}/private_keys/${::fqdn}.pem":
+  file { "${puppet::server_ssl_dir}/private_keys/${::puppet::server_certname}.pem":
     owner => $puppet::server_user,
     group => $puppet::server_group,
     mode  => '0640',
@@ -74,7 +74,7 @@ class puppet::server::config inherits puppet::config {
     if $::puppet::server_ca {
       exec {'puppet_server_config-generate_ca_cert':
         creates => $::puppet::server::ssl_cert,
-        command => "${::puppet::puppetca_cmd} --generate ${::fqdn}",
+        command => "${::puppet::puppetca_cmd} --generate ${::puppet::server_certname}",
         umask   => '0022',
         require => [Concat["${puppet::server_dir}/puppet.conf"],
                     Exec['puppet_server_config-create_ssl_dir'],
@@ -91,7 +91,7 @@ class puppet::server::config inherits puppet::config {
     if $::puppet::server_ca {
       exec {'puppet_server_config-generate_ca_cert':
         creates => $::puppet::server::ssl_cert,
-        command => "${::puppet::puppetca_cmd} --generate ${::fqdn}",
+        command => "${::puppet::puppetca_cmd} --generate ${::puppet::server_certname}",
         require => [Concat["${puppet::server_dir}/puppet.conf"],
                     Exec['puppet_server_config-create_ssl_dir'],
                     ],
