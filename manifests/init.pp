@@ -162,9 +162,6 @@
 #                                     configuration.
 #                                     type:string
 #
-# $nsauth_template::                  Use a custom template for the nsauth configuration.
-#                                     type:string
-#
 # $main_template::                    Use a custom template for the main puppet
 #                                     configuration.
 #                                     type:string
@@ -650,7 +647,6 @@ class puppet (
   $main_template                   = $puppet::params::main_template,
   $agent_template                  = $puppet::params::agent_template,
   $auth_template                   = $puppet::params::auth_template,
-  $nsauth_template                 = $puppet::params::nsauth_template,
   $allow_any_crl_auth              = $puppet::params::allow_any_crl_auth,
   $auth_allowed                    = $puppet::params::auth_allowed,
   $client_package                  = $puppet::params::client_package,

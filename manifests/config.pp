@@ -10,7 +10,6 @@ class puppet::config(
   $listen_to          = $::puppet::listen_to,
   $main_template      = $::puppet::main_template,
   $module_repository  = $::puppet::module_repository,
-  $nsauth_template    = $::puppet::nsauth_template,
   $pluginsource       = $::puppet::pluginsource,
   $pluginfactsource   = $::puppet::pluginfactsource,
   $puppet_dir         = $::puppet::dir,
@@ -45,11 +44,5 @@ class puppet::config(
   } ~>
   file { "${puppet_dir}/auth.conf":
     content => template($auth_template),
-  }
-
-  if $puppet::listen {
-    file { "${puppet_dir}/namespaceauth.conf":
-      content => template($nsauth_template),
-    }
   }
 }
