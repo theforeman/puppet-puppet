@@ -1,8 +1,8 @@
 <% if @manifest -%>
 manifest = <%= @manifest %>
 <% end -%>
-<% if @custom_modulepath && @modulepath -%>
-modulepath = <%= [@modulepath].flatten.join(":") %>
+<% if @custom_modulepath && @real_modulepath -%>
+modulepath = <%= [@real_modulepath].flatten.join(":") %>
 <% end -%>
 <% if !@config_version.nil? && !@config_version.empty? -%>
 config_version = <%= @config_version %>

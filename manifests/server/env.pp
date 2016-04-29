@@ -4,7 +4,7 @@ define puppet::server::env (
   $config_version         = $::puppet::server::config_version_cmd,
   $manifest               = undef,
   $manifestdir            = undef,
-  $modulepath             = ["${::puppet::server::envs_dir}/${name}/modules", $::puppet::server::common_modules_path],
+  $modulepath             = undef,
   $templatedir            = undef,
   $environment_timeout    = $::puppet::server::environment_timeout,
   $directory_environments = $::puppet::server::directory_environments,
@@ -12,6 +12,16 @@ define puppet::server::env (
   $group                  = $::puppet::server::environments_group,
   $mode                   = $::puppet::server::environments_mode,
 ) {
+
+  $default_modulepath = ["${basedir}/${name}/modules", $::puppet::server::common_modules_path]
+  if $modulepath == undef {
+    $custom_modulepath = false
+    $real_modulepath   = $default_modulepath
+  } else {
+    $custom_modulepath = ($modulepath != $default_modulepath)
+    $real_modulepath   = $modulepath
+  }
+
   file { "${basedir}/${name}":
     ensure => directory,
     owner  => $owner,
@@ -34,7 +44,6 @@ define puppet::server::env (
       mode   => $mode,
     }
 
-    $custom_modulepath = $modulepath and ($modulepath != ["${basedir}/${name}/modules", $::puppet::server::common_modules_path])
     if $manifest or $config_version or $custom_modulepath or $environment_timeout {
       file { "${basedir}/${name}/environment.conf":
         ensure  => file,

@@ -218,6 +218,40 @@ describe 'puppet::server::env' do
         end
       end
 
+      context 'with custom basedir' do
+        basedir = "#{codedir}/baz_environments"
+        let :params do
+          {
+            :basedir => basedir,
+          }
+        end
+
+        context 'with directory environments' do
+          let :pre_condition do
+            "class {'puppet': server => true, server_directory_environments => true}"
+          end
+
+          it { should_not contain_file("#{codedir}/environments/foo/environment.conf") }
+          it { should_not contain_file("#{basedir}/foo/environment.conf") }
+        end
+
+        context 'with config environments' do
+          let :pre_condition do
+            "class {'puppet': server => true, server_directory_environments => false}"
+          end
+
+          it 'should add modulepath with custom basedir to an env section' do
+            should contain_concat__fragment('puppet.conf+40-foo').
+              without_content(/^\s+manifest\s+=/).
+              without_content(/^\s+manifestdir\s+=/).
+              with_content(%r{^\s+modulepath\s+= #{basedir}/foo/modules:#{codedir}/environments/common:#{codedir}/modules:#{sharedir}/modules}).
+              without_content(/^\s+templatedir\s+=/).
+              without_content(/^\s+config_version\s+=/).
+              with({}) # So we can use a trailing dot on each with_content line
+          end
+        end
+      end
+
       context 'with manifest' do
         let :params do
           {
