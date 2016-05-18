@@ -171,11 +171,13 @@ class puppet::server::config inherits puppet::config {
       ensure => directory,
     }
 
-    file { $::puppet::server::common_modules_path:
-      ensure => directory,
-      owner  => $::puppet::server::environments_owner,
-      group  => $::puppet::server::environments_group,
-      mode   => $::puppet::server::environments_mode,
+    if $puppet::server_common_modules_path and $puppet::server_common_modules_path != '' {
+      file { $puppet::server_common_modules_path:
+        ensure => directory,
+        owner  => $::puppet::server_environments_owner,
+        group  => $::puppet::server_environments_group,
+        mode   => $::puppet::server_environments_mode,
+      }
     }
 
     # make sure your site.pp exists (puppet #15106, foreman #1708) and server_manifest_path too

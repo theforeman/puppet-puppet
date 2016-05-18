@@ -420,6 +420,23 @@ describe 'puppet::server::config' do
           it { should_not contain_puppet__server__env('production') }
         end
 
+        context 'with no common modules directory' do
+          let :pre_condition do
+            "class {'puppet':
+               server                        => true,
+               server_dynamic_environments   => true,
+               server_directory_environments => true,
+               server_environments_owner     => 'apache',
+               server_common_modules_path    => '',
+             }"
+          end
+
+          it 'should configure puppet.conf' do
+            should contain_concat__fragment('puppet.conf+15-main-master').
+              without_content(%r{^\s+basemodulepath})
+          end
+        end
+
         context 'with config environments' do
           let :pre_condition do
             "class {'puppet':
