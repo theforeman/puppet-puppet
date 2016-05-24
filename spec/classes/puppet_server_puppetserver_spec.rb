@@ -41,7 +41,7 @@ describe 'puppet::server::puppetserver' do
                                           'TLS_RSA_WITH_AES_128_CBC_SHA', ],
         :server_max_active_instances => 2,
         :server_ca                   => true,
-        :server_puppetserver_version => '2.3.1',
+        :server_puppetserver_version => '2.4.99',
         :server_use_legacy_auth_conf => false,
       } end
 
@@ -51,15 +51,15 @@ describe 'puppet::server::puppetserver' do
             :server_puppetserver_dir => '/etc/custom/puppetserver',
           })
         end
-        it {
-          should contain_file_line('ca_enabled').
-            with_ensure('present').
-            with_line('puppetlabs.services.ca.certificate-authority-service/certificate-authority-service')
-        }
-        it {
-          should contain_file_line('ca_disabled').
-            with_ensure('absent').
-            with_line('puppetlabs.services.ca.certificate-authority-disabled-service/certificate-authority-disabled-service')
+        it { should contain_file('/etc/custom/puppetserver/bootstrap.cfg') }
+        it { should contain_file_line('ca_enabled').with_ensure('present') }
+        it { should contain_file_line('ca_disabled'). with_ensure('absent') }
+        it { should contain_file('/etc/custom/puppetserver/services.d').with_ensure('directory') }
+        it { should contain_file('/etc/custom/puppetserver/services.d/ca.cfg') }
+        it { should contain_file('/opt/puppetlabs/server/apps/puppetserver/config').with_ensure('directory') }
+        it { should contain_file('/opt/puppetlabs/server/apps/puppetserver/config/services.d').with_ensure('directory') }
+        it { should contain_augeas('puppet::server::puppetserver::bootstrap').
+                with_changes('set BOOTSTRAP_CONFIG \'"/etc/custom/puppetserver/bootstrap.cfg,/etc/custom/puppetserver/services.d/,/opt/puppetlabs/server/apps/puppetserver/config/services.d/"\'')
         }
         it { should contain_augeas('puppet::server::puppetserver::jvm').
                 with_changes([
@@ -71,6 +71,7 @@ describe 'puppet::server::puppetserver' do
                 with_lens('Shellvars.lns').
                 with({})
         }
+
         it { should contain_file('/etc/custom/puppetserver/conf.d/ca.conf') }
         it { should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf') }
         it { should contain_file('/etc/custom/puppetserver/conf.d/web-routes.conf') }
@@ -118,16 +119,29 @@ describe 'puppet::server::puppetserver' do
       end
 
       describe 'versioned-code-service' do
-        context 'when server_puppetserver_version >= 2.3' do
+        context 'when server_puppetserver_version >= 2.5' do
           let(:params) do
             default_params.merge({
+                                     :server_puppetserver_version => '2.5.0',
+                                     :server_puppetserver_dir => '/etc/custom/puppetserver',
+                                 })
+          end
+          it { should_not contain_file_line('versioned_code_service') }
+        end
+
+        context 'when server_puppetserver_version >= 2.3 and < 2.5' do
+          let(:params) do
+            default_params.merge({
+                                     :server_puppetserver_version => '2.3.1',
                                      :server_puppetserver_dir => '/etc/custom/puppetserver',
                                  })
           end
           it 'should have versioned-code-service in bootstrap.cfg' do
             should contain_file_line('versioned_code_service').
                 with_ensure('present').
-                with_line('puppetlabs.services.versioned-code-service.versioned-code-service/versioned-code-service')
+                with_path('/etc/custom/puppetserver/bootstrap.cfg').
+                with_line('puppetlabs.services.versioned-code-service.versioned-code-service/versioned-code-service').
+                that_requires('File[/etc/custom/puppetserver/bootstrap.cfg]')
           end
         end
 
@@ -141,8 +155,109 @@ describe 'puppet::server::puppetserver' do
           it 'should not have versioned-code-service in bootstrap.cfg' do
             should contain_file_line('versioned_code_service').
                 with_ensure('absent').
-                with_line('puppetlabs.services.versioned-code-service.versioned-code-service/versioned-code-service')
+                with_path('/etc/custom/puppetserver/bootstrap.cfg').
+                with_line('puppetlabs.services.versioned-code-service.versioned-code-service/versioned-code-service').
+                that_requires('File[/etc/custom/puppetserver/bootstrap.cfg]')
           end
+        end
+      end
+
+      describe 'bootstrap.cfg' do
+        context 'when server_puppetserver_version >= 2.5' do
+          let(:params) do
+            default_params.merge({
+                                     :server_puppetserver_version => '2.5.0',
+                                     :server_puppetserver_dir => '/etc/custom/puppetserver',
+                                 })
+          end
+          it { should_not contain_file('/etc/custom/puppetserver/bootstrap.cfg') }
+          it { should_not contain_file_line('ca_enabled') }
+          it { should_not contain_file_line('ca_disabled') }
+        end
+
+        context 'when server_puppetserver_version < 2.4.99' do
+          let(:params) do
+            default_params.merge({
+                                     :server_puppetserver_version => '2.4.98',
+                                     :server_puppetserver_dir => '/etc/custom/puppetserver',
+                                 })
+          end
+          it { should contain_file('/etc/custom/puppetserver/bootstrap.cfg') }
+          it {
+            should contain_file_line('ca_enabled').
+              with_ensure('present').
+              with_path('/etc/custom/puppetserver/bootstrap.cfg').
+              with_line('puppetlabs.services.ca.certificate-authority-service/certificate-authority-service').
+              that_requires('File[/etc/custom/puppetserver/bootstrap.cfg]')
+          }
+          it {
+            should contain_file_line('ca_disabled').
+              with_ensure('absent').
+              with_path('/etc/custom/puppetserver/bootstrap.cfg').
+              with_line('puppetlabs.services.ca.certificate-authority-disabled-service/certificate-authority-disabled-service').
+              that_requires('File[/etc/custom/puppetserver/bootstrap.cfg]')
+          }
+          it { should contain_augeas('puppet::server::puppetserver::bootstrap').
+                  with_changes('set BOOTSTRAP_CONFIG \'"/etc/custom/puppetserver/bootstrap.cfg"\'').
+                  with_context('/files/etc/default/puppetserver').
+                  with_incl('/etc/default/puppetserver').
+                  with_lens('Shellvars.lns').
+                  with({})
+          }
+        end
+      end
+
+      describe 'ca.cfg' do
+        context 'when server_puppetserver_version >= 2.5' do
+          let(:params) do
+            default_params.merge({
+                                     :server_puppetserver_version => '2.5.0',
+                                     :server_puppetserver_dir => '/etc/custom/puppetserver',
+                                 })
+          end
+          it { should contain_file('/etc/custom/puppetserver/services.d').with_ensure('directory') }
+          it {
+            should contain_file('/etc/custom/puppetserver/services.d/ca.cfg').
+              with_content(%r{^puppetlabs.services.ca.certificate-authority-service/certificate-authority-service}).
+              with_content(%r{^#puppetlabs.services.ca.certificate-authority-disabled-service/certificate-authority-disabled-service})
+          }
+          it { should contain_file('/opt/puppetlabs/server/apps/puppetserver/config').with_ensure('directory') }
+          it { should contain_file('/opt/puppetlabs/server/apps/puppetserver/config/services.d').with_ensure('directory') }
+          it { should contain_augeas('puppet::server::puppetserver::bootstrap').
+                  with_changes('set BOOTSTRAP_CONFIG \'"/etc/custom/puppetserver/services.d/,/opt/puppetlabs/server/apps/puppetserver/config/services.d/"\'').
+                  with_context('/files/etc/default/puppetserver').
+                  with_incl('/etc/default/puppetserver').
+                  with_lens('Shellvars.lns').
+                  with({})
+          }
+        end
+
+        context 'when server_puppetserver_version >= 2.5 and server_ca => false' do
+          let(:params) do
+            default_params.merge({
+                                     :server_puppetserver_version => '2.5.0',
+                                     :server_puppetserver_dir => '/etc/custom/puppetserver',
+                                     :server_ca => false,
+                                 })
+          end
+          it {
+            should contain_file('/etc/custom/puppetserver/services.d/ca.cfg').
+              with_content(%r{^#puppetlabs.services.ca.certificate-authority-service/certificate-authority-service}).
+              with_content(%r{^puppetlabs.services.ca.certificate-authority-disabled-service/certificate-authority-disabled-service})
+          }
+        end
+
+        context 'when server_puppetserver_version < 2.4.99' do
+          let(:params) do
+            default_params.merge({
+                                     :server_puppetserver_version => '2.4.98',
+                                     :server_puppetserver_dir => '/etc/custom/puppetserver',
+                                 })
+          end
+          it { should_not contain_file('/etc/custom/puppetserver/services.d') }
+          it { should_not contain_file('/etc/custom/puppetserver/services.d/ca.cfg') }
+          it { should_not contain_file('/opt/puppetlabs/server/apps/puppetserver/config') }
+          it { should_not contain_file('/opt/puppetlabs/server/apps/puppetserver/config/services.d') }
         end
       end
 
