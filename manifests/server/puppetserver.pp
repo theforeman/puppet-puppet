@@ -88,38 +88,82 @@ class puppet::server::puppetserver (
     ],
   }
 
-  $ca_enabled_ensure = $server_ca ? {
-    true    => present,
-    default => absent,
+  if versioncmp($server_puppetserver_version, '2.4.99') == 0 {
+    $bootstrap_paths = "${server_puppetserver_dir}/bootstrap.cfg,${server_puppetserver_dir}/services.d/,/opt/puppetlabs/server/apps/puppetserver/config/services.d/"
+  } elsif versioncmp($server_puppetserver_version, '2.5') >= 0 {
+    $bootstrap_paths = "${server_puppetserver_dir}/services.d/,/opt/puppetlabs/server/apps/puppetserver/config/services.d/"
+  } else {  # 2.4
+    $bootstrap_paths = "${server_puppetserver_dir}/bootstrap.cfg"
+  }
+  augeas { 'puppet::server::puppetserver::bootstrap':
+    lens    => 'Shellvars.lns',
+    incl    => $config,
+    context => "/files${config}",
+    changes => "set BOOTSTRAP_CONFIG '\"${bootstrap_paths}\"'",
   }
 
-  $ca_disabled_ensure = $server_ca ? {
-    false   => present,
-    default => absent,
+  # 2.4.99 configures for both 2.4 and 2.5 making upgrades and new installations easier when the
+  # precise version available isn't known
+  if versioncmp($server_puppetserver_version, '2.4.99') >= 0 {
+    $servicesd = "${server_puppetserver_dir}/services.d"
+    file { $servicesd:
+      ensure => directory,
+    }
+    file { "${servicesd}/ca.cfg":
+      ensure  => file,
+      content => template('puppet/server/puppetserver/services.d/ca.cfg.erb'),
+    }
+
+    file { '/opt/puppetlabs/server/apps/puppetserver/config':
+      ensure => directory,
+    }
+    file { '/opt/puppetlabs/server/apps/puppetserver/config/services.d':
+      ensure => directory,
+    }
   }
 
-  file_line { 'ca_enabled':
-    ensure => $ca_enabled_ensure,
-    path   => "${server_puppetserver_dir}/bootstrap.cfg",
-    line   => 'puppetlabs.services.ca.certificate-authority-service/certificate-authority-service',
-  }
+  if versioncmp($server_puppetserver_version, '2.5') < 0 {
+    $bootstrapcfg = "${server_puppetserver_dir}/bootstrap.cfg"
+    file { $bootstrapcfg:
+      ensure => file,
+    }
 
-  file_line { 'ca_disabled':
-    ensure => $ca_disabled_ensure,
-    path   => "${server_puppetserver_dir}/bootstrap.cfg",
-    line   => 'puppetlabs.services.ca.certificate-authority-disabled-service/certificate-authority-disabled-service',
-  }
+    $ca_enabled_ensure = $server_ca ? {
+      true    => present,
+      default => absent,
+    }
 
-  if versioncmp($server_puppetserver_version, '2.3') >= 0 {
-    $versioned_code_service_ensure = present
-  } else {
-    $versioned_code_service_ensure = absent
-  }
+    $ca_disabled_ensure = $server_ca ? {
+      false   => present,
+      default => absent,
+    }
 
-  file_line { 'versioned_code_service':
-    ensure => $versioned_code_service_ensure,
-    path   => "${server_puppetserver_dir}/bootstrap.cfg",
-    line   => 'puppetlabs.services.versioned-code-service.versioned-code-service/versioned-code-service',
+    file_line { 'ca_enabled':
+      ensure  => $ca_enabled_ensure,
+      path    => $bootstrapcfg,
+      line    => 'puppetlabs.services.ca.certificate-authority-service/certificate-authority-service',
+      require => File[$bootstrapcfg],
+    }
+
+    file_line { 'ca_disabled':
+      ensure  => $ca_disabled_ensure,
+      path    => $bootstrapcfg,
+      line    => 'puppetlabs.services.ca.certificate-authority-disabled-service/certificate-authority-disabled-service',
+      require => File[$bootstrapcfg],
+    }
+
+    if versioncmp($server_puppetserver_version, '2.3') >= 0 {
+      $versioned_code_service_ensure = present
+    } else {
+      $versioned_code_service_ensure = absent
+    }
+
+    file_line { 'versioned_code_service':
+      ensure  => $versioned_code_service_ensure,
+      path    => $bootstrapcfg,
+      line    => 'puppetlabs.services.versioned-code-service.versioned-code-service/versioned-code-service',
+      require => File[$bootstrapcfg],
+    }
   }
 
   file { "${server_puppetserver_dir}/conf.d/ca.conf":

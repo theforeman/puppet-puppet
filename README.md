@@ -14,9 +14,10 @@ The Puppet master is configured under Apache and Passenger by default, unless
 to switch to the JVM-based Puppet Server.
 
 When using Puppet Server 2 (version 2.0 was the first version to support Puppet 4),
-the module supports and assumes you will be installing the latest version (currently 2.3.1).
-If you know you'll be installing an earlier version, you will need to override
-`server_puppetserver_version`.
+the module supports and assumes you will be installing the latest version.
+If you know you'll be installing an earlier or specific version, you will
+need to override `server_puppetserver_version`. More information in the Puppet
+Server section below.
 
 Many puppet.conf options for agents, masters and other are parameterized, with
 class documentation provided at the top of the manifests. In addition, there
@@ -160,6 +161,23 @@ host can access all client catalogues and client certificates. **
       server_http_port     => 8130, # default: 8139
       server_http_allow    => ['10.20.30.1', 'puppetbalancer.my.corp'],
     }
+
+## Puppet Server configuration
+
+Puppet Server requires slightly different configuration between different
+versions, which this module supports. It's recommended that you set the
+`server_puppetserver_version` parameter to the MAJOR.MINOR.PATCH version
+you have installed. By default the module will configure for the latest
+version available.
+
+Currently supported values and configuration behaviours are:
+
+* `2.5.x` - configures the certificate authority in `ca.cfg`
+* `2.4.99` (default) - configures for both 2.4 and 2.5, with `bootstrap.cfg`
+  and `ca.cfg`
+* `2.3.x`, `2.4.x` - configures the certificate authority and
+  versioned-code-service in `bootstrap.cfg`
+* `2.2.x` or lower - configures the certificate authority in `bootstrap.cfg`
 
 # Contributing
 

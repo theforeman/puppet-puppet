@@ -510,7 +510,7 @@ class puppet::server(
     validate_bool($enable_ruby_profiler)
     validate_bool($ca_auth_required)
     validate_bool($use_legacy_auth_conf)
-    validate_re($puppetserver_version, '^[\d]\.[\d]\.[\d]$')
+    validate_re($puppetserver_version, '^[\d]\.[\d]+\.[\d]+$')
   } else {
     if $ip != $puppet::params::ip {
       notify {
