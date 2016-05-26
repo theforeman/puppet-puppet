@@ -227,7 +227,7 @@
 # $remove_lock::                      Remove the agent lock when running.
 #                                     type:boolean
 #
-# $client_certname::                  The node’s certificate name, and the unique
+# $client_certname::                  The node's certificate name, and the unique
 #                                     identifier it uses when requesting catalogs.
 #                                     type:string
 #
