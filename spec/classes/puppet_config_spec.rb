@@ -63,6 +63,11 @@ describe 'puppet::config' do
 
         it 'should contain auth.conf' do
           should contain_file("#{confdir}/auth.conf").with_content(%r{^path /certificate_revocation_list/ca\nmethod find$})
+          if Puppet.version >= '4.0'
+            should contain_file("#{confdir}/auth.conf").with_content(%r{/puppet/v3/})
+          else
+            should_not contain_file("#{confdir}/auth.conf").with_content(%r{/puppet/v3/})
+          end
         end
 
         it 'should_not contain default_manifest setting in puppet.conf' do

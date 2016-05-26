@@ -63,6 +63,10 @@
 path /puppet/v3/environments
 method find
 allow *
+
+path /puppet/v3/resource_type
+method search
+allow *
 <% end -%>
 
 # allow nodes to retrieve their own catalog
