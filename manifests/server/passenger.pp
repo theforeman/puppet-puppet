@@ -20,7 +20,10 @@ class puppet::server::passenger (
   $http_allow              = $::puppet::server::http_allow,
 ) {
   include ::apache
-  include ::apache::mod::passenger
+
+  class { '::apache::mod::passenger':
+    passenger_max_pool_size => $passenger_max_pool,
+  }
 
   class { '::puppet::server::rack':
     app_root => $app_root,

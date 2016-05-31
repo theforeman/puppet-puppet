@@ -95,5 +95,18 @@ describe 'puppet::server::passenger' do
         end
       end
     end
+
+    describe 'with passenger_max_pool' do
+      let :params do
+        default_params.merge({
+          :passenger_max_pool => 8,
+        })
+      end
+      it 'should include the apache::mod::passenger class' do
+        should contain_class('apache::mod::passenger').with({
+          :passenger_max_pool_size => 8
+        })
+      end
+    end
   end
 end
