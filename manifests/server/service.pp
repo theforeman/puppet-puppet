@@ -10,7 +10,7 @@
 # $puppetserver::  Whether to start/stop the (JVM) puppetserver service
 #                  type:boolean
 #
-class puppet::server::service(
+class puppet::server::service (
   $puppetmaster = undef,
   $puppetserver = undef,
 ) {
@@ -34,9 +34,11 @@ class puppet::server::service(
       true  => 'running',
       false => 'stopped',
     }
-    service { 'puppetserver':
-      ensure => $ps_ensure,
-      enable => $puppetserver,
+    if ! defined(Service['puppetserver']) {
+      service { 'puppetserver':
+        ensure => $ps_ensure,
+        enable => $puppetserver,
+      }
     }
   }
 
