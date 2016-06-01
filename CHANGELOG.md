@@ -2,16 +2,44 @@
 
 ## 5.0.0
 * New or changed parameters:
+    * Add new server_* parameters for Puppet Server 2.x configuration options,
+      including whitelists for admin/CA clients and Ruby/SSL options
+    * Add server_puppetserver_version parameter, which should be set if not
+      using the latest version of Puppet Server for correct configuration
+    * Add server_use_legacy_auth_conf parameter for Puppet Server 2.0-2.1
+      compatibility with pre-HOCON auth configs (GH-372)
     * Add server_ip for configuring the listen IP (puppetserver only)
+    * Add server_main_template parameter for separate server puppet.conf lines
     * Add passenger_min_instances and passenger_pre_start for passenger tuning
+    * Add client_certname to set a custom client certificate name (GH-378)
+    * Allow server_common_modules_path to be unset to disable basemodulepath
     * Remove passenger_max_pool which had no effect
+* Other features:
+    * Support Puppet Server 2.x, defaulting to configuration for 2.4 and 2.5
+    * Use puppetserver by default with AIO packages
+    * Permit access to resource_type API for smart proxy support
+* Other changes and fixes:
+    * Paths to Puppet directories and configuration files updated for AIO
+      agent and server locations
+    * Use ip_to_cron from voxpupuli/extlib (GH-391)
+    * Respect server_certname for Puppet Server SSL paths
+    * Move default manifest creation to server config (GH-365)
+    * Fix hiera_config location for Puppet 4.0-4.4
+    * Fix ordering of server SSL directory before private_keys subdirectory
+    * Fix ordering of foreman/foreman_proxy users to after server config
+    * Fix puppet::server::env modulepath default to follow basedir parameter
+    * Move server parameters and validation to puppet::server
+    * Remove autosign from main puppet.conf section
+    * Remove management of namespaceauth.conf
+* Compatibility warnings:
     * The autosign parameter now takes only the path to the autosign file or
       a boolean. An additional parameter, autosign_mode, was added to set the
       file mode of the autosign file/script.
-* Other features:
-    * Support puppetserver 2.x
+    * Support for Puppet 3.0.x has been removed, 3.1.0 or higher is required
+
+## 4.3.2
 * Other changes and fixes:
-    * Use puppetserver by default with AIO packages
+    * Add EL5 to service management conditionals (GH-404)
 
 ## 4.3.1
 * Other changes and fixes:
