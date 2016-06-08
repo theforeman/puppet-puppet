@@ -23,6 +23,9 @@ describe 'puppet::server' do
       server_package = 'puppet-server'
       if os_facts[:osfamily] == 'Debian'
         server_package = 'puppetmaster'
+        if os_facts[:puppetversion].to_f > 4.0
+          server_package = 'puppet-master'
+        end
       end
 
       let(:facts) { default_facts }

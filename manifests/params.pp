@@ -53,12 +53,16 @@ class puppet::params {
   $classfile           = '$statedir/classes.txt'
   $syslogfacility      = undef
   $environment         = $::environment
+
   if versioncmp($::puppetversion, '4.0') < 0 {
-    $aio_package = false
+    $aio_package      = false
+    $deb_naio_package = false
   } elsif $::osfamily == 'Windows' or $::rubysitedir =~ /\/opt\/puppetlabs\/puppet/ {
-    $aio_package = true
+    $aio_package      = true
+    $deb_naio_package = false
   } else {
-    $aio_package = false
+    $aio_package      = false
+    $deb_naio_package = ($::osfamily == 'Debian')
   }
 
   case $::osfamily {
@@ -100,7 +104,10 @@ class puppet::params {
         $bindir            = '/opt/puppetlabs/bin'
       } else {
         $dir               = '/etc/puppet'
-        $codedir           = '/etc/puppet'
+        $codedir           =  $deb_naio_package ? {
+                                true  => '/etc/puppet/code',
+                                false => '/etc/puppet',
+                              }
         $logdir            = '/var/log/puppet'
         $rundir            = '/var/run/puppet'
         $ssldir            = '/var/lib/puppet/ssl'
@@ -258,7 +265,10 @@ class puppet::params {
   if $aio_package {
     $client_package = ['puppet-agent']
   } elsif ($::osfamily == 'Debian') {
-    $client_package = ['puppet-common','puppet']
+    $client_package = $deb_naio_package ? {
+      true    => ['puppet-agent', 'puppet'],
+      default => ['puppet-common', 'puppet']
+    }
   } elsif ($::osfamily =~ /(FreeBSD|DragonFly)/) {
     if (versioncmp($::puppetversion, '4.0') > 0) {
       $client_package = ['puppet4']
@@ -273,7 +283,10 @@ class puppet::params {
   $puppetca_cmd  = "${puppet_cmd} cert"
 
   # Puppet service name
-  $service_name = 'puppet'
+  $service_name = $deb_naio_package ? {
+    true    => 'puppet-agent',
+    default => 'puppet'
+  }
   # Puppet onedshot systemd service and timer name
   $systemd_unit_name = 'puppet-run'
   # Mechanisms to manage and reload/restart the agent
