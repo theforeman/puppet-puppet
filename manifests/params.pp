@@ -173,6 +173,7 @@ class puppet::params {
   $server_service_fallback    = true
   $server_passenger_min_instances = $::processorcount
   $server_passenger_pre_start = true
+  $server_passenger_ruby      = undef
   $server_httpd_service       = 'httpd'
   $server_external_nodes      = "${dir}/node.rb"
   $server_enc_api             = 'v2'

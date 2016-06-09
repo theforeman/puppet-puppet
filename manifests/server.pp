@@ -203,6 +203,11 @@
 #                              process during httpd start.
 #                              type:boolean
 #
+# $passenger_ruby::            The PassengerRuby parameter. Sets the Ruby
+#                              interpreter for serving the puppetmaster rack
+#                              application.
+#                              type:string
+#
 # $config_version::            How to determine the configuration version. When
 #                              using git_repo, by default a git describe
 #                              approach will be installed.
@@ -379,6 +384,7 @@ class puppet::server(
   $service_fallback         = $::puppet::server_service_fallback,
   $passenger_min_instances  = $::puppet::server_passenger_min_instances,
   $passenger_pre_start      = $::puppet::server_passenger_pre_start,
+  $passenger_ruby           = $::puppet::server_passenger_ruby,
   $httpd_service            = $::puppet::server_httpd_service,
   $external_nodes           = $::puppet::server_external_nodes,
   $template                 = $::puppet::server_template,

@@ -6,6 +6,7 @@ class puppet::server::passenger (
   $app_root                = $::puppet::server::app_root,
   $passenger_min_instances = $::puppet::server::passenger_min_instances,
   $passenger_pre_start     = $::puppet::server::passenger_pre_start,
+  $passenger_ruby          = $::puppet::server::passenger_ruby,
   $port                    = $::puppet::server::port,
   $ssl_ca_cert             = $::puppet::server::ssl_ca_cert,
   $ssl_ca_crl              = $::puppet::server::ssl_ca_crl,
@@ -106,6 +107,7 @@ class puppet::server::passenger (
     options                 => ['None'],
     passenger_pre_start     => $https_pre_start,
     passenger_min_instances => $passenger_min_instances,
+    passenger_ruby          => $passenger_ruby,
     require                 => Class['::puppet::server::rack'],
   }
 
@@ -142,6 +144,7 @@ class puppet::server::passenger (
       options                 => ['None'],
       passenger_pre_start     => $http_pre_start,
       passenger_min_instances => $passenger_min_instances,
+      passenger_ruby          => $passenger_ruby,
       require                 => Class['::puppet::server::rack'],
     }
   }

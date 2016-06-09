@@ -77,6 +77,7 @@ describe 'puppet::server::passenger' do
             :http => true,
             :passenger_min_instances => 10,
             :passenger_pre_start => true,
+            :passenger_ruby => '/opt/ruby2.0/bin/ruby',
           })
         end
 
@@ -84,6 +85,7 @@ describe 'puppet::server::passenger' do
           should contain_apache__vhost('puppet').with({
             :passenger_min_instances => 10,
             :passenger_pre_start     => 'https://puppet.example.com:8140',
+            :passenger_ruby          => '/opt/ruby2.0/bin/ruby',
           })
         end
 
@@ -91,6 +93,7 @@ describe 'puppet::server::passenger' do
           should contain_apache__vhost('puppet-http').with({
             :passenger_min_instances => 10,
             :passenger_pre_start     => 'http://puppet.example.com:8139',
+            :passenger_ruby          => '/opt/ruby2.0/bin/ruby',
           })
         end
       end
