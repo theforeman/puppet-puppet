@@ -62,10 +62,11 @@ describe 'puppet::config' do
         end
 
         it 'should contain auth.conf' do
-          should contain_file("#{confdir}/auth.conf").with_content(%r{^path /certificate_revocation_list/ca\nmethod find$})
           if Puppet.version >= '4.0'
+            should_not contain_file("#{confdir}/auth.conf").with_content(%r{^path /certificate_revocation_list/ca\nmethod find$})
             should contain_file("#{confdir}/auth.conf").with_content(%r{/puppet/v3/})
           else
+            should contain_file("#{confdir}/auth.conf").with_content(%r{^path /certificate_revocation_list/ca\nmethod find$})
             should_not contain_file("#{confdir}/auth.conf").with_content(%r{/puppet/v3/})
           end
         end
@@ -103,7 +104,11 @@ describe 'puppet::config' do
         end
 
         it 'should contain auth.conf with auth any' do
-          should contain_file("#{confdir}/auth.conf").with_content(%r{^path /certificate_revocation_list/ca\nauth any$})
+          if Puppet.version >= '4.0'
+            should contain_file("#{confdir}/auth.conf").with_content(%r{^path /puppet-ca/v1/certificate_revocation_list/ca\nauth any$})
+          else
+            should contain_file("#{confdir}/auth.conf").with_content(%r{^path /certificate_revocation_list/ca\nauth any$})
+          end
         end
       end
 

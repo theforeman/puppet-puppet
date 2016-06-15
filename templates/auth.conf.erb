@@ -7,8 +7,13 @@
 # otherwise, the general rules may "steal" requests that should be
 # governed by the specific rules.
 #
+<% if @puppetversion.to_f >= 4.0 -%>
+# See https://docs.puppetlabs.com/puppet/latest/reference/config_file_auth.html
+# for a more complete description of auth.conf's behavior.
+<% else -%>
 # See http://docs.puppetlabs.com/guides/rest_auth_conf.html for a more complete
 # description of auth.conf's behavior.
+<% end -%>
 #
 # Supported syntax:
 # Each stanza in auth.conf starts with a path to match, followed
@@ -37,6 +42,20 @@
 #
 # Examples:
 #
+<% if @puppetversion.to_f >= 4.0 -%>
+# path ~ ^/puppet/v3/path/to/resource    # Equivalent to `path /puppet/v3/path/to/resource`.
+# allow *                                # Allow all authenticated nodes (since auth
+#                                        # defaults to `yes`).
+#
+# path ~ ^/puppet/v3/catalog/([^/]+)$    # Permit nodes to access their own catalog (by
+# allow $1                               # certname), but not any other node's catalog.
+#
+# path ~ ^/puppet/v3/file_(metadata|content)/extra_files/  # Only allow certain nodes to
+# auth yes                                                 # access the "extra_files"
+# allow /^(.+)\.example\.com$/                             # mount point; note this must
+# allow_ip 192.168.100.0/24                                # go ABOVE the "/file" rule,
+#                                                          # since it is more specific.
+<% else -%>
 # path ~ ^/path/to/resource    # Equivalent to `path /path/to/resource`.
 # allow *                      # Allow all authenticated nodes (since auth
 #                              # defaults to `yes`).
@@ -49,6 +68,7 @@
 # allow /^(.+)\.example\.com$/                   # mount point; note this must
 # allow_ip 192.168.100.0/24                      # go ABOVE the "/file" rule,
 #                                                # since it is more specific.
+<% end -%>
 #
 # environment:: restrict an ACL to a comma-separated list of environments
 # method:: restrict an ACL to a comma-separated list of HTTP methods
@@ -59,6 +79,7 @@
 
 ### Authenticated ACLs - these rules apply only when the client
 ### has a valid certificate and is thus authenticated
+
 <% if @puppetversion.to_f >= 4.0 -%>
 path /puppet/v3/environments
 method find
@@ -74,23 +95,24 @@ allow *
 path ~ ^/puppet/v3/catalog/([^/]+)$
 method find
 allow <%= @auth_allowed.join(', ') %>
-<% end -%>
-
+<% else -%>
 path ~ ^/catalog/([^/]+)$
 method find
 allow <%= @auth_allowed.join(', ') %>
+<% end -%>
 
 # allow nodes to retrieve their own node definition
 <% if @puppetversion.to_f >= 4.0 -%>
 path ~ ^/puppet/v3/node/([^/]+)$
 method find
 allow <%= @auth_allowed.join(', ') %>
-<% end -%>
-
+<% else -%>
 path ~ ^/node/([^/]+)$
 method find
 allow <%= @auth_allowed.join(', ') %>
+<% end -%>
 
+<% if @puppetversion.to_f < 4.0 -%>
 # allow all nodes to access the certificates services
 path /certificate_revocation_list/ca
 <% if @allow_any_crl_auth -%>
@@ -98,17 +120,18 @@ auth any
 <% end -%>
 method find
 allow *
+<% end -%>
 
 # allow all nodes to store their own reports
 <% if @puppetversion.to_f >= 4.0 -%>
 path ~ ^/puppet/v3/report/([^/]+)$
 method save
 allow <%= @auth_allowed.join(', ') %>
-<% end -%>
-
+<% else -%>
 path ~ ^/report/([^/]+)$
 method save
 allow <%= @auth_allowed.join(', ') %>
+<% end -%>
 
 # Allow all nodes to access all file services; this is necessary for
 # pluginsync, file serving from modules, and file serving from custom
@@ -118,21 +141,31 @@ allow <%= @auth_allowed.join(', ') %>
 <% if @puppetversion.to_f >= 4.0 -%>
 path /puppet/v3/file
 allow *
-<% end -%>
-
+<% else -%>
 path /file
 allow *
+<% end -%>
 
 <% if @puppetversion.to_f >= 4.0 -%>
 path /puppet/v3/status
 method find
 allow *
-<% end -%>
-
+<% else -%>
 path /status
 method find
 allow *
+<% end -%>
 
+<% if @puppetversion.to_f >= 4.0 -%>
+# allow all nodes to access the certificates services
+path /puppet-ca/v1/certificate_revocation_list/ca
+<% if @allow_any_crl_auth -%>
+auth any
+<% end -%>
+method find
+allow *
+
+<% end -%>
 ### Unauthenticated ACLs, for clients without valid certificates; authenticated
 ### clients can also access these paths, though they rarely need to.
 
@@ -143,12 +176,12 @@ path /puppet-ca/v1/certificate/ca
 auth any
 method find
 allow *
-<% end -%>
-
+<% else -%>
 path /certificate/ca
 auth any
 method find
 allow *
+<% end -%>
 
 # allow nodes to retrieve the certificate they requested earlier
 <% if @puppetversion.to_f >= 4.0 -%>
@@ -156,12 +189,12 @@ path /puppet-ca/v1/certificate/
 auth any
 method find
 allow *
-<% end -%>
-
+<% else -%>
 path /certificate/
 auth any
 method find
 allow *
+<% end -%>
 
 # allow nodes to request a new certificate
 <% if @puppetversion.to_f >= 4.0 -%>
@@ -169,24 +202,25 @@ path /puppet-ca/v1/certificate_request
 auth any
 method find, save
 allow *
-<% end -%>
-
+<% else -%>
 path /certificate_request
 auth any
 method find, save
 allow *
+<% end -%>
 
 <% if scope.lookupvar('::puppet::listen') -%>
 path /run
 auth any
 method save
 allow <%= if (!@listen_to.empty?) then @listen_to.join(",") elsif ( @puppetmaster and !@puppetmaster.empty? ) then @puppetmaster else @fqdn end %>
-
 <% end -%>
 
+<% if @puppetversion.to_f < 4.0 -%>
 path /v2.0/environments
 method find
 allow *
+<% end -%>
 
 # deny everything else; this ACL is not strictly necessary, but
 # illustrates the default policy.
