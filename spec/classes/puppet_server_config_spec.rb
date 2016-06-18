@@ -137,12 +137,6 @@ describe 'puppet::server::config' do
             :mode => '0755',
           })
 
-          should contain_file("#{codedir}/manifests/site.pp").with({
-            :ensure  => 'file',
-            :replace => false,
-            :content => "# site.pp must exist (puppet #15106, foreman #1708)\n",
-          })
-
           should contain_puppet__server__env('development')
           should contain_puppet__server__env('production')
 
