@@ -102,11 +102,6 @@
 # $envs_dir::                  Directory that holds puppet environments
 #                              type:string
 #
-# $manifest_path::             Path to puppet site.pp manifest (only when
-#                              $git_repo_path and $dynamic_environments
-#                              are false)
-#                              type:string
-#
 # $common_modules_path::       Common modules paths (only when
 #                              $git_repo_path and $dynamic_environments
 #                              are false)
@@ -404,7 +399,6 @@ class puppet::server(
   $environments_group       = $::puppet::server_environments_group,
   $environments_mode        = $::puppet::server_environments_mode,
   $envs_dir                 = $::puppet::server_envs_dir,
-  $manifest_path            = $::puppet::server_manifest_path,
   $common_modules_path      = $::puppet::server_common_modules_path,
   $git_repo_mode            = $::puppet::server_git_repo_mode,
   $git_repo_path            = $::puppet::server_git_repo_path,
