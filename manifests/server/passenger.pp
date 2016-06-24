@@ -139,6 +139,7 @@ class puppet::server::passenger (
       docroot                 => "${app_root}/public/",
       directories             => $directories_http,
       port                    => $http_port,
+      ssl_proxyengine         => $ssl_proxyengine,
       custom_fragment         => join([
           $custom_fragment ? {
             undef   => '',
