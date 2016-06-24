@@ -112,8 +112,9 @@ class puppet::params {
     }
   }
 
-  $autosign      = "${dir}/autosign.conf"
-  $autosign_mode = '0664'
+  $autosign         = "${dir}/autosign.conf"
+  $autosign_mode    = '0664'
+  $autosign_content = undef
 
   $puppet_cmd = "${bindir}/puppet"
 

@@ -112,11 +112,22 @@ class puppet::server::config inherits puppet::config {
 
   # autosign file
   if $::puppet::server_ca and ! is_bool($puppet::autosign) {
-    file { $puppet::autosign:
-      ensure => file,
-      owner  => $puppet::user,
-      group  => $puppet::group,
-      mode   => $puppet::autosign_mode,
+    if $::puppet::autosign_content {
+      file { $puppet::autosign:
+        ensure  => file,
+        owner   => $puppet::user,
+        group   => $puppet::group,
+        mode    => $puppet::autosign_mode,
+        content => $puppet::autosign_content,
+      }
+    }
+    else {
+      file { $puppet::autosign:
+        ensure => file,
+        owner  => $puppet::user,
+        group  => $puppet::group,
+        mode   => $puppet::autosign_mode,
+      }
     }
   }
 

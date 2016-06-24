@@ -99,6 +99,11 @@
 #
 # $autosign_mode::                    mode of the autosign file/script
 #
+# $autosign_content::                 If set, write the autosign file content
+#                                     using the value of this parameter. Will
+#                                     only take affect if the autosign parameter
+#                                     is a script path.
+#
 # $usecacheonfailure::                Switch to enable use of cached catalog on
 #                                     failure of run.
 #                                     type: boolean
@@ -624,6 +629,7 @@ class puppet (
   $splaylimit                      = $puppet::params::splaylimit,
   $autosign                        = $puppet::params::autosign,
   $autosign_mode                   = $puppet::params::autosign_mode,
+  $autosign_content                = $puppet::params::autosign_content,
   $runinterval                     = $puppet::params::runinterval,
   $usecacheonfailure               = $puppet::params::usecacheonfailure,
   $runmode                         = $puppet::params::runmode,
