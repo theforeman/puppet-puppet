@@ -299,6 +299,9 @@
 #                              disable in case CA is delegated to a separate instance
 #                              type:boolean
 #
+# $puppetserver_vardir::       The path of the puppetserver var dir
+#                              type:string
+#
 # $puppetserver_dir::          The path of the puppetserver config dir
 #                              type:string
 #
@@ -374,6 +377,7 @@ class puppet::server(
   $reports                  = $::puppet::server_reports,
   $implementation           = $::puppet::server_implementation,
   $passenger                = $::puppet::server_passenger,
+  $puppetserver_vardir      = $::puppet::server_puppetserver_vardir,
   $puppetserver_dir         = $::puppet::server_puppetserver_dir,
   $puppetserver_version     = $::puppet::server_puppetserver_version,
   $service_fallback         = $::puppet::server_service_fallback,
@@ -498,6 +502,7 @@ class puppet::server(
     validate_re($jvm_min_heap_size, '^[0-9]+[kKmMgG]$')
     validate_re($jvm_max_heap_size, '^[0-9]+[kKmMgG]$')
     validate_absolute_path($puppetserver_dir)
+    validate_absolute_path($puppetserver_vardir)
     validate_absolute_path($jruby_gem_home)
     validate_integer($max_active_instances)
     validate_integer($idle_timeout)

@@ -25,6 +25,9 @@
 # * `server_puppetserver_dir`
 # Puppetserver config directory
 #
+# * `server_puppetserver_vardir`
+# Puppetserver config directory
+#
 # * `server_jruby_gem_home`
 # Puppetserver jruby gemhome
 #
@@ -55,6 +58,7 @@ class puppet::server::puppetserver (
   $jvm_max_heap_size           = $::puppet::server::jvm_max_heap_size,
   $jvm_extra_args              = $::puppet::server::jvm_extra_args,
   $server_puppetserver_dir     = $::puppet::server::puppetserver_dir,
+  $server_puppetserver_vardir  = $::puppet::server::puppetserver_vardir,
   $server_jruby_gem_home       = $::puppet::server::jruby_gem_home,
   $server_ruby_load_paths      = $::puppet::server::ruby_load_paths,
   $server_cipher_suites        = $::puppet::server::cipher_suites,
@@ -65,7 +69,6 @@ class puppet::server::puppetserver (
   $server_idle_timeout         = $::puppet::server::idle_timeout,
   $server_connect_timeout      = $::puppet::server::connect_timeout,
   $server_enable_ruby_profiler = $::puppet::server::enable_ruby_profiler,
-  $vardir                      = $::puppet::vardir,
   $server_ca_client_whitelist  = $::puppet::server::ca_client_whitelist,
   $server_admin_api_whitelist  = $::puppet::server::admin_api_whitelist,
   $server_puppetserver_version = $::puppet::server::puppetserver_version,

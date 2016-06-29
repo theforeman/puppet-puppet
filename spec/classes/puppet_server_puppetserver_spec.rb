@@ -43,6 +43,7 @@ describe 'puppet::server::puppetserver' do
         :server_ca                   => true,
         :server_puppetserver_version => '2.4.99',
         :server_use_legacy_auth_conf => false,
+        :server_puppetserver_vardir  => '/opt/puppetlabs/server/data/puppetserver',
       } end
 
       describe 'with default parameters' do
@@ -78,6 +79,32 @@ describe 'puppet::server::puppetserver' do
         it { should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
                                  with_content(/ssl-host\s+=\s0\.0\.0\.0/) }
         it { should contain_file('/etc/custom/puppetserver/conf.d/auth.conf') }
+      end
+
+      describe 'server_puppetserver_vardir' do
+        context 'with default parameters' do
+          let(:params) do
+            default_params.merge({
+              :server_puppetserver_dir => '/etc/custom/puppetserver',
+            })
+          end
+          it 'should have master-var-dir: /opt/puppetlabs/server/data/puppetserver' do
+            content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
+            expect(content).to include(%Q[    master-var-dir: /opt/puppetlabs/server/data/puppetserver\n])
+          end
+        end
+        context 'with custom server_puppetserver_vardir' do
+          let(:params) do
+            default_params.merge({
+              :server_puppetserver_dir    => '/etc/custom/puppetserver',
+              :server_puppetserver_vardir => '/opt/custom/puppetlabs/server/data/puppetserver',
+            })
+          end
+          it 'should have master-var-dir: /opt/puppetlabs/server/data/puppetserver' do
+            content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
+            expect(content).to include(%Q[    master-var-dir: /opt/custom/puppetlabs/server/data/puppetserver\n])
+          end
+        end
       end
 
       describe 'use-legacy-auth-conf' do

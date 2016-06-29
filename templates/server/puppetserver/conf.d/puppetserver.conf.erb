@@ -17,7 +17,7 @@ jruby-puppet: {
     master-conf-dir: <%= @server_dir %>
 
     # (optional) path to puppet var dir; if not specified, will use the puppet default
-    master-var-dir: <%= @vardir %>
+    master-var-dir: <%= @server_puppetserver_vardir %>
 
     # (optional) maximum number of JRuby instances to allow
     max-active-instances: <%= @server_max_active_instances %>
