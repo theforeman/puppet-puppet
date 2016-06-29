@@ -528,7 +528,6 @@
 #                                     type:boolean
 #
 # $server_puppetserver_vardir::       The path of the puppetserver var dir
-#                                     Defaults to '/opt/puppetlabs/server/data/puppetserver'
 #                                     type:string
 #
 # $server_puppetserver_dir::          The path of the puppetserver config dir
