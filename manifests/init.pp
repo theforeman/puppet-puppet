@@ -41,7 +41,6 @@
 #                                     Can also install only server packages with value
 #                                     of 'server' or only agent packages with 'agent'.
 #                                     Defaults to true
-#                                     type:string
 #
 # $package_provider::                 The provider used to install the agent.
 #                                     Defaults to chocolatey on Windows
@@ -196,7 +195,7 @@
 #
 # $client_package::                   Install a custom package to provide
 #                                     the puppet client
-#                                     type:string
+#                                     type:array
 #
 # $puppetmaster::                     Hostname of your puppetmaster (server
 #                                     directive in puppet.conf)
