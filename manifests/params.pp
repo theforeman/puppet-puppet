@@ -57,7 +57,7 @@ class puppet::params {
   if versioncmp($::puppetversion, '4.0') < 0 {
     $aio_package      = false
     $deb_naio_package = false
-  } elsif $::osfamily in ['Archlinux','Windows'] or $::rubysitedir =~ /\/opt\/puppetlabs\/puppet/ {
+  } elsif $::osfamily == 'Windows' or $::rubysitedir =~ /\/opt\/puppetlabs\/puppet/ {
     $aio_package      = true
     $deb_naio_package = false
   } else {
@@ -90,6 +90,17 @@ class puppet::params {
       $sharedir          = '/usr/local/share/puppet'
       $bindir            = '/usr/local/bin'
       $root_group        = undef
+    }
+
+    'Archlinux' : {
+      $dir               = '/etc/puppetlabs/puppet'
+      $codedir           = '/etc/puppetlabs/code'
+      $logdir            = '/var/log/puppetlabs/puppet'
+      $rundir            = '/var/run/puppetlabs'
+      $ssldir            = '/etc/puppetlabs/puppet/ssl'
+      $vardir            = '/opt/puppetlabs/puppet/cache'
+      $sharedir          = '/opt/puppetlabs/puppet'
+      $bindir            = '/usr/bin'
     }
 
     default : {
@@ -195,9 +206,17 @@ class puppet::params {
   $server_http_allow          = []
 
   # use puppetserver (JVM) or puppet master (Ruby)?
-  $server_implementation = $aio_package ? {
-    true    => 'puppetserver',
-    default => 'master',
+  case $::osfamily {
+    'Archlinux' : {
+      $server_implementation = 'puppetserver'
+    }
+    default : {
+      if $aio_package {
+        $server_implementation = 'puppetserver'
+      } else {
+        $server_implementation = 'master'
+      }
+    }
   }
 
   # Need a new master template for the server?
@@ -328,9 +347,17 @@ class puppet::params {
   $lower_fqdn              = downcase($::fqdn)
   $server_foreman          = true
   $server_facts            = true
-  $server_puppet_basedir   = $aio_package ? {
-    true  => '/opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet',
-    false => undef,
+  case $::osfamily {
+    'Archlinux' : {
+      $server_puppet_basedir = '/usr/lib/ruby/vendor_ruby/2.3.0/puppet'
+    }
+    default : {
+      if $aio_package {
+        $server_puppet_basedir = '/opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet'
+      } else {
+        $server_puppet_basedir = undef
+      }
+    }
   }
   $server_foreman_url      = "https://${lower_fqdn}"
   $server_foreman_ssl_ca   = undef
