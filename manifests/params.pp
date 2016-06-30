@@ -57,7 +57,7 @@ class puppet::params {
   if versioncmp($::puppetversion, '4.0') < 0 {
     $aio_package      = false
     $deb_naio_package = false
-  } elsif $::osfamily == 'Windows' or $::rubysitedir =~ /\/opt\/puppetlabs\/puppet/ {
+  } elsif $::osfamily in ['Archlinux','Windows'] or $::rubysitedir =~ /\/opt\/puppetlabs\/puppet/ {
     $aio_package      = true
     $deb_naio_package = false
   } else {
