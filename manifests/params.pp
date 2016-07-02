@@ -66,53 +66,54 @@ class puppet::params {
     }
 
     /^(FreeBSD|DragonFly)$/ : {
-      $dir               = '/usr/local/etc/puppet'
-      $codedir           = '/usr/local/etc/puppet'
-      $logdir            = '/var/log/puppet'
-      $rundir            = '/var/run/puppet'
-      $ssldir            = '/var/puppet/ssl'
-      $vardir            = '/var/puppet'
-      $sharedir          = '/usr/local/share/puppet'
-      $bindir            = '/usr/local/bin'
-      $root_group        = undef
+      $dir                        = '/usr/local/etc/puppet'
+      $codedir                    = '/usr/local/etc/puppet'
+      $logdir                     = '/var/log/puppet'
+      $rundir                     = '/var/run/puppet'
+      $ssldir                     = '/var/puppet/ssl'
+      $vardir                     = '/var/puppet'
+      $server_puppetserver_vardir = '/var/puppet'
+      $sharedir                   = '/usr/local/share/puppet'
+      $bindir                     = '/usr/local/bin'
+      $root_group                 = undef
     }
 
     default : {
       if $aio_package {
-        $dir               = '/etc/puppetlabs/puppet'
-        $codedir           = '/etc/puppetlabs/code'
-        $logdir            = '/var/log/puppetlabs/puppet'
-        $rundir            = '/var/run/puppetlabs'
-        $ssldir            = '/etc/puppetlabs/puppet/ssl'
-        $vardir            = '/opt/puppetlabs/puppet/cache'
-        $sharedir          = '/opt/puppetlabs/puppet'
-        $bindir            = '/opt/puppetlabs/bin'
+        $dir                        = '/etc/puppetlabs/puppet'
+        $codedir                    = '/etc/puppetlabs/code'
+        $logdir                     = '/var/log/puppetlabs/puppet'
+        $rundir                     = '/var/run/puppetlabs'
+        $ssldir                     = '/etc/puppetlabs/puppet/ssl'
+        $vardir                     = '/opt/puppetlabs/puppet/cache'
+        $sharedir                   = '/opt/puppetlabs/puppet'
+        $bindir                     = '/opt/puppetlabs/bin'
+        $server_puppetserver_dir    = '/etc/puppetlabs/puppetserver'
+        $server_puppetserver_vardir = '/opt/puppetlabs/server/data/puppetserver'
+        $server_ruby_load_paths     = ['/opt/puppetlabs/puppet/lib/ruby/vendor_ruby']
+        $server_jruby_gem_home      = '/opt/puppetlabs/server/data/puppetserver/jruby-gems'
       } else {
-        $dir               = '/etc/puppet'
-        $codedir           = '/etc/puppet'
-        $logdir            = '/var/log/puppet'
-        $rundir            = '/var/run/puppet'
-        $ssldir            = '/var/lib/puppet/ssl'
-        $vardir            = '/var/lib/puppet'
-        $sharedir          = '/usr/share/puppet'
-        $bindir            = '/usr/bin'
+        $dir                        = '/etc/puppet'
+        $codedir                    = '/etc/puppet'
+        $logdir                     = '/var/log/puppet'
+        $rundir                     = '/var/run/puppet'
+        $ssldir                     = '/var/lib/puppet/ssl'
+        $vardir                     = '/var/lib/puppet'
+        $sharedir                   = '/usr/share/puppet'
+        $bindir                     = '/usr/bin'
+        $server_puppetserver_dir    = '/etc/puppetserver'
+        $server_puppetserver_vardir = $vardir
+        $server_ruby_load_paths     = []
+        $server_jruby_gem_home      = '/var/lib/puppet/jruby-gems'
       }
       $root_group = undef
     }
   }
 
   if versioncmp($::puppetversion, '4.0') < 0 {
-    $configtimeout              = 120
-    $server_puppetserver_dir    = '/etc/puppetserver'
-    $server_puppetserver_vardir = $vardir
-    $server_ruby_load_paths     = []
-    $server_jruby_gem_home      = '/var/lib/puppet/jruby-gems'
+    $configtimeout = 120
   } else {
-    $configtimeout              = undef
-    $server_puppetserver_dir    = '/etc/puppetlabs/puppetserver'
-    $server_puppetserver_vardir = '/opt/puppetlabs/server/data/puppetserver'
-    $server_ruby_load_paths     = ['/opt/puppetlabs/puppet/lib/ruby/vendor_ruby']
-    $server_jruby_gem_home      = '/opt/puppetlabs/server/data/puppetserver/jruby-gems'
+    $configtimeout = undef
   }
 
   $autosign      = "${dir}/autosign.conf"
