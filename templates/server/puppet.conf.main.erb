@@ -4,9 +4,9 @@
 
 <% if scope.lookupvar("puppet::server::directory_environments") -%>
     environmentpath  = <%= scope.lookupvar("puppet::server::envs_dir") %>
-  <% if scope.lookupvar("puppet::server::common_modules_path") and !scope.lookupvar("puppet::server::common_modules_path").empty? -%>
+<% if scope.lookupvar("puppet::server::common_modules_path") and !scope.lookupvar("puppet::server::common_modules_path").empty? -%>
     basemodulepath   = <%= [scope.lookupvar("puppet::server::common_modules_path")].flatten.join(':') %>
-  <% end -%>
+<% end -%>
 <% end -%>
 <% if scope.lookupvar("puppet::server::default_manifest") -%>
     default_manifest = <%= scope.lookupvar("puppet::server::default_manifest_path") %>

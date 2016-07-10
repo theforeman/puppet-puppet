@@ -18,12 +18,18 @@ class puppet::server::service(
     fail('Both puppetmaster and puppetserver cannot be enabled simultaneously')
   }
 
+  if $::osfamily == 'Debian' and (versioncmp($::puppetversion, '4.0') > 0) {
+    $puppetmaster_service = 'puppet-master'
+  } else {
+    $puppetmaster_service = 'puppetmaster'
+  }
+
   if $puppetmaster != undef {
     $pm_ensure = $puppetmaster ? {
       true  => 'running',
       false => 'stopped',
     }
-    service { 'puppetmaster':
+    service { $puppetmaster_service:
       ensure => $pm_ensure,
       enable => $puppetmaster,
     }

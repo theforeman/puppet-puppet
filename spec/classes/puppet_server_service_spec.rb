@@ -22,15 +22,20 @@ describe 'puppet::server::service' do
 
       let(:facts) { default_facts.merge(additional_facts) }
 
+      master_service = 'puppetmaster'
+      if os_facts[:osfamily] == 'Debian' && os_facts[:puppetversion].to_f > 4.0
+        master_service = 'puppet-master'
+      end
+
       describe 'default_parameters' do
-        it { should_not contain_service('puppetmaster') }
+        it { should_not contain_service(master_service) }
         it { should_not contain_service('puppetserver') }
       end
 
       describe 'when puppetmaster => true' do
         let(:params) { {:puppetmaster => true, :puppetserver => Undef.new} }
         it do
-          should contain_service('puppetmaster').with({
+          should contain_service(master_service).with({
             :ensure => 'running',
             :enable => 'true',
           })
@@ -50,7 +55,7 @@ describe 'puppet::server::service' do
       describe 'when puppetmaster => false' do
         let(:params) { {:puppetmaster => false} }
         it do
-          should contain_service('puppetmaster').with({
+          should contain_service(master_service).with({
             :ensure => 'stopped',
             :enable => 'false',
           })
@@ -69,7 +74,7 @@ describe 'puppet::server::service' do
 
       describe 'when puppetmaster => undef' do
         let(:params) { {:puppetmaster => Undef.new} }
-        it { should_not contain_service('puppetmaster') }
+        it { should_not contain_service(master_service) }
       end
 
       describe 'when puppetserver => undef' do
