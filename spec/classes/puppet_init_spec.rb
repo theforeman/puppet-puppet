@@ -82,7 +82,9 @@ describe 'puppet' do
           :ca_server => '',
         } end
 
-        it { should_not contain_concat__fragment('puppet.conf+10-main').with_content(/ca_server/) }
+        it {
+          should_not contain_puppet__config__main('ca_server')
+        }
       end
 
       describe 'with ca_server' do
@@ -90,7 +92,9 @@ describe 'puppet' do
           :ca_server => 'ca.example.org',
         } end
 
-        it { should contain_concat__fragment('puppet.conf+10-main').with_content(/^\s+ca_server\s+= ca.example.org$/) }
+        it {
+          should contain_puppet__config__main('ca_server').with({'value' => 'ca.example.org'})
+        }
       end
 
       describe 'with empty ca_port' do
@@ -98,7 +102,9 @@ describe 'puppet' do
           :ca_port => '',
         } end
 
-        it { should_not contain_concat__fragment('puppet.conf+10-main').with_content(/ca_port/) }
+        it {
+          should_not contain_puppet__config__main('ca_port')
+        }
       end
 
       describe 'with ca_port' do
@@ -106,7 +112,9 @@ describe 'puppet' do
           :ca_port => '8140',
         } end
 
-        it { should contain_concat__fragment('puppet.conf+10-main').with_content(/^\s+ca_port\s+= 8140$/) }
+        it {
+          should contain_puppet__config__main('ca_port').with({'value' => '8140'})
+        }
       end
 
       describe 'with ca_port' do
@@ -114,7 +122,9 @@ describe 'puppet' do
           :ca_port => 8140,
         } end
 
-        it { should contain_concat__fragment('puppet.conf+10-main').with_content(/^\s+ca_port\s+= 8140$/) }
+        it {
+          should contain_puppet__config__main('ca_port').with({'value' => 8140})
+        }
       end
 
       # Test validate_array parameters

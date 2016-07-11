@@ -87,7 +87,7 @@ describe 'puppet::server::env' do
             })
 
             should_not contain_file("#{codedir}/environments/foo/environment.conf")
-            should_not contain_concat__fragment('puppet.conf+40-foo')
+            should_not contain_concat__fragment('puppet.conf_foo')
           end
         end
 
@@ -111,13 +111,15 @@ describe 'puppet::server::env' do
               :mode => '0755',
             })
 
-            should contain_concat__fragment('puppet.conf+40-foo').
-              without_content(/^\s+manifest\s+=/).
-              without_content(/^\s+manifestdir\s+=/).
-              with_content(%r{^\s+modulepath\s+= #{codedir}/environments/foo/modules:#{codedir}/environments/common:#{codedir}/modules:#{sharedir}/modules$}).
-              without_content(/^\s+templatedir\s+=/).
-              without_content(/^\s+config_version\s+=/).
-              with({}) # So we can use a trailing dot on each with_content line
+            should_not contain_puppet__config__environment('foo_manifest')
+            should_not contain_puppet__config__environment('foo_manifestdir')
+            should_not contain_puppet__config__environment('foo_templatedir')
+            should_not contain_puppet__config__environment('foo_config_version')
+            should contain_puppet__config__environment('foo_modulepath').with({
+              'key'    => 'modulepath',
+              'value'  => ["#{codedir}/environments/foo/modules",["#{codedir}/environments/common","#{codedir}/modules","#{sharedir}/modules"]],
+              'joiner' => ':',
+              })
 
             should_not contain_file("#{codedir}/environments/foo/environment.conf")
           end
@@ -143,13 +145,18 @@ describe 'puppet::server::env' do
           end
 
           it 'should add config_version to an env section' do
-            should contain_concat__fragment('puppet.conf+40-foo').
-              without_content(/^\s+manifest\s+=/).
-              without_content(/^\s+manifestdir\s+=/).
-              with_content(%r{^\s+modulepath\s+= #{codedir}/environments/foo/modules:#{codedir}/environments/common:#{codedir}/modules:#{sharedir}/modules$}).
-              without_content(/^\s+templatedir\s+=/).
-              with_content(/^\s+config_version\s+= bar/).
-              with({}) # So we can use a trailing dot on each with_content line
+            should_not contain_puppet__config__environment('foo_manifest')
+            should_not contain_puppet__config__environment('foo_manifestdir')
+            should_not contain_puppet__config__environment('foo_templatedir')
+            should contain_puppet__config__environment('foo_modulepath').with({
+              'key'    => 'modulepath',
+              'value'  => ["#{codedir}/environments/foo/modules",["#{codedir}/environments/common","#{codedir}/modules","#{sharedir}/modules"]],
+              'joiner' => ':',
+              })
+            should contain_puppet__config__environment('foo_config_version').with({
+              'key'   => 'config_version',
+              'value' => 'bar',
+              })
           end
         end
       end
@@ -179,13 +186,18 @@ describe 'puppet::server::env' do
           end
 
           it 'should add config_version to an env section' do
-            should contain_concat__fragment('puppet.conf+40-foo').
-              without_content(/^\s+manifest\s+=/).
-              without_content(/^\s+manifestdir\s+=/).
-              with_content(%r{^\s+modulepath\s+= #{codedir}/environments/foo/modules:#{codedir}/environments/common:#{codedir}/modules:#{sharedir}/modules$}).
-              without_content(/^\s+templatedir\s+=/).
-              with_content(/^\s+config_version\s+= bar/).
-              with({}) # So we can use a trailing dot on each with_content line
+            should_not contain_puppet__config__environment('foo_manifest')
+            should_not contain_puppet__config__environment('foo_manifestdir')
+            should_not contain_puppet__config__environment('foo_templatedir')
+            should contain_puppet__config__environment('foo_modulepath').with({
+              'key'    => 'modulepath',
+              'value'  => ["#{codedir}/environments/foo/modules",["#{codedir}/environments/common","#{codedir}/modules","#{sharedir}/modules"]],
+              'joiner' => ':',
+              })
+            should contain_puppet__config__environment('foo_config_version').with({
+              'key'   => 'config_version',
+              'value' => 'bar',
+              })
           end
         end
 
@@ -262,13 +274,15 @@ describe 'puppet::server::env' do
           end
 
           it 'should add modulepath with custom basedir to an env section' do
-            should contain_concat__fragment('puppet.conf+40-foo').
-              without_content(/^\s+manifest\s+=/).
-              without_content(/^\s+manifestdir\s+=/).
-              with_content(%r{^\s+modulepath\s+= #{basedir}/foo/modules:#{codedir}/environments/common:#{codedir}/modules:#{sharedir}/modules}).
-              without_content(/^\s+templatedir\s+=/).
-              without_content(/^\s+config_version\s+=/).
-              with({}) # So we can use a trailing dot on each with_content line
+            should_not contain_puppet__config__environment('foo_manifest')
+            should_not contain_puppet__config__environment('foo_manifestdir')
+            should_not contain_puppet__config__environment('foo_templatedir')
+            should_not contain_puppet__config__environment('foo_config_version')
+            should contain_puppet__config__environment('foo_modulepath').with({
+              'key'    => 'modulepath',
+              'value'  => ["#{basedir}/foo/modules",["#{codedir}/environments/common","#{codedir}/modules","#{sharedir}/modules"]],
+              'joiner' => ':',
+              })
           end
         end
       end

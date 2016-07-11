@@ -72,7 +72,7 @@ describe 'puppet::config' do
         end
 
         it 'should_not contain default_manifest setting in puppet.conf' do
-          should_not contain_concat__fragment('puppet.conf+10-main').with_content(/\s+default_manifest = .*/)
+          should_not contain_puppet__config__main("default_manifest")
         end
 
         it 'should_not contain default manifest /etc/puppet/manifests/default_manifest.pp' do
@@ -80,21 +80,17 @@ describe 'puppet::config' do
         end
 
         it 'should_not contain reports setting in puppet.conf' do
-          should_not contain_concat__fragment('puppet.conf+10-main').with_content(/\s+reports = .*/)
+          should_not contain_puppet__config__main("reports")
         end
 
         it 'should contain puppet.conf [main]' do
-          concat_fragment_content = [
-            '[main]',
-            "    vardir = #{vardir}",
-            "    logdir = #{logdir}",
-            "    rundir = #{rundir}",
-            "    ssldir = #{ssldir}",
-            '    privatekeydir = $ssldir/private_keys { group = service }',
-            '    hostprivkey = $privatekeydir/$certname.pem { mode = 640 }',
-            '    show_diff     = false',
-          ]
-          verify_concat_fragment_exact_contents(catalogue, 'puppet.conf+10-main', concat_fragment_content)
+          should contain_puppet__config__main("vardir").with({'value' => "#{vardir}"})
+          should contain_puppet__config__main("logdir").with({'value' => "#{logdir}"})
+          should contain_puppet__config__main("rundir").with({'value' => "#{rundir}"})
+          should contain_puppet__config__main("ssldir").with({'value' => "#{ssldir}"})
+          should contain_puppet__config__main("privatekeydir").with({'value' => '$ssldir/private_keys { group = service }'})
+          should contain_puppet__config__main("hostprivkey").with({'value' => '$privatekeydir/$certname.pem { mode = 640 }'})
+          should contain_puppet__config__main("show_diff").with({'value' => 'false'})
         end
       end
 
@@ -128,10 +124,7 @@ describe 'puppet::config' do
         end
 
         it 'should contain puppet.conf [main] with dns_alt_names' do
-          verify_concat_fragment_contents(catalogue, 'puppet.conf+10-main', [
-            '[main]',
-            '    dns_alt_names = foo,bar',
-          ])
+          should contain_puppet__config__main("dns_alt_names").with({'value' => ['foo','bar']})
         end
       end
 
@@ -141,10 +134,7 @@ describe 'puppet::config' do
         end
 
         it 'should contain puppet.conf [main] with syslogfacility' do
-          verify_concat_fragment_contents(catalogue, 'puppet.conf+10-main', [
-            '[main]',
-            '    syslogfacility = local6',
-          ])
+          should contain_puppet__config__main("syslogfacility").with({'value' => 'local6'})
         end
       end
 
@@ -154,10 +144,7 @@ describe 'puppet::config' do
         end
 
         it 'should contain puppet.conf [main] with module_repository' do
-          verify_concat_fragment_contents(catalogue, 'puppet.conf+10-main', [
-            '[main]',
-            '    module_repository = https://myforgeapi.example.com',
-          ])
+          should contain_puppet__config__main("module_repository").with({'value' => 'https://myforgeapi.example.com'})
         end
       end
 
@@ -167,13 +154,10 @@ describe 'puppet::config' do
         end
 
         it 'should contain puppet.conf [main] with SRV settings' do
-          verify_concat_fragment_contents(catalogue, 'puppet.conf+10-main', [
-            '[main]',
-            '    use_srv_records = true',
-            '    srv_domain = example.org',
-            '    pluginsource = puppet:///plugins',
-            '    pluginfactsource = puppet:///pluginfacts',
-          ])
+          should contain_puppet__config__main("use_srv_records").with({'value' => "true"})
+          should contain_puppet__config__main("srv_domain").with({'value' => "example.org"})
+          should contain_puppet__config__main("pluginsource").with({'value' => "puppet:///plugins"})
+          should contain_puppet__config__main("pluginfactsource").with({'value' => "puppet:///pluginfacts"})
         end
       end
 
@@ -215,9 +199,7 @@ describe 'puppet::config' do
         end
 
         it 'should configure puppet.conf' do
-          should contain_concat__fragment('puppet.conf+10-main').
-            with_content(/^\s+disable_warnings\s+= deprecations$/).
-            with({}) # So we can use a trailing dot on each with_content line
+          should contain_puppet__config__main("disable_warnings").with({'value' => "deprecations"})
         end
       end
     end

@@ -17,10 +17,42 @@ class puppet::config(
   $srv_domain         = $::puppet::srv_domain,
   $use_srv_records    = $::puppet::use_srv_records,
 ) {
-  concat::fragment { 'puppet.conf+10-main':
-    target  => "${puppet_dir}/puppet.conf",
-    content => template($main_template),
-    order   => '10',
+  puppet::config::main{
+    'vardir': value => $::puppet::vardir;
+    'logdir': value => $::puppet::logdir;
+    'rundir': value => $::puppet::rundir;
+    'ssldir': value => $::puppet::ssldir;
+    'privatekeydir': value => '$ssldir/private_keys { group = service }';
+    'hostprivkey': value => '$privatekeydir/$certname.pem { mode = 640 }';
+    'show_diff': value  => $::puppet::show_diff;
+  }
+
+  if $module_repository and !empty($module_repository) {
+    puppet::config::main{'module_repository': value => $module_repository; }
+  }
+  if $ca_server and !empty($ca_server) {
+    puppet::config::main{'ca_server': value => $ca_server; }
+  }
+  if $ca_port and !empty($ca_port) {
+    puppet::config::main{'ca_port': value => $ca_port; }
+  }
+  if $dns_alt_names and !empty($dns_alt_names) {
+    puppet::config::main{'dns_alt_names': value => $dns_alt_names; }
+  }
+  if $use_srv_records {
+    puppet::config::main{
+      'use_srv_records': value => true;
+      'srv_domain': value => $srv_domain;
+    }
+  }
+  if $pluginsource {
+    puppet::config::main{'pluginsource': value => $pluginsource; }
+  }
+  if $pluginfactsource {
+    puppet::config::main{'pluginfactsource': value => $pluginfactsource; }
+  }
+  if $syslogfacility and !empty($syslogfacility) {
+    puppet::config::main{'syslogfacility': value => $syslogfacility; }
   }
 
   file { $puppet_dir:
