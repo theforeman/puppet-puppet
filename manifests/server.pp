@@ -65,14 +65,6 @@
 # $external_nodes::            External nodes classifier executable
 #                              type:string
 #
-# $template::                  Which template should be used for master
-#                              configuration
-#                              type:string
-#
-# $main_template::             Which template should be used for master
-#                              related configuration in the [main] section
-#                              type:string
-#
 # $git_repo::                  Use git repository as a source of modules
 #                              type:boolean
 #
@@ -382,8 +374,6 @@ class puppet::server(
   $passenger_ruby           = $::puppet::server_passenger_ruby,
   $httpd_service            = $::puppet::server_httpd_service,
   $external_nodes           = $::puppet::server_external_nodes,
-  $template                 = $::puppet::server_template,
-  $main_template            = $::puppet::server_main_template,
   $cipher_suites            = $::puppet::server_cipher_suites,
   $config_version           = $::puppet::server_config_version,
   $connect_timeout          = $::puppet::server_connect_timeout,
