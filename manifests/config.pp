@@ -1,21 +1,22 @@
 # Set up the puppet config
 class puppet::config(
-  $allow_any_crl_auth = $::puppet::allow_any_crl_auth,
-  $auth_allowed       = $::puppet::auth_allowed,
-  $auth_template      = $::puppet::auth_template,
-  $ca_server          = $::puppet::ca_server,
-  $ca_port            = $::puppet::ca_port,
-  $dns_alt_names      = $::puppet::dns_alt_names,
-  $listen_to          = $::puppet::listen_to,
-  $main_template      = $::puppet::main_template,
-  $module_repository  = $::puppet::module_repository,
-  $pluginsource       = $::puppet::pluginsource,
-  $pluginfactsource   = $::puppet::pluginfactsource,
-  $puppet_dir         = $::puppet::dir,
-  $puppetmaster       = $::puppet::puppetmaster,
-  $syslogfacility     = $::puppet::syslogfacility,
-  $srv_domain         = $::puppet::srv_domain,
-  $use_srv_records    = $::puppet::use_srv_records,
+  $allow_any_crl_auth  = $::puppet::allow_any_crl_auth,
+  $auth_allowed        = $::puppet::auth_allowed,
+  $auth_template       = $::puppet::auth_template,
+  $ca_server           = $::puppet::ca_server,
+  $ca_port             = $::puppet::ca_port,
+  $dns_alt_names       = $::puppet::dns_alt_names,
+  $listen_to           = $::puppet::listen_to,
+  $main_template       = $::puppet::main_template,
+  $module_repository   = $::puppet::module_repository,
+  $pluginsource        = $::puppet::pluginsource,
+  $pluginfactsource    = $::puppet::pluginfactsource,
+  $puppet_dir          = $::puppet::dir,
+  $puppetmaster        = $::puppet::puppetmaster,
+  $syslogfacility      = $::puppet::syslogfacility,
+  $srv_domain          = $::puppet::srv_domain,
+  $use_srv_records     = $::puppet::use_srv_records,
+  $additional_settings = $::puppet::additional_settings,
 ) {
   puppet::config::main{
     'vardir': value => $::puppet::vardir;
@@ -53,6 +54,14 @@ class puppet::config(
   }
   if $syslogfacility and !empty($syslogfacility) {
     puppet::config::main{'syslogfacility': value => $syslogfacility; }
+  }
+
+  # we need to store this in a variable, because older puppet doesn't
+  # like resource{function(): ... }
+  $additional_settings_keys = keys($additional_settings)
+  puppet::config::additional_settings{ $additional_settings_keys:
+    hash     => $additional_settings,
+    resource => '::puppet::config::main',
   }
 
   file { $puppet_dir:
