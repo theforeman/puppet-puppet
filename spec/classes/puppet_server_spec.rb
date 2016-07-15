@@ -88,12 +88,14 @@ describe 'puppet::server' do
           end
         end
 
-        describe 'with server_implementation => "puppetserver"' do
-          let :pre_condition do
-            "class {'puppet': server_ip => '127.0.0.1', server_implementation => 'puppetserver'}"
-          end
+        unless os_facts[:osfamily] == 'FreeBSD'
+          describe 'with server_implementation => "puppetserver"' do
+            let :pre_condition do
+              "class {'puppet': server_ip => '127.0.0.1', server_implementation => 'puppetserver'}"
+            end
 
-          it { should_not contain_notify('ip_not_supported') }
+            it { should_not contain_notify('ip_not_supported') }
+          end
         end
       end
 
@@ -124,21 +126,23 @@ describe 'puppet::server' do
         end
       end
 
-      describe 'with server_implementation => "puppetserver"' do
-        let :pre_condition do
-          "class {'puppet': server => true, server_implementation => 'puppetserver'}"
-        end
+      unless os_facts[:osfamily] == 'FreeBSD'
+        describe 'with server_implementation => "puppetserver"' do
+          let :pre_condition do
+            "class {'puppet': server => true, server_implementation => 'puppetserver'}"
+          end
 
-        it { should compile.with_all_deps }
-        it { should_not contain_class('apache') }
-        it { should_not contain_notify('ip_not_supported') }
-        it do
-          should contain_class('puppet::server::service').
-            with_puppetmaster(nil).
-            with_puppetserver(true)
+          it { should compile.with_all_deps }
+          it { should_not contain_class('apache') }
+          it { should_not contain_notify('ip_not_supported') }
+          it do
+            should contain_class('puppet::server::service').
+              with_puppetmaster(nil).
+              with_puppetserver(true)
+          end
+          it { should contain_class('puppet::server::puppetserver') }
+          it { should contain_package('puppetserver') }
         end
-        it { should contain_class('puppet::server::puppetserver') }
-        it { should contain_package('puppetserver') }
       end
 
       describe 'with unknown server_implementation' do
@@ -179,30 +183,32 @@ describe 'puppet::server' do
         end
 
         it { should compile.with_all_deps }
-        # Puppetmaster not supported on FreeBSD
-        if not os_facts[:osfamily] == 'FreeBSD'
+        # Puppetmaster is not a separate package on FreeBSD
+        unless os_facts[:osfamily] == 'FreeBSD'
           it { should contain_package(server_package) }
         end
       end
 
-      describe 'when an invalid jvm size value is given' do
-        context "when server_jvm_min_heap_size => 'x4m'" do
-          let :pre_condition do
-            "class { 'puppet': server => true,
-                               server_implementation => 'puppetserver',
-                               server_jvm_min_heap_size => 'x4m',
-                               server_jvm_max_heap_size => '2G' }"
+      unless os_facts[:osfamily] == 'FreeBSD'
+        describe 'when an invalid jvm size value is given' do
+          context "when server_jvm_min_heap_size => 'x4m'" do
+            let :pre_condition do
+              "class { 'puppet': server => true,
+                                 server_implementation => 'puppetserver',
+                                 server_jvm_min_heap_size => 'x4m',
+                                 server_jvm_max_heap_size => '2G' }"
+            end
+            it { should raise_error(Puppet::Error, /does not match "\^\[0-9\]\+\[kKmMgG\]\$"/) }
           end
-          it { should raise_error(Puppet::Error, /does not match "\^\[0-9\]\+\[kKmMgG\]\$"/) }
-        end
-        context "when server_jvm_max_heap_size => 'x4m'" do
-          let :pre_condition do
-            "class { 'puppet': server => true,
-                               server_implementation => 'puppetserver',
-                               server_jvm_min_heap_size => '2G',
-                               server_jvm_max_heap_size => 'x4m' }"
+          context "when server_jvm_max_heap_size => 'x4m'" do
+            let :pre_condition do
+              "class { 'puppet': server => true,
+                                 server_implementation => 'puppetserver',
+                                 server_jvm_min_heap_size => '2G',
+                                 server_jvm_max_heap_size => 'x4m' }"
+            end
+            it { should raise_error(Puppet::Error, /does not match "\^\[0-9\]\+\[kKmMgG\]\$"/) }
           end
-          it { should raise_error(Puppet::Error, /does not match "\^\[0-9\]\+\[kKmMgG\]\$"/) }
         end
       end
 
