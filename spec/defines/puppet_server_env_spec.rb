@@ -44,6 +44,7 @@ describe 'puppet::server::env' do
         ssldir  = '/var/puppet/ssl'
         vardir  = '/var/puppet'
         sharedir = '/usr/local/share/puppet'
+        additional_facts = {}
       end
 
       let(:facts) { default_facts.merge(additional_facts) }

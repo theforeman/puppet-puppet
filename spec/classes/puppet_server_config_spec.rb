@@ -54,6 +54,7 @@ describe 'puppet::server::config' do
         sharedir            = '/usr/local/share/puppet'
         etcdir              = '/usr/local/etc/puppet'
         puppetcacmd         = '/usr/local/bin/puppet cert'
+        additional_facts    = {}
       end
 
       let(:facts) { default_facts.merge(additional_facts) }
@@ -86,13 +87,13 @@ describe 'puppet::server::config' do
           })
         end
 
-        context 'with non-AIO packages', :if => (Puppet.version < '4.0') do
+        context 'with non-AIO packages', :if => (Puppet.version < '4.0' || os_facts[:osfamily] == 'FreeBSD') do
           it 'CA cert generation should notify the Apache service' do
             should contain_exec('puppet_server_config-generate_ca_cert').that_notifies('Service[httpd]')
           end
         end
 
-        context 'with AIO packages', :if => (Puppet.version > '4.0') do
+        context 'with AIO packages', :if => (Puppet.version > '4.0' && os_facts[:osfamily] != 'FreeBSD') do
           it 'CA cert generation should notify the puppetserver service' do
             should contain_exec('puppet_server_config-generate_ca_cert').that_notifies('Service[puppetserver]')
           end
