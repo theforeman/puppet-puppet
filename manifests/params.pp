@@ -96,7 +96,7 @@ class puppet::params {
       $dir               = '/etc/puppetlabs/puppet'
       $codedir           = '/etc/puppetlabs/code'
       $logdir            = '/var/log/puppetlabs/puppet'
-      $rundir            = '/var/run/puppetlabs'
+      $rundir            = '/run/puppetlabs'
       $ssldir            = '/etc/puppetlabs/puppet/ssl'
       $vardir            = '/opt/puppetlabs/puppet/cache'
       $sharedir          = '/opt/puppetlabs/puppet'
