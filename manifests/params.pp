@@ -206,17 +206,10 @@ class puppet::params {
   $server_http_allow          = []
 
   # use puppetserver (JVM) or puppet master (Ruby)?
-  case $::osfamily {
-    'Archlinux' : {
-      $server_implementation = 'puppetserver'
-    }
-    default : {
-      if $aio_package {
-        $server_implementation = 'puppetserver'
-      } else {
-        $server_implementation = 'master'
-      }
-    }
+  if $aio_package or ($::osfamily == 'Archlinux') {
+    $server_implementation = 'puppetserver'
+  } else {
+    $server_implementation = 'master'
   }
 
   # Need a new master template for the server?
@@ -347,17 +340,9 @@ class puppet::params {
   $lower_fqdn              = downcase($::fqdn)
   $server_foreman          = true
   $server_facts            = true
-  case $::osfamily {
-    'Archlinux' : {
-      $server_puppet_basedir = '/usr/lib/ruby/vendor_ruby/2.3.0/puppet'
-    }
-    default : {
-      if $aio_package {
-        $server_puppet_basedir = '/opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet'
-      } else {
-        $server_puppet_basedir = undef
-      }
-    }
+  $server_puppet_basedir   = $aio_package ? {
+    true  => '/opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet',
+    false => undef,
   }
   $server_foreman_url      = "https://${lower_fqdn}"
   $server_foreman_ssl_ca   = undef
