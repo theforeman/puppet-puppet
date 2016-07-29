@@ -59,7 +59,11 @@ PuppetDB instance, using the puppetlabs/puppetdb module.  Use its
 `puppetdb::server` class to install the PuppetDB server and this module to
 configure the Puppet master to connect to PuppetDB.
 
-Requires [puppetlabs/puppetdb](https://forge.puppetlabs.com/puppetlabs/puppetdb) <5.0.0.
+Requires [puppetlabs/puppetdb](https://forge.puppetlabs.com/puppetlabs/puppetdb)
+
+Please see the notes about using puppetlabs/puppetdb 5.x with older versions of Puppet (< 4.x) and PuppetDB (< 3.x) with
+newer releases of the module and set the values via hiera or an extra include of `puppetdb::globals` with
+`puppetdb_version` defined.
 
 # Installation
 
