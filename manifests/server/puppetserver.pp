@@ -26,7 +26,7 @@
 # Puppetserver config directory
 #
 # * `server_puppetserver_vardir`
-# Puppetserver config directory
+# Puppetserver var directory
 #
 # * `server_jruby_gem_home`
 # Puppetserver jruby gemhome
