@@ -102,6 +102,10 @@
 # $envs_dir::                  Directory that holds puppet environments
 #                              type:string
 #
+# $envs_target::               Indicates that $envs_dir should be
+#                              a symbolic link to this target
+#                              type:string
+#
 # $common_modules_path::       Common modules paths (only when
 #                              $git_repo_path and $dynamic_environments
 #                              are false)
@@ -399,6 +403,7 @@ class puppet::server(
   $environments_group       = $::puppet::server_environments_group,
   $environments_mode        = $::puppet::server_environments_mode,
   $envs_dir                 = $::puppet::server_envs_dir,
+  $envs_target              = $::puppet::server_envs_target,
   $common_modules_path      = $::puppet::server_common_modules_path,
   $git_repo_mode            = $::puppet::server_git_repo_mode,
   $git_repo_path            = $::puppet::server_git_repo_path,

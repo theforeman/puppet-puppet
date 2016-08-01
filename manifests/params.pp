@@ -228,6 +228,7 @@ class puppet::params {
   $server_environments_mode    = '0755'
   # Where we store our puppet environments
   $server_envs_dir             = "${codedir}/environments"
+  $server_envs_target          = undef
   # Modules in this directory would be shared across all environments
   $server_common_modules_path  = ["${server_envs_dir}/common", "${codedir}/modules", "${sharedir}/modules"]
 

@@ -133,11 +133,19 @@ class puppet::server::config inherits puppet::config {
 
   ## Environments
   # location where our puppet environments are located
+  if $::puppet::server::envs_target and $::puppet::server::envs_target != '' {
+    $ensure = 'link'
+  } else {
+    $ensure = 'directory'
+  }
+
   file { $::puppet::server::envs_dir:
-    ensure => directory,
+    ensure => $ensure,
     owner  => $::puppet::server::environments_owner,
     group  => $::puppet::server::environments_group,
     mode   => $::puppet::server::environments_mode,
+    target => $::puppet::server::envs_target,
+    force  => true
   }
 
   if $::puppet::server::git_repo {
