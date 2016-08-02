@@ -145,7 +145,7 @@ class puppet::server::config inherits puppet::config {
     group  => $::puppet::server::environments_group,
     mode   => $::puppet::server::environments_mode,
     target => $::puppet::server::envs_target,
-    force  => true
+    force  => true,
   }
 
   if $::puppet::server::git_repo {
