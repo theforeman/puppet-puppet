@@ -526,6 +526,9 @@
 #                                     disable in case CA is delegated to a separate instance
 #                                     type:boolean
 #
+# $server_puppetserver_vardir::       The path of the puppetserver var dir
+#                                     type:string
+#
 # $server_puppetserver_dir::          The path of the puppetserver config dir
 #                                     type:string
 #
@@ -678,6 +681,7 @@ class puppet (
   $server_implementation           = $puppet::params::server_implementation,
   $server_passenger                = $puppet::params::server_passenger,
   $server_puppetserver_dir         = $puppet::params::server_puppetserver_dir,
+  $server_puppetserver_vardir      = $puppet::params::server_puppetserver_vardir,
   $server_puppetserver_version     = $puppet::params::server_puppetserver_version,
   $server_service_fallback         = $puppet::params::server_service_fallback,
   $server_passenger_min_instances  = $puppet::params::server_passenger_min_instances,
