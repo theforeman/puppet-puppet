@@ -180,6 +180,18 @@ describe 'puppet::server::env' do
               with({}) # So we can use a trailing dot on each with_content line
           end
         end
+
+        context 'with directory environments link' do
+          let :pre_condition do
+            "class {'puppet': server => true, server_envs_target => /foo}"
+          end
+
+          it 'should produce a symbolic link "environments" in codedir' do
+            should be_symlink("#{codedir}/environments").
+              be_linked_to('/foo').
+              with({}) # So we can use a trailing dot on each with_content line
+          end
+        end
       end
 
       context 'with modulepath' do
