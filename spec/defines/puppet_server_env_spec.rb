@@ -57,6 +57,13 @@ describe 'puppet::server::env' do
           end
 
           it 'should only deploy directories' do
+            should contain_file("#{codedir}/environments").with({
+              :ensure => 'directory',
+              :owner => 'puppet',
+              :group => nil,
+              :mode => '0755',
+            })
+
             should contain_file("#{codedir}/environments/foo").with({
               :ensure => 'directory',
               :owner => 'puppet',
@@ -183,12 +190,13 @@ describe 'puppet::server::env' do
 
         context 'with directory environments link' do
           let :pre_condition do
-            "class {'puppet': server => true, server_envs_target => /foo}"
+            "class {'puppet': server => true, server_envs_target => '/foo'}"
           end
 
           it 'should produce a symbolic link "environments" in codedir' do
-            should be_symlink("#{codedir}/environments").
-              be_linked_to('/foo').
+            should contain_file("#{codedir}/environments").
+              with_target('/foo').
+              with_ensure('link').
               with({}) # So we can use a trailing dot on each with_content line
           end
         end
