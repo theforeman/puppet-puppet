@@ -385,5 +385,5 @@ class puppet::params {
   $server_use_legacy_auth_conf     = false
 
   # For puppetserver 2, certain configuration parameters are version specific. We assume a particular version here.
-  $server_puppetserver_version     = '2.4.99'
+  $server_puppetserver_version     = '2.5.0'
 }
