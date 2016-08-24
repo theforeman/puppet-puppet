@@ -19,13 +19,19 @@ class puppet::server::passenger (
   $http                    = $::puppet::server::http,
   $http_port               = $::puppet::server::http_port,
   $http_allow              = $::puppet::server::http_allow,
+  $confdir                 = $::puppet::server::dir,
+  $rack_arguments          = $::puppet::server::rack_arguments,
+  $vardir                  = $::puppet::vardir,
 ) {
   include ::apache
   include ::apache::mod::passenger
 
   class { '::puppet::server::rack':
-    app_root => $app_root,
-    user     => $user,
+    app_root       => $app_root,
+    confdir        => $confdir,
+    rack_arguments => $rack_arguments,
+    user           => $user,
+    vardir         => $vardir,
   }
 
   case $::operatingsystem {

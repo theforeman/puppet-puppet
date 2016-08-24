@@ -20,10 +20,11 @@ describe 'puppet::server::rack' do
       let(:facts) { default_facts.merge(additional_facts) }
 
       let(:default_params) do {
-        :app_root => '/etc/puppet/rack',
-        :confdir  => '/etc/puppet',
-        :vardir   => '/var/lib/puppet',
-        :user     => 'puppet',
+        :app_root       => '/etc/puppet/rack',
+        :confdir        => '/etc/puppet',
+        :vardir         => '/var/lib/puppet',
+        :user           => 'puppet',
+        :rack_arguments => [],
       } end
 
       describe 'defaults' do

@@ -57,16 +57,20 @@ class puppet::params {
   case $::osfamily {
     'Windows' : {
       # Windows prefixes normal paths with the Data Directory's path and leaves 'puppet' off the end
-      $dir_prefix        = 'C:/ProgramData/PuppetLabs/puppet'
-      $dir               = "${dir_prefix}/etc"
-      $codedir           = "${dir_prefix}/etc"
-      $logdir            = "${dir_prefix}/var/log"
-      $rundir            = "${dir_prefix}/var/run"
-      $ssldir            = "${dir_prefix}/etc/ssl"
-      $vardir            = "${dir_prefix}/var"
-      $sharedir          = "${dir_prefix}/share"
-      $bindir            = "${dir_prefix}/bin"
-      $root_group        = undef
+      $dir_prefix                 = 'C:/ProgramData/PuppetLabs/puppet'
+      $dir                        = "${dir_prefix}/etc"
+      $codedir                    = "${dir_prefix}/etc"
+      $logdir                     = "${dir_prefix}/var/log"
+      $rundir                     = "${dir_prefix}/var/run"
+      $ssldir                     = "${dir_prefix}/etc/ssl"
+      $vardir                     = "${dir_prefix}/var"
+      $sharedir                   = "${dir_prefix}/share"
+      $bindir                     = "${dir_prefix}/bin"
+      $root_group                 = undef
+      $server_puppetserver_dir    = undef
+      $server_puppetserver_vardir = undef
+      $server_ruby_load_paths     = []
+      $server_jruby_gem_home      = undef
     }
 
     /^(FreeBSD|DragonFly)$/ : {
@@ -76,10 +80,13 @@ class puppet::params {
       $rundir                     = '/var/run/puppet'
       $ssldir                     = '/var/puppet/ssl'
       $vardir                     = '/var/puppet'
-      $server_puppetserver_vardir = '/var/puppet'
       $sharedir                   = '/usr/local/share/puppet'
       $bindir                     = '/usr/local/bin'
       $root_group                 = undef
+      $server_puppetserver_dir    = undef
+      $server_puppetserver_vardir = '/var/puppet'
+      $server_ruby_load_paths     = []
+      $server_jruby_gem_home      = undef
     }
 
     default : {

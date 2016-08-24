@@ -44,7 +44,13 @@ describe 'puppet::server::puppetserver' do
         :server_ca                   => true,
         :server_puppetserver_version => '2.4.99',
         :server_use_legacy_auth_conf => false,
+        :server_puppetserver_dir     => '/etc/custom/puppetserver',
         :server_puppetserver_vardir  => '/opt/puppetlabs/server/data/puppetserver',
+        :server_jruby_gem_home       => '/opt/puppetlabs/server/data/puppetserver/jruby-gems',
+        :server_dir                  => '/etc/puppetlabs/puppet',
+        :server_idle_timeout         => 1200000,
+        :server_connect_timeout      => 120000,
+        :server_enable_ruby_profiler => false,
       } end
 
       describe 'with default parameters' do
