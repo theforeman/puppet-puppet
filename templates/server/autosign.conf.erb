@@ -1,0 +1,4 @@
+# Managed by Puppet
+<% scope.lookupvar("puppet::server::autosign_entries").each do |entry| -%>
+<%= entry %>
+<% end -%>
