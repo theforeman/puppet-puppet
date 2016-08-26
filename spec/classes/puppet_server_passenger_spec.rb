@@ -68,6 +68,13 @@ describe 'puppet::server::passenger' do
             :custom_fragment => "ProxyPassMatch ^/([^/]+/certificate.*)$ https://ca.example.org:8140/$1",
           })
         end
+
+        it 'should include the puppet http vhost' do
+          should contain_apache__vhost('puppet').with({
+            :ssl_proxyengine => true,
+            :custom_fragment => "ProxyPassMatch ^/([^/]+/certificate.*)$ https://ca.example.org:8140/$1",
+          })
+        end
       end
 
       describe 'with SSL CRL' do
@@ -100,6 +107,7 @@ describe 'puppet::server::passenger' do
             :passenger_min_instances => 10,
             :passenger_pre_start     => 'https://puppet.example.com:8140',
             :passenger_ruby          => '/opt/ruby2.0/bin/ruby',
+            :ssl_proxyengine         => false,
           })
         end
 
@@ -108,6 +116,7 @@ describe 'puppet::server::passenger' do
             :passenger_min_instances => 10,
             :passenger_pre_start     => 'http://puppet.example.com:8139',
             :passenger_ruby          => '/opt/ruby2.0/bin/ruby',
+            :ssl_proxyengine         => false,
           })
         end
       end
