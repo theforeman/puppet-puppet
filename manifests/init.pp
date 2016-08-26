@@ -96,6 +96,11 @@
 #                                     sure that script considers the content of autosign.conf
 #                                     as otherwise Foreman functionality might be broken.
 #
+# $autosign_entries::                 A list of certnames or domain name globs
+#                                     whose certificate requests will automatically be signed.
+#                                     Defaults to an empty Array.
+#                                     type: array
+#
 # $autosign_mode::                    mode of the autosign file/script
 #
 # $usecacheonfailure::                Switch to enable use of cached catalog on
@@ -629,6 +634,7 @@ class puppet (
   $splay                           = $puppet::params::splay,
   $splaylimit                      = $puppet::params::splaylimit,
   $autosign                        = $puppet::params::autosign,
+  $autosign_entries                = $puppet::params::autosign_entries,
   $autosign_mode                   = $puppet::params::autosign_mode,
   $runinterval                     = $puppet::params::runinterval,
   $usecacheonfailure               = $puppet::params::usecacheonfailure,

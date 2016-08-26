@@ -11,6 +11,11 @@
 #                              sure that script considers the content of autosign.conf
 #                              as otherwise Foreman functionality might be broken.
 #
+# $autosign_entries::          A list of certnames or domain name globs
+#                              whose certificate requests will automatically be signed.
+#                              Defaults to an empty Array.
+#                              type: array
+#
 # $autosign_mode::             mode of the autosign file/script
 #
 # $hiera_config::              The hiera configuration file.
@@ -364,6 +369,7 @@
 
 class puppet::server(
   $autosign                 = $::puppet::autosign,
+  $autosign_entries         = $::puppet::autosign_entries,
   $autosign_mode            = $::puppet::autosign_mode,
   $hiera_config             = $::puppet::hiera_config,
   $admin_api_whitelist      = $::puppet::server_admin_api_whitelist,
@@ -492,6 +498,7 @@ class puppet::server(
   if ! is_bool($autosign) {
     validate_absolute_path($autosign)
     validate_string($autosign_mode)
+    validate_array($autosign_entries)
   }
 
   validate_array($rack_arguments)

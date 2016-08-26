@@ -118,6 +118,11 @@ class puppet::server::config inherits puppet::config {
       group  => $puppet::group,
       mode   => $puppet::autosign_mode,
     }
+    if !empty($puppet::autosign_entries) {
+      File[$puppet::autosign] {
+        content => template('puppet/server/autosign.conf.erb'),
+      }
+    }
   }
 
   # only manage this file if we provide content

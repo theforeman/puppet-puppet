@@ -16,6 +16,7 @@ describe 'puppet::server::config' do
 
       if Puppet.version < '4.0'
         codedir             = '/etc/puppet'
+        confdir             = '/etc/puppet'
         conf_file           = '/etc/puppet/puppet.conf'
         environments_dir    = '/etc/puppet/environments'
         logdir              = '/var/log/puppet'
@@ -29,6 +30,7 @@ describe 'puppet::server::config' do
         additional_facts    = {}
       else
         codedir             = '/etc/puppetlabs/code'
+        confdir             = '/etc/puppetlabs/puppet'
         conf_file           = '/etc/puppetlabs/puppet/puppet.conf'
         environments_dir    = '/etc/puppetlabs/code/environments'
         logdir              = '/var/log/puppetlabs/puppet'
@@ -44,6 +46,7 @@ describe 'puppet::server::config' do
 
       if os_facts[:osfamily] == 'FreeBSD'
         codedir             = '/usr/local/etc/puppet'
+        confdir             = '/usr/local/etc/puppet'
         conf_file           = '/usr/local/etc/puppet/puppet.conf'
         environments_dir    = '/usr/local/etc/puppet/environments'
         logdir              = '/var/log/puppet'
@@ -234,6 +237,35 @@ describe 'puppet::server::config' do
           should contain_concat__fragment('puppet.conf+30-master').
             with_content(/^\s+autosign\s+= \/somedir\/custom_autosign { mode = 664 }$/).
             with({}) # So we can use a trailing dot on each with_content line
+        end
+      end
+
+      describe "when autosign_entries is not set" do
+        let :pre_condition do
+          "class {'puppet':
+              server  => true,
+           }"
+        end
+
+        it 'should contain autosign.conf with out content set' do
+           should contain_file("#{confdir}/autosign.conf")
+           should_not contain_file("#{confdir}/autosign.conf").with_content(/# Managed by Puppet/)
+           should_not contain_file("#{confdir}/autosign.conf").with_content(/foo.bar/)
+        end
+      end
+
+      describe "when autosign_entries set to ['foo.bar']" do
+        let :pre_condition do
+          "class {'puppet':
+              server           => true,
+              autosign_entries => ['foo.bar'],
+           }"
+        end
+
+        it 'should contain autosign.conf with content set' do
+           should contain_file("#{confdir}/autosign.conf")
+           should contain_file("#{confdir}/autosign.conf").with_content(/# Managed by Puppet/)
+           should contain_file("#{confdir}/autosign.conf").with_content(/foo.bar/)
         end
       end
 
