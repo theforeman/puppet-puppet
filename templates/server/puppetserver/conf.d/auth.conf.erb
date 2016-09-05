@@ -45,6 +45,74 @@ authorization: {
             sort-order: 500
             name: "puppetlabs csr"
         },
+<%- if scope.function_versioncmp([@server_puppetserver_version, '2.2']) > 0 -%>
+<%- if @server_ca -%>
+        {
+            match-request: {
+                path: "/certificate_status/"
+                type: path
+                method: [ get, put, delete ]
+            }
+<%- if @server_ca_auth_required == false -%>
+            allow-unauthenticated: true
+<%- else -%>
+            allow: [
+<%- @server_ca_client_whitelist.each do |client| -%>
+                "<%= client %>",
+<%- end -%>
+            ]
+<%- end -%>
+            sort-order: 200
+            name: "certificate_status"
+        },
+        {
+            match-request: {
+                path: "/certificate_statuses/"
+                type: path
+                method: get
+            }
+<%- if @server_ca_auth_required == false -%>
+            allow-unauthenticated: true
+<%- else -%>
+            allow: [
+<%- @server_ca_client_whitelist.each do |client| -%>
+                "<%= client %>",
+<%- end -%>
+            ]
+<%- end -%>
+            sort-order: 200
+            name: "certificate_statuses"
+        },
+<%- end -%>
+        {
+            match-request: {
+                path: "/puppet-admin-api/v1/environment-cache"
+                type: path
+                method: delete
+            }
+            allow: [
+<%- @server_admin_api_whitelist.each do |client| -%>
+                "<%= client %>",
+<%- end -%>
+            ]
+            sort-order: 200
+            name: "environment-cache"
+        },
+        {
+            match-request: {
+                path: "/puppet-admin-api/v1/jruby-pool"
+                type: path
+                method: delete
+            }
+            allow: [
+<%- @server_admin_api_whitelist.each do |client| -%>
+                "<%= client %>",
+<%- end -%>
+            ]
+            sort-order: 200
+            name: "jruby-pool"
+        },
+<%- end -%>
         {
             match-request: {
                 path: "/puppet/v3/environments"

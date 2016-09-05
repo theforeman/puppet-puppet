@@ -52,11 +52,11 @@
 #   }
 #
 class puppet::server::puppetserver (
-  $java_bin                    = $::puppet::server::jvm_java_bin,
   $config                      = $::puppet::server::jvm_config,
+  $java_bin                    = $::puppet::server::jvm_java_bin,
+  $jvm_extra_args              = $::puppet::server::jvm_extra_args,
   $jvm_min_heap_size           = $::puppet::server::jvm_min_heap_size,
   $jvm_max_heap_size           = $::puppet::server::jvm_max_heap_size,
-  $jvm_extra_args              = $::puppet::server::jvm_extra_args,
   $server_puppetserver_dir     = $::puppet::server::puppetserver_dir,
   $server_puppetserver_vardir  = $::puppet::server::puppetserver_vardir,
   $server_jruby_gem_home       = $::puppet::server::jruby_gem_home,
@@ -69,6 +69,7 @@ class puppet::server::puppetserver (
   $server_idle_timeout         = $::puppet::server::idle_timeout,
   $server_connect_timeout      = $::puppet::server::connect_timeout,
   $server_enable_ruby_profiler = $::puppet::server::enable_ruby_profiler,
+  $server_ca_auth_required     = $::puppet::server::ca_auth_required,
   $server_ca_client_whitelist  = $::puppet::server::ca_client_whitelist,
   $server_admin_api_whitelist  = $::puppet::server::admin_api_whitelist,
   $server_puppetserver_version = $::puppet::server::puppetserver_version,
@@ -169,8 +170,14 @@ class puppet::server::puppetserver (
     }
   }
 
+  if versioncmp($server_puppetserver_version, '2.2') < 0 {
+    $ca_conf_ensure = file
+  } else {
+    $ca_conf_ensure = absent
+  }
+
   file { "${server_puppetserver_dir}/conf.d/ca.conf":
-    ensure  => file,
+    ensure  => $ca_conf_ensure,
     content => template('puppet/server/puppetserver/conf.d/ca.conf.erb'),
   }
 

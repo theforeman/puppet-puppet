@@ -377,8 +377,8 @@ class puppet::params {
   $server_connect_timeout          = 120000
   $server_enable_ruby_profiler     = false
   $server_ca_auth_required         = true
-  $server_admin_api_whitelist      = [ '127.0.0.1', '::1', $::ipaddress ]
-  $server_ca_client_whitelist      = [ '127.0.0.1', '::1', $::ipaddress ]
+  $server_admin_api_whitelist      = [ 'localhost', $lower_fqdn ]
+  $server_ca_client_whitelist      = [ 'localhost', $lower_fqdn ]
   $server_cipher_suites            = [ 'TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA', 'TLS_RSA_WITH_AES_128_CBC_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA', ]
   $server_ssl_protocols            = [ 'TLSv1.2', ]
 

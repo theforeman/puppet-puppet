@@ -13,10 +13,12 @@ jruby-puppet: {
     # used by the `puppetserver gem` command line tool.
     gem-home: <%= @server_jruby_gem_home %>
 
-    # (optional) path to puppet conf dir; if not specified, will use the puppet default
+    # (optional) path to puppet conf dir; if not specified, will use
+    # the puppet default
     master-conf-dir: <%= @server_dir %>
 
-    # (optional) path to puppet var dir; if not specified, will use the puppet default
+    # (optional) path to puppet var dir; if not specified, will use
+    # the puppet default
     master-var-dir: <%= @server_puppetserver_vardir %>
 
     # (optional) maximum number of JRuby instances to allow
@@ -63,6 +65,7 @@ profiler: {
     # enable or disable profiling for the Ruby code; defaults to 'false'.
     enabled: <%= @server_enable_ruby_profiler %>
 }
+<%- if scope.function_versioncmp([@server_puppetserver_version, '2.2']) < 0 -%>
 
 # Settings related to the puppet-admin HTTP API
 puppet-admin: {
@@ -72,3 +75,4 @@ puppet-admin: {
     <%- end -%>
     ]
 }
+<%- end -%>

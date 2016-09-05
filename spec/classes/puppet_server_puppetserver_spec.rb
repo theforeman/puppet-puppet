@@ -32,8 +32,9 @@ describe 'puppet::server::puppetserver' do
         :jvm_min_heap_size           => '2G',
         :jvm_max_heap_size           => '2G',
         :jvm_extra_args              => '',
-        :server_ca_client_whitelist  => [ '127.0.0.1', '::1', '192.0.2.10', ],
-        :server_admin_api_whitelist  => [ '127.0.0.1', '::1', '192.0.2.10', ],
+        :server_ca_auth_required     => true,
+        :server_ca_client_whitelist  => [ 'localhost', 'puppetserver123.example.com' ],
+        :server_admin_api_whitelist  => [ 'localhost', 'puppetserver123.example.com' ],
         :server_ruby_load_paths      => [ '/some/path', ],
         :server_ssl_protocols        => [ 'TLSv1.2', ],
         :server_cipher_suites        => [ 'TLS_RSA_WITH_AES_256_CBC_SHA256',
@@ -292,6 +293,77 @@ describe 'puppet::server::puppetserver' do
           it { should_not contain_file('/etc/custom/puppetserver/services.d/ca.cfg') }
           it { should_not contain_file('/opt/puppetlabs/server/apps/puppetserver/config') }
           it { should_not contain_file('/opt/puppetlabs/server/apps/puppetserver/config/services.d') }
+        end
+      end
+
+      describe 'server_ca related settings' do
+        context 'when server_puppetserver_version >= 2.2' do
+          let(:params) do
+            default_params.merge({
+                                     :server_puppetserver_version => '2.2.0',
+                                     :server_puppetserver_dir => '/etc/custom/puppetserver',
+                                 })
+          end
+          it {
+            should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
+              with_content(/^\s+path: "\/certificate_statuses\/"/).
+              with_content(/^\s+name: "certificate_status"/).
+              with_content(/^\s+path: "\/puppet-admin-api\/v1\/environment-cache"/).
+              with_content(/^\s+name: "environment-cache"/).
+              with_content(/^\s+path: "\/puppet-admin-api\/v1\/jruby-pool"/).
+              with_content(/^\s+name: "jruby-pool"/).
+              with({}) # So we can use a trailing dot on each with_content line
+          }
+          it {
+            should contain_file('/etc/custom/puppetserver/conf.d/ca.conf').
+              with_ensure('absent').
+              with({}) # So we can use a trailing dot on each with_content line
+          }
+          it {
+            should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              without_content(/^# Settings related to the puppet-admin HTTP API$/).
+              without_content(/^puppet-admin: \{$/).
+              without_content(/^\s+client-whitelist: \[$/).
+              without_content(/^\s+"localhost"\,$/).
+              without_content(/^\s+"puppetserver123.example.com"\,$/).
+              with({}) # So we can use a trailing dot on each with_content line
+          }
+        end
+
+        context 'when server_puppetserver_version < 2.2' do
+          let(:params) do
+            default_params.merge({
+                                     :server_puppetserver_version => '2.1.1',
+                                     :server_puppetserver_dir => '/etc/custom/puppetserver',
+                                 })
+          end
+          it {
+            should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
+              without_content(/^\s+path: "\/certificate_statuses\/"/).
+              without_content(/^\s+name: "certificate_status"/).
+              without_content(/^\s+path: "\/puppet-admin-api\/v1\/environment-cache"/).
+              without_content(/^\s+name: "environment-cache"/).
+              without_content(/^\s+path: "\/puppet-admin-api\/v1\/jruby-pool"/).
+              without_content(/^\s+name: "jruby-pool"/).
+              with({}) # So we can use a trailing dot on each with_content line
+          }
+          it {
+            should contain_file('/etc/custom/puppetserver/conf.d/ca.conf').
+              with_content(/^\s+authorization-required: true$/).
+              with_content(/^\s+client-whitelist: \[$/).
+              with_content(/^\s+"localhost"\,$/).
+              with_content(/^\s+"puppetserver123.example.com"\,$/).
+              with({}) # So we can use a trailing dot on each with_content line
+          }
+          it {
+            should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              with_content(/^# Settings related to the puppet-admin HTTP API$/).
+              with_content(/^puppet-admin: \{$/).
+              with_content(/^\s+client-whitelist: \[$/).
+              with_content(/^\s+"localhost"\,$/).
+              with_content(/^\s+"puppetserver123.example.com"\,$/).
+              with({}) # So we can use a trailing dot on each with_content line
+          }
         end
       end
 
