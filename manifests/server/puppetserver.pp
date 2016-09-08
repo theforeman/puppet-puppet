@@ -68,6 +68,8 @@ class puppet::server::puppetserver (
   $server_max_active_instances      = $::puppet::server::max_active_instances,
   $server_max_requests_per_instance = $::puppet::server::max_requests_per_instance,
   $server_ssl_protocols             = $::puppet::server::ssl_protocols,
+  $server_http                      = $::puppet::server::http,
+  $server_http_allow                = $::puppet::server::http_allow,
   $server_ca                        = $::puppet::server::ca,
   $server_dir                       = $::puppet::server::dir,
   $server_idle_timeout              = $::puppet::server::idle_timeout,
@@ -80,6 +82,10 @@ class puppet::server::puppetserver (
   $server_use_legacy_auth_conf      = $::puppet::server::use_legacy_auth_conf,
 ) {
   include ::puppet::server
+
+  if !(empty($server_http_allow)) {
+    fail('setting $server_http_allow is not supported for puppetserver as it would have no effect')
+  }
 
   $puppetserver_package = pick($::puppet::server::package, 'puppetserver')
 

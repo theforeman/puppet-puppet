@@ -5,7 +5,7 @@ fixtures:
     extlib:           'https://github.com/voxpupuli/puppet-extlib'
     foreman:          'https://github.com/theforeman/puppet-foreman'
     git:              'https://github.com/theforeman/puppet-git'
-    intfile:          'https://github.com/puppetlabs/puppetlabs-inifile.git'
+    inifile:          'https://github.com/puppetlabs/puppetlabs-inifile.git'
     puppetdb:         'https://github.com/puppetlabs/puppetlabs-puppetdb.git'
     stdlib:           'https://github.com/puppetlabs/puppetlabs-stdlib.git'
 
