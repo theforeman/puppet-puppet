@@ -1,5 +1,35 @@
 # Changelog
 
+## 6.0.0
+* New or changed parameters:
+    * Add server_passenger_ruby parameter to change Rack Ruby interpreter
+    * Add server_puppetserver_vardir parameter to set the Puppet Server vardir
+      to a different location than the agent (SERVER-357)
+    * Add server_envs_target parameter to create symlink in place of the
+      environments directory
+    * Add autosign_entries parameter to list certnames that will be added to
+      autosign.conf for automatic signing
+* Other features:
+    * Support Debian non-AIO Puppet 4 packages
+    * Enable HTTP to HTTPS proxying of CA requests on HTTP Puppet master vhost
+    * List Fedora 24 compatibility
+* Other changes and fixes:
+    * Change default Puppet Server version to 2.5.0
+    * Move CA and admin authorization/whitelist settings to auth.conf on Puppet
+      Server 2.2 or higher
+    * Remove non-functional Puppet 3 endpoints from auth.conf when using
+      Puppet 4
+    * Don't deploy empty site.pp file, not required on recent versions, and
+      remove the server_manifest_path parameter
+    * Add docs for using PuppetDB integration under pre-4.x versions of Puppet
+    * Fix missing default parameters under strict variables
+    * Fix Kafo data types in package parameter docs
+    * Fix indentation and whitespace in puppet.conf templates
+* Compatibility warnings:
+    * Support for Puppet 3.2 or lower has been removed, 3.3.0 or higher is
+      required
+    * server_manifest_path has been removed
+
 ## 5.0.0
 * New or changed parameters:
     * Add new server_* parameters for Puppet Server 2.x configuration options,
