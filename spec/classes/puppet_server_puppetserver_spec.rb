@@ -43,6 +43,8 @@ describe 'puppet::server::puppetserver' do
                                           'TLS_RSA_WITH_AES_128_CBC_SHA', ],
         :server_max_active_instances => 2,
         :server_max_requests_per_instance => 0,
+        :server_http                 => false,
+        :server_http_allow           => [],
         :server_ca                   => true,
         :server_puppetserver_version => '2.4.99',
         :server_use_legacy_auth_conf => false,
@@ -86,8 +88,16 @@ describe 'puppet::server::puppetserver' do
         it { should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf') }
         it { should contain_file('/etc/custom/puppetserver/conf.d/web-routes.conf') }
         it { should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
-                                 with_content(/ssl-host\s+=\s0\.0\.0\.0/) }
-        it { should contain_file('/etc/custom/puppetserver/conf.d/auth.conf') }
+                                 with_content(/ssl-host\s+=\s0\.0\.0\.0/).
+                                 with_content(/ssl-port\s+=\s8140/).
+                                 without_content(/ host\s+=\s/).
+                                 without_content(/ port\s+=\s8140/).
+                                 with({})
+        }
+        it { should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
+          with_content(/allow-header-cert-info: false/).
+          with({})
+        }
       end
 
       describe 'server_puppetserver_vardir' do
@@ -493,6 +503,44 @@ describe 'puppet::server::puppetserver' do
           should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
             with_content(/ssl-cert\s+=\s\/etc\/custom\/puppet\/ssl\/certs\/puppetserver43\.example\.com\.pem/)
         end
+      end
+
+      describe 'with server_http parameter set to true for the puppet class' do
+        let(:params) do
+          default_params.merge({
+            :server_puppetserver_dir => '/etc/custom/puppetserver',
+          })
+        end
+
+        let :pre_condition do
+          "class {'puppet': server_http => true, server_implementation => 'puppetserver'}"
+        end
+
+        it { should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
+          with_content(/ host\s+=\s0\.0\.0\.0/).
+          with_content(/ port\s+=\s8139/).
+          with({})
+        }
+
+        it { should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
+          with_content(/allow-header-cert-info: true/).
+          with({})
+        }
+      end
+
+      describe 'with server_http_allow parameter set for the puppet class' do
+        let(:params) do
+          default_params.merge({
+            :server_puppetserver_dir => '/etc/custom/puppetserver',
+          })
+        end
+
+        let :pre_condition do
+          "class {'puppet': server => true, server_http => true, server_http_allow => ['1.2.3.4'], server_implementation => 'puppetserver'}"
+        end
+
+        it { should raise_error(Puppet::Error, /setting \$server_http_allow is not supported for puppetserver as it would have no effect/) }
+
       end
     end
   end
