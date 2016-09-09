@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.1
+* Other changes and fixes:
+    * Change default Puppet Server version to 2.5.0
+
 ## 5.0.0
 * New or changed parameters:
     * Add new server_* parameters for Puppet Server 2.x configuration options,
