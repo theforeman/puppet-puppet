@@ -176,7 +176,8 @@ version available.
 
 Currently supported values and configuration behaviours are:
 
-* `2.5.x` (default) - configures the certificate authority in `ca.cfg`
+* `2.6.x` (default) - configures the /status API endpoint in `web-routes.conf`
+* `2.5.x` - configures the certificate authority in `ca.cfg`
 * `2.4.99` - configures for both 2.4 and 2.5, with `bootstrap.cfg`
   and `ca.cfg`
 * `2.3.x`, `2.4.x` - configures the certificate authority and

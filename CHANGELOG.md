@@ -14,7 +14,7 @@
     * Enable HTTP to HTTPS proxying of CA requests on HTTP Puppet master vhost
     * List Fedora 24 compatibility
 * Other changes and fixes:
-    * Change default Puppet Server version to 2.5.0
+    * Change default Puppet Server version to 2.6.0
     * Move CA and admin authorization/whitelist settings to auth.conf on Puppet
       Server 2.2 or higher
     * Remove non-functional Puppet 3 endpoints from auth.conf when using

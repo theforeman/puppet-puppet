@@ -367,6 +367,33 @@ describe 'puppet::server::puppetserver' do
         end
       end
 
+      describe 'status API endpoint' do
+        context 'when server_puppetserver_version >= 2.6' do
+          let(:params) do
+            default_params.merge({
+                                     :server_puppetserver_version => '2.6.0',
+                                     :server_puppetserver_dir => '/etc/custom/puppetserver',
+                                 })
+          end
+          it {
+            should contain_file('/etc/custom/puppetserver/conf.d/web-routes.conf').
+              with_content(/^\s+"puppetlabs.trapperkeeper.services.status.status-service\/status-service": "\/status"/)
+          }
+        end
+
+        context 'when server_puppetserver_version < 2.6' do
+          let(:params) do
+            default_params.merge({
+                                     :server_puppetserver_version => '2.5.0',
+                                     :server_puppetserver_dir => '/etc/custom/puppetserver',
+                                 })
+          end
+          it {
+            should contain_file('/etc/custom/puppetserver/conf.d/web-routes.conf').
+              without_content(/^\s+"puppetlabs.trapperkeeper.services.status.status-service\/status-service": "\/status"/)
+          }
+        end
+      end
       describe 'with extra_args parameter' do
         let :params do
           default_params.merge({
