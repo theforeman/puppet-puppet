@@ -2,7 +2,7 @@
 
 ## 5.0.1
 * Other changes and fixes:
-    * Change default Puppet Server version to 2.5.0
+    * Add support for Puppet Server 2.6.x and set it as default version
 
 ## 5.0.0
 * New or changed parameters:
