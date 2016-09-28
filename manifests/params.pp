@@ -168,19 +168,21 @@ class puppet::params {
   $auth_allowed = ['$1']
 
   # Will this host be a puppet agent ?
-  $agent                     = true
-  $remove_lock               = true
-  $client_certname           = $::clientcert
+  $agent                      = true
+  $remove_lock                = true
+  $client_certname            = $::clientcert
 
   # Custom puppetmaster
-  if defined('$trusted') and $::trusted['authenticated'] == 'local' {
-    $puppetmaster            = undef
+  # needed due to a PUP-4072
+  # more information in https://github.com/theforeman/puppet-foreman/commit/5fe3239da0c6fbac76172f61042a69ab3a7eb4e6
+  if versioncmp($::puppetversion, '3.7.5') < 0 or defined('$::puppetmaster') {
+    $puppetmaster             = $::puppetmaster
   } else {
-    $puppetmaster            = $::puppetmaster
+    $puppetmaster             = undef
   }
 
   # Hashes containing additional settings
-  $additional_settings   =      {}
+  $additional_settings        = {}
   $agent_additional_settings  = {}
   $server_additional_settings = {}
 
