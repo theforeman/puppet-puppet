@@ -154,9 +154,9 @@ By default, this HTTP instance accepts no connection (`deny all` in the `<Direct
 snippet). Allowed hosts can be configured by setting the `server_http_allow` parameter
 (which expects an array).
 
-** Note that running an HTTP puppetmaster is a huge security risk when improperly
+**Note that running an HTTP puppetmaster is a huge security risk when improperly
 configured. Allowed hosts should be tightly controlled; anyone with access to an allowed
-host can access all client catalogues and client certificates. **
+host can access all client catalogues and client certificates.**
 
     # Configure an HTTP puppetmaster vhost in addition to the standard SSL vhost
     class { '::puppet':
