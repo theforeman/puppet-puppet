@@ -370,20 +370,20 @@ class puppet::params {
   $server_jvm_max_heap_size = '2G'
   $server_jvm_extra_args    = '-XX:MaxPermSize=256m'
 
-  $server_ssl_dir_manage           = true
-  $server_default_manifest         = false
-  $server_default_manifest_path    = '/etc/puppet/manifests/default_manifest.pp'
-  $server_default_manifest_content = '' # lint:ignore:empty_string_assignment
-  $server_max_active_instances     = $::processorcount
+  $server_ssl_dir_manage            = true
+  $server_default_manifest          = false
+  $server_default_manifest_path     = '/etc/puppet/manifests/default_manifest.pp'
+  $server_default_manifest_content  = '' # lint:ignore:empty_string_assignment
+  $server_max_active_instances      = $::processorcount
   $server_max_requests_per_instance = 0
-  $server_idle_timeout             = 1200000
-  $server_connect_timeout          = 120000
-  $server_enable_ruby_profiler     = false
-  $server_ca_auth_required         = true
-  $server_admin_api_whitelist      = [ 'localhost', $lower_fqdn ]
-  $server_ca_client_whitelist      = [ 'localhost', $lower_fqdn ]
-  $server_cipher_suites            = [ 'TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA', 'TLS_RSA_WITH_AES_128_CBC_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA', ]
-  $server_ssl_protocols            = [ 'TLSv1.2', ]
+  $server_idle_timeout              = 1200000
+  $server_connect_timeout           = 120000
+  $server_enable_ruby_profiler      = false
+  $server_ca_auth_required          = true
+  $server_admin_api_whitelist       = [ 'localhost', $lower_fqdn ]
+  $server_ca_client_whitelist       = [ 'localhost', $lower_fqdn ]
+  $server_cipher_suites             = [ 'TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA', 'TLS_RSA_WITH_AES_128_CBC_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA', ]
+  $server_ssl_protocols             = [ 'TLSv1.2', ]
 
   # Puppetserver >= 2.2 Which auth.conf shall we use?
   $server_use_legacy_auth_conf     = false
