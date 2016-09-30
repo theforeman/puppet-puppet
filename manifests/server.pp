@@ -324,6 +324,9 @@
 #                              processor count
 #                              type:integer
 #
+# $max_requests_per_instance:: Max number of requests per jruby instance. Defaults to 0 (disabled)
+#                              type:integer
+#
 # $idle_timeout::              How long the server will wait for a response on an existing connection
 #                              type:integer
 #
@@ -458,6 +461,7 @@ class puppet::server(
   $jvm_extra_args           = $::puppet::server_jvm_extra_args,
   $jruby_gem_home           = $::puppet::server_jruby_gem_home,
   $max_active_instances     = $::puppet::server_max_active_instances,
+  $max_requests_per_instance = $::puppet::server_max_requests_per_instance,
   $use_legacy_auth_conf     = $::puppet::server_use_legacy_auth_conf,
 ) {
 
@@ -517,6 +521,7 @@ class puppet::server(
     validate_absolute_path($puppetserver_vardir)
     validate_absolute_path($jruby_gem_home)
     validate_integer($max_active_instances)
+    validate_integer($max_requests_per_instance)
     validate_integer($idle_timeout)
     validate_integer($connect_timeout)
     validate_array($ssl_protocols)

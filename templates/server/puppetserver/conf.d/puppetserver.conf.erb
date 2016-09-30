@@ -24,6 +24,9 @@ jruby-puppet: {
     # (optional) maximum number of JRuby instances to allow
     max-active-instances: <%= @server_max_active_instances %>
 
+    # (optional) the number of HTTP requests a given JRuby instance will handle in its lifetime.
+    max-requests-per-instance: <%= @server_max_requests_per_instance %>
+
 <%- if scope.function_versioncmp([@server_puppetserver_version, '2.2']) >= 0 -%>
     use-legacy-auth-conf: <%= @server_use_legacy_auth_conf %>
 <%- end %>

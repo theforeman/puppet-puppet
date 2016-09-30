@@ -375,6 +375,7 @@ class puppet::params {
   $server_default_manifest_path    = '/etc/puppet/manifests/default_manifest.pp'
   $server_default_manifest_content = '' # lint:ignore:empty_string_assignment
   $server_max_active_instances     = $::processorcount
+  $server_max_requests_per_instance = 0
   $server_idle_timeout             = 1200000
   $server_connect_timeout          = 120000
   $server_enable_ruby_profiler     = false

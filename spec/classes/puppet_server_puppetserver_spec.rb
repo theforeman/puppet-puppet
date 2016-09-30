@@ -42,6 +42,7 @@ describe 'puppet::server::puppetserver' do
                                           'TLS_RSA_WITH_AES_128_CBC_SHA256',
                                           'TLS_RSA_WITH_AES_128_CBC_SHA', ],
         :server_max_active_instances => 2,
+        :server_max_requests_per_instance => 0,
         :server_ca                   => true,
         :server_puppetserver_version => '2.4.99',
         :server_use_legacy_auth_conf => false,
