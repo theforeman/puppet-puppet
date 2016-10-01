@@ -194,10 +194,6 @@
 # $agent_noop::                       Run the agent in noop mode.
 #                                     type:boolean
 #
-# $agent_template::                   Use a custom template for the agent puppet
-#                                     configuration.
-#                                     type:string
-#
 # $client_package::                   Install a custom package to provide
 #                                     the puppet client
 #                                     type:array
@@ -295,14 +291,6 @@
 #                                     type:boolean
 #
 # $server_external_nodes::            External nodes classifier executable
-#                                     type:string
-#
-# $server_template::                  Which template should be used for master
-#                                     configuration
-#                                     type:string
-#
-# $server_main_template::             Which template should be used for master
-#                                     related configuration in the [main] section
 #                                     type:string
 #
 # $server_git_repo::                  Use git repository as a source of modules
@@ -660,8 +648,6 @@ class puppet (
   $agent_restart_command           = $puppet::params::agent_restart_command,
   $classfile                       = $puppet::params::classfile,
   $hiera_config                    = $puppet::params::hiera_config,
-  $main_template                   = $puppet::params::main_template,
-  $agent_template                  = $puppet::params::agent_template,
   $auth_template                   = $puppet::params::auth_template,
   $allow_any_crl_auth              = $puppet::params::allow_any_crl_auth,
   $auth_allowed                    = $puppet::params::auth_allowed,
@@ -699,8 +685,6 @@ class puppet (
   $server_passenger_ruby           = $puppet::params::server_passenger_ruby,
   $server_httpd_service            = $puppet::params::server_httpd_service,
   $server_external_nodes           = $puppet::params::server_external_nodes,
-  $server_template                 = $puppet::params::server_template,
-  $server_main_template            = $puppet::params::server_main_template,
   $server_cipher_suites            = $puppet::params::server_cipher_suites,
   $server_config_version           = $puppet::params::server_config_version,
   $server_connect_timeout          = $puppet::params::server_connect_timeout,

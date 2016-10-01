@@ -54,10 +54,41 @@ define puppet::server::env (
       }
     }
   } else {
-    concat::fragment { "puppet.conf+40-${name}":
-      target  => "${::puppet::dir}/puppet.conf",
-      content => template('puppet/server/puppet.conf.env.erb'),
-      order   => '40',
+    if $manifest {
+      puppet::config::environment{"${name}_manifest":
+        key   => 'manifest',
+        env   => $name,
+        value => $manifest,
+      }
+    }
+    if $manifestdir {
+      puppet::config::environment{"${name}_manifestdir":
+        key   => 'manifestdir',
+        env   => $name,
+        value => $manifestdir,
+      }
+    }
+    if $real_modulepath {
+      puppet::config::environment{"${name}_modulepath":
+        key    => 'modulepath',
+        env    => $name,
+        value  => $real_modulepath,
+        joiner => ':',
+      }
+    }
+    if $templatedir {
+      puppet::config::environment{"${name}_templatedir":
+        key   => 'templatedir',
+        env   => $name,
+        value => $templatedir,
+      }
+    }
+    if $config_version {
+      puppet::config::environment{"${name}_config_version":
+        key   => 'config_version',
+        env   => $name,
+        value => $config_version,
+      }
     }
   }
 }
