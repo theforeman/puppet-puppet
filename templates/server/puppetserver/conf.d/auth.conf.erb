@@ -1,5 +1,6 @@
 authorization: {
     version: 1
+    allow-header-cert-info: <%= scope.lookupvar('puppet::server::http') %>
     rules: [
         {
             # Allow nodes to retrieve their own catalog
