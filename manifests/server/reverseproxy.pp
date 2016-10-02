@@ -52,14 +52,14 @@ class puppet::server::reverseproxy (
     ],
     proxy_pass_match     => [
       {
-        'path'           => '^/.*/certificate.*/',
-        'url'            => "https://${ca_server}:${ca_port}",
-        'reverse_urls'   => "https://${ca_server}:${ca_port}",
+         'path'          => '^/.*/certificate.*/',
+          'url'          => "https://${ca_server}:${ca_port}",
+          'reverse_urls' => "https://${ca_server}:${ca_port}",
       },
       {
-        'path'           => '/',
-        'url'            => "http://localhost:${http_port}",
-        'reverse_urls'   => "http://localhost:${http_port}",
+          'path'         => '/',
+          'url'          => "http://localhost:${http_port}",
+          'reverse_urls' => "http://localhost:${http_port}",
       },
     ],
     require              => File["$confdir/public"],
