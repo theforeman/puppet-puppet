@@ -23,9 +23,9 @@ class puppet::server::reverseproxy (
   file { "${confdir}/public":
     ensure => directory,
   }
- 
+
   ::apache::listen {'8140':}
- 
+
   ::apache::vhost { 'puppetserver-reverse-proxy':
     servername           => "$fqdn",
     vhost_name           => '*',
