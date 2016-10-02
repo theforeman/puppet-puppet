@@ -52,7 +52,7 @@ class puppet::server::reverseproxy (
     ],
     proxy_pass_match     => [
       {
-         'path'          => '^/.*/certificate.*/',
+          'path'         => '^/.*/certificate.*/',
           'url'          => "https://${ca_server}:${ca_port}",
           'reverse_urls' => "https://${ca_server}:${ca_port}",
       },
