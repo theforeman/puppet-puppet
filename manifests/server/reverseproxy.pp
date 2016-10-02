@@ -1,6 +1,6 @@
 # == Class: puppet::server::reverseproxy
 #
-# Set up apache to proxy certificate requests to the 
+# Set up apache to proxy certificate requests to the
 # designated ca server.
 #
 class puppet::server::reverseproxy (
@@ -16,15 +16,15 @@ class puppet::server::reverseproxy (
   $confdir                 = $::puppet::server::dir,
   $ca_port                 = $::puppet::ca_port,
   $ca_server               = $::puppet::ca_server,
+  $vardir                  = $::puppet::vardir
 ) {
   include ::apache
-
   file { "$confdir/public":
     ensure => directory,
   }
-  
+ 
   ::apache::listen {'8140':}
-  
+ 
   ::apache::vhost { 'puppetserver-reverse-proxy':
     servername             => "$fqdn",
     vhost_name             => '*',
