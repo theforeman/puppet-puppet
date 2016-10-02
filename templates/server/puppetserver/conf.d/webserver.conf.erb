@@ -2,7 +2,7 @@ webserver: {
     access-log-config = <%= scope.lookupvar('puppet::server::puppetserver_dir') %>/request-logging.xml
     client-auth       = want
 <%- if scope.lookupvar('puppet::server::http') -%>
-    host              = 127.0.0.1
+    host              = <%= scope.lookupvar('puppet::server::ip') %>
     port              = <%= scope.lookupvar('puppet::server::http_port') %>
 <%- else -%>
     ssl-host          = <%= scope.lookupvar('puppet::server::ip') %>
