@@ -15,8 +15,7 @@ class puppet::server::reverseproxy (
   $http_port             = $::puppet::server::http_port,
   $confdir               = $::puppet::server::dir,
   $ca_port               = $::puppet::ca_port,
-  $ca_server             = $::puppet::ca_server,
-  $vardir                = $::puppet::vardir
+  $ca_server             = $::puppet::ca_server
 ) {
   include ::apache
 
