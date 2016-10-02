@@ -20,7 +20,7 @@ class puppet::server::reverseproxy (
 ) {
   include ::apache
   
-  file { "$confdir/public":
+  file { "${confdir}/public":
     ensure => directory,
   }
  
@@ -30,7 +30,7 @@ class puppet::server::reverseproxy (
     servername           => "$fqdn",
     vhost_name           => '*',
     priority             => false,
-    docroot              => "$confdir/public",
+    docroot              => "${confdir}/public",
     port                 => $port,
     ssl                  => true,
     ssl_cert             => $ssl_cert,
@@ -63,6 +63,6 @@ class puppet::server::reverseproxy (
         'reverse_urls'   => "http://localhost:${http_port}",
       },
     ],
-    require              => File["$confdir/public"],
+    require              => File["${confdir}/public"],
   }
 }
