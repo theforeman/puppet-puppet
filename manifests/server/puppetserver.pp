@@ -79,7 +79,7 @@ class puppet::server::puppetserver (
   $ca_port                     = $::puppet::ca_port
 ) {
   include ::puppet::server
-  
+
   if $http and $ca_server != '' and $ca_port != '' {
     include ::puppet::server::reverseproxy
   }
