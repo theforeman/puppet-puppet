@@ -19,7 +19,7 @@ class puppet::server::reverseproxy (
   $vardir                = $::puppet::vardir
 ) {
   include ::apache
-  
+
   file { "${confdir}/public":
     ensure => directory,
   }
