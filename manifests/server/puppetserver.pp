@@ -74,8 +74,14 @@ class puppet::server::puppetserver (
   $server_admin_api_whitelist  = $::puppet::server::admin_api_whitelist,
   $server_puppetserver_version = $::puppet::server::puppetserver_version,
   $server_use_legacy_auth_conf = $::puppet::server::use_legacy_auth_conf,
+  $ca_server                   = $::puppet::ca_server,
+  $ca_port                     = $::puppet::ca_port
 ) {
   include ::puppet::server
+  
+  if $ca_server != '' and $ca_port != '' {
+    include ::puppet::server::reverseproxy
+  }
 
   $puppetserver_package = pick($::puppet::server::package, 'puppetserver')
 
