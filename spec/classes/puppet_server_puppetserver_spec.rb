@@ -42,7 +42,7 @@ describe 'puppet::server::puppetserver' do
                                           'TLS_RSA_WITH_AES_128_CBC_SHA256',
                                           'TLS_RSA_WITH_AES_128_CBC_SHA', ],
         :server_max_active_instances => 2,
-        :server_max_requests_per_instance => 0,
+        :server_max_requests_per_instance => 10000,
         :server_ca                   => true,
         :server_puppetserver_version => '2.4.99',
         :server_use_legacy_auth_conf => false,
@@ -100,6 +100,10 @@ describe 'puppet::server::puppetserver' do
           it 'should have master-var-dir: /opt/puppetlabs/server/data/puppetserver' do
             content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
             expect(content).to include(%Q[    master-var-dir: /opt/puppetlabs/server/data/puppetserver\n])
+          end
+          it 'should have max-requests-per-instance: /opt/puppetlabs/server/data/puppetserver' do
+            content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
+            expect(content).to include(%Q[    max-requests-per-instance: 10000\n])
           end
         end
         context 'with custom server_puppetserver_vardir' do

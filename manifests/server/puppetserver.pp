@@ -66,7 +66,7 @@ class puppet::server::puppetserver (
   $server_ruby_load_paths           = $::puppet::server::ruby_load_paths,
   $server_cipher_suites             = $::puppet::server::cipher_suites,
   $server_max_active_instances      = $::puppet::server::max_active_instances,
-  $server_max_requests_per_instance = $::puppet::server::max_active_instances,
+  $server_max_requests_per_instance = $::puppet::server::max_requests_per_instance,
   $server_ssl_protocols             = $::puppet::server::ssl_protocols,
   $server_ca                        = $::puppet::server::ca,
   $server_dir                       = $::puppet::server::dir,
