@@ -42,6 +42,7 @@ describe 'puppet::server::puppetserver' do
                                           'TLS_RSA_WITH_AES_128_CBC_SHA256',
                                           'TLS_RSA_WITH_AES_128_CBC_SHA', ],
         :server_max_active_instances => 2,
+        :server_max_requests_per_instance => 0,
         :server_ca                   => true,
         :server_puppetserver_version => '2.4.99',
         :server_use_legacy_auth_conf => false,
@@ -149,6 +150,32 @@ describe 'puppet::server::puppetserver' do
           it 'should not have a use-legacy-auth-conf setting in puppetserver.conf' do
             content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
             expect(content).not_to include('use-legacy-auth-conf')
+          end
+        end
+      end
+
+      describe 'server_max_requests_per_instance' do
+        context 'with default parameters' do
+          let(:params) do
+            default_params.merge({
+              :server_puppetserver_dir => '/etc/custom/puppetserver',
+              })
+            end
+          it 'should have max-requests-per-instance: /opt/puppetlabs/server/data/puppetserver' do
+            content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
+            expect(content).to include(%Q[    max-requests-per-instance: 0\n])
+          end
+        end
+        context 'custom server_max_requests_per_instance' do
+          let(:params) do
+            default_params.merge({
+              :server_max_requests_per_instance => 123456,
+            })
+          end
+
+          it 'should have custom max-requests-per-instance: /opt/puppetlabs/server/data/puppetserver' do
+            content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
+            expect(content).to include(%Q[    max-requests-per-instance: 123456\n])
           end
         end
       end
