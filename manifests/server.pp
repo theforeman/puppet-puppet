@@ -479,7 +479,6 @@ class puppet::server(
   validate_bool($passenger)
   validate_bool($git_repo)
   validate_bool($service_fallback)
-  validate_bool($server_facts)
   validate_bool($server_foreman_facts)
   validate_bool($strict_variables)
   validate_bool($foreman)
