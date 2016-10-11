@@ -217,10 +217,6 @@
 #                              approach will be installed.
 #                              type:string
 #
-# $server_facts::              Should foreman receive facts from puppet
-#                              DEPRECATION WARNING: Use server_foreman_facts.
-#                              type:boolean
-#
 # $server_foreman_facts::      Should foreman receive facts from puppet
 #                              type:boolean
 #
@@ -451,7 +447,6 @@ class puppet::server(
   $foreman_ssl_ca            = $::puppet::server_foreman_ssl_ca,
   $foreman_ssl_cert          = $::puppet::server_foreman_ssl_cert,
   $foreman_ssl_key           = $::puppet::server_foreman_ssl_key,
-  $server_facts              = undef,
   $server_foreman_facts      = $::puppet::server_foreman_facts,
   $puppet_basedir            = $::puppet::server_puppet_basedir,
   $puppetdb_host             = $::puppet::server_puppetdb_host,
@@ -469,10 +464,6 @@ class puppet::server(
   $max_requests_per_instance = $::puppet::server_max_requests_per_instance,
   $use_legacy_auth_conf      = $::puppet::server_use_legacy_auth_conf,
 ) {
-
-  if $server_facts {
-    warning('The $server_facts parameter to puppet::server is deprecated. Use $server_foreman_facts instead.')
-  }
 
   validate_bool($ca)
   validate_bool($http)
