@@ -342,7 +342,7 @@ class puppet::params {
   # Foreman parameters
   $lower_fqdn              = downcase($::fqdn)
   $server_foreman          = true
-  $server_facts            = true
+  $server_foreman_facts    = true
   $server_puppet_basedir   = $aio_package ? {
     true  => '/opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet',
     false => undef,

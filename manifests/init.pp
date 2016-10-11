@@ -445,6 +445,10 @@
 #                                     type:string
 #
 # $server_facts::                     Should foreman receive facts from puppet
+#                                     DEPRECATION WARNING: Use server_foreman_facts.
+#                                     type:boolean
+#
+# $server_foreman_facts::             Should foreman receive facts from puppet
 #                                     type:boolean
 #
 # $server_foreman::                   Should foreman integration be installed
@@ -750,7 +754,8 @@ class puppet (
   $server_foreman_ssl_ca            = $puppet::params::server_foreman_ssl_ca,
   $server_foreman_ssl_cert          = $puppet::params::server_foreman_ssl_cert,
   $server_foreman_ssl_key           = $puppet::params::server_foreman_ssl_key,
-  $server_facts                     = $puppet::params::server_facts,
+  $server_facts                     = $puppet::params::server_foreman_facts,
+  $server_foreman_facts             = $puppet::params::server_foreman_facts,
   $server_puppet_basedir            = $puppet::params::server_puppet_basedir,
   $server_puppetdb_host             = $puppet::params::server_puppetdb_host,
   $server_puppetdb_port             = $puppet::params::server_puppetdb_port,
@@ -767,6 +772,10 @@ class puppet (
   $server_max_requests_per_instance = $puppet::params::server_max_requests_per_instance,
   $server_use_legacy_auth_conf      = $puppet::params::server_use_legacy_auth_conf,
 ) inherits puppet::params {
+
+  if $server_facts != $server_foreman_facts {
+    warning('The $server_facts parameter to puppet is deprecated and has no effect.')
+  }
 
   validate_bool($listen)
   validate_bool($pluginsync)
