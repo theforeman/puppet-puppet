@@ -754,7 +754,7 @@ class puppet (
   $server_foreman_ssl_ca            = $puppet::params::server_foreman_ssl_ca,
   $server_foreman_ssl_cert          = $puppet::params::server_foreman_ssl_cert,
   $server_foreman_ssl_key           = $puppet::params::server_foreman_ssl_key,
-  $server_facts                     = $puppet::params::server_foreman_facts,
+  $server_facts                     = undef,
   $server_foreman_facts             = $puppet::params::server_foreman_facts,
   $server_puppet_basedir            = $puppet::params::server_puppet_basedir,
   $server_puppetdb_host             = $puppet::params::server_puppetdb_host,
@@ -773,8 +773,8 @@ class puppet (
   $server_use_legacy_auth_conf      = $puppet::params::server_use_legacy_auth_conf,
 ) inherits puppet::params {
 
-  if $server_facts != $server_foreman_facts {
-    warning('The $server_facts parameter to puppet is deprecated and has no effect.')
+  if $server_facts {
+    warning('The $server_facts parameter to puppet is deprecated. Use $server_foreman_facts instead.')
   }
 
   validate_bool($listen)

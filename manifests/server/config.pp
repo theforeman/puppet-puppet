@@ -204,7 +204,7 @@ class puppet::server::config inherits puppet::config {
     anchor { 'puppet::server::config_start': } ->
     class {'::foreman::puppetmaster':
       foreman_url    => $::puppet::server::foreman_url,
-      receive_facts  => $::puppet::server::server_foreman_facts,
+      receive_facts  => pick($::puppet::server::server_facts, $::puppet::server::server_foreman_facts),
       puppet_home    => $::puppet::server::puppetserver_vardir,
       puppet_basedir => $::puppet::server::puppet_basedir,
       puppet_etcdir  => $puppet::dir,
