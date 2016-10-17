@@ -81,11 +81,13 @@ describe 'puppet::server::config' do
           should contain_exec('puppet_server_config-create_ssl_dir').with({
             :creates => ssldir,
             :command => "/bin/mkdir -p #{ssldir}",
+            :umask   => '0022',
           })
 
           should contain_exec('puppet_server_config-generate_ca_cert').with({
             :creates => "#{ssldir}/certs/puppetmaster.example.com.pem",
             :command => "#{puppetcacmd} --generate puppetmaster.example.com",
+            :umask   => '0022',
             :require => ["Concat[#{conf_file}]", "Exec[puppet_server_config-create_ssl_dir]"],
           })
         end
@@ -99,13 +101,6 @@ describe 'puppet::server::config' do
         context 'with AIO packages', :if => (Puppet.version > '4.0' && os_facts[:osfamily] != 'FreeBSD') do
           it 'CA cert generation should notify the puppetserver service' do
             should contain_exec('puppet_server_config-generate_ca_cert').that_notifies('Service[puppetserver]')
-          end
-        end
-
-        context 'on Puppet 3.4+', :if => (Puppet.version >= '3.4.0') do
-          it 'should set sane umask on execs' do
-            should contain_exec('puppet_server_config-create_ssl_dir').with_umask('0022')
-            should contain_exec('puppet_server_config-generate_ca_cert').with_umask('0022')
           end
         end
 

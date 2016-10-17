@@ -67,42 +67,23 @@ class puppet::server::config inherits puppet::config {
     mode  => '0640',
   }
 
-  # 3.4.0+ supports umask
-  if versioncmp($::puppetversion, '3.4.0') >= 0 {
-    # If the ssl dir is not the default dir, it needs to be created before running
-    # the generate ca cert or it will fail.
-    exec {'puppet_server_config-create_ssl_dir':
-      creates => $::puppet::server::ssl_dir,
-      command => "/bin/mkdir -p ${::puppet::server::ssl_dir}",
+  # If the ssl dir is not the default dir, it needs to be created before running
+  # the generate ca cert or it will fail.
+  exec {'puppet_server_config-create_ssl_dir':
+    creates => $::puppet::server::ssl_dir,
+    command => "/bin/mkdir -p ${::puppet::server::ssl_dir}",
+    umask   => '0022',
+  }
+
+  # Generate a new CA and host cert if our host cert doesn't exist
+  if $::puppet::server::ca {
+    exec {'puppet_server_config-generate_ca_cert':
+      creates => $::puppet::server::ssl_cert,
+      command => "${::puppet::puppetca_cmd} --generate ${::puppet::server::certname}",
       umask   => '0022',
-    }
-
-    # Generate a new CA and host cert if our host cert doesn't exist
-    if $::puppet::server::ca {
-      exec {'puppet_server_config-generate_ca_cert':
-        creates => $::puppet::server::ssl_cert,
-        command => "${::puppet::puppetca_cmd} --generate ${::puppet::server::certname}",
-        umask   => '0022',
-        require => [Concat["${::puppet::server::dir}/puppet.conf"],
-                    Exec['puppet_server_config-create_ssl_dir'],
-                    ],
-      }
-    }
-  } else {
-    # Copy of above without umask for pre-3.4
-    exec {'puppet_server_config-create_ssl_dir':
-      creates => $::puppet::server::ssl_dir,
-      command => "/bin/mkdir -p ${::puppet::server::ssl_dir}",
-    }
-
-    if $::puppet::server::ca {
-      exec {'puppet_server_config-generate_ca_cert':
-        creates => $::puppet::server::ssl_cert,
-        command => "${::puppet::puppetca_cmd} --generate ${::puppet::server::certname}",
-        require => [Concat["${::puppet::server::dir}/puppet.conf"],
-                    Exec['puppet_server_config-create_ssl_dir'],
-                    ],
-      }
+      require => [Concat["${::puppet::server::dir}/puppet.conf"],
+                  Exec['puppet_server_config-create_ssl_dir'],
+                  ],
     }
   }
 
