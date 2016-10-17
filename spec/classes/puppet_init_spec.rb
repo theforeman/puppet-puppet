@@ -52,7 +52,10 @@ describe 'puppet' do
       end
 
       describe 'with no custom parameters' do
+        it { is_expected.to compile.with_all_deps unless os_facts[:osfamily] == 'windows' }
+        it { should contain_class('puppet::agent') }
         it { should contain_class('puppet::config') }
+        it { should_not contain_class('puppet::server') }
         if Puppet.version < '4.0'
           it { should contain_file(puppet_directory).with_ensure('directory') }
           it { should contain_concat(puppet_concat) }
@@ -62,6 +65,16 @@ describe 'puppet' do
           it { should contain_concat(puppet_concat) }
           it { should contain_package(puppet_package).with_ensure('present') }
         end
+      end
+
+      describe 'with server => true', :unless => (os_facts[:osfamily] == 'windows') do
+        let :params do {
+          :server => true,
+        } end
+
+        it { is_expected.to compile.with_all_deps }
+        it { should contain_class('puppet::server') }
+        it { should contain_class('puppet::agent::service').that_requires('Class[puppet::server]') }
       end
 
       describe 'with empty ca_server' do
