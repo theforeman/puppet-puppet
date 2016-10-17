@@ -810,4 +810,10 @@ class puppet (
     include ::puppet::server
     Class['puppet::server'] -> Class['puppet']
   }
+
+  # Ensure the server is running before the agent needs it, and that
+  # certificates are generated in the server config (if enabled)
+  if $server == true and $agent == true {
+    Class['puppet::server'] -> Class['puppet::agent::service']
+  }
 }
