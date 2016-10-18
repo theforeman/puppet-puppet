@@ -49,7 +49,7 @@ authorization: {
 <%- if @server_ca -%>
         {
             match-request: {
-                path: "/certificate_status/"
+                path: "/puppet-ca/v1/certificate_status/"
                 type: path
                 method: [ get, put, delete ]
             }
@@ -67,7 +67,7 @@ authorization: {
         },
         {
             match-request: {
-                path: "/certificate_statuses/"
+                path: "/puppet-ca/v1/certificate_statuses/"
                 type: path
                 method: get
             }

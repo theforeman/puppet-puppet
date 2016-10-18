@@ -306,8 +306,10 @@ describe 'puppet::server::puppetserver' do
           end
           it {
             should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
-              with_content(/^\s+path: "\/certificate_statuses\/"/).
+              with_content(/^\s+path: "\/puppet-ca\/v1\/certificate_status\/"/).
               with_content(/^\s+name: "certificate_status"/).
+              with_content(/^\s+path: "\/puppet-ca\/v1\/certificate_statuses\/"/).
+              with_content(/^\s+name: "certificate_statuses"/).
               with_content(/^\s+path: "\/puppet-admin-api\/v1\/environment-cache"/).
               with_content(/^\s+name: "environment-cache"/).
               with_content(/^\s+path: "\/puppet-admin-api\/v1\/jruby-pool"/).
@@ -339,8 +341,10 @@ describe 'puppet::server::puppetserver' do
           end
           it {
             should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
-              without_content(/^\s+path: "\/certificate_statuses\/"/).
+              without_content(/^\s+path: "\/puppet-ca\/v1\/certificate_status\/"/).
               without_content(/^\s+name: "certificate_status"/).
+              without_content(/^\s+path: "\/puppet-ca\/v1\/certificate_statuses\/"/).
+              without_content(/^\s+name: "certificate_statuses"/).
               without_content(/^\s+path: "\/puppet-admin-api\/v1\/environment-cache"/).
               without_content(/^\s+name: "environment-cache"/).
               without_content(/^\s+path: "\/puppet-admin-api\/v1\/jruby-pool"/).
