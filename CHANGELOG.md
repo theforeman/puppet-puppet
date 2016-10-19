@@ -1,5 +1,12 @@
 # Changelog
 
+## 6.0.1
+* Other features:
+    * Permit access to environment_classes Puppet Server API
+* Other changes and fixes:
+    * start Puppet agent after server is running
+    * add full api path to certificate_status(es) in auth.conf
+
 ## 6.0.0
 * New or changed parameters:
     * Add server_passenger_ruby parameter to change Rack Ruby interpreter
