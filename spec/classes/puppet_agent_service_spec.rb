@@ -1,16 +1,8 @@
 require 'spec_helper'
 
 describe 'puppet::agent::service' do
-  on_os_under_test.each do |os, os_facts|
+  on_os_under_test.each do |os, facts|
     context "on #{os}" do
-      let (:default_facts) do
-        os_facts.merge({
-          :clientcert     => 'puppetmaster.example.com',
-          :concat_basedir => '/nonexistant',
-          :fqdn           => 'puppetmaster.example.com',
-          :puppetversion  => Puppet.version,
-      }) end
-
       if Puppet.version < '4.0'
         confdir = '/etc/puppet'
         additional_facts = {}
@@ -19,12 +11,12 @@ describe 'puppet::agent::service' do
         additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
       end
 
-      if os_facts[:osfamily] == 'FreeBSD'
+      if facts[:osfamily] == 'FreeBSD'
         confdir = '/usr/local/etc/puppet'
       end
 
       let :facts do
-        default_facts.merge(additional_facts)
+        facts.merge(additional_facts)
       end
 
       describe 'with no custom parameters' do
@@ -57,7 +49,7 @@ describe 'puppet::agent::service' do
         case os
         when /\A(windows|archlinux)/
           it do
-            should raise_error(Puppet::Error, /Runmode of cron not supported on #{os_facts[:kernel]} operating systems!/)
+            should raise_error(Puppet::Error, /Runmode of cron not supported on #{facts[:kernel]} operating systems!/)
           end
         when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-16/
           it do
@@ -89,7 +81,7 @@ describe 'puppet::agent::service' do
             should contain_service('puppet-run.timer').with(:ensure => :running)
           end
         else
-          it { should raise_error(Puppet::Error, /Runmode of systemd.timer not supported on #{os_facts[:kernel]} operating systems!/) }
+          it { should raise_error(Puppet::Error, /Runmode of systemd.timer not supported on #{facts[:kernel]} operating systems!/) }
         end
       end
 

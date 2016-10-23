@@ -1,20 +1,10 @@
 require 'spec_helper'
 
 describe 'puppet::server::env' do
-  on_os_under_test.each do |os, os_facts|
-    next if os_facts[:osfamily] == 'windows'
-    next if os_facts[:osfamily] == 'Archlinux'
+  on_os_under_test.each do |os, facts|
+    next if facts[:osfamily] == 'windows'
+    next if facts[:osfamily] == 'Archlinux'
     context "on #{os}" do
-      let(:default_facts) do
-        os_facts.merge({
-          :clientcert       => 'puppetmaster.example.com',
-          :concat_basedir   => '/nonexistant',
-          :fqdn             => 'puppetmaster.example.com',
-          :rubyversion      => '1.9.3',
-          :puppetversion    => Puppet.version,
-        })
-      end
-
       if Puppet.version < '4.0'
         codedir = '/etc/puppet'
         confdir = '/etc/puppet'
@@ -35,7 +25,7 @@ describe 'puppet::server::env' do
         additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
       end
 
-      if os_facts[:osfamily] == 'FreeBSD'
+      if facts[:osfamily] == 'FreeBSD'
         codedir = '/usr/local/etc/puppet'
         confdir = '/usr/local/etc/puppet'
         logdir  = '/var/log/puppet'
@@ -46,7 +36,7 @@ describe 'puppet::server::env' do
         additional_facts = {}
       end
 
-      let(:facts) { default_facts.merge(additional_facts) }
+      let(:facts) { facts.merge(additional_facts) }
 
       let(:title) { 'foo' }
 

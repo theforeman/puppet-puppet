@@ -1,16 +1,8 @@
 require 'spec_helper'
 
 describe 'puppet::agent::service::daemon' do
-  on_os_under_test.each do |os, os_facts|
+  on_os_under_test.each do |os, facts|
     context "on #{os}" do
-      let (:default_facts) do
-        os_facts.merge({
-          :clientcert     => 'puppetmaster.example.com',
-          :concat_basedir => '/nonexistant',
-          :fqdn           => 'puppetmaster.example.com',
-          :puppetversion  => Puppet.version,
-      }) end
-
       if Puppet.version < '4.0'
         confdir = '/etc/puppet'
         additional_facts = {}
@@ -19,12 +11,12 @@ describe 'puppet::agent::service::daemon' do
         additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
       end
 
-      if os_facts[:osfamily] == 'FreeBSD'
+      if facts[:osfamily] == 'FreeBSD'
         confdir = '/usr/local/etc/puppet'
       end
 
       let :facts do
-        default_facts.merge(additional_facts)
+        facts.merge(additional_facts)
       end
 
       describe 'when runmode => daemon' do
@@ -49,7 +41,7 @@ describe 'puppet::agent::service::daemon' do
           it do
             case os
             when /\A(windows|archlinux)/
-              should raise_error(Puppet::Error, /Runmode of cron not supported on #{os_facts[:kernel]} operating systems!/)
+              should raise_error(Puppet::Error, /Runmode of cron not supported on #{facts[:kernel]} operating systems!/)
             else
               should contain_service('puppet').with({
                 :ensure     => 'stopped',
