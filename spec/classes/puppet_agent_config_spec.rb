@@ -5,12 +5,7 @@ describe 'puppet::agent::config' do
   on_os_under_test.each do |os, facts|
     next if facts[:osfamily] == 'windows' # TODO, see https://github.com/fessyfoo/rspec-puppet-windows-issue
     context "on #{os}" do
-      let(:facts) do
-        facts.merge({
-          :concat_basedir => '/foo/bar',
-          :puppetversion  => Puppet.version,
-        })
-      end
+      let(:facts) { facts }
 
       context 'with default parameters' do
         let :pre_condition do

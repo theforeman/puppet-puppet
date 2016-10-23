@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe 'puppet::config::entry' do
-  on_supported_os.each do |os, os_facts|
+  on_supported_os.each do |os, facts|
     next if only_test_os() and not only_test_os.include?(os)
     next if exclude_test_os() and exclude_test_os.include?(os)
     context "on #{os}" do
       let(:default_facts) do
-        os_facts.merge({
+        facts.merge({
           :clientcert       => 'puppetmaster.example.com',
           :concat_basedir   => '/nonexistant',
           :fqdn             => 'puppetmaster.example.com',
@@ -35,7 +35,7 @@ describe 'puppet::config::entry' do
         additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
       end
 
-      if os_facts[:osfamily] == 'FreeBSD'
+      if facts[:osfamily] == 'FreeBSD'
         codedir = '/usr/local/etc/puppet'
         confdir = '/usr/local/etc/puppet'
         logdir  = '/var/log/puppet'

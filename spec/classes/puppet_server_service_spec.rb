@@ -1,28 +1,21 @@
 require 'spec_helper'
 
 describe 'puppet::server::service' do
-  on_os_under_test.each do |os, os_facts|
-    next if os_facts[:osfamily] == 'windows'
+  on_os_under_test.each do |os, facts|
+    next if facts[:osfamily] == 'windows'
     context "on #{os}" do
-      let (:default_facts) do
-        os_facts.merge({
-          :clientcert             => 'puppetmaster.example.com',
-          :concat_basedir         => '/nonexistant',
-          :fqdn                   => 'puppetmaster.example.com',
-          :puppetversion          => Puppet.version,
-      }) end
-
+      master_service = 'puppetmaster'
       if Puppet.version < '4.0'
         additional_facts = {}
       else
         additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
+        if facts[:osfamily] == 'Debian'
+          master_service = 'puppet-master'
+        end
       end
 
-      let(:facts) { default_facts.merge(additional_facts) }
-
-      master_service = 'puppetmaster'
-      if os_facts[:osfamily] == 'Debian' && os_facts[:puppetversion].to_f > 4.0
-        master_service = 'puppet-master'
+      let(:facts) do
+        facts.merge(additional_facts)
       end
 
       describe 'default_parameters' do

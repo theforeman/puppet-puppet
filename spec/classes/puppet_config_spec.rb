@@ -1,16 +1,8 @@
 require 'spec_helper'
 
 describe 'puppet::config' do
-  on_os_under_test.each do |os, os_facts|
+  on_os_under_test.each do |os, facts|
     context "on #{os}" do
-      let (:default_facts) do
-        os_facts.merge({
-          :concat_basedir => '/foo/bar',
-          :domain         => 'example.org',
-          :fqdn           => 'host.example.com',
-          :puppetversion  => Puppet.version,
-      }) end
-
       if Puppet.version < '4.0'
         codedir          = '/etc/puppet'
         confdir          = '/etc/puppet'
@@ -31,7 +23,7 @@ describe 'puppet::config' do
         additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
       end
 
-      case os_facts[:osfamily]
+      case facts[:osfamily]
       when 'FreeBSD'
         codedir  = '/usr/local/etc/puppet'
         confdir  = '/usr/local/etc/puppet'
@@ -51,7 +43,7 @@ describe 'puppet::config' do
       end
 
       let :facts do
-        default_facts.merge(additional_facts)
+        facts.merge(additional_facts).merge({:domain => 'example.org'})
       end
 
       describe 'with default parameters' do

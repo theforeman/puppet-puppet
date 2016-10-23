@@ -1,18 +1,11 @@
 require 'spec_helper'
 
 describe 'puppet::server::puppetserver' do
-  on_os_under_test.each do |os, os_facts|
-    next if os_facts[:osfamily] == 'windows'
-    next if os_facts[:osfamily] == 'FreeBSD'
-    next if os_facts[:osfamily] == 'Archlinux'
+  on_os_under_test.each do |os, facts|
+    next if facts[:osfamily] == 'windows'
+    next if facts[:osfamily] == 'FreeBSD'
+    next if facts[:osfamily] == 'Archlinux'
     context "on #{os}" do
-      let (:default_facts) do
-        os_facts.merge({
-          :puppetversion  => Puppet.version,
-          :ipaddress      => '192.0.2.10',
-          :processorcount => 1,
-      }) end
-
       let :pre_condition do
         "class {'puppet': server_implementation => 'puppetserver'}"
       end
@@ -23,7 +16,9 @@ describe 'puppet::server::puppetserver' do
         additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
       end
 
-      let(:facts) { default_facts.merge(additional_facts) }
+      let(:facts) do
+        facts.merge(additional_facts)
+      end
 
       let(:default_params) do {
         :java_bin                    => '/usr/bin/java',

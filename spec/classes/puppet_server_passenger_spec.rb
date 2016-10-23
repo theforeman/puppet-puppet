@@ -1,17 +1,10 @@
 require 'spec_helper'
 
 describe 'puppet::server::passenger' do
-  on_os_under_test.each do |os, os_facts|
-    next if os_facts[:osfamily] == 'windows'
-    next if os_facts[:osfamily] == 'Archlinux'
+  on_os_under_test.each do |os, facts|
+    next if facts[:osfamily] == 'windows'
+    next if facts[:osfamily] == 'Archlinux'
     context "on #{os}" do
-      let (:default_facts) do
-        os_facts.merge({
-          :concat_basedir         => '/foo/bar',
-          :puppetversion          => Puppet.version,
-          :fqdn                   => 'puppet.example.com',
-      }) end
-
       if Puppet.version < '4.0'
         additional_facts = {}
       else
@@ -19,7 +12,7 @@ describe 'puppet::server::passenger' do
       end
 
       let :facts do
-        default_facts.merge(additional_facts)
+        facts.merge(additional_facts)
       end
 
       let(:default_params) do {
@@ -104,7 +97,7 @@ describe 'puppet::server::passenger' do
         it 'should include the puppet https vhost' do
           should contain_apache__vhost('puppet').with({
             :passenger_min_instances => 10,
-            :passenger_pre_start     => 'https://puppet.example.com:8140',
+            :passenger_pre_start     => 'https://foo.example.com:8140',
             :passenger_ruby          => '/opt/ruby2.0/bin/ruby',
             :ssl_proxyengine         => false,
           })
@@ -113,7 +106,7 @@ describe 'puppet::server::passenger' do
         it 'should include the puppet http vhost' do
           should contain_apache__vhost('puppet-http').with({
             :passenger_min_instances => 10,
-            :passenger_pre_start     => 'http://puppet.example.com:8139',
+            :passenger_pre_start     => 'http://foo.example.com:8139',
             :passenger_ruby          => '/opt/ruby2.0/bin/ruby',
             :ssl_proxyengine         => false,
           })

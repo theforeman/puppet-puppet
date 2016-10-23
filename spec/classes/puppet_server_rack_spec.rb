@@ -1,21 +1,18 @@
 require 'spec_helper'
 
 describe 'puppet::server::rack' do
-  on_os_under_test.each do |os, os_facts|
-    next if os_facts[:osfamily] == 'windows'
+  on_os_under_test.each do |os, facts|
+    next if facts[:osfamily] == 'windows'
     context "on #{os}" do
-      let (:default_facts) do
-        os_facts.merge({
-          :puppetversion          => Puppet.version,
-      }) end
-
       if Puppet.version < '4.0'
         additional_facts = {}
       else
         additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
       end
 
-      let(:facts) { default_facts.merge(additional_facts) }
+      let(:facts) do
+        facts.merge(additional_facts)
+      end
 
       let(:default_params) do {
         :app_root       => '/etc/puppet/rack',

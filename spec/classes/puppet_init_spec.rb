@@ -1,22 +1,14 @@
 require 'spec_helper'
 
 describe 'puppet' do
-  on_os_under_test.each do |os, os_facts|
+  on_os_under_test.each do |os, facts|
     context "on #{os}" do
-      let (:default_facts) do
-        os_facts.merge({
-          :clientcert     => 'puppetmaster.example.com',
-          :concat_basedir => '/nonexistant',
-          :fqdn           => 'puppetmaster.example.com',
-          :puppetversion  => Puppet.version,
-      }) end
-
       if Puppet.version < '4.0'
         puppet_concat    = '/etc/puppet/puppet.conf'
         puppet_directory = '/etc/puppet'
         puppet_package   = 'puppet'
         additional_facts = {}
-        case os_facts[:osfamily]
+        case facts[:osfamily]
         when 'FreeBSD'
           puppet_concat    = '/usr/local/etc/puppet/puppet.conf'
           puppet_directory = '/usr/local/etc/puppet'
@@ -31,7 +23,7 @@ describe 'puppet' do
         puppet_directory = '/etc/puppetlabs/puppet'
         puppet_package   = 'puppet-agent'
         additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
-        case os_facts[:osfamily]
+        case facts[:osfamily]
         when 'FreeBSD'
           puppet_concat    = '/usr/local/etc/puppet/puppet.conf'
           puppet_directory = '/usr/local/etc/puppet'
@@ -46,11 +38,11 @@ describe 'puppet' do
       end
 
       let :facts do
-        default_facts.merge(additional_facts)
+        facts.merge(additional_facts)
       end
 
       describe 'with no custom parameters' do
-        it { is_expected.to compile.with_all_deps unless os_facts[:osfamily] == 'windows' }
+        it { is_expected.to compile.with_all_deps unless facts[:osfamily] == 'windows' }
         it { should contain_class('puppet::agent') }
         it { should contain_class('puppet::config') }
         it { should_not contain_class('puppet::server') }
@@ -65,7 +57,7 @@ describe 'puppet' do
         end
       end
 
-      describe 'with server => true', :unless => (['windows', 'Archlinux'].include?(os_facts[:osfamily])) do
+      describe 'with server => true', :unless => (['windows', 'Archlinux'].include?(facts[:osfamily])) do
         let :params do {
           :server => true,
         } end
