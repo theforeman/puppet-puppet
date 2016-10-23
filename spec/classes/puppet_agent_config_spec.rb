@@ -2,9 +2,7 @@ require 'spec_helper'
 
 describe 'puppet::agent::config' do
 
-  on_supported_os.each do |os, facts|
-    next if only_test_os() and not only_test_os.include?(os)
-    next if exclude_test_os() and exclude_test_os.include?(os)
+  on_os_under_test.each do |os, facts|
     next if facts[:osfamily] == 'windows' # TODO, see https://github.com/fessyfoo/rspec-puppet-windows-issue
     context "on #{os}" do
       let(:facts) do

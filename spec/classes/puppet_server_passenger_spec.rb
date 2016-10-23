@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe 'puppet::server::passenger' do
-  on_supported_os.each do |os, os_facts|
-    next if only_test_os() and not only_test_os.include?(os)
-    next if exclude_test_os() and exclude_test_os.include?(os)
+  on_os_under_test.each do |os, os_facts|
     next if os_facts[:osfamily] == 'windows'
     next if os_facts[:osfamily] == 'Archlinux'
     context "on #{os}" do
