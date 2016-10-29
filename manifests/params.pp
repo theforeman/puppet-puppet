@@ -69,6 +69,8 @@ class puppet::params {
       $root_group                 = undef
       $server_puppetserver_dir    = undef
       $server_puppetserver_vardir = undef
+      $server_puppetserver_rundir = undef
+      $server_puppetserver_logdir = undef
       $server_ruby_load_paths     = []
       $server_jruby_gem_home      = undef
     }
@@ -85,6 +87,8 @@ class puppet::params {
       $root_group                 = undef
       $server_puppetserver_dir    = undef
       $server_puppetserver_vardir = '/var/puppet'
+      $server_puppetserver_rundir = '/var/run/puppetserver'
+      $server_puppetserver_logdir = '/var/log/puppetserver'
       $server_ruby_load_paths     = []
       $server_jruby_gem_home      = undef
     }
@@ -101,6 +105,8 @@ class puppet::params {
       $root_group                 = undef
       $server_puppetserver_dir    = undef
       $server_puppetserver_vardir = undef
+      $server_puppetserver_rundir = undef
+      $server_puppetserver_logdir = undef
       $server_ruby_load_paths     = []
       $server_jruby_gem_home      = undef
     }
@@ -117,6 +123,8 @@ class puppet::params {
         $bindir                     = '/opt/puppetlabs/bin'
         $server_puppetserver_dir    = '/etc/puppetlabs/puppetserver'
         $server_puppetserver_vardir = '/opt/puppetlabs/server/data/puppetserver'
+        $server_puppetserver_rundir = '/var/run/puppetlabs/puppetserver'
+        $server_puppetserver_logdir = '/var/log/puppetlabs/puppetserver'
         $server_ruby_load_paths     = ['/opt/puppetlabs/puppet/lib/ruby/vendor_ruby']
         $server_jruby_gem_home      = '/opt/puppetlabs/server/data/puppetserver/jruby-gems'
       } else {
@@ -133,6 +141,8 @@ class puppet::params {
         $bindir                     = '/usr/bin'
         $server_puppetserver_dir    = '/etc/puppetserver'
         $server_puppetserver_vardir = $vardir
+        $server_puppetserver_rundir = undef
+        $server_puppetserver_logdir = undef
         $server_ruby_load_paths     = []
         $server_jruby_gem_home      = '/var/lib/puppet/jruby-gems'
       }
