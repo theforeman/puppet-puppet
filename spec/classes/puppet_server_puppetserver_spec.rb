@@ -51,8 +51,11 @@ describe 'puppet::server::puppetserver' do
         :server_use_legacy_auth_conf => false,
         :server_puppetserver_dir     => '/etc/custom/puppetserver',
         :server_puppetserver_vardir  => '/opt/puppetlabs/server/data/puppetserver',
+        :server_puppetserver_rundir  => '/var/run/puppetlabs/puppetserver',
+        :server_puppetserver_logdir  => '/var/log/puppetlabs/puppetserver',
         :server_jruby_gem_home       => '/opt/puppetlabs/server/data/puppetserver/jruby-gems',
         :server_dir                  => '/etc/puppetlabs/puppet',
+        :codedir                     => '/etc/puppetlabs/code',
         :server_idle_timeout         => 1200000,
         :server_connect_timeout      => 120000,
         :server_enable_ruby_profiler => false,
@@ -89,10 +92,10 @@ describe 'puppet::server::puppetserver' do
         it { should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf') }
         it { should contain_file('/etc/custom/puppetserver/conf.d/web-routes.conf') }
         it { should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
-                                 with_content(/ssl-host\s+=\s0\.0\.0\.0/).
-                                 with_content(/ssl-port\s+=\s8140/).
-                                 without_content(/ host\s+=\s/).
-                                 without_content(/ port\s+=\s8140/).
+                                 with_content(/ssl-host:\s0\.0\.0\.0/).
+                                 with_content(/ssl-port:\s8140/).
+                                 without_content(/ host:\s/).
+                                 without_content(/ port:\s8139/).
                                  with({})
         }
         it { should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
@@ -480,7 +483,7 @@ describe 'puppet::server::puppetserver' do
         end
 
         it 'should put the correct ip address in webserver.conf' do
-          should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').with_content(/ssl-host\s+=\s127\.0\.0\.1/)
+          should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').with_content(/ssl-host:\s127\.0\.0\.1/)
         end
       end
 
@@ -497,12 +500,12 @@ describe 'puppet::server::puppetserver' do
 
         it 'should put the correct ssl key path in webserver.conf' do
           should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
-            with_content(/ssl-key\s+=\s\/etc\/custom\/puppet\/ssl\/private_keys\/puppetserver43\.example\.com\.pem/)
+            with_content(%r{ssl-key: /etc/custom/puppet/ssl/private_keys/puppetserver43\.example\.com\.pem})
         end
 
         it 'should put the correct ssl cert path in webserver.conf' do
           should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
-            with_content(/ssl-cert\s+=\s\/etc\/custom\/puppet\/ssl\/certs\/puppetserver43\.example\.com\.pem/)
+            with_content(%r{ssl-cert: /etc/custom/puppet/ssl/certs/puppetserver43\.example\.com\.pem})
         end
       end
 
@@ -518,8 +521,8 @@ describe 'puppet::server::puppetserver' do
         end
 
         it { should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
-          with_content(/ host\s+=\s0\.0\.0\.0/).
-          with_content(/ port\s+=\s8139/).
+          with_content(/ host:\s0\.0\.0\.0/).
+          with_content(/ port:\s8139/).
           with({})
         }
 
