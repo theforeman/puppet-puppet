@@ -209,7 +209,7 @@
 #                              approach will be installed.
 #                              type:string
 #
-# $server_facts::              Should foreman receive facts from puppet
+# $server_foreman_facts::      Should foreman receive facts from puppet
 #                              type:boolean
 #
 # $foreman::                   Should foreman integration be installed
@@ -437,7 +437,7 @@ class puppet::server(
   $foreman_ssl_ca            = $::puppet::server_foreman_ssl_ca,
   $foreman_ssl_cert          = $::puppet::server_foreman_ssl_cert,
   $foreman_ssl_key           = $::puppet::server_foreman_ssl_key,
-  $server_facts              = $::puppet::server_facts,
+  $server_foreman_facts      = $::puppet::server_foreman_facts,
   $puppet_basedir            = $::puppet::server_puppet_basedir,
   $puppetdb_host             = $::puppet::server_puppetdb_host,
   $puppetdb_port             = $::puppet::server_puppetdb_port,
@@ -460,7 +460,7 @@ class puppet::server(
   validate_bool($passenger)
   validate_bool($git_repo)
   validate_bool($service_fallback)
-  validate_bool($server_facts)
+  validate_bool($server_foreman_facts)
   validate_bool($strict_variables)
   validate_bool($foreman)
   validate_bool($puppetdb_swf)
