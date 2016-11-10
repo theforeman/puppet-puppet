@@ -601,6 +601,10 @@
 #                                     Defaults to false (the puppetserver will use its own conf.d/auth.conf)
 #                                     type:boolean
 #
+# $server_check_for_updates::         Should the puppetserver phone home to check for available updates?
+#                                     Defaults to true
+#                                     type:boolean
+#
 # === Usage:
 #
 # * Simple usage:
@@ -774,6 +778,7 @@ class puppet (
   $server_max_active_instances      = $puppet::params::server_max_active_instances,
   $server_max_requests_per_instance = $puppet::params::server_max_requests_per_instance,
   $server_use_legacy_auth_conf      = $puppet::params::server_use_legacy_auth_conf,
+  $server_check_for_updates         = $puppet::params::server_check_for_updates,
 ) inherits puppet::params {
 
   validate_bool($listen)

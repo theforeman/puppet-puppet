@@ -59,6 +59,7 @@ describe 'puppet::server::puppetserver' do
         :server_idle_timeout         => 1200000,
         :server_connect_timeout      => 120000,
         :server_enable_ruby_profiler => false,
+        :server_check_for_updates    => true,
       } end
 
       describe 'with default parameters' do
@@ -439,6 +440,36 @@ describe 'puppet::server::puppetserver' do
           }
         end
       end
+
+      describe 'product.conf' do
+        context 'when server_puppetserver_version >= 2.7' do
+          let(:params) do
+            default_params.merge({
+              :server_puppetserver_version => '2.7.0',
+              :server_puppetserver_dir => '/etc/custom/puppetserver',
+              :server_check_for_updates => false,
+            })
+          end
+          it {
+            should contain_file('/etc/custom/puppetserver/conf.d/product.conf').
+              with_content(/^\s+check-for-updates: false/)
+          }
+        end
+
+        context 'when server_puppetserver_version < 2.7' do
+          let(:params) do
+            default_params.merge({
+              :server_puppetserver_version => '2.6.0',
+              :server_puppetserver_dir => '/etc/custom/puppetserver',
+            })
+          end
+          it {
+            should contain_file('/etc/custom/puppetserver/conf.d/product.conf').
+              with_ensure('absent')
+          }
+        end
+      end
+
       describe 'with extra_args parameter' do
         let :params do
           default_params.merge({
