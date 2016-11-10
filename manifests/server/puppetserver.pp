@@ -74,6 +74,7 @@ class puppet::server::puppetserver (
   $server_admin_api_whitelist  = $::puppet::server::admin_api_whitelist,
   $server_puppetserver_version = $::puppet::server::puppetserver_version,
   $server_use_legacy_auth_conf = $::puppet::server::use_legacy_auth_conf,
+  $server_check_for_updates    = $::puppet::server::check_for_updates,
 ) {
   include ::puppet::server
 
@@ -199,5 +200,16 @@ class puppet::server::puppetserver (
   file { "${server_puppetserver_dir}/conf.d/auth.conf":
     ensure  => file,
     content => template('puppet/server/puppetserver/conf.d/auth.conf.erb'),
+  }
+
+  if versioncmp($server_puppetserver_version, '2.7') >= 0 {
+    $product_conf_ensure = file
+  } else {
+    $product_conf_ensure = absent
+  }
+
+  file { "${server_puppetserver_dir}/conf.d/product.conf":
+    ensure  => $product_conf_ensure,
+    content => template('puppet/server/puppetserver/conf.d/product.conf.erb'),
   }
 }
