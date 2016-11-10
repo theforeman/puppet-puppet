@@ -379,12 +379,13 @@ class puppet::params {
   $server_ca_auth_required         = true
   $server_admin_api_whitelist      = [ 'localhost', $lower_fqdn ]
   $server_ca_client_whitelist      = [ 'localhost', $lower_fqdn ]
-  $server_cipher_suites            = [ 'TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA', 'TLS_RSA_WITH_AES_128_CBC_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA', ]
-  $server_ssl_protocols            = [ 'TLSv1.2', ]
+  $server_cipher_suites            = [ 'TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA', 'TLS_RSA_WITH_AES_128_CBC_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA' ]
+  $server_ssl_protocols            = [ 'TLSv1.2' ]
+  $server_check_for_updates         = true
 
   # Puppetserver >= 2.2 Which auth.conf shall we use?
   $server_use_legacy_auth_conf     = false
 
   # For puppetserver 2, certain configuration parameters are version specific. We assume a particular version here.
-  $server_puppetserver_version     = '2.6.0'
+  $server_puppetserver_version     = '2.7.0'
 }

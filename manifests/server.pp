@@ -459,6 +459,7 @@ class puppet::server(
   $jruby_gem_home           = $::puppet::server_jruby_gem_home,
   $max_active_instances     = $::puppet::server_max_active_instances,
   $use_legacy_auth_conf     = $::puppet::server_use_legacy_auth_conf,
+  $check_for_updates        = $::puppet::server_check_for_updates,
 ) {
 
   validate_bool($ca)
