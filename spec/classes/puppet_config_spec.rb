@@ -63,11 +63,19 @@ describe 'puppet::config' do
 
         it 'should contain auth.conf' do
           if Puppet.version >= '4.0'
-            should_not contain_file("#{confdir}/auth.conf").with_content(%r{^path /certificate_revocation_list/ca\nmethod find$})
-            should contain_file("#{confdir}/auth.conf").with_content(%r{/puppet/v3/})
+            should_not contain_concat__fragment('puppet.auth+10-main-start').
+              with_content(%r{^path /certificate_revocation_list/ca\nmethod find$}).
+              with({}) # So we can use a trailing dot on each with_content line
+            should contain_concat__fragment('puppet.auth+10-main-start').
+              with_content(%r{/puppet/v3/}).
+              with({}) # So we can use a trailing dot on each with_content line
           else
-            should contain_file("#{confdir}/auth.conf").with_content(%r{^path /certificate_revocation_list/ca\nmethod find$})
-            should_not contain_file("#{confdir}/auth.conf").with_content(%r{/puppet/v3/})
+            should contain_concat__fragment('puppet.auth+10-main-start').
+              with_content(%r{^path /certificate_revocation_list/ca\nmethod find$}).
+              with({}) # So we can use a trailing dot on each with_content line
+            should_not contain_concat__fragment('puppet.auth+10-main-start').
+              with_content(%r{/puppet/v3/}).
+              with({}) # So we can use a trailing dot on each with_content line
           end
         end
 
@@ -101,9 +109,13 @@ describe 'puppet::config' do
 
         it 'should contain auth.conf with auth any' do
           if Puppet.version >= '4.0'
-            should contain_file("#{confdir}/auth.conf").with_content(%r{^path /puppet-ca/v1/certificate_revocation_list/ca\nauth any$})
+            should contain_concat__fragment('puppet.auth+10-main-start').
+              with_content(%r{^path /puppet-ca/v1/certificate_revocation_list/ca\nauth any$}).
+              with({}) # So we can use a trailing dot on each with_content line
           else
-            should contain_file("#{confdir}/auth.conf").with_content(%r{^path /certificate_revocation_list/ca\nauth any$})
+            should contain_concat__fragment('puppet.auth+10-main-start').
+              with_content(%r{^path /certificate_revocation_list/ca\nauth any$}).
+              with({}) # So we can use a trailing dot on each with_content line
           end
         end
       end
@@ -114,7 +126,9 @@ describe 'puppet::config' do
         end
 
         it 'should contain auth.conf with allow' do
-          should contain_file("#{confdir}/auth.conf").with_content(%r{^allow \$1, puppetproxy$})
+          should contain_concat__fragment('puppet.auth+10-main-start').
+            with_content(%r{^allow \$1, puppetproxy$}).
+            with({}) # So we can use a trailing dot on each with_content line
         end
       end
 
@@ -167,7 +181,9 @@ describe 'puppet::config' do
         end
 
         it 'should contain auth.conf with auth any' do
-          should contain_file("#{confdir}/auth.conf").with_content(%r{^path /run\nauth any\nmethod save\nallow node1.example.com,node2.example.com$})
+          should contain_concat__fragment('puppet.auth+10-main-start').
+            with_content(%r{^path /run\nauth any\nmethod save\nallow node1.example.com,node2.example.com$}).
+            with({}) # So we can use a trailing dot on each with_content line
         end
       end
 
@@ -177,7 +193,9 @@ describe 'puppet::config' do
         end
 
         it 'should contain auth.conf with auth any' do
-          should contain_file("#{confdir}/auth.conf").with_content(%r{^path /run\nauth any\nmethod save\nallow master.example.com$})
+          should contain_concat__fragment('puppet.auth+10-main-start').
+            with_content(%r{^path /run\nauth any\nmethod save\nallow master.example.com$}).
+            with({}) # So we can use a trailing dot on each with_content line
         end
       end
 
@@ -187,7 +205,9 @@ describe 'puppet::config' do
         end
 
         it 'should contain auth.conf with auth any' do
-          should contain_file("#{confdir}/auth.conf").with_content(%r{^path /run\nauth any\nmethod save\nallow #{facts[:fqdn]}$})
+          should contain_concat__fragment('puppet.auth+10-main-start').
+            with_content(%r{^path /run\nauth any\nmethod save\nallow #{facts[:fqdn]}$}).
+            with({}) # So we can use a trailing dot on each with_content line
         end
       end
 
