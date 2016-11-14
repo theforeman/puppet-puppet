@@ -19,6 +19,11 @@ class puppet::server::config inherits puppet::config {
     Class['puppet::server::config'] ~> Class['foreman_proxy::service']
   }
 
+  # And before Foreman's cert-using service needs it
+  if defined(Class['foreman::service']) and $foreman::ssl {
+    Class['puppet::server::config'] -> Class['foreman::service']
+  }
+
   ## General configuration
   $ca_server                   = $::puppet::ca_server
   $ca_port                     = $::puppet::ca_port
