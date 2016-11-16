@@ -31,6 +31,17 @@ class puppet::server::install {
     }
   }
 
+  # Prevent the master service running and preventing Apache from binding to the port
+  if $::puppet::server::passenger and $::osfamily == 'Debian' {
+    file { '/etc/default/puppetmaster':
+      content => "START=no\n",
+    }
+
+    if $::puppet::manage_packages == true or $::puppet::manage_packages == 'server' {
+      File['/etc/default/puppetmaster'] -> Package[$server_package]
+    }
+  }
+
   if $::puppet::server::git_repo {
     file { $puppet::vardir:
       ensure => directory,

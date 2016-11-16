@@ -33,12 +33,20 @@ describe 'puppet::server' do
             should contain_class('puppet::server::config')
             should contain_class('puppet::server::service').
               with_puppetmaster(false).
-              with_puppetserver(nil)
+              with_puppetserver(nil).
+              with_rack(true)
           end
           it { should_not contain_notify('ip_not_supported') }
           # No server_package for FreeBSD
           if not facts[:osfamily] == 'FreeBSD'
             it { should contain_package(server_package) }
+          end
+          if facts[:osfamily] == 'Debian'
+            it do
+              should contain_file('/etc/default/puppetmaster').
+                with_content("START=no\n").
+                that_comes_before("Package[#{server_package}]")
+            end
           end
         end
       end
@@ -100,7 +108,8 @@ describe 'puppet::server' do
         it do
           should contain_class('puppet::server::service').
             with_puppetmaster(true).
-            with_puppetserver(nil)
+            with_puppetserver(nil).
+            with_rack(false)
         end
 
         describe "and server_service_fallback => false" do
@@ -112,7 +121,8 @@ describe 'puppet::server' do
           it do
             should contain_class('puppet::server::service').
               with_puppetmaster(false).
-              with_puppetserver(nil)
+              with_puppetserver(nil).
+              with_rack(false)
           end
         end
       end
@@ -129,7 +139,8 @@ describe 'puppet::server' do
           it do
             should contain_class('puppet::server::service').
               with_puppetmaster(nil).
-              with_puppetserver(true)
+              with_puppetserver(true).
+              with_rack(false)
           end
           it { should contain_class('puppet::server::puppetserver') }
           it { should contain_package('puppetserver') }

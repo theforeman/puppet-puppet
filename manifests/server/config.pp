@@ -1,15 +1,11 @@
 # Set up the puppet server config
 class puppet::server::config inherits puppet::config {
   if $::puppet::server::passenger and $::puppet::server::implementation == 'master' {
-    # Anchor the passenger config inside this
-    class { '::puppet::server::passenger': } -> Class['puppet::server::config']
+    contain '::puppet::server::passenger'
   }
 
   if $::puppet::server::implementation == 'puppetserver' {
-    include ::puppet::server::puppetserver
-    anchor {'::puppet::server::puppetserver_start': } ->
-    Class['::puppet::server::puppetserver'] ~>
-    anchor {'::puppet::server::puppetserver_end': }
+    contain '::puppet::server::puppetserver'
   }
 
   # Mirror the relationship, as defined() is parse-order dependent

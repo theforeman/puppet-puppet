@@ -561,18 +561,22 @@ class puppet::server(
   }
 
   if $implementation == 'master' {
-    $pm_service = !$passenger and $service_fallback
-    $ps_service = undef
+    $pm_service   = !$passenger and $service_fallback
+    $ps_service   = undef
+    $rack_service = $passenger
   } elsif $implementation == 'puppetserver' {
-    $pm_service = undef
-    $ps_service = true
+    $pm_service   = undef
+    $ps_service   = true
+    $rack_service = false
   }
 
   class { '::puppet::server::install': }~>
   class { '::puppet::server::config':  }~>
   class { '::puppet::server::service':
+    app_root     => $app_root,
     puppetmaster => $pm_service,
     puppetserver => $ps_service,
+    rack         => $rack_service,
   }->
   Class['puppet::server']
 

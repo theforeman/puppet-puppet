@@ -25,26 +25,7 @@ class puppet::server::passenger (
 ) {
   include ::apache
   include ::apache::mod::passenger
-
-  class { '::puppet::server::rack':
-    app_root       => $app_root,
-    confdir        => $confdir,
-    rack_arguments => $rack_arguments,
-    user           => $user,
-    vardir         => $vardir,
-  }
-
-  case $::operatingsystem {
-    'Debian', 'Ubuntu': {
-      file { '/etc/default/puppetmaster':
-        content => "START=no\n",
-        before  => Class['puppet::server::install'],
-      }
-    }
-    default: {
-      # nothing to do
-    }
-  }
+  contain '::puppet::server::rack'
 
   $directory = {
     'path'              => "${app_root}/public/",
