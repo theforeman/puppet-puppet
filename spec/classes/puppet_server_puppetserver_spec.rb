@@ -21,38 +21,39 @@ describe 'puppet::server::puppetserver' do
       end
 
       let(:default_params) do {
-        :java_bin                    => '/usr/bin/java',
-        :config                      => '/etc/default/puppetserver',
-        :jvm_min_heap_size           => '2G',
-        :jvm_max_heap_size           => '2G',
-        :jvm_extra_args              => '',
-        :server_ca_auth_required     => true,
-        :server_ca_client_whitelist  => [ 'localhost', 'puppetserver123.example.com' ],
-        :server_admin_api_whitelist  => [ 'localhost', 'puppetserver123.example.com' ],
-        :server_ruby_load_paths      => [ '/some/path', ],
-        :server_ssl_protocols        => [ 'TLSv1.2', ],
-        :server_cipher_suites        => [ 'TLS_RSA_WITH_AES_256_CBC_SHA256',
-                                          'TLS_RSA_WITH_AES_256_CBC_SHA',
-                                          'TLS_RSA_WITH_AES_128_CBC_SHA256',
-                                          'TLS_RSA_WITH_AES_128_CBC_SHA', ],
-        :server_max_active_instances => 2,
-        :server_max_requests_per_instance => 0,
-        :server_http                 => false,
-        :server_http_allow           => [],
-        :server_ca                   => true,
-        :server_puppetserver_version => '2.4.99',
-        :server_use_legacy_auth_conf => false,
-        :server_puppetserver_dir     => '/etc/custom/puppetserver',
-        :server_puppetserver_vardir  => '/opt/puppetlabs/server/data/puppetserver',
-        :server_puppetserver_rundir  => '/var/run/puppetlabs/puppetserver',
-        :server_puppetserver_logdir  => '/var/log/puppetlabs/puppetserver',
-        :server_jruby_gem_home       => '/opt/puppetlabs/server/data/puppetserver/jruby-gems',
-        :server_dir                  => '/etc/puppetlabs/puppet',
-        :codedir                     => '/etc/puppetlabs/code',
-        :server_idle_timeout         => 1200000,
-        :server_connect_timeout      => 120000,
-        :server_enable_ruby_profiler => false,
-        :server_check_for_updates    => true,
+        :java_bin                               => '/usr/bin/java',
+        :config                                 => '/etc/default/puppetserver',
+        :jvm_min_heap_size                      => '2G',
+        :jvm_max_heap_size                      => '2G',
+        :jvm_extra_args                         => '',
+        :server_ca_auth_required                => true,
+        :server_ca_client_whitelist             => [ 'localhost', 'puppetserver123.example.com' ],
+        :server_admin_api_whitelist             => [ 'localhost', 'puppetserver123.example.com' ],
+        :server_ruby_load_paths                 => [ '/some/path', ],
+        :server_ssl_protocols                   => [ 'TLSv1.2', ],
+        :server_cipher_suites                   => [ 'TLS_RSA_WITH_AES_256_CBC_SHA256',
+                                                     'TLS_RSA_WITH_AES_256_CBC_SHA',
+                                                     'TLS_RSA_WITH_AES_128_CBC_SHA256',
+                                                     'TLS_RSA_WITH_AES_128_CBC_SHA', ],
+        :server_max_active_instances            => 2,
+        :server_max_requests_per_instance       => 0,
+        :server_http                            => false,
+        :server_http_allow                      => [],
+        :server_ca                              => true,
+        :server_puppetserver_version            => '2.4.99',
+        :server_use_legacy_auth_conf            => false,
+        :server_puppetserver_dir                => '/etc/custom/puppetserver',
+        :server_puppetserver_vardir             => '/opt/puppetlabs/server/data/puppetserver',
+        :server_puppetserver_rundir             => '/var/run/puppetlabs/puppetserver',
+        :server_puppetserver_logdir             => '/var/log/puppetlabs/puppetserver',
+        :server_jruby_gem_home                  => '/opt/puppetlabs/server/data/puppetserver/jruby-gems',
+        :server_dir                             => '/etc/puppetlabs/puppet',
+        :codedir                                => '/etc/puppetlabs/code',
+        :server_idle_timeout                    => 1200000,
+        :server_connect_timeout                 => 120000,
+        :server_enable_ruby_profiler            => false,
+        :server_check_for_updates               => true,
+        :server_environment_class_cache_enabled => false,
       } end
 
       describe 'with default parameters' do
@@ -158,6 +159,44 @@ describe 'puppet::server::puppetserver' do
           it 'should not have a use-legacy-auth-conf setting in puppetserver.conf' do
             content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
             expect(content).not_to include('use-legacy-auth-conf')
+          end
+        end
+      end
+
+      describe 'environment-class-cache-enabled' do
+        context 'with default parameters' do
+          let(:params) do
+            default_params.merge({
+                                     :server_puppetserver_dir => '/etc/custom/puppetserver',
+                                 })
+          end
+          it 'should have environment-class-cache-enabled: false in puppetserver.conf' do
+            content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
+            expect(content).to include(%Q[    environment-class-cache-enabled: false\n])
+          end
+        end
+        context 'when environment-class-cache-enabled = true' do
+          let(:params) do
+            default_params.merge({
+                                     :server_environment_class_cache_enabled => true,
+                                     :server_puppetserver_dir                => '/etc/custom/puppetserver',
+                                 })
+          end
+          it 'should have environment-class-cache-enabled: true in puppetserver.conf' do
+            content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
+            expect(content).to include(%Q[    environment-class-cache-enabled: true\n])
+          end
+        end
+        context 'when server_puppetserver_version < 2.4' do
+          let(:params) do
+            default_params.merge({
+                                     :server_puppetserver_version => '2.2.2',
+                                     :server_puppetserver_dir     => '/etc/custom/puppetserver',
+                                 })
+          end
+          it 'should not have a environment-class-cache-enabled setting in puppetserver.conf' do
+            content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
+            expect(content).not_to include('environment-class-cache-enabled')
           end
         end
       end

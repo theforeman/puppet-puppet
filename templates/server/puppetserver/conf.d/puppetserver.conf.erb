@@ -68,6 +68,11 @@ jruby-puppet: {
     # specified in the Puppet Server HOCON-formatted auth.conf (if false).
     use-legacy-auth-conf: <%= @server_use_legacy_auth_conf %>
 <%- end -%>
+<%- if scope.function_versioncmp([@server_puppetserver_version, '2.3']) >= 0 -%>
+
+    # (optional) enable or disable environment class cache
+    environment-class-cache-enabled: <%= @server_environment_class_cache_enabled %>
+<%- end -%>
 }
 
 # settings related to HTTP client requests made by Puppet Server
