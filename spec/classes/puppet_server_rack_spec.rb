@@ -25,16 +25,6 @@ describe 'puppet::server::rack' do
       describe 'defaults' do
         let(:params) { default_params }
 
-        it 'should define Exec[puppet_server_rack-restart]' do
-          should contain_exec('puppet_server_rack-restart').with({
-            :command      => 'touch /etc/puppet/rack/tmp/restart.txt',
-            :path         => '/bin:/usr/bin',
-            :refreshonly  => true,
-            :cwd          => '/etc/puppet/rack',
-            :require      => ['Class[Puppet::Server::Install]', 'File[/etc/puppet/rack/tmp]'],
-          })
-        end
-
         it 'should create server_app_root' do
           should contain_file('/etc/puppet/rack').with({
             :ensure => 'directory',
@@ -62,7 +52,6 @@ describe 'puppet::server::rack' do
         it 'should create config.ru' do
           should contain_file('/etc/puppet/rack/config.ru').with({
             :owner  => 'puppet',
-            :notify => 'Exec[puppet_server_rack-restart]',
           })
         end
 

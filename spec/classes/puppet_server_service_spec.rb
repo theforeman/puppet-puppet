@@ -21,6 +21,7 @@ describe 'puppet::server::service' do
       describe 'default_parameters' do
         it { should_not contain_service(master_service) }
         it { should_not contain_service('puppetserver') }
+        it { should_not contain_exec('restart_puppetmaster') }
       end
 
       describe 'when puppetmaster => true' do
@@ -59,6 +60,17 @@ describe 'puppet::server::service' do
           should contain_service('puppetserver').with({
             :ensure => 'stopped',
             :enable => 'false',
+          })
+        end
+      end
+
+      describe 'when rack => true' do
+        let(:params) { {:rack => true, :puppetserver => :undef, :puppetmaster => :undef, :app_root => '/etc/puppet/rack'} }
+        it do
+          should contain_exec('restart_puppetmaster').with({
+            :command      => '/bin/touch /etc/puppet/rack/tmp/restart.txt',
+            :refreshonly  => true,
+            :cwd          => '/etc/puppet/rack',
           })
         end
       end
