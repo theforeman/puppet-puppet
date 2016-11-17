@@ -117,15 +117,15 @@ class puppet::server::config inherits puppet::config {
   # Open read permissions to private keys to puppet group for foreman, proxy etc.
   file { "${::puppet::server::ssl_dir}/private_keys":
     ensure  => directory,
-    owner   => $::puppet::server::user,
-    group   => $::puppet::server::group,
+    owner   => $::puppet::server::private_keys_owner,
+    group   => $::puppet::server::private_keys_group,
     mode    => '0750',
     require => Exec['puppet_server_config-create_ssl_dir'],
   }
 
   file { "${::puppet::server::ssl_dir}/private_keys/${::puppet::server::certname}.pem":
-    owner => $::puppet::server::user,
-    group => $::puppet::server::group,
+    owner => $::puppet::server::private_keys_owner,
+    group => $::puppet::server::private_keys_group,
     mode  => '0640',
   }
 

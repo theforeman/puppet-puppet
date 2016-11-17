@@ -376,6 +376,12 @@
 # $server_ssl_dir::                   SSL directory
 #                                     type:string
 #
+# $server_private_keys_owner::        The owner of the private_keys directory
+#                                     type:string
+#
+# $server_private_keys_group::        The group owning the private_keys directory
+#                                     type:string
+#
 # $server_package::                   Custom package name for puppet master
 #                                     type:string
 #
@@ -745,6 +751,8 @@ class puppet (
   $server_app_root                  = $puppet::params::server_app_root,
   $server_ruby_load_paths           = $puppet::params::server_ruby_load_paths,
   $server_ssl_dir                   = $puppet::params::server_ssl_dir,
+  $server_private_keys_owner        = $puppet::params::server_private_keys_owner,
+  $server_private_keys_group        = $puppet::params::server_private_keys_group,
   $server_ssl_dir_manage            = $puppet::params::server_ssl_dir_manage,
   $server_ssl_protocols             = $puppet::params::server_ssl_protocols,
   $server_package                   = $puppet::params::server_package,
