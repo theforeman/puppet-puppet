@@ -1,5 +1,6 @@
 # Default parameters
 class puppet::params {
+  $privatekeydir_group         = 'service'
 
   # Basic config
   $version             = 'present'

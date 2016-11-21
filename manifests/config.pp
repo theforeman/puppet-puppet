@@ -16,6 +16,7 @@ class puppet::config(
   $syslogfacility      = $::puppet::syslogfacility,
   $srv_domain          = $::puppet::srv_domain,
   $use_srv_records     = $::puppet::use_srv_records,
+  $privatekeydir_group = $::puppet::privatekeydir_group,
   $additional_settings = $::puppet::additional_settings,
 ) {
   puppet::config::main{
@@ -23,9 +24,18 @@ class puppet::config(
     'logdir': value => $::puppet::logdir;
     'rundir': value => $::puppet::rundir;
     'ssldir': value => $::puppet::ssldir;
-    'privatekeydir': value => '$ssldir/private_keys { group = service }';
     'hostprivkey': value => '$privatekeydir/$certname.pem { mode = 640 }';
     'show_diff': value  => $::puppet::show_diff;
+  }
+
+  if $privatekeydir_group {
+      puppet::config::main{
+        'privatekeydir': value => "\$ssldir/private_keys { group = ${privatekeydir_group} }";
+      }
+  } else {
+      puppet::config::main{
+        'privatekeydir': value => "\$ssldir/private_keys";
+      }
   }
 
   if $module_repository and !empty($module_repository) {

@@ -4,6 +4,9 @@
 #
 # === Parameters:
 #
+# $privatekeydir_group::              The group owning the private_keys directory, defaults to "service". May also be "root" or false.
+#                                     type:string
+#
 # $version::                          Specify a specific version of a package to
 #                                     install. The version should be the exact
 #                                     match for your distro.
@@ -631,6 +634,7 @@
 #   }
 #
 class puppet (
+  $privatekeydir_group              = $puppet::params::privatekeydir_group,
   $version                          = $puppet::params::version,
   $user                             = $puppet::params::user,
   $group                            = $puppet::params::group,
