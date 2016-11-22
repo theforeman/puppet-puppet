@@ -1,11 +1,11 @@
 # Set up the puppet server config
 class puppet::server::config inherits puppet::config {
   if $::puppet::server::passenger and $::puppet::server::implementation == 'master' {
-    contain '::puppet::server::passenger'
+    contain 'puppet::server::passenger' # lint:ignore:relative_classname_inclusion (PUP-1597)
   }
 
   if $::puppet::server::implementation == 'puppetserver' {
-    contain '::puppet::server::puppetserver'
+    contain 'puppet::server::puppetserver' # lint:ignore:relative_classname_inclusion (PUP-1597)
   }
 
   # Mirror the relationship, as defined() is parse-order dependent
