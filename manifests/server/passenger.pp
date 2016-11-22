@@ -25,7 +25,7 @@ class puppet::server::passenger (
 ) {
   include ::apache
   include ::apache::mod::passenger
-  contain '::puppet::server::rack'
+  contain 'puppet::server::rack' # lint:ignore:relative_classname_inclusion (PUP-1597)
 
   $directory = {
     'path'              => "${app_root}/public/",
