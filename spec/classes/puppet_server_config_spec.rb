@@ -187,6 +187,16 @@ describe 'puppet::server::config' do
         end
       end
 
+      describe 'with server_private_keys_group' do
+        let :pre_condition do
+          'class {"puppet": server => true, server_private_keys_group => "galois"}'
+        end
+
+        it 'should set up SSL permissions' do
+          should contain_file("#{ssldir}/private_keys").with_group('galois')
+        end
+      end
+
       describe "when autosign => true" do
         let :pre_condition do
           "class {'puppet':

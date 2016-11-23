@@ -141,6 +141,12 @@
 # $ssl_dir::                   SSL directory
 #                              type:string
 #
+# $private_keys_owner::        The owner of the private_keys directory
+#                              type:string
+#
+# $private_keys_group::        The group owning the private_keys directory
+#                              type:string
+#
 # $package::                   Custom package name for puppet master
 #                              type:string
 #
@@ -408,6 +414,8 @@ class puppet::server(
   $environments_owner        = $::puppet::server_environments_owner,
   $environments_group        = $::puppet::server_environments_group,
   $environments_mode         = $::puppet::server_environments_mode,
+  $private_keys_owner        = $::puppet::server_private_keys_owner,
+  $private_keys_group        = $::puppet::server_private_keys_group,
   $envs_dir                  = $::puppet::server_envs_dir,
   $envs_target               = $::puppet::server_envs_target,
   $common_modules_path       = $::puppet::server_common_modules_path,

@@ -1,5 +1,6 @@
 # Default parameters
 class puppet::params {
+  $privatekeydir_group         = 'service'
 
   # Basic config
   $version             = 'present'
@@ -266,6 +267,10 @@ class puppet::params {
   $server_environments_owner   = $user
   $server_environments_group   = $root_group
   $server_environments_mode    = '0755'
+  # Owner of the private_keys dir: for cases where external services need read
+  # access to it.
+  $server_private_keys_owner   = $user
+  $server_private_keys_group   = $group
   # Where we store our puppet environments
   $server_envs_dir             = "${codedir}/environments"
   $server_envs_target          = undef
