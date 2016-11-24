@@ -8,57 +8,57 @@
 #                                           install. The version should be the exact
 #                                           match for your distro.
 #                                           You can also use certain values like 'latest'.
-#                                           type:string
+#                                           type:String
 #
 # $user::                                   Override the name of the puppet user.
-#                                           type:string
+#                                           type:String
 #
 # $group::                                  Override the name of the puppet group.
-#                                           type:string
+#                                           type:String
 #
 # $dir::                                    Override the puppet directory.
-#                                           type:string
+#                                           type:Stdlib::Absolutepath
 #
 # $codedir::                                Override the puppet code directory.
-#                                           type:string
+#                                           type:Stdlib::Absolutepath
 #
 # $vardir::                                 Override the puppet var directory.
-#                                           type:string
+#                                           type:Stdlib::Absolutepath
 #
 # $logdir::                                 Override the log directory.
-#                                           type:string
+#                                           type:Stdlib::Absolutepath
 #
 # $rundir::                                 Override the PID directory.
-#                                           type:string
+#                                           type:Stdlib::Absolutepath
 #
 # $ssldir::                                 Override where SSL certificates are kept.
-#                                           type:string
+#                                           type:Stdlib::Absolutepath
 #
 # $sharedir::                               Override the system data directory.
-#                                           type:string
+#                                           type:Stdlib::Absolutepath
 #
 # $manage_packages::                        Should this module install packages or not.
 #                                           Can also install only server packages with value
 #                                           of 'server' or only agent packages with 'agent'.
-#                                           Defaults to true
+#                                           type:Variant[Boolean, Enum['server', 'agent']]
 #
 # $package_provider::                       The provider used to install the agent.
 #                                           Defaults to chocolatey on Windows
 #                                           Defaults to undef elsewhere
-#                                           type:string
+#                                           type:Optional[String]
 #
 # $package_source::                         The location of the file to be used by the
 #                                           agent's package resource.
 #                                           Defaults to undef. If 'windows' or 'msi' are
 #                                           used as the provider then this setting is
 #                                           required.
-#                                           type:string
+#                                           type:Optional[Stdlib::Absolutepath]
 #
 # $port::                                   Override the port of the master we connect to.
-#                                           type:integer
+#                                           type:Integer[0, 65535]
 #
 # $listen::                                 Should the puppet agent listen for connections.
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $listen_to::                              An array of servers allowed to initiate a puppet run.
 #                                           If $listen = true one of three things will happen:
@@ -69,25 +69,25 @@
 #                                           allowed.
 #                                           3) if $puppetmaster is not defined or empty,
 #                                           $fqdn will be used.
-#                                           type:array
+#                                           type:Array[String]
 #
 # $pluginsync::                             Enable pluginsync.
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $splay::                                  Switch to enable a random amount of time
 #                                           to sleep before each run.
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $splaylimit::                             The maximum time to delay before runs.
 #                                           Defaults to being the same as the run interval.
 #                                           This setting can be a time interval in seconds
 #                                           (30 or 30s), minutes (30m), hours (6h), days (2d),
 #                                           or years (5y).
-#                                           type:string
+#                                           type:Pattern[/^\d+[smhdy]?$/]
 #
 # $runinterval::                            Set up the interval (in seconds) to run
 #                                           the puppet agent.
-#                                           type:integer
+#                                           type:Integer[0]
 #
 # $autosign::                               If set to a boolean, autosign is enabled or disabled
 #                                           for all incoming requests. Otherwise this has to be
@@ -95,22 +95,22 @@
 #                                           an autosign script. If this is set to a script, make
 #                                           sure that script considers the content of autosign.conf
 #                                           as otherwise Foreman functionality might be broken.
+#                                           type:Variant[Boolean, Stdlib::Absolutepath]
 #
 # $autosign_entries::                       A list of certnames or domain name globs
 #                                           whose certificate requests will automatically be signed.
 #                                           Defaults to an empty Array.
-#                                           type: array
+#                                           type:Array[String]
 #
 # $autosign_mode::                          mode of the autosign file/script
+#                                           type:Pattern[/^[0-9]{4}$/]
 #
 # $usecacheonfailure::                      Switch to enable use of cached catalog on
 #                                           failure of run.
-#                                           type: boolean
+#                                           type:Boolean
 #
 # $runmode::                                Select the mode to setup the puppet agent.
-#                                           Can be either 'cron', 'service',
-#                                           'systemd.timer', or 'none'.
-#                                           type:string
+#                                           type:Enum['cron', 'service', 'systemd.timer', 'none']
 #
 # $unavailable_runmodes::                   Runmodes that are not available for the
 #                                           current system. This module will not try
@@ -118,173 +118,173 @@
 #                                           on Linux, ['cron', 'systemd.timer'] on
 #                                           Windows and ['systemd.timer'] on other
 #                                           systems.
-#                                           type: array
+#                                           type:Array[Enum['cron', 'service', 'systemd.timer', 'none']]
 #
 # $cron_cmd::                               Specify command to launch when runmode is
 #                                           set 'cron'.
-#                                           type:string
+#                                           type:Optional[String]
 #
 # $systemd_cmd::                            Specify command to launch when runmode is
 #                                           set 'systemd.timer'.
-#                                           type:string
+#                                           type:Optional[String]
 #
 # $show_diff::                              Show and report changed files with diff output
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $module_repository::                      Use a different puppet module repository
-#                                           type:string
+#                                           type:Optional[Stdlib::HTTPUrl]
 #
 # $configtimeout::                          How long the client should wait for the
 #                                           configuration to be retrieved before
 #                                           considering it a failure.
-#                                           type:integer
+#                                           type:Optional[Integer[0]]
 #
 # $ca_server::                              Use a different ca server. Should be either
 #                                           a string with the location of the ca_server
 #                                           or 'false'.
-#                                           type:string
+#                                           type:Optional[Variant[String, Boolean]]
 #
 # $ca_port::                                Puppet CA port
-#                                           type:integer
+#                                           type:Optional[Integer[0, 65535]]
 #
 # $dns_alt_names::                          Use additional DNS names when generating a
 #                                           certificate.  Defaults to an empty Array.
-#                                           type:array
+#                                           type:Array[String]
 #
 # $classfile::                              The file in which puppet agent stores a list
 #                                           of the classes associated with the retrieved
 #                                           configuration.
-#                                           type:string
+#                                           type:String
 #
 # $hiera_config::                           The hiera configuration file.
-#                                           type:string
+#                                           type:String
 #
 # $syslogfacility::                         Facility name to use when logging to syslog
-#                                           type:string
+#                                           type:Optional[String]
 #
 # $auth_template::                          Use a custom template for the auth
 #                                           configuration.
-#                                           type:string
+#                                           type:String
 #
 # $main_template::                          Use a custom template for the main puppet
 #                                           configuration.
-#                                           type:string
+#                                           type:String
 #
 # $use_srv_records::                        Whether DNS SRV records will be used to resolve
 #                                           the Puppet master
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $srv_domain::                             Search domain for SRV records
-#                                           type:string
+#                                           type:String
 #
 # $pluginsource::                           URL to retrieve Puppet plugins from during pluginsync
-#                                           type:string
+#                                           type:String
 #
 # $pluginfactsource::                       URL to retrieve Puppet facts from during pluginsync
-#                                           type:string
+#                                           type:String
 #
 # $additional_settings::                    A hash of additional main settings.
-#                                           type:hash
+#                                           type:Hash[String, Data]
 #
 # == puppet::agent parameters
 #
 # $agent::                                  Should a puppet agent be installed
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $agent_noop::                             Run the agent in noop mode.
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $agent_template::                         Use a custom template for the agent puppet
 #                                           configuration.
-#                                           type:string
+#                                           type:String
 #
 # $client_package::                         Install a custom package to provide
 #                                           the puppet client
-#                                           type:array
+#                                           type:Array[String]
 #
 # $puppetmaster::                           Hostname of your puppetmaster (server
 #                                           directive in puppet.conf)
-#                                           type:string
+#                                           type:Optional[String]
 #
 # $prerun_command::                         A command which gets excuted before each Puppet run
-#                                           type:string
+#                                           type:Optional[String]
 #
 # $postrun_command::                        A command which gets excuted after each Puppet run
-#                                           type:string
+#                                           type:Optional[String]
 #
 # $systemd_unit_name::                      The name of the puppet systemd units.
-#                                           type:string
+#                                           type:String
 #
 # $service_name::                           The name of the puppet agent service.
-#                                           type:string
+#                                           type:String
 #
 # $agent_restart_command::                  The command which gets excuted on puppet service restart
-#                                           type:string
+#                                           type:Optional[String]
 #
 # $environment::                            Default environment of the Puppet agent
-#                                           type:string
+#                                           type:String
 #
 # $agent_additional_settings::              A hash of additional agent settings.
 #                                           Example: {stringify_facts => true}
-#                                           type:hash
+#                                           type:Hash[String, Data]
 #
 # $remove_lock::                            Remove the agent lock when running.
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $client_certname::                        The node's certificate name, and the unique
 #                                           identifier it uses when requesting catalogs.
-#                                           type:string
+#                                           type:String
 #
 # $dir_owner::                              Owner of the base puppet directory, used when
 #                                           puppet::server is false.
-#                                           type:string
+#                                           type:String
 #
 # $dir_group::                              Group of the base puppet directory, used when
 #                                           puppet::server is false.
-#                                           type:string
+#                                           type:Optional[String]
 #
 # == puppet::server parameters
 #
 # $server::                                 Should a puppet master be installed as well as the client
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $server_user::                            Name of the puppetmaster user.
-#                                           type:string
+#                                           type:String
 #
 # $server_group::                           Name of the puppetmaster group.
-#                                           type:string
+#                                           type:String
 #
 # $server_dir::                             Puppet configuration directory
-#                                           type:string
+#                                           type:String
 #
 # $server_ip::                              Bind ip address of the puppetmaster
-#                                           type:string
+#                                           type:String
 #
 # $server_port::                            Puppet master port
-#                                           type:integer
+#                                           type:Integer
 #
 # $server_ca::                              Provide puppet CA
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $server_http::                            Should the puppet master listen on HTTP as well as HTTPS.
 #                                           Useful for load balancer or reverse proxy scenarios. Note that
 #                                           the HTTP puppet master denies access from all clients by default,
 #                                           allowed clients must be specified with $server_http_allow.
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $server_http_port::                       Puppet master HTTP port; defaults to 8139.
-#                                           type:integer
+#                                           type:Integer
 #
 # $server_http_allow::                      Array of allowed clients for the HTTP puppet master. Passed
 #                                           to Apache's 'Allow' directive.
-#                                           type:array
+#                                           type:Array[String]
 #
 # $server_reports::                         List of report types to include on the puppetmaster
-#                                           type:string
+#                                           type:String
 #
 # $server_implementation::                  Puppet master implementation, either "master" (traditional
 #                                           Ruby) or "puppetserver" (JVM-based)
-#                                           type:string
+#                                           type:Enum['master', 'puppetserver']
 #
 # $server_passenger::                       If set to true, we will configure apache with
 #                                           passenger. If set to false, we will enable the
@@ -292,123 +292,123 @@
 #                                           service_fallback is set to false. See 'Advanced
 #                                           server parameters' for more information.
 #                                           Only applicable when server_implementation is "master".
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $server_external_nodes::                  External nodes classifier executable
-#                                           type:string
+#                                           type:Stdlib::Absolutepath
 #
 # $server_template::                        Which template should be used for master
 #                                           configuration
-#                                           type:string
+#                                           type:String
 #
 # $server_main_template::                   Which template should be used for master
 #                                           related configuration in the [main] section
-#                                           type:string
+#                                           type:String
 #
 # $server_git_repo::                        Use git repository as a source of modules
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $server_dynamic_environments::            Use $environment in the modulepath
 #                                           Deprecated when $server_directory_environments is true,
 #                                           set $server_environments to [] instead.
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $server_directory_environments::          Enable directory environments, defaulting to true
 #                                           with Puppet 3.6.0 or higher
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $server_environments::                    Environments to setup (creates directories).
 #                                           Applies only when $server_dynamic_environments
 #                                           is false
-#                                           type:array
+#                                           type:Array[String]
 #
 # $server_environments_owner::              The owner of the environments directory
-#                                           type:string
+#                                           type:String
 #
 # $server_environments_group::              The group owning the environments directory
-#                                           type:string
+#                                           type:Optional[String]
 #
 # $server_environments_mode::               Environments directory mode.
-#                                           type:string
+#                                           type:Pattern[/^[0-9]{4}$/]
 #
 # $server_envs_dir::                        Directory that holds puppet environments
-#                                           type:string
+#                                           type:Stdlib::Absolutepath
 #
 # $server_envs_target::                     Indicates that $envs_dir should be
 #                                           a symbolic link to this target
-#                                           type:string
+#                                           type:Optional[Stdlib::Absolutepath]
 #
 # $server_common_modules_path::             Common modules paths (only when
 #                                           $server_git_repo_path and $server_dynamic_environments
 #                                           are false)
-#                                           type:array
+#                                           type:Array[Stdlib::Absolutepath]
 #
 # $server_git_repo_path::                   Git repository path
-#                                           type:string
+#                                           type:Stdlib::Absolutepath
 #
 # $server_git_repo_mode::                   Git repository mode
-#                                           type:string
+#                                           type:Pattern[/^[0-9]{4}$/]
 #
 # $server_git_repo_group::                  Git repository group
-#                                           type:string
+#                                           type:String
 #
 # $server_git_repo_user::                   Git repository user
-#                                           type:string
+#                                           type:String
 #
 # $server_git_branch_map::                  Git branch to puppet env mapping for the
 #                                           default post receive hook
-#                                           type:hash
+#                                           type:Hash[String, String]
 #
 # $server_post_hook_content::               Which template to use for git post hook
-#                                           type:string
+#                                           type:String
 #
 # $server_post_hook_name::                  Name of a git hook
-#                                           type:string
+#                                           type:String
 #
 # $server_storeconfigs_backend::            Do you use storeconfigs? (note: not required)
 #                                           false if you don't, "active_record" for 2.X
 #                                           style db, "puppetdb" for puppetdb
-#                                           type:string
+#                                           type:Variant[Undef, Boolean, Enum['active_record', 'puppetdb']]
 #
 # $server_app_root::                        Directory where the application lives
-#                                           type:string
+#                                           type:Stdlib::Absolutepath
 #
 # $server_ssl_dir::                         SSL directory
-#                                           type:string
+#                                           type:Stdlib::Absolutepath
 #
 # $server_package::                         Custom package name for puppet master
-#                                           type:string
+#                                           type:Optional[String]
 #
 # $server_version::                         Custom package version for puppet master
-#                                           type:string
+#                                           type:Optional[String]
 #
 # $server_certname::                        The name to use when handling certificates.
-#                                           type:string
+#                                           type:String
 #
 # $server_strict_variables::                if set to true, it will throw parse errors
 #                                           when accessing undeclared variables.
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $server_additional_settings::             A hash of additional settings.
 #                                           Example: {trusted_node_data => true, ordering => 'manifest'}
-#                                           type:hash
+#                                           type:Hash[String, Data]
 #
 # $server_rack_arguments::                  Arguments passed to rack app ARGV in addition to --confdir and
 #                                           --vardir.  The default is an empty array.
-#                                           type:array
+#                                           type:Array[String]
 #
 # $server_puppetdb_host::                   PuppetDB host
-#                                           type:string
+#                                           type:Optional[String]
 #
 # $server_puppetdb_port::                   PuppetDB port
-#                                           type:integer
+#                                           type:Integer[0, 65535]
 #
 # $server_puppetdb_swf::                    PuppetDB soft_write_failure
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $server_parser::                          Sets the parser to use. Valid options are 'current' or 'future'.
 #                                           Defaults to 'current'.
-#                                           type:string
+#                                           type:Enum['current', 'future']
 #
 # === Advanced server parameters:
 #
@@ -416,199 +416,199 @@
 #                                           on configuration changes. Defaults
 #                                           to 'httpd' based on the default
 #                                           apache module included with foreman-installer.
-#                                           type:string
+#                                           type:String
 #
 # $server_service_fallback::                If passenger is not used, do we want to fallback
 #                                           to using the puppetmaster service? Set to false
 #                                           if you disabled passenger and you do NOT want to
 #                                           use the puppetmaster service. Defaults to true.
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $server_passenger_min_instances::         The PassengerMinInstances parameter. Sets the
 #                                           minimum number of application processes to run.
 #                                           Defaults to the number of processors on your
 #                                           system.
-#                                           type:integer
+#                                           type:Integer[0]
 #
 # $server_passenger_pre_start::             Pre-start the first passenger worker instance
 #                                           process during httpd start.
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $server_passenger_ruby::                  The PassengerRuby parameter. Sets the Ruby
 #                                           interpreter for serving the puppetmaster
 #                                           rack application.
-#                                           type:string
+#                                           type:Optional[String]
 #
 # $server_config_version::                  How to determine the configuration version. When
 #                                           using git_repo, by default a git describe
 #                                           approach will be installed.
-#                                           type:string
+#                                           type:Optional[String]
 #
 # $server_foreman_facts::                   Should foreman receive facts from puppet
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $server_foreman::                         Should foreman integration be installed
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $server_foreman_url::                     Foreman URL
-#                                           type:string
+#                                           type:Stdlib::HTTPUrl
 #
 # $server_foreman_ssl_ca::                  SSL CA of the Foreman server
-#                                           type:string
+#                                           type:Optional[Stdlib::Absolutepath]
 #
 # $server_foreman_ssl_cert::                Client certificate for authenticating against Foreman server
-#                                           type:string
+#                                           type:Optional[Stdlib::Absolutepath]
 #
 # $server_foreman_ssl_key::                 Key for authenticating against Foreman server
-#                                           type:string
+#                                           type:Optional[Stdlib::Absolutepath]
 #
 # $server_puppet_basedir::                  Where is the puppet code base located
-#                                           type:string
+#                                           type:Optional[Stdlib::Absolutepath]
 #
 # $server_enc_api::                         What version of enc script to deploy. Valid
 #                                           values are 'v2' for latest, and 'v1'
 #                                           for Foreman =< 1.2
-#                                           type:string
+#                                           type:Enum['v2', 'v1']
 #
 # $server_report_api::                      What version of report processor to deploy.
 #                                           Valid values are 'v2' for latest, and 'v1'
 #                                           for Foreman =< 1.2
-#                                           type:string
+#                                           type:Enum['v2', 'v1']
 #
 # $server_request_timeout::                 Timeout in node.rb script for fetching
 #                                           catalog from Foreman (in seconds).
-#                                           type:integer
+#                                           type:Integer[0]
 #
 # $server_environment_timeout::             Timeout for cached compiled catalogs (10s, 5m, ...)
-#                                           type:string
+#                                           type:Variant[Undef, Enum['unlimited'], Pattern[/^\d+[smhdy]?$/]]
 #
 # $server_ca_proxy::                        The actual server that handles puppet CA.
 #                                           Setting this to anything non-empty causes
 #                                           the apache vhost to set up a proxy for all
 #                                           certificates pointing to the value.
-#                                           type:string
+#                                           type:Optional[String]
 #
 # $server_jvm_java_bin::                    Set the default java to use.
-#                                           type:string
+#                                           type:String
 #
 # $server_jvm_config::                      Specify the puppetserver jvm configuration file.
-#                                           type:string
+#                                           type:String
 #
 # $server_jvm_min_heap_size::               Specify the minimum jvm heap space.
-#                                           type:string
+#                                           type:String
 #
 # $server_jvm_max_heap_size::               Specify the maximum jvm heap space.
-#                                           type:string
+#                                           type:String
 #
 # $server_jvm_extra_args::                  Additional java options to pass through.
 #                                           This can be used for Java versions prior to
 #                                           Java 8 to specify the max perm space to use:
 #                                           For example: '-XX:MaxPermSpace=128m'.
-#                                           type:string
+#                                           type:String
 #
 # $server_jruby_gem_home::                  Where jruby gems are located for puppetserver
-#                                           type:string
+#                                           type:String
 #
 # $allow_any_crl_auth::                     Allow any authentication for the CRL. This
 #                                           is needed on the puppet CA to accept clients
 #                                           from a the puppet CA proxy.
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $auth_allowed::                           An array of authenticated nodes allowed to
 #                                           access all catalog and node endpoints.
 #                                           default to ['$1']
-#                                           type:array
+#                                           type:Array[String]
 #
 # $server_default_manifest::                Toggle if default_manifest setting should
 #                                           be added to the [main] section
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $server_default_manifest_path::           A string setting the path to the default_manifest
-#                                           type:string
+#                                           type:Stdlib::Absolutepath
 #
 # $server_default_manifest_content::        A string to set the content of the default_manifest
 #                                           If set to '' it will not manage the file
-#                                           type:string
+#                                           type:String
 #
 # $server_ssl_dir_manage::                  Toggle if ssl_dir should be added to the [master]
 #                                           configuration section. This is necessary to
 #                                           disable in case CA is delegated to a separate instance
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $server_puppetserver_vardir::             The path of the puppetserver var dir
-#                                           type:string
+#                                           type:Stdlib::Absolutepath
 #
 # $server_puppetserver_rundir::             The path of the puppetserver run dir
-#                                           type:string
+#                                           type:Optional[Stdlib::Absolutepath]
 #
 # $server_puppetserver_logdir::             The path of the puppetserver log dir
-#                                           type:string
+#                                           type:Optional[Stdlib::Absolutepath]
 #
 # $server_puppetserver_dir::                The path of the puppetserver config dir
-#                                           type:string
+#                                           type:Stdlib::Absolutepath
 #
 # $server_puppetserver_version::            The version of puppetserver 2 installed (or being installed)
 #                                           Unfortunately, different versions of puppetserver need configuring differently,
 #                                           and there's no easy way of determining which version is being installed.
 #                                           Defaults to '2.3.1' but can be overriden if you're installing an older version.
-#                                           type:string
+#                                           type:Pattern[/^[0-9\.]+$/]
 #
 # $server_max_active_instances::            Max number of active jruby instances. Defaults to
 #                                           processor count
-#                                           type:integer
+#                                           type:Integer[1]
 #
 # $server_max_requests_per_instance::       Max number of requests a jruby instances will handle. Defaults to 0 (disabled)
-#                                           type:integer
+#                                           type:Integer[0]
 #
 # $server_idle_timeout::                    How long the server will wait for a response on an existing connection
-#                                           type:integer
+#                                           type:Integer[0]
 #
 # $server_connect_timeout::                 How long the server will wait for a response to a connection attempt
-#                                           type:integer
+#                                           type:Integer[0]
 #
 # $server_ssl_protocols::                   Array of SSL protocols to use.
 #                                           Defaults to [ 'TLSv1.2' ]
-#                                           type:array
+#                                           type:Array[String]
 #
 # $server_cipher_suites::                   List of SSL ciphers to use in negotiation
 #                                           Defaults to [ 'TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA',
 #                                           'TLS_RSA_WITH_AES_128_CBC_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA', ]
-#                                           type:array
+#                                           type:Array[String]
 #
 # $server_ruby_load_paths::                 List of ruby paths
 #                                           Defaults based on $::puppetversion
-#                                           type:array
+#                                           type:Array[Stdlib::Absolutepath]
 #
 # $server_ca_client_whitelist::             The whitelist of client certificates that
 #                                           can query the certificate-status endpoint
 #                                           Defaults to [ '127.0.0.1', '::1', $::ipaddress ]
-#                                           type:array
+#                                           type:Array[String]
 #
 # $server_admin_api_whitelist::             The whitelist of clients that
 #                                           can query the puppet-admin-api endpoint
 #                                           Defaults to [ '127.0.0.1', '::1', $::ipaddress ]
-#                                           type:array
+#                                           type:Array[String]
 #
 # $server_enable_ruby_profiler::            Should the puppetserver ruby profiler be enabled?
 #                                           Defaults to false
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $server_ca_auth_required::                Whether client certificates are needed to access the puppet-admin api
 #                                           Defaults to true
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $server_use_legacy_auth_conf::            Should the puppetserver use the legacy puppet auth.conf?
 #                                           Defaults to false (the puppetserver will use its own conf.d/auth.conf)
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $server_check_for_updates::               Should the puppetserver phone home to check for available updates?
 #                                           Defaults to true
-#                                           type:boolean
+#                                           type:Boolean
 #
 # $server_environment_class_cache_enabled:: Enable environment class cache in conjunction with the use of the
 #                                           environment_classes API.
 #                                           Defaults to false
-#                                           type:boolean
+#                                           type:Boolean
 #
 # === Usage:
 #
