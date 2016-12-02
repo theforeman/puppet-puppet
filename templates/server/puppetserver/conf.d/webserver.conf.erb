@@ -10,8 +10,10 @@ webserver: {
     ssl-cert: <%= scope.lookupvar('puppet::server::ssl_cert') %>
     ssl-key: <%= scope.lookupvar('puppet::server::ssl_cert_key') %>
     ssl-ca-cert: <%= scope.lookupvar('puppet::server::ssl_ca_cert') %>
+<%- if scope.lookupvar('puppet::server::_crl_enable') -%>
+    ssl-crl-path: <%= scope.lookupvar('puppet::server::ssl_ca_crl') %>
+<%- end -%>
 <%- if scope.lookupvar('puppet::server::ca') -%>
     ssl-cert-chain: <%= scope.lookupvar('puppet::server::ssl_chain') %>
-    ssl-crl-path: <%= scope.lookupvar('puppet::server::ssl_ca_crl') %>
 <%- end -%>
 }

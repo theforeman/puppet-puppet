@@ -47,6 +47,17 @@
 # $ca::                        Provide puppet CA
 #                              type:boolean
 #
+# $ca_crl_filepath::           Path to ca_crl file
+#                              type:string
+#
+# $ca_crl_sync::               Sync the puppet ca crl to compile masters. Requires compile masters to
+#                              be agents of the CA master (MOM) defaults to false
+#                              type:boolean
+# 
+# $crl_enable::                Enable CRL processing, defaults to true when $ca is true else defaults
+#                              to false
+#                              type:boolean
+#
 # $http::                      Should the puppet master listen on HTTP as well as HTTPS.
 #                              Useful for load balancer or reverse proxy scenarios. Note that
 #                              the HTTP puppet master denies access from all clients by default,
@@ -384,6 +395,9 @@ class puppet::server(
   $port                            = $::puppet::server_port,
   $ip                              = $::puppet::server_ip,
   $ca                              = $::puppet::server_ca,
+  $ca_crl_filepath                 = $::puppet::ca_crl_filepath,
+  $ca_crl_sync                     = $::puppet::server_ca_crl_sync,
+  $crl_enable                      = $::puppet::server_crl_enable,
   $ca_auth_required                = $::puppet::server_ca_auth_required,
   $ca_client_whitelist             = $::puppet::server_ca_client_whitelist,
   $http                            = $::puppet::server_http,
@@ -553,13 +567,15 @@ class puppet::server(
   }
 
   if $ca {
-    $ssl_ca_cert   = "${ssl_dir}/ca/ca_crt.pem"
-    $ssl_ca_crl    = "${ssl_dir}/ca/ca_crl.pem"
-    $ssl_chain     = "${ssl_dir}/ca/ca_crt.pem"
+    $ssl_ca_cert = "${ssl_dir}/ca/ca_crt.pem"
+    $ssl_ca_crl  = "${ssl_dir}/ca/ca_crl.pem"
+    $ssl_chain   = "${ssl_dir}/ca/ca_crt.pem"
+    $_crl_enable = true
   } else {
     $ssl_ca_cert = "${ssl_dir}/certs/ca.pem"
-    $ssl_ca_crl  = false
+    $ssl_ca_crl  = pick($ca_crl_filepath, "${ssl_dir}/crl.pem")
     $ssl_chain   = false
+    $_crl_enable = pick($crl_enable, false)
   }
 
   $ssl_cert      = "${ssl_dir}/certs/${certname}.pem"

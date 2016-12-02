@@ -30,6 +30,8 @@ class puppet::params {
   $usecacheonfailure   = true
   $ca_server           = undef
   $ca_port             = undef
+  $ca_crl_filepath     = undef
+  $server_crl_enable   = undef
   $prerun_command      = undef
   $postrun_command     = undef
   $dns_alt_names       = []
@@ -227,6 +229,7 @@ class puppet::params {
   # Will this host be a puppetmaster?
   $server                     = false
   $server_ca                  = true
+  $server_ca_crl_sync         = false
   $server_reports             = 'foreman'
   $server_passenger           = true
   $server_service_fallback    = true

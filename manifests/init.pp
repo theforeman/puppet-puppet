@@ -155,6 +155,10 @@
 # $ca_port::                                Puppet CA port
 #                                           type:Optional[Integer[0, 65535]]
 #
+# $ca_crl_filepath::                        Path to CA CRL file, dynamically resolves based on
+#                                           $::server_ca status.
+#                                           type:Optional[String]
+#
 # $dns_alt_names::                          Use additional DNS names when generating a
 #                                           certificate.  Defaults to an empty Array.
 #                                           type:Array[String]
@@ -273,6 +277,15 @@
 #
 # $server_ca::                              Provide puppet CA
 #                                           type:Boolean
+#
+# $server_ca_crl_sync::                     Sync puppet CA crl file to compile masters, Puppet CA Must be the Puppetserver
+#                                           for the compile masters. Defaults to false.
+#                                           type:Boolean
+#
+# $server_crl_enable::                      Turn on crl checking. Defaults to true when server_ca is true. Otherwise
+#                                           Defaults to false. Note unless you are using an external CA. It is recommended
+#                                           to set this to true. See $server_ca_crl_sync to enable syncing from CA Puppet Master
+#                                           type:Optional[Boolean]
 #
 # $server_http::                            Should the puppet master listen on HTTP as well as HTTPS.
 #                                           Useful for load balancer or reverse proxy scenarios. Note that
@@ -675,6 +688,7 @@ class puppet (
   $configtimeout                          = $puppet::params::configtimeout,
   $ca_server                              = $puppet::params::ca_server,
   $ca_port                                = $puppet::params::ca_port,
+  $ca_crl_filepath                        = $puppet::params::ca_crl_filepath,
   $prerun_command                         = $puppet::params::prerun_command,
   $postrun_command                        = $puppet::params::postrun_command,
   $dns_alt_names                          = $puppet::params::dns_alt_names,
@@ -709,6 +723,8 @@ class puppet (
   $server_ip                              = $puppet::params::ip,
   $server_port                            = $puppet::params::port,
   $server_ca                              = $puppet::params::server_ca,
+  $server_ca_crl_sync                     = $puppet::params::server_ca_crl_sync,
+  $server_crl_enable                      = $puppet::params::server_crl_enable,
   $server_ca_auth_required                = $puppet::params::server_ca_auth_required,
   $server_ca_client_whitelist             = $puppet::params::server_ca_client_whitelist,
   $server_http                            = $puppet::params::server_http,
