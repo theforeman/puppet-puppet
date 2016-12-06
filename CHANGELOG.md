@@ -1,5 +1,43 @@
 # Changelog
 
+## 7.0.0
+* New or changed parameters:
+    * Add server_check_for_updates parameter to control update checking and
+      data collection
+    * Add server_environment_class_cache_enabled parameter to enable
+      environment caching
+    * Add server_max_requests_per_instance parameter to control number of
+      requests each Puppet Server JRuby instance handles
+    * Add server_puppetserver_rundir/vardir parameters
+    * Rename server_facts parameter to server_foreman_facts to prevent a name
+      clash with Puppet's trusted_server_facts (GH-440)
+* Other features:
+    * Add Puppet Server 2.7 support
+    * Add `puppet::config::*` resources to manage configuration entries using
+      concat files
+    * Move ENC config into puppet::server::enc, allowing discovery via exported
+      resources
+    * Support HTTP configuration of Puppet Server via existing server_http
+      parameter - this is open to all connections when enabled, and is not
+      configurable.
+    * Add Arch Linux agent support
+* Other changes and fixes:
+    * Change puppet.conf templates to use puppet::config resources
+    * Fix auth.conf paths to certificate_status API endpoints
+    * Fix initialisation of puppetmaster parameter with strict variables
+    * Fix differences in Puppet Server config files from defaults
+    * Fix ordering of Puppet CA generation to Foreman startup (#17133)
+    * Fix refreshing of Puppet master under Passenger when ENC configuration
+      is changed (#17062)
+    * Permit extlib 1.x
+    * Change parameter documentation to use Puppet 4 style typing
+    * Remove pre-Puppet 3.4 umask support
+* Compatibility warnings:
+    * Minimum version of Puppet 3.6.0 is required
+    * Drops support for Ruby 1.8.7
+    * Drop FreeBSD 9.x support
+    * server_facts parameter is now server_foreman_facts
+
 ## 6.0.1
 * Other features:
     * Permit access to environment_classes Puppet Server API
