@@ -85,12 +85,13 @@ class puppet::params {
       $sharedir                   = '/usr/local/share/puppet'
       $bindir                     = '/usr/local/bin'
       $root_group                 = undef
-      $server_puppetserver_dir    = undef
-      $server_puppetserver_vardir = '/var/puppet'
+      $server_puppetserver_dir    = '/usr/local/etc/puppetserver'
+      $server_puppetserver_vardir = '/var/puppet/server/data/puppetserver'
       $server_puppetserver_rundir = '/var/run/puppetserver'
       $server_puppetserver_logdir = '/var/log/puppetserver'
-      $server_ruby_load_paths     = []
-      $server_jruby_gem_home      = undef
+      $ruby_gem_dir               = regsubst($::rubyversion, '^(\d+\.\d+).*$', '/usr/local/lib/ruby/gems/\1/gems')
+      $server_ruby_load_paths     = [$::rubysitedir, "${ruby_gem_dir}/facter-${::facterversion}/lib"]
+      $server_jruby_gem_home      = '/var/puppet/server/data/puppetserver/jruby-gems'
     }
 
     'Archlinux' : {

@@ -43,7 +43,7 @@ describe 'puppet::server::config' do
         logdir              = '/var/log/puppet'
         rundir              = '/var/run/puppet'
         vardir              = '/var/puppet'
-        puppetserver_vardir = '/var/puppet'
+        puppetserver_vardir = '/var/puppet/server/data/puppetserver'
         ssldir              = '/var/puppet/ssl'
         sharedir            = '/usr/local/share/puppet'
         etcdir              = '/usr/local/etc/puppet'

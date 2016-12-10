@@ -3,7 +3,6 @@ require 'spec_helper'
 describe 'puppet::server::puppetserver' do
   on_os_under_test.each do |os, facts|
     next if facts[:osfamily] == 'windows'
-    next if facts[:osfamily] == 'FreeBSD'
     next if facts[:osfamily] == 'Archlinux'
     context "on #{os}" do
       let :pre_condition do
@@ -67,21 +66,31 @@ describe 'puppet::server::puppetserver' do
         it { should contain_file_line('ca_disabled'). with_ensure('absent') }
         it { should contain_file('/etc/custom/puppetserver/services.d').with_ensure('directory') }
         it { should contain_file('/etc/custom/puppetserver/services.d/ca.cfg') }
-        it { should contain_file('/opt/puppetlabs/server/apps/puppetserver/config').with_ensure('directory') }
-        it { should contain_file('/opt/puppetlabs/server/apps/puppetserver/config/services.d').with_ensure('directory') }
-        it { should contain_augeas('puppet::server::puppetserver::bootstrap').
-                with_changes('set BOOTSTRAP_CONFIG \'"/etc/custom/puppetserver/bootstrap.cfg,/etc/custom/puppetserver/services.d/,/opt/puppetlabs/server/apps/puppetserver/config/services.d/"\'')
-        }
-        it { should contain_augeas('puppet::server::puppetserver::jvm').
-                with_changes([
-                  'set JAVA_ARGS \'"-Xms2G -Xmx2G"\'',
-                  'set JAVA_BIN /usr/bin/java',
-                ]).
-                with_context('/files/etc/default/puppetserver').
-                with_incl('/etc/default/puppetserver').
-                with_lens('Shellvars.lns').
-                with({})
-        }
+        if  facts[:osfamily] == 'FreeBSD'
+          it { should contain_augeas('puppet::server::puppetserver::jvm').
+            with_changes([
+                           'set puppetserver_java_opts \'"-Xms2G -Xmx2G"\'',
+                         ]).
+            with_context('/files/etc/rc.conf').
+            with({})
+          }
+        else
+          it { should contain_file('/opt/puppetlabs/server/apps/puppetserver/config').with_ensure('directory') }
+          it { should contain_file('/opt/puppetlabs/server/apps/puppetserver/config/services.d').with_ensure('directory') }
+          it { should contain_augeas('puppet::server::puppetserver::bootstrap').
+                  with_changes('set BOOTSTRAP_CONFIG \'"/etc/custom/puppetserver/bootstrap.cfg,/etc/custom/puppetserver/services.d/,/opt/puppetlabs/server/apps/puppetserver/config/services.d/"\'')
+          }
+          it { should contain_augeas('puppet::server::puppetserver::jvm').
+                  with_changes([
+                    'set JAVA_ARGS \'"-Xms2G -Xmx2G"\'',
+                    'set JAVA_BIN /usr/bin/java',
+                  ]).
+                  with_context('/files/etc/default/puppetserver').
+                  with_incl('/etc/default/puppetserver').
+                  with_lens('Shellvars.lns').
+                  with({})
+          }
+        end
 
         it { should contain_file('/etc/custom/puppetserver/conf.d/ca.conf') }
         it { should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf') }
@@ -306,13 +315,15 @@ describe 'puppet::server::puppetserver' do
               with_line('puppetlabs.services.ca.certificate-authority-disabled-service/certificate-authority-disabled-service').
               that_requires('File[/etc/custom/puppetserver/bootstrap.cfg]')
           }
-          it { should contain_augeas('puppet::server::puppetserver::bootstrap').
-                  with_changes('set BOOTSTRAP_CONFIG \'"/etc/custom/puppetserver/bootstrap.cfg"\'').
-                  with_context('/files/etc/default/puppetserver').
-                  with_incl('/etc/default/puppetserver').
-                  with_lens('Shellvars.lns').
-                  with({})
-          }
+          unless facts[:osfamily] == 'FreeBSD'
+            it { should contain_augeas('puppet::server::puppetserver::bootstrap').
+                    with_changes('set BOOTSTRAP_CONFIG \'"/etc/custom/puppetserver/bootstrap.cfg"\'').
+                    with_context('/files/etc/default/puppetserver').
+                    with_incl('/etc/default/puppetserver').
+                    with_lens('Shellvars.lns').
+                    with({})
+            }
+          end
         end
       end
 
@@ -330,15 +341,17 @@ describe 'puppet::server::puppetserver' do
               with_content(%r{^puppetlabs.services.ca.certificate-authority-service/certificate-authority-service}).
               with_content(%r{^#puppetlabs.services.ca.certificate-authority-disabled-service/certificate-authority-disabled-service})
           }
-          it { should contain_file('/opt/puppetlabs/server/apps/puppetserver/config').with_ensure('directory') }
-          it { should contain_file('/opt/puppetlabs/server/apps/puppetserver/config/services.d').with_ensure('directory') }
-          it { should contain_augeas('puppet::server::puppetserver::bootstrap').
-                  with_changes('set BOOTSTRAP_CONFIG \'"/etc/custom/puppetserver/services.d/,/opt/puppetlabs/server/apps/puppetserver/config/services.d/"\'').
-                  with_context('/files/etc/default/puppetserver').
-                  with_incl('/etc/default/puppetserver').
-                  with_lens('Shellvars.lns').
-                  with({})
-          }
+          unless facts[:osfamily] == 'FreeBSD'
+            it { should contain_file('/opt/puppetlabs/server/apps/puppetserver/config').with_ensure('directory') }
+            it { should contain_file('/opt/puppetlabs/server/apps/puppetserver/config/services.d').with_ensure('directory') }
+            it { should contain_augeas('puppet::server::puppetserver::bootstrap').
+                    with_changes('set BOOTSTRAP_CONFIG \'"/etc/custom/puppetserver/services.d/,/opt/puppetlabs/server/apps/puppetserver/config/services.d/"\'').
+                    with_context('/files/etc/default/puppetserver').
+                    with_incl('/etc/default/puppetserver').
+                    with_lens('Shellvars.lns').
+                    with({})
+            }
+          end
         end
 
         context 'when server_puppetserver_version >= 2.5 and server_ca => false' do
@@ -508,17 +521,26 @@ describe 'puppet::server::puppetserver' do
             :jvm_extra_args => ['-XX:foo=bar', '-XX:bar=foo'],
           })
         end
-
-        it { should contain_augeas('puppet::server::puppetserver::jvm').
-                with_changes([
-                  'set JAVA_ARGS \'"-Xms2G -Xmx2G -XX:foo=bar -XX:bar=foo"\'',
-                  'set JAVA_BIN /usr/bin/java',
-                ]).
-                with_context('/files/etc/default/puppetserver').
-                with_incl('/etc/default/puppetserver').
-                with_lens('Shellvars.lns').
-                with({})
-        }
+        if facts[:osfamily] == 'FreeBSD'
+          it { should contain_augeas('puppet::server::puppetserver::jvm').
+            with_changes([
+                           'set puppetserver_java_opts \'"-Xms2G -Xmx2G -XX:foo=bar -XX:bar=foo"\'',
+                         ]).
+            with_context('/files/etc/rc.conf').
+            with({})
+          }
+        else
+          it { should contain_augeas('puppet::server::puppetserver::jvm').
+                  with_changes([
+                    'set JAVA_ARGS \'"-Xms2G -Xmx2G -XX:foo=bar -XX:bar=foo"\'',
+                    'set JAVA_BIN /usr/bin/java',
+                  ]).
+                  with_context('/files/etc/default/puppetserver').
+                  with_incl('/etc/default/puppetserver').
+                  with_lens('Shellvars.lns').
+                  with({})
+          }
+        end
       end
 
       describe 'with jvm_config file parameter' do
@@ -526,12 +548,19 @@ describe 'puppet::server::puppetserver' do
             :config => '/etc/custom/puppetserver',
           })
         end
-        it { should contain_augeas('puppet::server::puppetserver::jvm').
-                with_context('/files/etc/custom/puppetserver').
-                with_incl('/etc/custom/puppetserver').
-                with_lens('Shellvars.lns').
-                with({})
-        }
+        if facts[:osfamily] == 'FreeBSD'
+          it { should contain_augeas('puppet::server::puppetserver::jvm').
+            with_context('/files/etc/rc.conf').
+            with({})
+          }
+        else
+          it { should contain_augeas('puppet::server::puppetserver::jvm').
+                  with_context('/files/etc/custom/puppetserver').
+                  with_incl('/etc/custom/puppetserver').
+                  with_lens('Shellvars.lns').
+                  with({})
+          }
+        end
       end
 
       describe 'with server_ip parameter given to the puppet class' do

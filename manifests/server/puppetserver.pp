@@ -97,28 +97,36 @@ class puppet::server::puppetserver (
   $jvm_cmd_arr = ["-Xms${jvm_min_heap_size}", "-Xmx${jvm_max_heap_size}", $jvm_extra_args]
   $jvm_cmd = strip(join(flatten($jvm_cmd_arr),' '))
 
-  augeas { 'puppet::server::puppetserver::jvm':
-    lens    => 'Shellvars.lns',
-    incl    => $config,
-    context => "/files${config}",
-    changes => [
-      "set JAVA_ARGS '\"${jvm_cmd}\"'",
-      "set JAVA_BIN ${java_bin}",
-    ],
-  }
+  if $::osfamily == 'FreeBSD' {
+    augeas { 'puppet::server::puppetserver::jvm':
+      context => '/files/etc/rc.conf',
+      changes => [ "set puppetserver_java_opts '\"${jvm_cmd}\"'" ],
+    }
+  } else {
+    augeas { 'puppet::server::puppetserver::jvm':
+      lens    => 'Shellvars.lns',
+      incl    => $config,
+      context => "/files${config}",
+      changes => [
+        "set JAVA_ARGS '\"${jvm_cmd}\"'",
+        "set JAVA_BIN ${java_bin}",
+      ],
+    }
 
-  if versioncmp($server_puppetserver_version, '2.4.99') == 0 {
-    $bootstrap_paths = "${server_puppetserver_dir}/bootstrap.cfg,${server_puppetserver_dir}/services.d/,/opt/puppetlabs/server/apps/puppetserver/config/services.d/"
-  } elsif versioncmp($server_puppetserver_version, '2.5') >= 0 {
-    $bootstrap_paths = "${server_puppetserver_dir}/services.d/,/opt/puppetlabs/server/apps/puppetserver/config/services.d/"
-  } else {  # 2.4
-    $bootstrap_paths = "${server_puppetserver_dir}/bootstrap.cfg"
-  }
-  augeas { 'puppet::server::puppetserver::bootstrap':
-    lens    => 'Shellvars.lns',
-    incl    => $config,
-    context => "/files${config}",
-    changes => "set BOOTSTRAP_CONFIG '\"${bootstrap_paths}\"'",
+    if versioncmp($server_puppetserver_version, '2.4.99') == 0 {
+      $bootstrap_paths = "${server_puppetserver_dir}/bootstrap.cfg,${server_puppetserver_dir}/services.d/,/opt/puppetlabs/server/apps/puppetserver/config/services.d/"
+    } elsif versioncmp($server_puppetserver_version, '2.5') >= 0 {
+      $bootstrap_paths = "${server_puppetserver_dir}/services.d/,/opt/puppetlabs/server/apps/puppetserver/config/services.d/"
+    } else { # 2.4
+      $bootstrap_paths = "${server_puppetserver_dir}/bootstrap.cfg"
+    }
+
+    augeas { 'puppet::server::puppetserver::bootstrap':
+      lens    => 'Shellvars.lns',
+      incl    => $config,
+      context => "/files${config}",
+      changes => "set BOOTSTRAP_CONFIG '\"${bootstrap_paths}\"'",
+    }
   }
 
   # 2.4.99 configures for both 2.4 and 2.5 making upgrades and new installations easier when the
@@ -133,11 +141,13 @@ class puppet::server::puppetserver (
       content => template('puppet/server/puppetserver/services.d/ca.cfg.erb'),
     }
 
-    file { '/opt/puppetlabs/server/apps/puppetserver/config':
-      ensure => directory,
-    }
-    file { '/opt/puppetlabs/server/apps/puppetserver/config/services.d':
-      ensure => directory,
+    unless $::osfamily == 'FreeBSD' {
+      file { '/opt/puppetlabs/server/apps/puppetserver/config':
+        ensure => directory,
+      }
+      file { '/opt/puppetlabs/server/apps/puppetserver/config/services.d':
+        ensure => directory,
+      }
     }
   }
 
