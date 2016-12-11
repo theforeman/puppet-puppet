@@ -25,6 +25,9 @@
 # * `server_puppetserver_dir`
 # Puppetserver config directory
 #
+# * `server_puppetserver_vardir`
+# Puppetserver var directory
+#
 # * `server_jruby_gem_home`
 # Puppetserver jruby gemhome
 #
@@ -36,6 +39,9 @@
 #
 # * `server_max_active_instances`
 # Puppetserver number of max jruby instances
+#
+# * `server_max_requests_per_instance`
+# Puppetserver number of max requests per jruby instance
 #
 # === Example
 #
@@ -49,29 +55,42 @@
 #   }
 #
 class puppet::server::puppetserver (
-  $java_bin                    = $::puppet::server::jvm_java_bin,
-  $config                      = $::puppet::server::jvm_config,
-  $jvm_min_heap_size           = $::puppet::server::jvm_min_heap_size,
-  $jvm_max_heap_size           = $::puppet::server::jvm_max_heap_size,
-  $jvm_extra_args              = $::puppet::server::jvm_extra_args,
-  $server_puppetserver_dir     = $::puppet::server::puppetserver_dir,
-  $server_jruby_gem_home       = $::puppet::server::jruby_gem_home,
-  $server_ruby_load_paths      = $::puppet::server::ruby_load_paths,
-  $server_cipher_suites        = $::puppet::server::cipher_suites,
-  $server_max_active_instances = $::puppet::server::max_active_instances,
-  $server_ssl_protocols        = $::puppet::server::ssl_protocols,
-  $server_ca                   = $::puppet::server::ca,
-  $server_dir                  = $::puppet::server::dir,
-  $server_idle_timeout         = $::puppet::server::idle_timeout,
-  $server_connect_timeout      = $::puppet::server::connect_timeout,
-  $server_enable_ruby_profiler = $::puppet::server::enable_ruby_profiler,
-  $vardir                      = $::puppet::vardir,
-  $server_ca_client_whitelist  = $::puppet::server::ca_client_whitelist,
-  $server_admin_api_whitelist  = $::puppet::server::admin_api_whitelist,
-  $server_puppetserver_version = $::puppet::server::puppetserver_version,
-  $server_use_legacy_auth_conf = $::puppet::server::use_legacy_auth_conf,
+  $config                                 = $::puppet::server::jvm_config,
+  $java_bin                               = $::puppet::server::jvm_java_bin,
+  $jvm_extra_args                         = $::puppet::server::jvm_extra_args,
+  $jvm_min_heap_size                      = $::puppet::server::jvm_min_heap_size,
+  $jvm_max_heap_size                      = $::puppet::server::jvm_max_heap_size,
+  $server_puppetserver_dir                = $::puppet::server::puppetserver_dir,
+  $server_puppetserver_vardir             = $::puppet::server::puppetserver_vardir,
+  $server_puppetserver_rundir             = $::puppet::server::puppetserver_rundir,
+  $server_puppetserver_logdir             = $::puppet::server::puppetserver_logdir,
+  $server_jruby_gem_home                  = $::puppet::server::jruby_gem_home,
+  $server_ruby_load_paths                 = $::puppet::server::ruby_load_paths,
+  $server_cipher_suites                   = $::puppet::server::cipher_suites,
+  $server_max_active_instances            = $::puppet::server::max_active_instances,
+  $server_max_requests_per_instance       = $::puppet::server::max_requests_per_instance,
+  $server_ssl_protocols                   = $::puppet::server::ssl_protocols,
+  $server_http                            = $::puppet::server::http,
+  $server_http_allow                      = $::puppet::server::http_allow,
+  $server_ca                              = $::puppet::server::ca,
+  $server_dir                             = $::puppet::server::dir,
+  $codedir                                = $::puppet::server::codedir,
+  $server_idle_timeout                    = $::puppet::server::idle_timeout,
+  $server_connect_timeout                 = $::puppet::server::connect_timeout,
+  $server_enable_ruby_profiler            = $::puppet::server::enable_ruby_profiler,
+  $server_ca_auth_required                = $::puppet::server::ca_auth_required,
+  $server_ca_client_whitelist             = $::puppet::server::ca_client_whitelist,
+  $server_admin_api_whitelist             = $::puppet::server::admin_api_whitelist,
+  $server_puppetserver_version            = $::puppet::server::puppetserver_version,
+  $server_use_legacy_auth_conf            = $::puppet::server::use_legacy_auth_conf,
+  $server_check_for_updates               = $::puppet::server::check_for_updates,
+  $server_environment_class_cache_enabled = $::puppet::server::environment_class_cache_enabled,
 ) {
   include ::puppet::server
+
+  if !(empty($server_http_allow)) {
+    fail('setting $server_http_allow is not supported for puppetserver as it would have no effect')
+  }
 
   $puppetserver_package = pick($::puppet::server::package, 'puppetserver')
 
@@ -166,8 +185,14 @@ class puppet::server::puppetserver (
     }
   }
 
+  if versioncmp($server_puppetserver_version, '2.2') < 0 {
+    $ca_conf_ensure = file
+  } else {
+    $ca_conf_ensure = absent
+  }
+
   file { "${server_puppetserver_dir}/conf.d/ca.conf":
-    ensure  => file,
+    ensure  => $ca_conf_ensure,
     content => template('puppet/server/puppetserver/conf.d/ca.conf.erb'),
   }
 
@@ -189,5 +214,16 @@ class puppet::server::puppetserver (
   file { "${server_puppetserver_dir}/conf.d/auth.conf":
     ensure  => file,
     content => template('puppet/server/puppetserver/conf.d/auth.conf.erb'),
+  }
+
+  if versioncmp($server_puppetserver_version, '2.7') >= 0 {
+    $product_conf_ensure = file
+  } else {
+    $product_conf_ensure = absent
+  }
+
+  file { "${server_puppetserver_dir}/conf.d/product.conf":
+    ensure  => $product_conf_ensure,
+    content => template('puppet/server/puppetserver/conf.d/product.conf.erb'),
   }
 }

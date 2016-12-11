@@ -19,26 +19,13 @@ class puppet::server::passenger (
   $http                    = $::puppet::server::http,
   $http_port               = $::puppet::server::http_port,
   $http_allow              = $::puppet::server::http_allow,
+  $confdir                 = $::puppet::server::dir,
+  $rack_arguments          = $::puppet::server::rack_arguments,
+  $vardir                  = $::puppet::vardir,
 ) {
   include ::apache
   include ::apache::mod::passenger
-
-  class { '::puppet::server::rack':
-    app_root => $app_root,
-    user     => $user,
-  }
-
-  case $::operatingsystem {
-    'Debian', 'Ubuntu': {
-      file { '/etc/default/puppetmaster':
-        content => "START=no\n",
-        before  => Class['puppet::server::install'],
-      }
-    }
-    default: {
-      # nothing to do
-    }
-  }
+  contain 'puppet::server::rack' # lint:ignore:relative_classname_inclusion (PUP-1597)
 
   $directory = {
     'path'              => "${app_root}/public/",
@@ -133,6 +120,7 @@ class puppet::server::passenger (
       docroot                 => "${app_root}/public/",
       directories             => $directories_http,
       port                    => $http_port,
+      ssl_proxyengine         => $ssl_proxyengine,
       custom_fragment         => join([
           $custom_fragment ? {
             undef   => '',

@@ -8,24 +8,71 @@ jruby-puppet: {
         <%= ruby_load_path %>,
     <%- end -%>
     ]
-<%- end %>
-    # This setting determines where JRuby will look for gems.  It is also
-    # used by the `puppetserver gem` command line tool.
+<%- end -%>
+
+    # This setting determines where JRuby will install gems.  It is used for loading gems,
+    # and also by the `puppetserver gem` command line tool.
     gem-home: <%= @server_jruby_gem_home %>
 
-    # (optional) path to puppet conf dir; if not specified, will use the puppet default
+<%- if scope.function_versioncmp([@server_puppetserver_version, '2.7']) >= 0 -%>
+    # This setting defines the complete "GEM_PATH" for jruby.  If set, it should include
+    # the gem-home directory as well as any other directories that gems can be loaded
+    # from (including the vendored gems directory for gems that ship with puppetserver)
+    gem-path: [${jruby-puppet.gem-home}, "/opt/puppetlabs/server/data/puppetserver/vendored-jruby-gems"]
+
+<%- end -%>
+    # PLEASE NOTE: Use caution when modifying the below settings. Modifying
+    # these settings will change the value of the corresponding Puppet settings
+    # for Puppet Server, but not for the Puppet CLI tools. This likely will not
+    # be a problem with master-var-dir, master-run-dir, or master-log-dir unless
+    # some critical setting in puppet.conf is interpolating the value of one
+    # of the corresponding settings, but it is important that any changes made to
+    # master-conf-dir and master-code-dir are also made to the corresponding Puppet
+    # settings when running the Puppet CLI tools. See
+    # https://docs.puppetlabs.com/puppetserver/latest/puppet_conf_setting_diffs.html#overriding-puppet-settings-in-puppet-server
+    # for more information.
+
+    # (optional) path to puppet conf dir; if not specified, will use
+    # the puppet default
     master-conf-dir: <%= @server_dir %>
 
-    # (optional) path to puppet var dir; if not specified, will use the puppet default
-    master-var-dir: <%= @vardir %>
+<%- if scope.function_versioncmp([@server_puppetserver_version, '2.1']) >= 0 -%>
+    # (optional) path to puppet code dir; if not specified, will use
+    # the puppet default
+    master-code-dir: <%= @codedir %>
 
+<%- end -%>
+    # (optional) path to puppet var dir; if not specified, will use
+    # the puppet default
+    master-var-dir: <%= @server_puppetserver_vardir %>
+
+<%- if scope.function_versioncmp([@server_puppetserver_version, '2.1']) >= 0 -%>
+    # (optional) path to puppet run dir; if not specified, will use
+    # the puppet default
+    master-run-dir: <%= @server_puppetserver_rundir %>
+
+    # (optional) path to puppet log dir; if not specified, will use
+    # the puppet default
+    master-log-dir: <%= @server_puppetserver_logdir %>
+
+<%- end -%>
     # (optional) maximum number of JRuby instances to allow
     max-active-instances: <%= @server_max_active_instances %>
 
+    # (optional) the number of HTTP requests a given JRuby instance will handle in its lifetime.
+    max-requests-per-instance: <%= @server_max_requests_per_instance %>
 <%- if scope.function_versioncmp([@server_puppetserver_version, '2.2']) >= 0 -%>
-    use-legacy-auth-conf: <%= @server_use_legacy_auth_conf %>
-<%- end %>
 
+    # (optional) Authorize access to Puppet master endpoints via rules specified
+    # in the legacy Puppet auth.conf file (if true or not specified) or via rules
+    # specified in the Puppet Server HOCON-formatted auth.conf (if false).
+    use-legacy-auth-conf: <%= @server_use_legacy_auth_conf %>
+<%- end -%>
+<%- if scope.function_versioncmp([@server_puppetserver_version, '2.3']) >= 0 -%>
+
+    # (optional) enable or disable environment class cache
+    environment-class-cache-enabled: <%= @server_environment_class_cache_enabled %>
+<%- end -%>
 }
 
 # settings related to HTTP client requests made by Puppet Server
@@ -63,6 +110,7 @@ profiler: {
     # enable or disable profiling for the Ruby code; defaults to 'false'.
     enabled: <%= @server_enable_ruby_profiler %>
 }
+<%- if scope.function_versioncmp([@server_puppetserver_version, '2.2']) < 0 -%>
 
 # Settings related to the puppet-admin HTTP API
 puppet-admin: {
@@ -72,3 +120,4 @@ puppet-admin: {
     <%- end -%>
     ]
 }
+<%- end -%>

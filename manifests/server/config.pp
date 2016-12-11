@@ -1,15 +1,11 @@
 # Set up the puppet server config
 class puppet::server::config inherits puppet::config {
   if $::puppet::server::passenger and $::puppet::server::implementation == 'master' {
-    # Anchor the passenger config inside this
-    class { '::puppet::server::passenger': } -> Class['puppet::server::config']
+    contain 'puppet::server::passenger' # lint:ignore:relative_classname_inclusion (PUP-1597)
   }
 
   if $::puppet::server::implementation == 'puppetserver' {
-    include ::puppet::server::puppetserver
-    anchor {'::puppet::server::puppetserver_start': } ->
-    Class['::puppet::server::puppetserver'] ~>
-    anchor {'::puppet::server::puppetserver_end': }
+    contain 'puppet::server::puppetserver' # lint:ignore:relative_classname_inclusion (PUP-1597)
   }
 
   # Mirror the relationship, as defined() is parse-order dependent
@@ -17,6 +13,11 @@ class puppet::server::config inherits puppet::config {
   if defined(Class['foreman_proxy::config']) and $foreman_proxy::ssl {
     Class['puppet::server::config'] ~> Class['foreman_proxy::config']
     Class['puppet::server::config'] ~> Class['foreman_proxy::service']
+  }
+
+  # And before Foreman's cert-using service needs it
+  if defined(Class['foreman::service']) and $foreman::ssl {
+    Class['puppet::server::config'] -> Class['foreman::service']
   }
 
   ## General configuration
@@ -27,22 +28,83 @@ class puppet::server::config inherits puppet::config {
   $server_environment_timeout  = $::puppet::server::environment_timeout
 
   if $server_external_nodes and $server_external_nodes != '' {
-    $server_node_terminus = 'exec'
-  } else {
-    $server_node_terminus = 'plain'
+    class{ '::puppet::server::enc':
+      enc_path => $server_external_nodes,
+    }
   }
 
-  concat::fragment { 'puppet.conf+30-master':
-    target  => "${::puppet::dir}/puppet.conf",
-    content => template($::puppet::server::template),
-    order   => '30',
-  }
-  concat::fragment { 'puppet.conf+15-main-master':
-    target  => "${::puppet::dir}/puppet.conf",
-    content => template($::puppet::server::main_template),
-    order   => '15',
+  $autosign = is_bool($::puppet::server::autosign)? {
+    true  => $::puppet::server::autosign,
+    false => "${::puppet::server::autosign} { mode = ${::puppet::server::autosign_mode} }"
   }
 
+  puppet::config::main {
+    'reports':            value => $::puppet::server::reports;
+  }
+  if $::puppet::server::hiera_config and !empty($::puppet::server::hiera_config){
+    puppet::config::main {
+      'hiera_config':       value => $::puppet::server::hiera_config;
+    }
+  }
+  if $puppet::server::directory_environments {
+    puppet::config::main {
+      'environmentpath':  value => $puppet::server::envs_dir;
+    }
+  }
+  if $puppet::server::common_modules_path and !empty($puppet::server::common_modules_path) {
+    puppet::config::main {
+      'basemodulepath':   value => $puppet::server::common_modules_path, joiner => ':';
+    }
+  }
+  if $puppet::server::default_manifest {
+    puppet::config::main {
+      'default_manifest': value => $puppet::server::default_manifest_path;
+    }
+  }
+
+  puppet::config::master {
+    'autosign':           value => $autosign;
+    'ca':                 value => $::puppet::server::ca;
+    'certname':           value => $::puppet::server::certname;
+    'parser':             value => $::puppet::server::parser;
+    'strict_variables':   value => $::puppet::server::strict_variables;
+  }
+  if $::puppet::server::ssl_dir_manage {
+    puppet::config::master {
+      'ssldir':           value => $::puppet::server::ssl_dir;
+    }
+  }
+  if $server_environment_timeout {
+    puppet::config::master {
+      'environment_timeout':  value => $server_environment_timeout;
+    }
+  }
+  if $server_storeconfigs_backend {
+    puppet::config::master {
+      'storeconfigs':         value => true;
+      'storeconfigs_backend': value => $server_storeconfigs_backend;
+    }
+  }
+  if !$::puppet::server::directory_environments  and
+    ( $::puppet::server::git_repo or $::puppet::server::dynamic_environments ) {
+    puppet::config::master {
+      'manifest':   value => "${::puppet::server::envs_dir}/\$environment/manifests/site.pp";
+      'modulepath': value => "${::puppet::server::envs_dir}/\$environment/modules";
+    }
+    if $::puppet::server::config_version_cmd {
+      puppet::config::master {
+        'config_version': value => $::puppet::server::config_version_cmd;
+      }
+    }
+  }
+
+  # we need to store this in a variable, because older puppet doesn't
+  # like resource{function(): ... }
+  $additional_settings_keys = keys($::puppet::server_additional_settings)
+  puppet::config::additional_settings{ $additional_settings_keys:
+    hash     => $::puppet::server_additional_settings,
+    resource => '::puppet::config::master',
+  }
 
   file { "${puppet::vardir}/reports":
     ensure => directory,
@@ -67,42 +129,23 @@ class puppet::server::config inherits puppet::config {
     mode  => '0640',
   }
 
-  # 3.4.0+ supports umask
-  if versioncmp($::puppetversion, '3.4.0') >= 0 {
-    # If the ssl dir is not the default dir, it needs to be created before running
-    # the generate ca cert or it will fail.
-    exec {'puppet_server_config-create_ssl_dir':
-      creates => $::puppet::server::ssl_dir,
-      command => "/bin/mkdir -p ${::puppet::server::ssl_dir}",
+  # If the ssl dir is not the default dir, it needs to be created before running
+  # the generate ca cert or it will fail.
+  exec {'puppet_server_config-create_ssl_dir':
+    creates => $::puppet::server::ssl_dir,
+    command => "/bin/mkdir -p ${::puppet::server::ssl_dir}",
+    umask   => '0022',
+  }
+
+  # Generate a new CA and host cert if our host cert doesn't exist
+  if $::puppet::server::ca {
+    exec {'puppet_server_config-generate_ca_cert':
+      creates => $::puppet::server::ssl_cert,
+      command => "${::puppet::puppetca_cmd} --generate ${::puppet::server::certname}",
       umask   => '0022',
-    }
-
-    # Generate a new CA and host cert if our host cert doesn't exist
-    if $::puppet::server::ca {
-      exec {'puppet_server_config-generate_ca_cert':
-        creates => $::puppet::server::ssl_cert,
-        command => "${::puppet::puppetca_cmd} --generate ${::puppet::server::certname}",
-        umask   => '0022',
-        require => [Concat["${::puppet::server::dir}/puppet.conf"],
-                    Exec['puppet_server_config-create_ssl_dir'],
-                    ],
-      }
-    }
-  } else {
-    # Copy of above without umask for pre-3.4
-    exec {'puppet_server_config-create_ssl_dir':
-      creates => $::puppet::server::ssl_dir,
-      command => "/bin/mkdir -p ${::puppet::server::ssl_dir}",
-    }
-
-    if $::puppet::server::ca {
-      exec {'puppet_server_config-generate_ca_cert':
-        creates => $::puppet::server::ssl_cert,
-        command => "${::puppet::puppetca_cmd} --generate ${::puppet::server::certname}",
-        require => [Concat["${::puppet::server::dir}/puppet.conf"],
-                    Exec['puppet_server_config-create_ssl_dir'],
-                    ],
-      }
+      require => [Concat["${::puppet::server::dir}/puppet.conf"],
+                  Exec['puppet_server_config-create_ssl_dir'],
+                  ],
     }
   }
 
@@ -129,6 +172,11 @@ class puppet::server::config inherits puppet::config {
         mode   => $puppet::autosign_mode,
       }
     }
+    if !empty($puppet::autosign_entries) {
+      File[$puppet::autosign] {
+        content => template('puppet/server/autosign.conf.erb'),
+      }
+    }
   }
 
   # only manage this file if we provide content
@@ -144,11 +192,19 @@ class puppet::server::config inherits puppet::config {
 
   ## Environments
   # location where our puppet environments are located
+  if $::puppet::server::envs_target and $::puppet::server::envs_target != '' {
+    $ensure = 'link'
+  } else {
+    $ensure = 'directory'
+  }
+
   file { $::puppet::server::envs_dir:
-    ensure => directory,
+    ensure => $ensure,
     owner  => $::puppet::server::environments_owner,
     group  => $::puppet::server::environments_group,
     mode   => $::puppet::server::environments_mode,
+    target => $::puppet::server::envs_target,
+    force  => true,
   }
 
   if $::puppet::server::git_repo {
@@ -202,8 +258,8 @@ class puppet::server::config inherits puppet::config {
     anchor { 'puppet::server::config_start': } ->
     class {'::foreman::puppetmaster':
       foreman_url    => $::puppet::server::foreman_url,
-      receive_facts  => $::puppet::server::server_facts,
-      puppet_home    => $puppet::vardir,
+      receive_facts  => $::puppet::server::server_foreman_facts,
+      puppet_home    => $::puppet::server::puppetserver_vardir,
       puppet_basedir => $::puppet::server::puppet_basedir,
       puppet_etcdir  => $puppet::dir,
       enc_api        => $::puppet::server::enc_api,

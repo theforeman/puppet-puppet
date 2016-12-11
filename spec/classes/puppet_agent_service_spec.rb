@@ -1,18 +1,8 @@
 require 'spec_helper'
 
 describe 'puppet::agent::service' do
-  on_supported_os.each do |os, os_facts|
-    next if only_test_os() and not only_test_os.include?(os)
-    next if exclude_test_os() and exclude_test_os.include?(os)
+  on_os_under_test.each do |os, facts|
     context "on #{os}" do
-      let (:default_facts) do
-        os_facts.merge({
-          :clientcert     => 'puppetmaster.example.com',
-          :concat_basedir => '/nonexistant',
-          :fqdn           => 'puppetmaster.example.com',
-          :puppetversion  => Puppet.version,
-      }) end
-
       if Puppet.version < '4.0'
         confdir = '/etc/puppet'
         additional_facts = {}
@@ -21,12 +11,12 @@ describe 'puppet::agent::service' do
         additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
       end
 
-      if os_facts[:osfamily] == 'FreeBSD'
+      if facts[:osfamily] == 'FreeBSD'
         confdir = '/usr/local/etc/puppet'
       end
 
       let :facts do
-        default_facts.merge(additional_facts)
+        facts.merge(additional_facts)
       end
 
       describe 'with no custom parameters' do
@@ -39,7 +29,7 @@ describe 'puppet::agent::service' do
           should contain_class('puppet::agent::service::cron').with(:enabled => false)
         end
         case os
-        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-16/
+        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-16/, /\Aarchlinux-/
           it do
             should contain_class('puppet::agent::service::systemd').with(:enabled => false)
             should contain_service('puppet-run.timer').with(:ensure => :stopped)
@@ -57,9 +47,9 @@ describe 'puppet::agent::service' do
           "class {'puppet': agent => true, runmode => 'cron'}"
         end
         case os
-        when /\Awindows/
+        when /\A(windows|archlinux)/
           it do
-            should raise_error(Puppet::Error, /Runmode of cron not supported on #{os_facts[:kernel]} operating systems!/)
+            should raise_error(Puppet::Error, /Runmode of cron not supported on #{facts[:kernel]} operating systems!/)
           end
         when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-16/
           it do
@@ -83,7 +73,7 @@ describe 'puppet::agent::service' do
           "class {'puppet': agent => true, runmode => 'systemd.timer'}"
         end
         case os
-        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-16/
+        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-16/, /\Aarchlinux-/
           it do
             should contain_class('puppet::agent::service::daemon').with(:enabled => false)
             should contain_class('puppet::agent::service::cron').with(:enabled => false)
@@ -91,7 +81,7 @@ describe 'puppet::agent::service' do
             should contain_service('puppet-run.timer').with(:ensure => :running)
           end
         else
-          it { should raise_error(Puppet::Error, /Runmode of systemd.timer not supported on #{os_facts[:kernel]} operating systems!/) }
+          it { should raise_error(Puppet::Error, /Runmode of systemd.timer not supported on #{facts[:kernel]} operating systems!/) }
         end
       end
 
@@ -115,7 +105,7 @@ describe 'puppet::agent::service' do
           should contain_class('puppet::agent::service::cron').with(:enabled => false)
         end
         case os
-        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-16/
+        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-16/, /\Aarchlinux-/
           it do
             should contain_class('puppet::agent::service::systemd').with(:enabled => false)
             should contain_service('puppet-run.timer').with(:ensure => :stopped)

@@ -59,7 +59,11 @@ PuppetDB instance, using the puppetlabs/puppetdb module.  Use its
 `puppetdb::server` class to install the PuppetDB server and this module to
 configure the Puppet master to connect to PuppetDB.
 
-Requires [puppetlabs/puppetdb](https://forge.puppetlabs.com/puppetlabs/puppetdb) <5.0.0.
+Requires [puppetlabs/puppetdb](https://forge.puppetlabs.com/puppetlabs/puppetdb)
+
+Please see the notes about using puppetlabs/puppetdb 5.x with older versions of Puppet (< 4.x) and PuppetDB (< 3.x) with
+newer releases of the module and set the values via hiera or an extra include of `puppetdb::globals` with
+`puppetdb_version` defined.
 
 # Installation
 
@@ -146,13 +150,16 @@ and `X-SSL-Subject` HTTP headers to have been set on the front end server.
 
 The listening port can be configured by setting `server_http_port` (which defaults to 8139).
 
-By default, this HTTP instance accepts no connection (`deny all` in the `<Directory>`
+For passenger setups, this HTTP instance accepts no connections by default (`deny all` in the `<Directory>`
 snippet). Allowed hosts can be configured by setting the `server_http_allow` parameter
 (which expects an array).
 
-** Note that running an HTTP puppetmaster is a huge security risk when improperly
+For puppetserver, this HTTP instance accepts **ALL** connections and no further restrictions can be configured. The
+`server_http_allow` parameter has no effect at all!
+
+**Note that running an HTTP puppetmaster is a huge security risk when improperly
 configured. Allowed hosts should be tightly controlled; anyone with access to an allowed
-host can access all client catalogues and client certificates. **
+host can access all client catalogues and client certificates.**
 
     # Configure an HTTP puppetmaster vhost in addition to the standard SSL vhost
     class { '::puppet':
@@ -172,8 +179,10 @@ version available.
 
 Currently supported values and configuration behaviours are:
 
+* `2.7.x` (default) - creates `product.conf`
+* `2.6.x` - configures the /status API endpoint in `web-routes.conf`
 * `2.5.x` - configures the certificate authority in `ca.cfg`
-* `2.4.99` (default) - configures for both 2.4 and 2.5, with `bootstrap.cfg`
+* `2.4.99` - configures for both 2.4 and 2.5, with `bootstrap.cfg`
   and `ca.cfg`
 * `2.3.x`, `2.4.x` - configures the certificate authority and
   versioned-code-service in `bootstrap.cfg`

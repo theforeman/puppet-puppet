@@ -1,18 +1,8 @@
 require 'spec_helper'
 
 describe 'puppet::agent::service::systemd' do
-  on_supported_os.each do |os, os_facts|
-    next if only_test_os() and not only_test_os.include?(os)
-    next if exclude_test_os() and exclude_test_os.include?(os)
+  on_os_under_test.each do |os, facts|
     context "on #{os}" do
-      let (:default_facts) do
-        os_facts.merge({
-          :clientcert     => 'puppetmaster.example.com',
-          :concat_basedir => '/nonexistant',
-          :fqdn           => 'puppetmaster.example.com',
-          :puppetversion  => Puppet.version,
-      }) end
-
       if Puppet.version < '4.0'
         confdir = '/etc/puppet'
         additional_facts = {}
@@ -21,12 +11,14 @@ describe 'puppet::agent::service::systemd' do
         additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
       end
 
-      if os_facts[:osfamily] == 'FreeBSD'
+      if facts[:osfamily] == 'FreeBSD'
         confdir = '/usr/local/etc/puppet'
+      elsif facts[:osfamily] == 'Archlinux'
+        confdir = '/etc/puppetlabs/puppet'
       end
 
       let :facts do
-        default_facts.merge(additional_facts)
+        facts.merge(additional_facts)
       end
 
       describe 'when runmode is not systemd' do
@@ -35,7 +27,7 @@ describe 'puppet::agent::service::systemd' do
         end
 
         case os
-        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-16/
+        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-16/, /\Aarchlinux-/
           it 'should disable systemd timer' do
             should contain_class('puppet::agent::service::systemd').with({
               'enabled' => false,
@@ -73,14 +65,16 @@ describe 'puppet::agent::service::systemd' do
 
         if Puppet.version < '4.0'
           bindir = '/usr/bin'
-        elsif os_facts[:osfamily] == 'FreeBSD'
+        elsif facts[:osfamily] == 'FreeBSD'
           bindir = '/usr/local/bin'
+        elsif facts[:osfamily] == 'Archlinux'
+          bindir = '/usr/bin'
         else
           bindir = '/opt/puppetlabs/bin'
         end
 
         case os
-        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-16/
+        when /\Adebian-8/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-16/, /\Aarchlinux-/
           it 'should enable systemd timer' do
             should contain_class('puppet::agent::service::systemd').with({
               'enabled' => true,
@@ -105,7 +99,7 @@ describe 'puppet::agent::service::systemd' do
             })
           end
         else
-          it { should raise_error(Puppet::Error, /Runmode of systemd.timer not supported on #{os_facts[:kernel]} operating systems!/) }
+          it { should raise_error(Puppet::Error, /Runmode of systemd.timer not supported on #{facts[:kernel]} operating systems!/) }
         end
       end
     end

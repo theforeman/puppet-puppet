@@ -1,18 +1,10 @@
 require 'spec_helper'
 
 describe 'puppet::server::passenger' do
-  on_supported_os.each do |os, os_facts|
-    next if only_test_os() and not only_test_os.include?(os)
-    next if exclude_test_os() and exclude_test_os.include?(os)
-    next if os_facts[:osfamily] == 'windows'
+  on_os_under_test.each do |os, facts|
+    next if facts[:osfamily] == 'windows'
+    next if facts[:osfamily] == 'Archlinux'
     context "on #{os}" do
-      let (:default_facts) do
-        os_facts.merge({
-          :concat_basedir         => '/foo/bar',
-          :puppetversion          => Puppet.version,
-          :fqdn                   => 'puppet.example.com',
-      }) end
-
       if Puppet.version < '4.0'
         additional_facts = {}
       else
@@ -20,15 +12,29 @@ describe 'puppet::server::passenger' do
       end
 
       let :facts do
-        default_facts.merge(additional_facts)
+        facts.merge(additional_facts)
       end
 
       let(:default_params) do {
         :app_root => '/etc/puppet/rack',
+        :confdir => '/etc/puppet',
+        :vardir => '/var/lib/puppet',
         :passenger_pre_start => true,
         :passenger_min_instances => 12,
+        :passenger_ruby => '/usr/bin/tfm-ruby',
         :port => 8140,
+        :http => false,
         :http_port => 8139,
+        :http_allow => [],
+        :ssl_cert => 'cert.pem',
+        :ssl_cert_key => 'key.pem',
+        :ssl_ca_cert => 'ca.pem',
+        :ssl_ca_crl => false,
+        :ssl_chain => 'ca.pem',
+        :ssl_dir => 'ssl/',
+        :puppet_ca_proxy => '',
+        :rack_arguments => [],
+        :user => 'puppet',
       } end
 
       describe 'without parameters' do
@@ -49,6 +55,13 @@ describe 'puppet::server::passenger' do
         end
 
         it 'should include the puppet vhost' do
+          should contain_apache__vhost('puppet').with({
+            :ssl_proxyengine => true,
+            :custom_fragment => "ProxyPassMatch ^/([^/]+/certificate.*)$ https://ca.example.org:8140/$1",
+          })
+        end
+
+        it 'should include the puppet http vhost' do
           should contain_apache__vhost('puppet').with({
             :ssl_proxyengine => true,
             :custom_fragment => "ProxyPassMatch ^/([^/]+/certificate.*)$ https://ca.example.org:8140/$1",
@@ -84,16 +97,18 @@ describe 'puppet::server::passenger' do
         it 'should include the puppet https vhost' do
           should contain_apache__vhost('puppet').with({
             :passenger_min_instances => 10,
-            :passenger_pre_start     => 'https://puppet.example.com:8140',
+            :passenger_pre_start     => 'https://foo.example.com:8140',
             :passenger_ruby          => '/opt/ruby2.0/bin/ruby',
+            :ssl_proxyengine         => false,
           })
         end
 
         it 'should include the puppet http vhost' do
           should contain_apache__vhost('puppet-http').with({
             :passenger_min_instances => 10,
-            :passenger_pre_start     => 'http://puppet.example.com:8139',
+            :passenger_pre_start     => 'http://foo.example.com:8139',
             :passenger_ruby          => '/opt/ruby2.0/bin/ruby',
+            :ssl_proxyengine         => false,
           })
         end
       end

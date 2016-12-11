@@ -2,17 +2,10 @@ require 'spec_helper'
 
 describe 'puppet::agent::config' do
 
-  on_supported_os.each do |os, facts|
-    next if only_test_os() and not only_test_os.include?(os)
-    next if exclude_test_os() and exclude_test_os.include?(os)
+  on_os_under_test.each do |os, facts|
     next if facts[:osfamily] == 'windows' # TODO, see https://github.com/fessyfoo/rspec-puppet-windows-issue
     context "on #{os}" do
-      let(:facts) do
-        facts.merge({
-          :concat_basedir => '/foo/bar',
-          :puppetversion  => Puppet.version,
-        })
-      end
+      let(:facts) { facts }
 
       context 'with default parameters' do
         let :pre_condition do
@@ -20,7 +13,7 @@ describe 'puppet::agent::config' do
         end
 
         it { should compile.with_all_deps }
-        it { should contain_concat__fragment( 'puppet.conf+20-agent' ) }
+        it { should contain_concat__fragment( 'puppet.conf_agent' ) }
         if facts[:osfamily] == 'Debian'
           it { should contain_augeas('puppet::set_start').
                with_context('/files/etc/default/puppet').
@@ -36,13 +29,13 @@ describe 'puppet::agent::config' do
         end
       end
 
-      context 'with runmode => cron' do
+      context 'with runmode => cron', :unless => (facts[:osfamily] == 'Archlinux') do
         let :pre_condition do
           'class { "::puppet": runmode => "cron" }'
         end
 
         it { should compile.with_all_deps }
-        it { should contain_concat__fragment( 'puppet.conf+20-agent' ) }
+        it { should contain_concat__fragment( 'puppet.conf_agent' ) }
         if facts[:osfamily] == 'Debian'
           it { should contain_augeas('puppet::set_start').
                with_context('/files/etc/default/puppet').
@@ -64,7 +57,7 @@ describe 'puppet::agent::config' do
         end
 
         it { should compile.with_all_deps }
-        it { should contain_concat__fragment( 'puppet.conf+20-agent' ) }
+        it { should contain_concat__fragment( 'puppet.conf_agent' ) }
         if facts[:osfamily] == 'Debian'
           it { should contain_augeas('puppet::set_start').
                with_context('/files/etc/default/puppet').

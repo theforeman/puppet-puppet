@@ -1,13 +1,17 @@
 webserver: {
-    access-log-config = <%= scope.lookupvar('puppet::server::puppetserver_dir') %>/request-logging.xml
-    client-auth       = want
-    ssl-host          = <%= scope.lookupvar('puppet::server::ip') %>
-    ssl-port          = <%= scope.lookupvar('puppet::server::port') %>
-    ssl-cert          = <%= scope.lookupvar('puppet::server::ssl_cert') %>
-    ssl-key           = <%= scope.lookupvar('puppet::server::ssl_cert_key') %>
-    ssl-ca-cert       = <%= scope.lookupvar('puppet::server::ssl_ca_cert') %>
+    access-log-config: <%= scope.lookupvar('puppet::server::puppetserver_dir') %>/request-logging.xml
+    client-auth: want
+<%- if scope.lookupvar('puppet::server::http') -%>
+    host: <%= scope.lookupvar('puppet::server::ip') %>
+    port: <%= scope.lookupvar('puppet::server::http_port') %>
+<%- end -%>
+    ssl-host: <%= scope.lookupvar('puppet::server::ip') %>
+    ssl-port: <%= scope.lookupvar('puppet::server::port') %>
+    ssl-cert: <%= scope.lookupvar('puppet::server::ssl_cert') %>
+    ssl-key: <%= scope.lookupvar('puppet::server::ssl_cert_key') %>
+    ssl-ca-cert: <%= scope.lookupvar('puppet::server::ssl_ca_cert') %>
 <%- if scope.lookupvar('puppet::server::ca') -%>
-    ssl-cert-chain    = <%= scope.lookupvar('puppet::server::ssl_chain') %>
-    ssl-crl-path      = <%= scope.lookupvar('puppet::server::ssl_ca_crl') %>
+    ssl-cert-chain: <%= scope.lookupvar('puppet::server::ssl_chain') %>
+    ssl-crl-path: <%= scope.lookupvar('puppet::server::ssl_ca_crl') %>
 <%- end -%>
 }

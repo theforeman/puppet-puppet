@@ -6,6 +6,10 @@ require 'puppetlabs_spec_helper/module_spec_helper'
 require 'rspec-puppet-facts'
 include RspecPuppetFacts
 
+                                                    # Original fact sources:
+add_custom_fact :concat_basedir, '/tmp'             # puppetlabs-concat
+add_custom_fact :puppetversion, Puppet.version      # Facter, but excluded from rspec-puppet-facts
+
 # Workaround for no method in rspec-puppet to pass undef through :params
 class Undef
   def inspect; 'undef'; end
@@ -26,6 +30,14 @@ end
 def exclude_test_os
   if ENV.key?('EXCLUDE_OS')
     ENV['EXCLUDE_OS'].split(',')
+  end
+end
+
+# Use the above environment variables to limit the platforms under test
+def on_os_under_test
+  on_supported_os.reject do |os, facts|
+    (only_test_os() && !only_test_os.include?(os)) ||
+      (exclude_test_os() && exclude_test_os.include?(os))
   end
 end
 

@@ -1,30 +1,22 @@
 require 'spec_helper'
 
 describe 'puppet::agent::install' do
-  on_supported_os.each do |os, os_facts|
-    next if only_test_os() and not only_test_os.include?(os)
-    next if exclude_test_os() and exclude_test_os.include?(os)
+  on_os_under_test.each do |os, facts|
     context "on #{os}" do
-      let (:default_facts) do
-        os_facts.merge({
-          :concat_basedir         => '/nonexistant',
-          :puppetversion          => Puppet.version,
-      }) end
-
       if Puppet.version < '4.0'
-        if os_facts[:osfamily] == 'FreeBSD'
+        if facts[:osfamily] == 'FreeBSD'
           client_package = 'puppet38'
         else
           client_package = 'puppet'
         end
         additional_facts = {}
       else
-        if os_facts[:osfamily] == 'FreeBSD'
+        if facts[:osfamily] == 'FreeBSD'
           client_package = 'puppet4'
           additional_facts = {}
         else
           client_package = 'puppet-agent'
-          if os_facts[:osfamily] == 'windows'
+          if facts[:osfamily] == 'windows'
             additional_facts = {}
           else
             additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
@@ -33,7 +25,7 @@ describe 'puppet::agent::install' do
       end
 
       let (:facts) do
-        default_facts.merge(additional_facts)
+        facts.merge(additional_facts)
       end
 
       describe 'with default parameters' do
@@ -41,7 +33,7 @@ describe 'puppet::agent::install' do
           'include ::puppet'
         end
 
-        if os_facts[:osfamily] == 'windows'
+        if facts[:osfamily] == 'windows'
           it 'should define provider as chocolatey on Windows' do
             should contain_package(client_package).with_provider('chocolatey')
           end
@@ -90,7 +82,7 @@ describe 'puppet::agent::install' do
         end
       end
 
-      if os_facts[:osfamily] == 'windows'
+      if facts[:osfamily] == 'windows'
         describe "when package_provider => 'msi'" do
           let :pre_condition do
             "class { 'puppet': package_provider => 'msi', }"

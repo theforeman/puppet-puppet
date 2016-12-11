@@ -2,12 +2,10 @@ fixtures:
   repositories:
     apache:           'https://github.com/puppetlabs/puppetlabs-apache'
     concat:           'https://github.com/puppetlabs/puppetlabs-concat'
-    extlib:
-      repo: 'git://github.com/puppet-community/puppet-extlib'
-      ref:  'v0.11.3'
+    extlib:           'https://github.com/voxpupuli/puppet-extlib'
     foreman:          'https://github.com/theforeman/puppet-foreman'
     git:              'https://github.com/theforeman/puppet-git'
-    intfile:          'https://github.com/puppetlabs/puppetlabs-inifile.git'
+    inifile:          'https://github.com/puppetlabs/puppetlabs-inifile.git'
     puppetdb:         'https://github.com/puppetlabs/puppetlabs-puppetdb.git'
     stdlib:           'https://github.com/puppetlabs/puppetlabs-stdlib.git'
 

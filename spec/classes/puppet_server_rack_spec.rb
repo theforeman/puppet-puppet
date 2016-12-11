@@ -1,43 +1,29 @@
 require 'spec_helper'
 
 describe 'puppet::server::rack' do
-  on_supported_os.each do |os, os_facts|
-    next if only_test_os() and not only_test_os.include?(os)
-    next if exclude_test_os() and exclude_test_os.include?(os)
-    next if os_facts[:osfamily] == 'windows'
+  on_os_under_test.each do |os, facts|
+    next if facts[:osfamily] == 'windows'
     context "on #{os}" do
-      let (:default_facts) do
-        os_facts.merge({
-          :puppetversion          => Puppet.version,
-      }) end
-
       if Puppet.version < '4.0'
         additional_facts = {}
       else
         additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
       end
 
-      let(:facts) { default_facts.merge(additional_facts) }
+      let(:facts) do
+        facts.merge(additional_facts)
+      end
 
       let(:default_params) do {
-        :app_root => '/etc/puppet/rack',
-        :confdir  => '/etc/puppet',
-        :vardir   => '/var/lib/puppet',
-        :user     => 'puppet',
+        :app_root       => '/etc/puppet/rack',
+        :confdir        => '/etc/puppet',
+        :vardir         => '/var/lib/puppet',
+        :user           => 'puppet',
+        :rack_arguments => [],
       } end
 
       describe 'defaults' do
         let(:params) { default_params }
-
-        it 'should define Exec[puppet_server_rack-restart]' do
-          should contain_exec('puppet_server_rack-restart').with({
-            :command      => 'touch /etc/puppet/rack/tmp/restart.txt',
-            :path         => '/bin:/usr/bin',
-            :refreshonly  => true,
-            :cwd          => '/etc/puppet/rack',
-            :require      => ['Class[Puppet::Server::Install]', 'File[/etc/puppet/rack/tmp]'],
-          })
-        end
 
         it 'should create server_app_root' do
           should contain_file('/etc/puppet/rack').with({
@@ -66,7 +52,6 @@ describe 'puppet::server::rack' do
         it 'should create config.ru' do
           should contain_file('/etc/puppet/rack/config.ru').with({
             :owner  => 'puppet',
-            :notify => 'Exec[puppet_server_rack-restart]',
           })
         end
 
