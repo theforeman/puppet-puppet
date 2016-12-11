@@ -19,9 +19,11 @@
 # $autosign_mode::             mode of the autosign file/script
 #
 # $autosign_content::          If set, write the autosign file content
-#                              using the value of this parameter. Will
-#                              only take affect if the autosign parameter
-#                              is a script path. Cannot be used with autosign_entries.
+#                              using the value of this parameter. 
+#                              Cannot be used at the same time as autosign_entries
+#                              For example, could be a string, or
+#                              file('another_module/autosign.sh') or
+#                              template('another_module/autosign.sh.erb')
 #
 # $hiera_config::              The hiera configuration file.
 #                              type:string
