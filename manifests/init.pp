@@ -637,6 +637,7 @@
 #     version    => '2.7.20-1',
 #   }
 #
+class puppet (
   $version                                = $puppet::params::version,
   $user                                   = $puppet::params::user,
   $group                                  = $puppet::params::group,
