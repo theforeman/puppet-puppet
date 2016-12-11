@@ -466,7 +466,6 @@ class puppet::server(
   $use_legacy_auth_conf            = $::puppet::server_use_legacy_auth_conf,
   $check_for_updates               = $::puppet::server_check_for_updates,
   $environment_class_cache_enabled = $::puppet::server_environment_class_cache_enabled,
->>>>>>> master
 ) {
 
   validate_bool($ca)
