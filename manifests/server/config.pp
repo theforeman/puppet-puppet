@@ -6,6 +6,21 @@ class puppet::server::config inherits puppet::config {
 
   if $::puppet::server::implementation == 'puppetserver' {
     contain 'puppet::server::puppetserver' # lint:ignore:relative_classname_inclusion (PUP-1597)
+    unless empty($::puppet::server::puppetserver_vardir) {
+      puppet::config::master {
+        'vardir': value => $::puppet::server::puppetserver_vardir;
+      }
+    }
+    unless empty($::puppet::server::puppetserver_rundir) {
+      puppet::config::master {
+        'rundir': value => $::puppet::server::puppetserver_rundir;
+      }
+    }
+    unless empty($::puppet::server::puppetserver_logdir) {
+      puppet::config::master {
+        'logdir': value => $::puppet::server::puppetserver_logdir;
+      }
+    }
   }
 
   # Mirror the relationship, as defined() is parse-order dependent
@@ -69,6 +84,7 @@ class puppet::server::config inherits puppet::config {
     'parser':             value => $::puppet::server::parser;
     'strict_variables':   value => $::puppet::server::strict_variables;
   }
+
   if $::puppet::server::ssl_dir_manage {
     puppet::config::master {
       'ssldir':           value => $::puppet::server::ssl_dir;

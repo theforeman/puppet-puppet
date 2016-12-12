@@ -14,6 +14,8 @@ describe 'puppet::server::config' do
         rundir              = '/var/run/puppet'
         vardir              = '/var/lib/puppet'
         puppetserver_vardir = '/var/lib/puppet'
+        puppetserver_logdir = '/var/log/puppet'
+        puppetserver_rundir = '/var/run/puppet'
         ssldir              = '/var/lib/puppet/ssl'
         sharedir            = '/usr/share/puppet'
         etcdir              = '/etc/puppet'
@@ -28,6 +30,8 @@ describe 'puppet::server::config' do
         rundir              = '/var/run/puppetlabs'
         vardir              = '/opt/puppetlabs/puppet/cache'
         puppetserver_vardir = '/opt/puppetlabs/server/data/puppetserver'
+        puppetserver_logdir = '/var/log/puppetlabs/puppetserver'
+        puppetserver_rundir = '/var/run/puppetlabs/puppetserver'
         ssldir              = '/etc/puppetlabs/puppet/ssl'
         sharedir            = '/opt/puppetlabs/puppet'
         etcdir              = '/etc/puppetlabs/puppet'
@@ -44,6 +48,8 @@ describe 'puppet::server::config' do
         rundir              = '/var/run/puppet'
         vardir              = '/var/puppet'
         puppetserver_vardir = '/var/puppet/server/data/puppetserver'
+        puppetserver_logdir = '/var/log/puppetserver'
+        puppetserver_rundir = '/var/run/puppetserver'
         ssldir              = '/var/puppet/ssl'
         sharedir            = '/usr/local/share/puppet'
         etcdir              = '/usr/local/etc/puppet'
@@ -602,6 +608,21 @@ describe 'puppet::server::config' do
           it 'should not generate CA certificates' do
             should_not contain_exec('puppet_server_config-generate_ca_cert')
           end
+        end
+      end
+
+      describe 'with server_implementation => "puppetserver"', :if => (Puppet.version >= '4.0.0') do
+        let :pre_condition do
+          "class {'puppet':
+            server => true,
+            server_implementation => 'puppetserver'
+          }"
+        end
+
+        it 'should configure puppet.conf' do
+          should contain_puppet__config__master("vardir").with_value(puppetserver_vardir)
+          should contain_puppet__config__master("logdir").with_value(puppetserver_logdir)
+          should contain_puppet__config__master("rundir").with_value(puppetserver_rundir)
         end
       end
     end
