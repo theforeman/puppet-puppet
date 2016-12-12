@@ -24,6 +24,7 @@
 #                              For example, could be a string, or
 #                              file('another_module/autosign.sh') or
 #                              template('another_module/autosign.sh.erb')
+#                              type:string
 #
 # $hiera_config::              The hiera configuration file.
 #                              type:string

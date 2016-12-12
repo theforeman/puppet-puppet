@@ -112,6 +112,7 @@
 #                                           For example, could be a string, or
 #                                           file('another_module/autosign.sh') or
 #                                           template('another_module/autosign.sh.erb')
+#                                           type:Optional[String]
 #
 # $usecacheonfailure::                      Switch to enable use of cached catalog on
 #                                           failure of run.

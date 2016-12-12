@@ -154,33 +154,25 @@ class puppet::server::config inherits puppet::config {
   }
 
   # autosign file
-  if $::puppet::server_ca and ! is_bool($puppet::autosign) {
-    if $::puppet::autosign_content and !empty($puppet::autosign_entries){
+  if $::puppet::server::autosign_content {
+    if !empty($::puppet::server::autosign_entries) {
       fail('Cannot set both autosign_content and autosign_entries')
     }
-    if $::puppet::autosign_content {
-      file { $puppet::autosign:
-        ensure  => file,
-        owner   => $puppet::user,
-        group   => $puppet::group,
-        mode    => $puppet::autosign_mode,
-        content => $puppet::autosign_content,
-      }
-    }
-    else {
-      file { $puppet::autosign:
-        ensure => file,
-        owner  => $puppet::user,
-        group  => $puppet::group,
-        mode   => $puppet::autosign_mode,
-      }
-    }
-    if !empty($puppet::autosign_entries) {
-      File[$puppet::autosign] {
-        content => template('puppet/server/autosign.conf.erb'),
-      }
-    }
+    $autosign_content = $::puppet::server::autosign_content
+  } elsif !empty($::puppet::server::autosign_entries) {
+    $autosign_content = template('puppet/server/autosign.conf.erb')
+  } else {
+    $autosign_content = undef
   }
+
+  file { $::puppet::server::autosign:
+    ensure  => file,
+    owner   => $::puppet::server::user,
+    group   => $::puppet::server::group,
+    mode    => $::puppet::server::autosign_mode,
+    content => $autosign_content,
+  }
+
 
   # only manage this file if we provide content
   if $::puppet::server::default_manifest and $::puppet::server::default_manifest_content != '' {
