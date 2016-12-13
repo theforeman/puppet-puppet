@@ -105,6 +105,14 @@
 # $autosign_mode::                          mode of the autosign file/script
 #                                           type:Pattern[/^[0-9]{4}$/]
 #
+# $autosign_content::                       If set, write the autosign file content
+#                                           using the value of this parameter. 
+#                                           Cannot be used at the same time as autosign_entries
+#                                           For example, could be a string, or
+#                                           file('another_module/autosign.sh') or
+#                                           template('another_module/autosign.sh.erb')
+#                                           type:Optional[String]
+#
 # $usecacheonfailure::                      Switch to enable use of cached catalog on
 #                                           failure of run.
 #                                           type:Boolean
@@ -654,6 +662,7 @@ class puppet (
   $autosign                               = $puppet::params::autosign,
   $autosign_entries                       = $puppet::params::autosign_entries,
   $autosign_mode                          = $puppet::params::autosign_mode,
+  $autosign_content                       = $puppet::params::autosign_content,
   $runinterval                            = $puppet::params::runinterval,
   $usecacheonfailure                      = $puppet::params::usecacheonfailure,
   $runmode                                = $puppet::params::runmode,

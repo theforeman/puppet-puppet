@@ -18,6 +18,14 @@
 #
 # $autosign_mode::             mode of the autosign file/script
 #
+# $autosign_content::          If set, write the autosign file content
+#                              using the value of this parameter. 
+#                              Cannot be used at the same time as autosign_entries
+#                              For example, could be a string, or
+#                              file('another_module/autosign.sh') or
+#                              template('another_module/autosign.sh.erb')
+#                              type:string
+#
 # $hiera_config::              The hiera configuration file.
 #                              type:string
 #
@@ -366,6 +374,7 @@ class puppet::server(
   $autosign                        = $::puppet::autosign,
   $autosign_entries                = $::puppet::autosign_entries,
   $autosign_mode                   = $::puppet::autosign_mode,
+  $autosign_content                = $::puppet::autosign_content,
   $hiera_config                    = $::puppet::hiera_config,
   $admin_api_whitelist             = $::puppet::server_admin_api_whitelist,
   $user                            = $::puppet::server_user,
@@ -498,6 +507,10 @@ class puppet::server(
     validate_absolute_path($autosign)
     validate_string($autosign_mode)
     validate_array($autosign_entries)
+  }
+
+  if $autosign_content {
+    validate_string($autosign_content)
   }
 
   validate_array($rack_arguments)
