@@ -105,7 +105,6 @@
 # $autosign_mode::                          mode of the autosign file/script
 #                                           type:Pattern[/^[0-9]{4}$/]
 #
-#
 # $autosign_content::                       If set, write the autosign file content
 #                                           using the value of this parameter. 
 #                                           Cannot be used at the same time as autosign_entries
