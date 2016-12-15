@@ -154,17 +154,23 @@ class puppet::server::config inherits puppet::config {
   }
 
   # autosign file
-  if $::puppet::server_ca and ! is_bool($puppet::autosign) {
-    file { $puppet::autosign:
-      ensure => file,
-      owner  => $puppet::user,
-      group  => $puppet::group,
-      mode   => $puppet::autosign_mode,
-    }
-    if !empty($puppet::autosign_entries) {
-      File[$puppet::autosign] {
-        content => template('puppet/server/autosign.conf.erb'),
+  if $::puppet::server_ca and ! is_bool($puppet::server::autosign){
+    if $::puppet::server::autosign_content {
+      if !empty($::puppet::server::autosign_entries) {
+        fail('Cannot set both autosign_content and autosign_entries')
       }
+      $autosign_content = $::puppet::server::autosign_content
+    } elsif !empty($::puppet::server::autosign_entries) {
+      $autosign_content = template('puppet/server/autosign.conf.erb')
+    } else {
+      $autosign_content = undef
+    }
+    file { $::puppet::server::autosign:
+      ensure  => file,
+      owner   => $::puppet::server::user,
+      group   => $::puppet::server::group,
+      mode    => $::puppet::server::autosign_mode,
+      content => $autosign_content,
     }
   }
 
