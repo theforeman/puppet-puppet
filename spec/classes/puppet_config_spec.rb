@@ -138,16 +138,45 @@ describe 'puppet::config' do
         end
       end
 
-      describe "when use_srv_records => true" do
-        let :pre_condition do
-          "class { 'puppet': use_srv_records => true }"
+      describe "when use_srv_records => true, and domain fact" do
+        context 'is defined' do
+          let :pre_condition do
+            "class { 'puppet': use_srv_records => true }"
+          end
+
+          it 'should contain puppet.conf [main] with SRV settings' do
+            should contain_puppet__config__main("use_srv_records").with({'value' => "true"})
+            should contain_puppet__config__main("srv_domain").with({'value' => "example.org"})
+            should contain_puppet__config__main("pluginsource").with({'value' => "puppet:///plugins"})
+            should contain_puppet__config__main("pluginfactsource").with({'value' => "puppet:///pluginfacts"})
+          end
         end
 
-        it 'should contain puppet.conf [main] with SRV settings' do
-          should contain_puppet__config__main("use_srv_records").with({'value' => "true"})
-          should contain_puppet__config__main("srv_domain").with({'value' => "example.org"})
-          should contain_puppet__config__main("pluginsource").with({'value' => "puppet:///plugins"})
-          should contain_puppet__config__main("pluginfactsource").with({'value' => "puppet:///pluginfacts"})
+        context 'is unset' do
+          let(:facts) { facts.merge({domain: nil}) }
+          let :pre_condition do
+            'class { ::puppet:
+               use_srv_records => true
+            }'
+          end
+
+          it 'should fail with a helpful message' do
+            should raise_error(Puppet::Error, /\$::domain fact found to be undefined and \$srv_domain is undefined/)
+          end
+        end
+
+        context 'is overriden via param' do
+          let :pre_condition do
+            'class { "::puppet":
+               use_srv_records => true,
+               srv_domain      => "special_domain.com"
+            }'
+          end
+          
+          it 'should configure srv domain' do
+            should contain_puppet__config__main('use_srv_records').with_value(true)
+            should contain_puppet__config__main('srv_domain').with_value('special_domain.com')
+          end
         end
       end
 

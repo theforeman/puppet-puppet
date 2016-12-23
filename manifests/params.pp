@@ -34,7 +34,17 @@ class puppet::params {
   $postrun_command     = undef
   $dns_alt_names       = []
   $use_srv_records     = false
-  $srv_domain          = $::domain
+
+  # On versions < 3.7.5 the defined function was optional as such strict variables cannot be used
+  # In some edge cases 'domain' fact may be not defined
+  if versioncmp($::puppetversion, '3.7.5') < 0 {
+    $srv_domain = $::domain
+  } elsif defined('$::domain') {
+    $srv_domain = $::domain
+  } else {
+    $srv_domain = undef
+  }
+
   # lint:ignore:puppet_url_without_modules
   $pluginsource        = 'puppet:///plugins'
   $pluginfactsource    = 'puppet:///pluginfacts'
