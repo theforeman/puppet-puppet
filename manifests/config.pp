@@ -41,6 +41,9 @@ class puppet::config(
     puppet::config::main{'dns_alt_names': value => $dns_alt_names; }
   }
   if $use_srv_records {
+    unless $srv_domain {
+      fail('$::domain fact found to be undefined and $srv_domain is undefined')
+    }
     puppet::config::main{
       'use_srv_records': value => true;
       'srv_domain': value => $srv_domain;
