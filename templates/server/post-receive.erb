@@ -120,3 +120,8 @@ $stdin.each_line do |line|
     end
   end
 end
+
+# If we have a remote named mirror we push there as well
+if %x{git remote} =~ /^mirror$/
+  %x{git push mirror --mirror}
+end
