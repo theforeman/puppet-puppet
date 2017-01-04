@@ -1,6 +1,11 @@
 require 'spec_helper'
 
 describe 'puppet::server::config' do
+  before :each do
+    @cacrl = Tempfile.new('cacrl')
+    File.open(@cacrl, 'w') { |f| f.write "This is my CRL File" }
+    Puppet.settings[:cacrl] = @cacrl.path
+  end
   on_os_under_test.each do |os, facts|
     next if facts[:osfamily] == 'windows'
     next if facts[:osfamily] == 'Archlinux'
@@ -656,6 +661,106 @@ describe 'puppet::server::config' do
           should contain_puppet__config__master("vardir").with_value(puppetserver_vardir)
           should contain_puppet__config__master("logdir").with_value(puppetserver_logdir)
           should contain_puppet__config__master("rundir").with_value(puppetserver_rundir)
+        end
+      end
+
+      describe 'with server_ca_crl_sync => true' do
+        context 'with server_ca => false and running "puppet apply"' do
+          let :pre_condition do
+            "class {'puppet':
+              server             => true,
+              server_ca_crl_sync => true,
+              server_ca          => false,
+              server_ssl_dir     => '/etc/custom/puppetlabs/puppet/ssl'
+            }"
+          end
+          it 'should not sync the crl' do
+            should_not contain_file('/etc/custom/puppetlabs/puppet/ssl/crl.pem')
+          end
+        end
+        context 'with server_ca => false: running "puppet agent -t"' do
+          let :pre_condition do
+            "class {'puppet':
+              server             => true,
+              server_ca_crl_sync => true,
+              server_ca          => false,
+              server_ssl_dir     => '/etc/custom/puppetlabs/puppet/ssl'
+            }"
+          end
+          let(:facts) do
+            facts.merge({:servername => 'myserver' })
+          end
+
+          it 'should sync the crl from the ca' do
+            should contain_file('/etc/custom/puppetlabs/puppet/ssl/crl.pem').
+               with_content("This is my CRL File")
+          end
+        end
+        context 'with server_ca => true: running "puppet agent -t"' do
+          let :pre_condition do
+            "class {'puppet':
+              server             => true,
+              server_ca_crl_sync => true,
+              server_ca          => true,
+              server_ssl_dir     => '/etc/custom/puppetlabs/puppet/ssl'
+            }"
+          end
+          let(:facts) do
+            facts.merge({:servername => 'myserver' })
+          end
+
+          it 'should not sync the crl' do
+            should_not contain_file('/etc/custom/puppetlabs/puppet/ssl/crl.pem')
+          end
+        end
+      end
+
+      describe 'allow crl checking' do
+        context 'as ca' do
+          let :pre_condition do
+            "class {'puppet':
+              server                  => true,
+              server_implementation   => 'puppetserver',
+              server_ca               => true,
+              server_puppetserver_dir => '/etc/custom/puppetserver',
+              server_jruby_gem_home   => '/opt/puppetlabs/server/data/puppetserver/jruby-gems'
+            }"
+          end
+          it 'should use the ca_crl.pem file' do
+             should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
+               with_content(/ssl-crl-path: #{ssldir}\/ca\/ca_crl.pem/)
+          end
+        end
+        context 'as non-ca with default' do
+          let :pre_condition do
+            "class {'puppet':
+              server                  => true,
+              server_implementation   => 'puppetserver',
+              server_ca               => false,
+              server_puppetserver_dir => '/etc/custom/puppetserver',
+              server_jruby_gem_home   => '/opt/puppetlabs/server/data/puppetserver/jruby-gems'
+            }"
+          end
+          it 'should use the ca_crl.pem file' do
+             should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
+               without_content(/ssl-crl-path: #{ssldir}\/crl.pem/)
+          end
+        end
+        context 'as non-ca with default' do
+          let :pre_condition do
+            "class {'puppet':
+              server                  => true,
+              server_implementation   => 'puppetserver',
+              server_ca               => false,
+              server_crl_enable       => true,
+              server_puppetserver_dir => '/etc/custom/puppetserver',
+              server_jruby_gem_home   => '/opt/puppetlabs/server/data/puppetserver/jruby-gems'
+            }"
+          end
+          it 'should use the ca_crl.pem file' do
+             should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
+               with_content(/ssl-crl-path: #{ssldir}\/crl.pem/)
+          end
         end
       end
     end
