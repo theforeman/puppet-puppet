@@ -1,0 +1,14 @@
+---
+HOSTS:
+  centos-6-x64:
+    roles:
+      - master
+    platform: centos-6-x86_64
+    box: centos/6
+    hypervisor: vagrant
+    vagrant_memsize: 3072
+CONFIG:
+  type: aio
+...
+# vim: syntax=yaml
+
