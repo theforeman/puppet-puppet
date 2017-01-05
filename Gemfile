@@ -27,5 +27,7 @@ gem 'json', '~> 1.0', {"platforms"=>["ruby_19"], "groups"=>["test"]}
 gem 'json_pure', '~> 1.0', {"platforms"=>["ruby_19"], "groups"=>["test"]}
 gem 'metadata-json-lint'
 gem 'kafo_module_lint'
+gem 'beaker-rspec', {"groups"=>["system_tests"]}
+gem 'beaker-puppet_install_helper', {"groups"=>["system_tests"]}
 
 # vim:ft=ruby
