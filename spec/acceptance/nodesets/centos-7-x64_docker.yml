@@ -1,0 +1,15 @@
+HOSTS:
+  centos-7-x64-docker:
+    platform: centos-7-x86_64
+    hypervisor : docker
+    image: centos:7
+    # docker_preserve_image: true
+    docker_cmd: '["/usr/sbin/init"]'
+    docker_image_commands:
+      - 'yum install -y -q crontabs tar wget which iproute'
+      # crontab: required for  puppet cron resources
+      # iproute: required for beaker/serverspec port tests which require the 
+      #   ss utility
+      # which: required for puppetserver rpm pre/post scripts
+CONFIG:
+  type: aio
