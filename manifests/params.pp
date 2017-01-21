@@ -317,7 +317,7 @@ class puppet::params {
     $client_package = ['puppet-agent']
   } elsif ($::osfamily == 'Debian') {
     $client_package = $deb_naio_package ? {
-      true    => ['puppet-agent', 'puppet'],
+      true    => ['puppet'],
       default => ['puppet-common', 'puppet']
     }
   } elsif ($::osfamily =~ /(FreeBSD|DragonFly)/) {
@@ -334,10 +334,8 @@ class puppet::params {
   $puppetca_cmd  = "${puppet_cmd} cert"
 
   # Puppet service name
-  $service_name = $deb_naio_package ? {
-    true    => 'puppet-agent',
-    default => 'puppet'
-  }
+  $service_name = 'puppet'
+
   # Puppet onedshot systemd service and timer name
   $systemd_unit_name = 'puppet-run'
   # Mechanisms to manage and reload/restart the agent
