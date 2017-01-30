@@ -1,5 +1,10 @@
 # Changelog
 
+## 7.0.1
+* Other changes and fixes:
+    * Set vardir, rundir and logdir explicitly in puppet.conf
+    * Fix undefined variable error when domain fact is missing
+
 ## 7.0.0
 * New or changed parameters:
     * Add server_check_for_updates parameter to control update checking and
