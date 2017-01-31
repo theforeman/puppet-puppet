@@ -2,3 +2,13 @@
 Rakefile:
   param_docs_pattern:
     - manifests/init.pp
+Gemfile:
+  extra:
+    - gem: 'beaker-rspec'
+      options:
+        groups:
+          - 'system_tests'
+    - gem: 'beaker-puppet_install_helper'
+      options:
+        groups:
+          - 'system_tests'
