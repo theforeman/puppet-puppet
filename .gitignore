@@ -37,3 +37,7 @@ coverage/
 
 ## InteliJ / RubyMine
 .idea
+
+## Beaker
+.vagrant/
+log/
