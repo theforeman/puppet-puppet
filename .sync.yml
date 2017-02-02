@@ -1,4 +1,8 @@
 ---
+.travis.yml:
+  beaker_sets:
+    - centos-7-x64_docker
+    - centos-6-x64_docker
 Rakefile:
   param_docs_pattern:
     - manifests/init.pp
