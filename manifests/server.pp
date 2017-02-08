@@ -348,6 +348,10 @@
 #                              Defaults to [ 'TLSv1.2' ]
 #                              type:array
 #
+# $ssl_chain_filepath::        Path to certificate chain for puppetserver
+#                              Defaults to "${ssl_dir}/ca/ca_crt.pem"
+#                              type:Stdlib::Absolutepath
+#
 # $cipher_suites::             List of SSL ciphers to use in negotiation
 #                              Defaults to [ 'TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA',
 #                              'TLS_RSA_WITH_AES_128_CBC_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA', ]
@@ -448,6 +452,7 @@ class puppet::server(
   $ssl_dir                         = $::puppet::server_ssl_dir,
   $ssl_dir_manage                  = $::puppet::server_ssl_dir_manage,
   $ssl_protocols                   = $::puppet::server_ssl_protocols,
+  $ssl_chain_filepath              = $::puppet::server_ssl_chain_filepath,
   $package                         = $::puppet::server_package,
   $version                         = $::puppet::server_version,
   $certname                        = $::puppet::server_certname,
@@ -569,7 +574,7 @@ class puppet::server(
   if $ca {
     $ssl_ca_cert = "${ssl_dir}/ca/ca_crt.pem"
     $ssl_ca_crl  = "${ssl_dir}/ca/ca_crl.pem"
-    $ssl_chain   = "${ssl_dir}/ca/ca_crt.pem"
+    $ssl_chain   = $ssl_chain_filepath
     $_crl_enable = pick($crl_enable, true)
   } else {
     $ssl_ca_cert = "${ssl_dir}/certs/ca.pem"

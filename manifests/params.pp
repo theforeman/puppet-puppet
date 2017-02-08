@@ -427,6 +427,7 @@ class puppet::params {
   $server_ca_client_whitelist             = [ 'localhost', $lower_fqdn ]
   $server_cipher_suites                   = [ 'TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA', 'TLS_RSA_WITH_AES_128_CBC_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA' ]
   $server_ssl_protocols                   = [ 'TLSv1.2' ]
+  $server_ssl_chain_filepath              = "${server_ssl_dir}/ca/ca_crt.pem"
   $server_check_for_updates               = true
   $server_environment_class_cache_enabled = false
 

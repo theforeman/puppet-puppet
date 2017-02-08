@@ -591,6 +591,11 @@
 #                                           Defaults to [ 'TLSv1.2' ]
 #                                           type:Array[String]
 #
+# $server_ssl_chain_filepath::              Path to certificate chain for puppetserver
+#                                           Only used when $ca is true
+#                                           Defaults to "${ssl_dir}/ca/ca_crt.pem"
+#                                           type:Optional[Stdlib::Absolutepath]
+#
 # $server_cipher_suites::                   List of SSL ciphers to use in negotiation
 #                                           Defaults to [ 'TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA',
 #                                           'TLS_RSA_WITH_AES_128_CBC_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA', ]
@@ -777,6 +782,7 @@ class puppet (
   $server_ssl_dir                         = $puppet::params::server_ssl_dir,
   $server_ssl_dir_manage                  = $puppet::params::server_ssl_dir_manage,
   $server_ssl_protocols                   = $puppet::params::server_ssl_protocols,
+  $server_ssl_chain_filepath              = $puppet::params::server_ssl_chain_filepath,
   $server_package                         = $puppet::params::server_package,
   $server_version                         = $puppet::params::server_version,
   $server_certname                        = $puppet::params::server_certname,
