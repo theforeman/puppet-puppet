@@ -390,10 +390,11 @@ class puppet::params {
     true  => '/opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet',
     false => undef,
   }
-  $server_foreman_url      = "https://${lower_fqdn}"
-  $server_foreman_ssl_ca   = undef
-  $server_foreman_ssl_cert = undef
-  $server_foreman_ssl_key  = undef
+  $server_foreman_url        = "https://${lower_fqdn}"
+  $server_foreman_ssl_ca     = undef
+  $server_foreman_ssl_cert   = undef
+  $server_foreman_ssl_key    = undef
+  $server_foreman_enable_ssl = true
 
   # Which Parser do we want to use? https://docs.puppetlabs.com/references/latest/configuration.html#parser
   $server_parser = 'current'

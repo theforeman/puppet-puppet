@@ -483,6 +483,9 @@
 # $server_foreman_ssl_key::                 Key for authenticating against Foreman server
 #                                           type:Optional[Stdlib::Absolutepath]
 #
+# $server_foreman_enable_ssl::              Should puppet use foreman ssl to send reports
+#                                           type:Boolean
+#
 # $server_puppet_basedir::                  Where is the puppet code base located
 #                                           type:Optional[Stdlib::Absolutepath]
 #
@@ -793,6 +796,7 @@ class puppet (
   $server_foreman_ssl_cert                = $puppet::params::server_foreman_ssl_cert,
   $server_foreman_ssl_key                 = $puppet::params::server_foreman_ssl_key,
   $server_foreman_facts                   = $puppet::params::server_foreman_facts,
+  $server_foreman_enable_ssl              = $puppet::params::server_foreman_enable_ssl,
   $server_puppet_basedir                  = $puppet::params::server_puppet_basedir,
   $server_puppetdb_host                   = $puppet::params::server_puppetdb_host,
   $server_puppetdb_port                   = $puppet::params::server_puppetdb_port,
