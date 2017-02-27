@@ -277,11 +277,11 @@ class puppet::server::config inherits puppet::config {
   if $::puppet::server::foreman {
     # check if ssl should be enabled
     if $::foreman::server_foreman_enable_ssl {
-      $foreman_ssl_ca   => pick($::puppet::server::foreman_ssl_ca,
+      $foreman_ssl_ca   = pick($::puppet::server::foreman_ssl_ca,
                                 $::puppet::server::ssl_ca_cert)
-      $foreman_ssl_cert => pick($::puppet::server::foreman_ssl_cert,
+      $foreman_ssl_cert = pick($::puppet::server::foreman_ssl_cert,
                                 $::puppet::server::ssl_cert)
-      $foreman_ssl_key  => pick($::puppet::server::foreman_ssl_key,
+      $foreman_ssl_key  = pick($::puppet::server::foreman_ssl_key,
                                 $::puppet::server::ssl_cert_key)
     }else{
       $foreman_ssl_ca   = ''
