@@ -556,6 +556,11 @@
 #                                           disable in case CA is delegated to a separate instance
 #                                           type:Boolean
 #
+# $server_ssl_key_manage::                  Toggle if "private_keys/${::puppet::server::certname}.pem"
+#                                           should be created with default user and group. This is used in
+#                                           the default Forman setup to reuse the key for TLS communication.
+#                                           type:Boolean
+#
 # $server_puppetserver_vardir::             The path of the puppetserver var dir
 #                                           type:Stdlib::Absolutepath
 #
@@ -776,6 +781,7 @@ class puppet (
   $server_ruby_load_paths                 = $puppet::params::server_ruby_load_paths,
   $server_ssl_dir                         = $puppet::params::server_ssl_dir,
   $server_ssl_dir_manage                  = $puppet::params::server_ssl_dir_manage,
+  $server_ssl_key_manage                  = $puppet::params::server_ssl_key_manage,
   $server_ssl_protocols                   = $puppet::params::server_ssl_protocols,
   $server_package                         = $puppet::params::server_package,
   $server_version                         = $puppet::params::server_version,
