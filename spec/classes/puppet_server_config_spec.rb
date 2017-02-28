@@ -630,6 +630,21 @@ describe 'puppet::server::config' do
         end
       end
 
+      describe 'with ssl key management disabled for server' do
+        let :pre_condition do
+          "class {'puppet':
+            server                => true,
+            server_certname       => 'servercert',
+            server_ssl_key_manage => false,
+            server_ssl_dir        => '/etc/custom/puppetlabs/puppet/ssl'
+          }"
+        end
+
+        it 'should not contain a default ssl key definition' do
+          should_not contain_file('/etc/custom/puppetlabs/puppet/ssl/private_keys/servercert.pem')
+        end
+      end
+
       describe 'with nondefault CA settings' do
         context 'with server_ca => false' do
           let :pre_condition do
