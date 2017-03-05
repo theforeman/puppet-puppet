@@ -275,6 +275,19 @@ class puppet::server::config inherits puppet::config {
 
   ## Foreman
   if $::puppet::server::foreman {
+    # check if ssl should be enabled
+    if $::foreman::server_foreman_enable_ssl {
+      $foreman_ssl_ca   = pick($::puppet::server::foreman_ssl_ca,
+                                $::puppet::server::ssl_ca_cert)
+      $foreman_ssl_cert = pick($::puppet::server::foreman_ssl_cert,
+                                $::puppet::server::ssl_cert)
+      $foreman_ssl_key  = pick($::puppet::server::foreman_ssl_key,
+                                $::puppet::server::ssl_cert_key)
+    }else{
+      $foreman_ssl_ca   = ''
+      $foreman_ssl_cert = ''
+      $foreman_ssl_key  = ''
+    }
     # Include foreman components for the puppetmaster
     # ENC script, reporting script etc.
     anchor { 'puppet::server::config_start': } ->
@@ -287,9 +300,9 @@ class puppet::server::config inherits puppet::config {
       enc_api        => $::puppet::server::enc_api,
       report_api     => $::puppet::server::report_api,
       timeout        => $::puppet::server::request_timeout,
-      ssl_ca         => pick($::puppet::server::foreman_ssl_ca, $::puppet::server::ssl_ca_cert),
-      ssl_cert       => pick($::puppet::server::foreman_ssl_cert, $::puppet::server::ssl_cert),
-      ssl_key        => pick($::puppet::server::foreman_ssl_key, $::puppet::server::ssl_cert_key),
+      ssl_ca         => $foreman_ssl_ca,
+      ssl_cert       => $foreman_ssl_cert,
+      ssl_key        => $foreman_ssl_key,
     } ~> anchor { 'puppet::server::config_end': }
   }
 
