@@ -139,10 +139,12 @@ class puppet::server::config inherits puppet::config {
     require => Exec['puppet_server_config-create_ssl_dir'],
   }
 
-  file { "${::puppet::server::ssl_dir}/private_keys/${::puppet::server::certname}.pem":
-    owner => $::puppet::server::user,
-    group => $::puppet::server::group,
-    mode  => '0640',
+  if $puppet::server::ssl_key_manage {
+    file { "${::puppet::server::ssl_dir}/private_keys/${::puppet::server::certname}.pem":
+      owner => $::puppet::server::user,
+      group => $::puppet::server::group,
+      mode  => '0640',
+    }
   }
 
   # If the ssl dir is not the default dir, it needs to be created before running

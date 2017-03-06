@@ -414,6 +414,7 @@ class puppet::params {
   $server_jvm_extra_args    = '-XX:MaxPermSize=256m'
 
   $server_ssl_dir_manage                  = true
+  $server_ssl_key_manage                  = true
   $server_default_manifest                = false
   $server_default_manifest_path           = '/etc/puppet/manifests/default_manifest.pp'
   $server_default_manifest_content        = '' # lint:ignore:empty_string_assignment

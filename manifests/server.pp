@@ -53,7 +53,7 @@
 # $ca_crl_sync::               Sync the puppet ca crl to compile masters. Requires compile masters to
 #                              be agents of the CA master (MOM) defaults to false
 #                              type:boolean
-# 
+#
 # $crl_enable::                Enable CRL processing, defaults to true when $ca is true else defaults
 #                              to false
 #                              type:boolean
@@ -319,6 +319,11 @@
 #                              disable in case CA is delegated to a separate instance
 #                              type:boolean
 #
+# $ssl_key_manage::            Toggle if "private_keys/${::puppet::server::certname}.pem"
+#                              should be created with default user and group. This is used in
+#                              the default Forman setup to reuse the key for TLS communication.
+#                              type:Boolean
+#
 # $puppetserver_vardir::       The path of the puppetserver var dir
 #                              type:string
 #
@@ -447,6 +452,7 @@ class puppet::server(
   $ruby_load_paths                 = $::puppet::server_ruby_load_paths,
   $ssl_dir                         = $::puppet::server_ssl_dir,
   $ssl_dir_manage                  = $::puppet::server_ssl_dir_manage,
+  $ssl_key_manage                  = $::puppet::server_ssl_key_manage,
   $ssl_protocols                   = $::puppet::server_ssl_protocols,
   $package                         = $::puppet::server_package,
   $version                         = $::puppet::server_version,
@@ -494,6 +500,7 @@ class puppet::server(
   validate_bool($puppetdb_swf)
   validate_bool($default_manifest)
   validate_bool($ssl_dir_manage)
+  validate_bool($ssl_key_manage)
   validate_bool($passenger_pre_start)
   validate_integer($passenger_min_instances)
 
