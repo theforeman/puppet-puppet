@@ -409,16 +409,30 @@ class puppet::params {
   }
 
   $server_jvm_java_bin      = '/usr/bin/java'
-  $server_jvm_min_heap_size = '2G'
-  $server_jvm_max_heap_size = '2G'
   $server_jvm_extra_args    = '-XX:MaxPermSize=256m'
+
+  # This is some very trivial "tuning". See the puppet reference:
+  # https://docs.puppet.com/puppetserver/latest/tuning_guide.html
+  if 0 + $::memorysize_mb >= 2048 {
+    $server_jvm_min_heap_size = '2G'
+    $server_jvm_max_heap_size = '2G'
+    $server_max_active_instances = $::processorcount
+  } elsif 0 + $::memorysize_mb >= 1024 {
+    $server_max_active_instances = 1
+    $server_jvm_min_heap_size = '1G'
+    $server_jvm_max_heap_size = '1G'
+  } else {
+    # VMs with 1GB RAM and a crash kernel enabled usually have an effective 992MB RAM
+    $server_max_active_instances = 1
+    $server_jvm_min_heap_size = '768m'
+    $server_jvm_max_heap_size = '768m'
+  }
 
   $server_ssl_dir_manage                  = true
   $server_ssl_key_manage                  = true
   $server_default_manifest                = false
   $server_default_manifest_path           = '/etc/puppet/manifests/default_manifest.pp'
   $server_default_manifest_content        = '' # lint:ignore:empty_string_assignment
-  $server_max_active_instances            = $::processorcount
   $server_max_requests_per_instance       = 0
   $server_idle_timeout                    = 1200000
   $server_connect_timeout                 = 120000
