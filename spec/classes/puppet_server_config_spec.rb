@@ -778,6 +778,23 @@ describe 'puppet::server::config' do
           end
         end
       end
+
+      describe 'with ssl_chain_filepath overwritten' do
+	let :pre_condition do
+          "class {'puppet':
+              server                      => true,
+              server_implementation       => 'puppetserver',
+              server_ca                   => true,
+              server_puppetserver_dir     => '/etc/custom/puppetserver',
+              server_jruby_gem_home       => '/opt/puppetlabs/server/data/puppetserver/jruby-gems',
+              server_ssl_chain_filepath   => '/etc/example/certchain.pem',
+           }"
+        end
+        it 'should use the server_ssl_chain_filepath file' do
+           should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
+             with_content(/ssl-cert-chain: \/etc\/example\/certchain.pem/)
+        end
+      end
     end
   end
 end
