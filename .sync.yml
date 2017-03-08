@@ -16,3 +16,8 @@ Gemfile:
       options:
         groups:
           - 'system_tests'
+spec/spec_helper.rb:
+  extra_code: |
+    def unsupported_puppetmaster_osfamily(osfamily)
+      ['Archlinux', 'windows', 'Suse'].include?(osfamily)
+    end

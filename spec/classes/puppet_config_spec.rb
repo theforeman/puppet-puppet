@@ -11,6 +11,8 @@ describe 'puppet::config' do
         ssldir           = '/var/lib/puppet/ssl'
         vardir           = '/var/lib/puppet'
         sharedir         = '/usr/share/puppet'
+        dir_owner        = 'puppet'
+        dir_group        = 'puppet'
         additional_facts = {}
       else
         codedir          = '/etc/puppetlabs/code'
@@ -20,6 +22,8 @@ describe 'puppet::config' do
         ssldir           = '/etc/puppetlabs/puppet/ssl'
         vardir           = '/opt/puppetlabs/puppet/cache'
         sharedir         = '/opt/puppetlabs/puppet'
+        dir_owner        = 'root'
+        dir_group        = nil
         additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
       end
 
@@ -32,7 +36,14 @@ describe 'puppet::config' do
         ssldir   = '/var/puppet/ssl'
         vardir   = '/var/puppet'
         sharedir = '/usr/local/share/puppet'
+      when 'Suse'
+        if Puppet.version < '4.0'
+          dir_owner = 'root'
+          dir_group = nil
+        end
       when 'windows'
+        dir_owner = nil
+        dir_group = nil
         codedir  = 'C:/ProgramData/PuppetLabs/puppet/etc'
         confdir  = 'C:/ProgramData/PuppetLabs/puppet/etc'
         logdir   = 'C:/ProgramData/PuppetLabs/puppet/var/log'
@@ -49,6 +60,12 @@ describe 'puppet::config' do
       describe 'with default parameters' do
         let :pre_condition do
           'include ::puppet'
+        end
+
+        it 'should contain confdir' do
+          should contain_file(confdir)
+            .with_owner(dir_owner)
+            .with_group(dir_group)
         end
 
         it 'should contain auth.conf' do

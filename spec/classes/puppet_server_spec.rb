@@ -2,8 +2,7 @@ require 'spec_helper'
 
 describe 'puppet::server' do
   on_os_under_test.each do |os, facts|
-    next if facts[:osfamily] == 'windows'
-    next if facts[:osfamily] == 'Archlinux'
+    next if unsupported_puppetmaster_osfamily(facts[:osfamily])
     context "on #{os}" do
       if facts[:osfamily] == 'FreeBSD'
         ssldir = '/var/puppet/ssl'
