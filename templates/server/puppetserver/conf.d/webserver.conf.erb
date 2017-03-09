@@ -16,4 +16,7 @@ webserver: {
 <%- if scope.lookupvar('puppet::server::ca') -%>
     ssl-cert-chain: <%= scope.lookupvar('puppet::server::ssl_chain') %>
 <%- end -%>
+<%- if scope.lookupvar('puppet::server::web_idle_timeout') -%>
+    idle-timeout-milliseconds: <%= scope.lookupvar('puppet::server::web_idle_timeout') %>
+<%- end -%>
 }
