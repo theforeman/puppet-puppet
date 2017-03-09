@@ -117,27 +117,6 @@ describe 'puppet' do
         }
       end
 
-      # Test validate_array parameters
-      [
-        :dns_alt_names,
-      ].each do |p|
-        context "when #{p} => 'foo'" do
-          let(:params) {{ p => 'foo' }}
-          it { should raise_error(Puppet::Error, /is not an Array/) }
-        end
-      end
-
-      describe 'when directories are not absolute paths' do
-        [
-          'dir', 'logdir', 'rundir'
-        ].each do |d|
-          context "when #{d} => './somedir'" do
-            let(:params) {{ d => './somedir'}}
-            it { should raise_error(Puppet::Error, /is not an absolute path/) }
-          end
-        end
-      end
-
     end
   end
 end
