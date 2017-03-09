@@ -49,6 +49,7 @@ describe 'puppet::server::puppetserver' do
         :server_dir                             => '/etc/puppetlabs/puppet',
         :codedir                                => '/etc/puppetlabs/code',
         :server_idle_timeout                    => 1200000,
+        :server_web_idle_timeout                => 30000,
         :server_connect_timeout                 => 120000,
         :server_enable_ruby_profiler            => false,
         :server_check_for_updates               => true,

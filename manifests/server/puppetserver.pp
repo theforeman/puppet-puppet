@@ -76,6 +76,7 @@ class puppet::server::puppetserver (
   $server_dir                             = $::puppet::server::dir,
   $codedir                                = $::puppet::server::codedir,
   $server_idle_timeout                    = $::puppet::server::idle_timeout,
+  $server_web_idle_timeout                = $::puppet::server::web_idle_timeout,
   $server_connect_timeout                 = $::puppet::server::connect_timeout,
   $server_enable_ruby_profiler            = $::puppet::server::enable_ruby_profiler,
   $server_ca_auth_required                = $::puppet::server::ca_auth_required,
