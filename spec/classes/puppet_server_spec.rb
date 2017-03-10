@@ -141,13 +141,6 @@ describe 'puppet::server' do
         it { should contain_package('puppetserver') }
       end
 
-      describe 'with unknown server_implementation' do
-        let :pre_condition do
-          "class {'puppet': server => true, server_implementation => 'golang'}"
-        end
-        it { should raise_error(Puppet::Error, /"golang" does not match/) }
-      end
-
       describe "when manage_packages => false" do
         let :pre_condition do
           "class { 'puppet': server => true, manage_packages => false,
