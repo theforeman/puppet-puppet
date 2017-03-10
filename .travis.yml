@@ -28,13 +28,19 @@ matrix:
     # Acceptance tests
     - rvm: 2.3.1
       dist: trusty
-      env: PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_set=centos-7-x64_docker
+      env: PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_set=docker/centos-7
       script: bundle exec rake beaker
       services: docker
       bundler_args: --without development
     - rvm: 2.3.1
       dist: trusty
-      env: PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_set=centos-6-x64_docker
+      env: PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_set=docker/centos-6
+      script: bundle exec rake beaker
+      services: docker
+      bundler_args: --without development
+    - rvm: 2.3.1
+      dist: trusty
+      env: PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_set=docker/debian-8
       script: bundle exec rake beaker
       services: docker
       bundler_args: --without development
