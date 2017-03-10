@@ -7,8 +7,7 @@ describe 'puppet::server::config' do
     Puppet.settings[:cacrl] = @cacrl.path
   end
   on_os_under_test.each do |os, facts|
-    next if facts[:osfamily] == 'windows'
-    next if facts[:osfamily] == 'Archlinux'
+    next if unsupported_puppetmaster_osfamily(facts[:osfamily])
     context "on #{os}" do
       if Puppet.version < '4.0'
         codedir             = '/etc/puppet'

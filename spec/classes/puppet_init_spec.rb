@@ -57,7 +57,7 @@ describe 'puppet' do
         end
       end
 
-      describe 'with server => true', :unless => (['windows', 'Archlinux'].include?(facts[:osfamily])) do
+      describe 'with server => true', :unless => unsupported_puppetmaster_osfamily(facts[:osfamily]) do
         let :params do {
           :server => true,
         } end

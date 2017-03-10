@@ -178,12 +178,12 @@ class puppet::params {
 
   $manage_packages = true
 
-  if $aio_package and $::osfamily != 'Windows' {
-    $dir_owner = 'root'
-    $dir_group = $root_group
-  } elsif $::osfamily == 'Windows' {
+  if $::osfamily == 'Windows' {
     $dir_owner = undef
     $dir_group = undef
+  } elsif $aio_package or $::osfamily == 'Suse' {
+    $dir_owner = 'root'
+    $dir_group = $root_group
   } else {
     $dir_owner = $user
     $dir_group = $group

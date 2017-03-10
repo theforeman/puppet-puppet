@@ -99,6 +99,12 @@
       "operatingsystem": "Archlinux"
     },
     {
+      "operatingsystem": "SLES",
+      "operatingsystemrelease": [
+        "11", "12"
+      ]
+    },
+    {
       "operatingsystem": "windows",
       "operatingsystemrelease": [
         "Vista",
