@@ -14,15 +14,14 @@ RSpec.configure do |c|
   # Configure all nodes in nodeset
   c.before :suite do
     # Install module and dependencies
-    puppet_module_install(source: proj_root, module_name: 'puppet')
+    puppet_module_install(:source => proj_root, :module_name => 'puppet')
     hosts.each do |host|
-      on host, puppet('module', 'install', 'puppetlabs-stdlib'), acceptable_exit_codes: [0, 1]
-      on host, puppet('module', 'install', 'puppetlabs-concat'), acceptable_exit_codes: [0, 1]
-      on host, puppet('module', 'install', 'puppet-extlib'), acceptable_exit_codes: [0, 1]
-      on host, puppet('module', 'install', 'puppetlabs-apache'), acceptable_exit_codes: [0, 1]
+      ["puppetlabs-stdlib"].each do |mod|
+        on host, puppet('module', 'install', mod), { :acceptable_exit_codes => [0] }
+      end
 
       if fact_on(host, 'osfamily') == 'RedHat'
-        # don't delete downloaded rpm for use with BEAKER_provision=no + 
+        # don't delete downloaded rpm for use with BEAKER_provision=no +
         # BEAKER_destroy=no
         on host, 'sed -i "s/keepcache=.*/keepcache=1/" /etc/yum.conf'
         # refresh check if cache needs refresh on next yum command
@@ -41,4 +40,3 @@ shared_examples 'a idempotent resource' do
     apply_manifest(pp, catch_changes: true)
   end
 end
-
