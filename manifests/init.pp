@@ -643,7 +643,7 @@
 #
 # $server_allow_header_cert_info::          Enable client authentication over HTTP Headers
 #                                           Defaults to false, and can also be activated with the $server_http setting
-#                                           type:boolean
+#                                           type:Boolean
 # === Usage:
 #
 # * Simple usage:

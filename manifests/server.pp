@@ -390,7 +390,7 @@
 #
 # $allow_header_cert_info::    Allow client authentication over HTTP Headers
 #                              Defaults to false, and can also be activated with the $http setting
-#                              type:boolean
+#                              type:Boolean
 
 
 class puppet::server(
