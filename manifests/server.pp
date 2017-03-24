@@ -388,6 +388,9 @@
 #                              Defaults to false (the puppetserver will use its own conf.d/auth.conf)
 #                              type:boolean
 #
+# $allow_header_cert_info::    Allow client authentication over HTTP Headers
+#                              Defaults to false, and can also be activated with the $http setting
+#                              type:boolean
 
 
 class puppet::server(
@@ -492,6 +495,7 @@ class puppet::server(
   $use_legacy_auth_conf            = $::puppet::server_use_legacy_auth_conf,
   $check_for_updates               = $::puppet::server_check_for_updates,
   $environment_class_cache_enabled = $::puppet::server_environment_class_cache_enabled,
+  $allow_header_cert_info          = $::puppet::server_allow_header_cert_info,
 ) {
 
   validate_bool($ca)
@@ -568,6 +572,7 @@ class puppet::server(
     validate_bool($use_legacy_auth_conf)
     validate_re($puppetserver_version, '^[\d]\.[\d]+\.[\d]+$')
     validate_bool($environment_class_cache_enabled)
+    validate_bool($allow_header_cert_info)
   } else {
     if $ip != $puppet::params::ip {
       notify {

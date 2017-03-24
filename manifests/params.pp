@@ -448,6 +448,7 @@ class puppet::params {
   $server_ssl_chain_filepath              = "${server_ssl_dir}/ca/ca_crt.pem"
   $server_check_for_updates               = true
   $server_environment_class_cache_enabled = false
+  $server_allow_header_cert_info          = false
 
   # Puppetserver >= 2.2 Which auth.conf shall we use?
   $server_use_legacy_auth_conf     = false
