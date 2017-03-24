@@ -85,7 +85,7 @@ describe 'puppet::server::config' do
 
           should contain_exec('puppet_server_config-generate_ca_cert').with({
             :creates => "#{ssldir}/certs/puppetmaster.example.com.pem",
-            :command => "#{puppetcacmd} --generate puppetmaster.example.com",
+            :command => "#{puppetcacmd} --generate puppetmaster.example.com --allow-dns-alt-names",
             :umask   => '0022',
             :require => ["Concat[#{conf_file}]", "Exec[puppet_server_config-create_ssl_dir]"],
           })

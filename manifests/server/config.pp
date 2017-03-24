@@ -157,7 +157,7 @@ class puppet::server::config inherits puppet::config {
   if $::puppet::server::ca {
     exec {'puppet_server_config-generate_ca_cert':
       creates => $::puppet::server::ssl_cert,
-      command => "${::puppet::puppetca_cmd} --generate ${::puppet::server::certname}",
+      command => "${::puppet::puppetca_cmd} --generate ${::puppet::server::certname} --allow-dns-alt-names",
       umask   => '0022',
       require => [Concat["${::puppet::server::dir}/puppet.conf"],
                   Exec['puppet_server_config-create_ssl_dir'],
