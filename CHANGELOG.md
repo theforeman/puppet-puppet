@@ -1,5 +1,38 @@
 # Changelog
 
+## 8.0.0
+* New or changed parameters:
+    * Add `$autosign_content` parameter to supply content for the autosign file.
+    * Add `$ca_crl_filepath`, `$server_ca_crl_sync` and `$server_crl_enable`
+      parameters. This allows the CRL to be enabled when `puppet_ca` is
+      disabled and provides the ability to sync `#{ssldir}/ca/ca_crl.pem`
+      contents to `#{ssldir}/crl.pem` from a master of masters.
+    * Add `$server_ssl_key_manage` parameter to disable the standard private
+      key management which eases external certificate and key handling.
+    * Add `$server_ssl_chain_filepath` parameter, to specify the value of
+      `ssl-cert-chain` in the `webserver.conf` file for puppetserver.
+    * Add `$server_allow_header_cert_info` parameter to set
+      `allow-header-cert-info` for puppetserver independently from the
+      `$server_http` parameter.
+* Other features:
+    * Support native puppetserver package on FreeBSD
+    * Allow disabling crl when `server_ca => true` 
+    * Add SLES AIO agent support
+    * Add support for Parallels PSBM
+* Other changes and fixes:
+    * Lower JVM heap size when low memory is detected
+
+## 7.0.2
+* Other changes and fixes:
+    * Handle removal of the native puppet-agent package in Debian 9
+    * Generate Puppet cert with --allow-dns-alt-names
+    * The server_package parameter should also take arrays
+
+## 7.0.1
+* Other changes and fixes:
+    * Set vardir, rundir and logdir explicitly in puppet.conf
+    * Fix undefined variable error when domain fact is missing
+
 ## 7.0.0
 * New or changed parameters:
     * Add server_check_for_updates parameter to control update checking and
