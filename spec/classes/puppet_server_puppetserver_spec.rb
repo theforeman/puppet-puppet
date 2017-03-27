@@ -624,6 +624,23 @@ describe 'puppet::server::puppetserver' do
         }
       end
 
+      describe 'with server_allow_header_cert_info parameter set to true for the puppet class' do
+        let(:params) do
+          default_params.merge({
+            :server_puppetserver_dir => '/etc/custom/puppetserver',
+           })
+        end
+
+        let :pre_condition do
+          "class {'puppet': server_allow_header_cert_info => true, server_implementation => 'puppetserver'}"
+        end
+
+        it { should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
+            with_content(/allow-header-cert-info: true/).
+            with({})
+        }
+      end
+
       describe 'with server_http_allow parameter set for the puppet class' do
         let(:params) do
           default_params.merge({

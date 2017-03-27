@@ -641,6 +641,9 @@
 #                                           Defaults to false
 #                                           type:Boolean
 #
+# $server_allow_header_cert_info::          Enable client authentication over HTTP Headers
+#                                           Defaults to false, and can also be activated with the $server_http setting
+#                                           type:Boolean
 # === Usage:
 #
 # * Simple usage:
@@ -822,6 +825,7 @@ class puppet (
   $server_use_legacy_auth_conf            = $puppet::params::server_use_legacy_auth_conf,
   $server_check_for_updates               = $puppet::params::server_check_for_updates,
   $server_environment_class_cache_enabled = $puppet::params::server_environment_class_cache_enabled,
+  $server_allow_header_cert_info          = $puppet::params::server_allow_header_cert_info,
 ) inherits puppet::params {
 
   validate_bool($listen)
