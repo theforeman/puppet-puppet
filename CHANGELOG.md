@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.0.2
+* Other changes and fixes:
+    * Handle removal of the native puppet-agent package in Debian 9
+    * Generate Puppet cert with --allow-dns-alt-names
+    * The server_package parameter should also take arrays
+
 ## 7.0.1
 * Other changes and fixes:
     * Set vardir, rundir and logdir explicitly in puppet.conf
