@@ -391,190 +391,114 @@
 
 
 class puppet::server(
-  $autosign                        = $::puppet::autosign,
-  $autosign_entries                = $::puppet::autosign_entries,
-  $autosign_mode                   = $::puppet::autosign_mode,
-  $autosign_content                = $::puppet::autosign_content,
-  $hiera_config                    = $::puppet::hiera_config,
-  $admin_api_whitelist             = $::puppet::server_admin_api_whitelist,
-  $user                            = $::puppet::server_user,
-  $group                           = $::puppet::server_group,
-  $dir                             = $::puppet::server_dir,
-  $codedir                         = $::puppet::codedir,
-  $port                            = $::puppet::server_port,
-  $ip                              = $::puppet::server_ip,
-  $ca                              = $::puppet::server_ca,
-  $ca_crl_filepath                 = $::puppet::ca_crl_filepath,
-  $ca_crl_sync                     = $::puppet::server_ca_crl_sync,
-  $crl_enable                      = $::puppet::server_crl_enable,
-  $ca_auth_required                = $::puppet::server_ca_auth_required,
-  $ca_client_whitelist             = $::puppet::server_ca_client_whitelist,
-  $http                            = $::puppet::server_http,
-  $http_port                       = $::puppet::server_http_port,
-  $http_allow                      = $::puppet::server_http_allow,
-  $reports                         = $::puppet::server_reports,
-  $implementation                  = $::puppet::server_implementation,
-  $passenger                       = $::puppet::server_passenger,
-  $puppetserver_vardir             = $::puppet::server_puppetserver_vardir,
-  $puppetserver_rundir             = $::puppet::server_puppetserver_rundir,
-  $puppetserver_logdir             = $::puppet::server_puppetserver_logdir,
-  $puppetserver_dir                = $::puppet::server_puppetserver_dir,
-  $puppetserver_version            = $::puppet::server_puppetserver_version,
-  $service_fallback                = $::puppet::server_service_fallback,
-  $passenger_min_instances         = $::puppet::server_passenger_min_instances,
-  $passenger_pre_start             = $::puppet::server_passenger_pre_start,
-  $passenger_ruby                  = $::puppet::server_passenger_ruby,
-  $httpd_service                   = $::puppet::server_httpd_service,
-  $external_nodes                  = $::puppet::server_external_nodes,
-  $cipher_suites                   = $::puppet::server_cipher_suites,
-  $config_version                  = $::puppet::server_config_version,
-  $connect_timeout                 = $::puppet::server_connect_timeout,
-  $git_repo                        = $::puppet::server_git_repo,
-  $dynamic_environments            = $::puppet::server_dynamic_environments,
-  $directory_environments          = $::puppet::server_directory_environments,
-  $default_manifest                = $::puppet::server_default_manifest,
-  $default_manifest_path           = $::puppet::server_default_manifest_path,
-  $default_manifest_content        = $::puppet::server_default_manifest_content,
-  $enable_ruby_profiler            = $::puppet::server_enable_ruby_profiler,
-  $environments                    = $::puppet::server_environments,
-  $environments_owner              = $::puppet::server_environments_owner,
-  $environments_group              = $::puppet::server_environments_group,
-  $environments_mode               = $::puppet::server_environments_mode,
-  $envs_dir                        = $::puppet::server_envs_dir,
-  $envs_target                     = $::puppet::server_envs_target,
-  $common_modules_path             = $::puppet::server_common_modules_path,
-  $git_repo_mode                   = $::puppet::server_git_repo_mode,
-  $git_repo_path                   = $::puppet::server_git_repo_path,
-  $git_repo_group                  = $::puppet::server_git_repo_group,
-  $git_repo_user                   = $::puppet::server_git_repo_user,
-  $git_branch_map                  = $::puppet::server_git_branch_map,
-  $idle_timeout                    = $::puppet::server_idle_timeout,
-  $post_hook_content               = $::puppet::server_post_hook_content,
-  $post_hook_name                  = $::puppet::server_post_hook_name,
-  $storeconfigs_backend            = $::puppet::server_storeconfigs_backend,
-  $app_root                        = $::puppet::server_app_root,
-  $ruby_load_paths                 = $::puppet::server_ruby_load_paths,
-  $ssl_dir                         = $::puppet::server_ssl_dir,
-  $ssl_dir_manage                  = $::puppet::server_ssl_dir_manage,
-  $ssl_key_manage                  = $::puppet::server_ssl_key_manage,
-  $ssl_protocols                   = $::puppet::server_ssl_protocols,
-  $ssl_chain_filepath              = $::puppet::server_ssl_chain_filepath,
-  $package                         = $::puppet::server_package,
-  $version                         = $::puppet::server_version,
-  $certname                        = $::puppet::server_certname,
-  $enc_api                         = $::puppet::server_enc_api,
-  $report_api                      = $::puppet::server_report_api,
-  $request_timeout                 = $::puppet::server_request_timeout,
-  $ca_proxy                        = $::puppet::server_ca_proxy,
-  $strict_variables                = $::puppet::server_strict_variables,
-  $additional_settings             = $::puppet::server_additional_settings,
-  $rack_arguments                  = $::puppet::server_rack_arguments,
-  $foreman                         = $::puppet::server_foreman,
-  $foreman_url                     = $::puppet::server_foreman_url,
-  $foreman_ssl_ca                  = $::puppet::server_foreman_ssl_ca,
-  $foreman_ssl_cert                = $::puppet::server_foreman_ssl_cert,
-  $foreman_ssl_key                 = $::puppet::server_foreman_ssl_key,
-  $server_foreman_facts            = $::puppet::server_foreman_facts,
-  $puppet_basedir                  = $::puppet::server_puppet_basedir,
-  $puppetdb_host                   = $::puppet::server_puppetdb_host,
-  $puppetdb_port                   = $::puppet::server_puppetdb_port,
-  $puppetdb_swf                    = $::puppet::server_puppetdb_swf,
-  $parser                          = $::puppet::server_parser,
-  $environment_timeout             = $::puppet::server_environment_timeout,
-  $jvm_java_bin                    = $::puppet::server_jvm_java_bin,
-  $jvm_config                      = $::puppet::server_jvm_config,
-  $jvm_min_heap_size               = $::puppet::server_jvm_min_heap_size,
-  $jvm_max_heap_size               = $::puppet::server_jvm_max_heap_size,
-  $jvm_extra_args                  = $::puppet::server_jvm_extra_args,
-  $jruby_gem_home                  = $::puppet::server_jruby_gem_home,
-  $max_active_instances            = $::puppet::server_max_active_instances,
-  $max_requests_per_instance       = $::puppet::server_max_requests_per_instance,
-  $use_legacy_auth_conf            = $::puppet::server_use_legacy_auth_conf,
-  $check_for_updates               = $::puppet::server_check_for_updates,
-  $environment_class_cache_enabled = $::puppet::server_environment_class_cache_enabled,
+  Variant[Boolean, Stdlib::Absolutepath] $autosign                         = $::puppet::autosign,
+  Array[String] $autosign_entries                                          = $::puppet::autosign_entries,
+  String $autosign_mode                                                    = $::puppet::autosign_mode,
+  Optional[String] $autosign_content                                       = $::puppet::autosign_content,
+  String $hiera_config                                                     = $::puppet::hiera_config,
+  Array $admin_api_whitelist                                               = $::puppet::server_admin_api_whitelist,
+  $user                                                                    = $::puppet::server_user,
+  $group                                                                   = $::puppet::server_group,
+  $dir                                                                     = $::puppet::server_dir,
+  $codedir                                                                 = $::puppet::codedir,
+  $port                                                                    = $::puppet::server_port,
+  $ip                                                                      = $::puppet::server_ip,
+  Boolean $ca                                                              = $::puppet::server_ca,
+  $ca_crl_filepath                                                         = $::puppet::ca_crl_filepath,
+  $ca_crl_sync                                                             = $::puppet::server_ca_crl_sync,
+  $crl_enable                                                              = $::puppet::server_crl_enable,
+  Boolean $ca_auth_required                                                = $::puppet::server_ca_auth_required,
+  Array $ca_client_whitelist                                               = $::puppet::server_ca_client_whitelist,
+  Boolean $http                                                            = $::puppet::server_http,
+  $http_port                                                               = $::puppet::server_http_port,
+  Array $http_allow                                                        = $::puppet::server_http_allow,
+  $reports                                                                 = $::puppet::server_reports,
+  Enum['master', 'puppetserver'] $implementation                           = $::puppet::server_implementation,
+  Boolean $passenger                                                       = $::puppet::server_passenger,
+  Stdlib::Absolutepath $puppetserver_vardir                                = $::puppet::server_puppetserver_vardir,
+  $puppetserver_rundir                                                     = $::puppet::server_puppetserver_rundir,
+  $puppetserver_logdir                                                     = $::puppet::server_puppetserver_logdir,
+  Stdlib::Absolutepath $puppetserver_dir                                   = $::puppet::server_puppetserver_dir,
+  Pattern[/^[\d]\.[\d]+\.[\d]+$/] $puppetserver_version                    = $::puppet::server_puppetserver_version,
+  Boolean $service_fallback                                                = $::puppet::server_service_fallback,
+  Integer $passenger_min_instances                                         = $::puppet::server_passenger_min_instances,
+  Boolean $passenger_pre_start                                             = $::puppet::server_passenger_pre_start,
+  $passenger_ruby                                                          = $::puppet::server_passenger_ruby,
+  $httpd_service                                                           = $::puppet::server_httpd_service,
+  String $external_nodes                                                   = $::puppet::server_external_nodes,
+  Array $cipher_suites                                                     = $::puppet::server_cipher_suites,
+  $config_version                                                          = $::puppet::server_config_version,
+  Integer $connect_timeout                                                 = $::puppet::server_connect_timeout,
+  Boolean $git_repo                                                        = $::puppet::server_git_repo,
+  $dynamic_environments                                                    = $::puppet::server_dynamic_environments,
+  $directory_environments                                                  = $::puppet::server_directory_environments,
+  Boolean $default_manifest                                                = $::puppet::server_default_manifest,
+  Stdlib::Absolutepath $default_manifest_path                              = $::puppet::server_default_manifest_path,
+  String $default_manifest_content                                         = $::puppet::server_default_manifest_content,
+  Boolean $enable_ruby_profiler                                            = $::puppet::server_enable_ruby_profiler,
+  $environments                                                            = $::puppet::server_environments,
+  $environments_owner                                                      = $::puppet::server_environments_owner,
+  $environments_group                                                      = $::puppet::server_environments_group,
+  $environments_mode                                                       = $::puppet::server_environments_mode,
+  $envs_dir                                                                = $::puppet::server_envs_dir,
+  $envs_target                                                             = $::puppet::server_envs_target,
+  $common_modules_path                                                     = $::puppet::server_common_modules_path,
+  $git_repo_mode                                                           = $::puppet::server_git_repo_mode,
+  $git_repo_path                                                           = $::puppet::server_git_repo_path,
+  $git_repo_group                                                          = $::puppet::server_git_repo_group,
+  $git_repo_user                                                           = $::puppet::server_git_repo_user,
+  $git_branch_map                                                          = $::puppet::server_git_branch_map,
+  Integer $idle_timeout                                                    = $::puppet::server_idle_timeout,
+  $post_hook_content                                                       = $::puppet::server_post_hook_content,
+  $post_hook_name                                                          = $::puppet::server_post_hook_name,
+  $storeconfigs_backend                                                    = $::puppet::server_storeconfigs_backend,
+  $app_root                                                                = $::puppet::server_app_root,
+  Array $ruby_load_paths                                                   = $::puppet::server_ruby_load_paths,
+  $ssl_dir                                                                 = $::puppet::server_ssl_dir,
+  Boolean $ssl_dir_manage                                                  = $::puppet::server_ssl_dir_manage,
+  Boolean $ssl_key_manage                                                  = $::puppet::server_ssl_key_manage,
+  Array $ssl_protocols                                                     = $::puppet::server_ssl_protocols,
+  $ssl_chain_filepath                                                      = $::puppet::server_ssl_chain_filepath,
+  $package                                                                 = $::puppet::server_package,
+  $version                                                                 = $::puppet::server_version,
+  $certname                                                                = $::puppet::server_certname,
+  $enc_api                                                                 = $::puppet::server_enc_api,
+  $report_api                                                              = $::puppet::server_report_api,
+  $request_timeout                                                         = $::puppet::server_request_timeout,
+  Optional[String] $ca_proxy                                               = $::puppet::server_ca_proxy,
+  Boolean $strict_variables                                                = $::puppet::server_strict_variables,
+  Hash $additional_settings                                                = $::puppet::server_additional_settings,
+  Array $rack_arguments                                                    = $::puppet::server_rack_arguments,
+  Boolean $foreman                                                         = $::puppet::server_foreman,
+  $foreman_url                                                             = $::puppet::server_foreman_url,
+  $foreman_ssl_ca                                                          = $::puppet::server_foreman_ssl_ca,
+  $foreman_ssl_cert                                                        = $::puppet::server_foreman_ssl_cert,
+  $foreman_ssl_key                                                         = $::puppet::server_foreman_ssl_key,
+  Boolean $server_foreman_facts                                            = $::puppet::server_foreman_facts,
+  $puppet_basedir                                                          = $::puppet::server_puppet_basedir,
+  Optional[String] $puppetdb_host                                          = $::puppet::server_puppetdb_host,
+  $puppetdb_port                                                           = $::puppet::server_puppetdb_port,
+  Boolean $puppetdb_swf                                                    = $::puppet::server_puppetdb_swf,
+  Enum['current', 'future'] $parser                                        = $::puppet::server_parser,
+  Optional[Pattern[/^(unlimited|0|[0-9]+[smh]{1})$/]] $environment_timeout = $::puppet::server_environment_timeout,
+  $jvm_java_bin                                                            = $::puppet::server_jvm_java_bin,
+  $jvm_config                                                              = $::puppet::server_jvm_config,
+  Pattern[/^[0-9]+[kKmMgG]$/] $jvm_min_heap_size                           = $::puppet::server_jvm_min_heap_size,
+  Pattern[/^[0-9]+[kKmMgG]$/] $jvm_max_heap_size                           = $::puppet::server_jvm_max_heap_size,
+  $jvm_extra_args                                                          = $::puppet::server_jvm_extra_args,
+  Stdlib::Absolutepath $jruby_gem_home                                     = $::puppet::server_jruby_gem_home,
+  Integer $max_active_instances                                            = $::puppet::server_max_active_instances,
+  Integer $max_requests_per_instance                                       = $::puppet::server_max_requests_per_instance,
+  Boolean $use_legacy_auth_conf                                            = $::puppet::server_use_legacy_auth_conf,
+  $check_for_updates                                                       = $::puppet::server_check_for_updates,
+  Boolean $environment_class_cache_enabled                                 = $::puppet::server_environment_class_cache_enabled,
 ) {
 
-  validate_bool($ca)
-  validate_bool($http)
-  validate_bool($passenger)
-  validate_bool($git_repo)
-  validate_bool($service_fallback)
-  validate_bool($server_foreman_facts)
-  validate_bool($strict_variables)
-  validate_bool($foreman)
-  validate_bool($puppetdb_swf)
-  validate_bool($default_manifest)
-  validate_bool($ssl_dir_manage)
-  validate_bool($ssl_key_manage)
-  validate_bool($passenger_pre_start)
-  validate_integer($passenger_min_instances)
-
-  validate_hash($additional_settings)
-
-  if $default_manifest {
-    validate_absolute_path($default_manifest_path)
-    validate_string($default_manifest_content)
-  }
-
-  validate_string($hiera_config)
-  validate_string($external_nodes)
-  if $ca_proxy {
-    validate_string($ca_proxy)
-  }
-  if $puppetdb_host {
-    validate_string($puppetdb_host)
-  }
-
-  if $http {
-    validate_array($http_allow)
-  }
-
-  if ! is_bool($autosign) {
-    validate_absolute_path($autosign)
-    validate_string($autosign_mode)
-    validate_array($autosign_entries)
-  }
-
-  if $autosign_content {
-    validate_string($autosign_content)
-  }
-
-  validate_array($rack_arguments)
-
-  validate_re($implementation, '^(master|puppetserver)$')
-  validate_re($parser, '^(current|future)$')
-
-  if $environment_timeout {
-    validate_re($environment_timeout, '^(unlimited|0|[0-9]+[smh]{1})$')
-  }
-
-  if $implementation == 'puppetserver' {
-    validate_re($jvm_min_heap_size, '^[0-9]+[kKmMgG]$')
-    validate_re($jvm_max_heap_size, '^[0-9]+[kKmMgG]$')
-    validate_absolute_path($puppetserver_dir)
-    validate_absolute_path($puppetserver_vardir)
-    validate_absolute_path($jruby_gem_home)
-    validate_integer($max_active_instances)
-    validate_integer($max_requests_per_instance)
-    validate_integer($idle_timeout)
-    validate_integer($connect_timeout)
-    validate_array($ssl_protocols)
-    validate_array($cipher_suites)
-    validate_array($ruby_load_paths)
-    validate_array($ca_client_whitelist)
-    validate_array($admin_api_whitelist)
-    validate_bool($enable_ruby_profiler)
-    validate_bool($ca_auth_required)
-    validate_bool($use_legacy_auth_conf)
-    validate_re($puppetserver_version, '^[\d]\.[\d]+\.[\d]+$')
-    validate_bool($environment_class_cache_enabled)
-  } else {
-    if $ip != $puppet::params::ip {
-      notify {
-        'ip_not_supported':
-          message  => "Bind IP address is unsupported for the ${implementation} implementation.",
-          loglevel => 'warning',
-      }
+  if $implementation != 'puppetserver' and $ip != $puppet::params::ip {
+    notify {
+      'ip_not_supported':
+        message  => "Bind IP address is unsupported for the ${implementation} implementation.",
+        loglevel => 'warning',
     }
   }
 
