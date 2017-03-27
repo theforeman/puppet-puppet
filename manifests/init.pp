@@ -377,7 +377,7 @@
 #                                           type:Stdlib::Absolutepath
 #
 # $server_package::                         Custom package name for puppet master
-#                                           type:Optional[String]
+#                                           type:Optional[Variant[String, Array[String]]]
 #
 # $server_version::                         Custom package version for puppet master
 #                                           type:Optional[String]
