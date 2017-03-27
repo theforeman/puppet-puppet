@@ -25,6 +25,7 @@ gem 'simplecov'
 gem 'puppet-blacksmith', '>= 3.1.0', {"groups"=>["development"]}
 gem 'json', '~> 1.0', {"platforms"=>["ruby_19"], "groups"=>["test"]}
 gem 'json_pure', '~> 1.0', {"platforms"=>["ruby_19"], "groups"=>["test"]}
+gem 'logging', '~> 2.1.0', {"platforms"=>["ruby_19"], "groups"=>["test"]}
 gem 'metadata-json-lint'
 gem 'kafo_module_lint'
 
