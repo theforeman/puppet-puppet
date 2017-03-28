@@ -1,6 +1,6 @@
 # Changelog
 
-## 8.0.0
+## 7.1.0
 * New or changed parameters:
     * Add `$autosign_content` parameter to supply content for the autosign file.
     * Add `$ca_crl_filepath`, `$server_ca_crl_sync` and `$server_crl_enable`
