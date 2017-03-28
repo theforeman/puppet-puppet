@@ -85,7 +85,21 @@ class puppet::config(
       }
     }
   } ~>
-  file { "${puppet_dir}/auth.conf":
+  concat { "${puppet_dir}/auth.conf":
+    owner => 'root',
+    group => $::puppet::params::root_group,
+    mode  => '0644',
+  }
+
+  concat::fragment { 'puppet.auth+10-main-start':
+    target  => "${puppet_dir}/auth.conf",
     content => template($auth_template),
+    order   => '10',
+  }
+
+  concat::fragment { 'zzz_puppet.auth+999-main-end':
+    target  => "${puppet_dir}/auth.conf",
+    content => template('puppet/auth_end.conf.erb'),
+    order   => '999',
   }
 }
