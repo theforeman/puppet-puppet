@@ -279,8 +279,8 @@ class puppet::server::config inherits puppet::config {
   if $::puppet::server::foreman {
     # Include foreman components for the puppetmaster
     # ENC script, reporting script etc.
-    anchor { 'puppet::server::config_start': } ->
-    class {'::foreman::puppetmaster':
+    anchor { 'puppet::server::config_start': }
+    -> class {'::foreman::puppetmaster':
       foreman_url    => $::puppet::server::foreman_url,
       receive_facts  => $::puppet::server::server_foreman_facts,
       puppet_home    => $::puppet::server::puppetserver_vardir,
@@ -292,7 +292,8 @@ class puppet::server::config inherits puppet::config {
       ssl_ca         => pick($::puppet::server::foreman_ssl_ca, $::puppet::server::ssl_ca_cert),
       ssl_cert       => pick($::puppet::server::foreman_ssl_cert, $::puppet::server::ssl_cert),
       ssl_key        => pick($::puppet::server::foreman_ssl_key, $::puppet::server::ssl_cert_key),
-    } ~> anchor { 'puppet::server::config_end': }
+    }
+    ~> anchor { 'puppet::server::config_end': }
   }
 
   ## PuppetDB
