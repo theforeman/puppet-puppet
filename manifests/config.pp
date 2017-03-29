@@ -71,8 +71,8 @@ class puppet::config(
     ensure => directory,
     owner  => $::puppet::dir_owner,
     group  => $::puppet::dir_group,
-  } ->
-  case $::osfamily {
+  }
+  -> case $::osfamily {
     'Windows': {
       concat { "${puppet_dir}/puppet.conf": }
     }
@@ -84,8 +84,8 @@ class puppet::config(
         mode  => '0644',
       }
     }
-  } ~>
-  file { "${puppet_dir}/auth.conf":
+  }
+  ~> file { "${puppet_dir}/auth.conf":
     content => template($auth_template),
   }
 }
