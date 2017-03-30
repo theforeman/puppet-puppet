@@ -1,6 +1,6 @@
 {
   "name": "theforeman-puppet",
-  "version": "7.1.0",
+  "version": "7.1.1",
   "author": "theforeman",
   "summary": "Puppet agent and server configuration",
   "license": "GPL-3.0+",
@@ -101,7 +101,8 @@
     {
       "operatingsystem": "SLES",
       "operatingsystemrelease": [
-        "11", "12"
+        "11",
+        "12"
       ]
     },
     {
