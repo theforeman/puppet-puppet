@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.1.1
+* Other changes and fixes:
+    * Add Puppet 3 client compatibility under rack
+
 ## 7.1.0
 * New or changed parameters:
     * Add `$autosign_content` parameter to supply content for the autosign file.

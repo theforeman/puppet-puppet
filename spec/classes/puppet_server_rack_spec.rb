@@ -56,7 +56,7 @@ describe 'puppet::server::rack' do
         end
 
         it 'should manage config.ru contents' do
-          verify_exact_contents(catalogue, '/etc/puppet/rack/config.ru', [
+          verify_contents(catalogue, '/etc/puppet/rack/config.ru', [
             '$0 = "master"',
             'ARGV << "--rack"',
             'ARGV << "--confdir" << "/etc/puppet"',
