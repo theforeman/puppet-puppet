@@ -21,6 +21,7 @@
     * Add support for Parallels PSBM
 * Other changes and fixes:
     * Lower JVM heap size when low memory is detected
+    * Add Puppet 3 client compatibility under rack
 
 ## 7.0.2
 * Other changes and fixes:
