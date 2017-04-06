@@ -177,27 +177,6 @@ describe 'puppet::server' do
           it { should contain_package(server_package) }
         end
       end
-
-      describe 'when an invalid jvm size value is given' do
-        context "when server_jvm_min_heap_size => 'x4m'" do
-          let :pre_condition do
-            "class { 'puppet': server => true,
-                               server_implementation => 'puppetserver',
-                               server_jvm_min_heap_size => 'x4m',
-                               server_jvm_max_heap_size => '2G' }"
-          end
-          it { should raise_error(Puppet::Error, /does not match "\^\[0-9\]\+\[kKmMgG\]\$"/) }
-        end
-        context "when server_jvm_max_heap_size => 'x4m'" do
-          let :pre_condition do
-            "class { 'puppet': server => true,
-                               server_implementation => 'puppetserver',
-                               server_jvm_min_heap_size => '2G',
-                               server_jvm_max_heap_size => 'x4m' }"
-          end
-          it { should raise_error(Puppet::Error, /does not match "\^\[0-9\]\+\[kKmMgG\]\$"/) }
-        end
-      end
     end
   end
 end

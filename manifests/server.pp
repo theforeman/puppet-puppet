@@ -324,7 +324,7 @@ class puppet::server(
   Optional[Stdlib::Absolutepath] $puppetserver_rundir = $::puppet::server_puppetserver_rundir,
   Optional[Stdlib::Absolutepath] $puppetserver_logdir = $::puppet::server_puppetserver_logdir,
   Stdlib::Absolutepath $puppetserver_dir = $::puppet::server_puppetserver_dir,
-  Pattern[/^[0-9\.]+$/] $puppetserver_version = $::puppet::server_puppetserver_version,
+  Pattern[/^[\d]\.[\d]+\.[\d]+$/] $puppetserver_version = $::puppet::server_puppetserver_version,
   Boolean $service_fallback = $::puppet::server_service_fallback,
   Integer[0] $passenger_min_instances = $::puppet::server_passenger_min_instances,
   Boolean $passenger_pre_start = $::puppet::server_passenger_pre_start,
@@ -388,10 +388,10 @@ class puppet::server(
   Variant[Undef, Enum['unlimited'], Pattern[/^\d+[smhdy]?$/]] $environment_timeout = $::puppet::server_environment_timeout,
   String $jvm_java_bin = $::puppet::server_jvm_java_bin,
   String $jvm_config = $::puppet::server_jvm_config,
-  String $jvm_min_heap_size = $::puppet::server_jvm_min_heap_size,
-  String $jvm_max_heap_size = $::puppet::server_jvm_max_heap_size,
+  Pattern[/^[0-9]+[kKmMgG]$/] $jvm_min_heap_size = $::puppet::server_jvm_min_heap_size,
+  Pattern[/^[0-9]+[kKmMgG]$/] $jvm_max_heap_size = $::puppet::server_jvm_max_heap_size,
   String $jvm_extra_args = $::puppet::server_jvm_extra_args,
-  String $jruby_gem_home = $::puppet::server_jruby_gem_home,
+  Optional[Stdlib::Absolutepath] $jruby_gem_home = $::puppet::server_jruby_gem_home,
   Integer[1] $max_active_instances = $::puppet::server_max_active_instances,
   Integer[0] $max_requests_per_instance = $::puppet::server_max_requests_per_instance,
   Boolean $use_legacy_auth_conf = $::puppet::server_use_legacy_auth_conf,
@@ -399,89 +399,11 @@ class puppet::server(
   Boolean $environment_class_cache_enabled = $::puppet::server_environment_class_cache_enabled,
   Boolean $allow_header_cert_info = $::puppet::server_allow_header_cert_info,
 ) {
-
-  validate_bool($ca)
-  validate_bool($http)
-  validate_bool($passenger)
-  validate_bool($git_repo)
-  validate_bool($service_fallback)
-  validate_bool($server_foreman_facts)
-  validate_bool($strict_variables)
-  validate_bool($foreman)
-  validate_bool($puppetdb_swf)
-  validate_bool($default_manifest)
-  validate_bool($ssl_dir_manage)
-  validate_bool($ssl_key_manage)
-  validate_bool($passenger_pre_start)
-  validate_integer($passenger_min_instances)
-
-  validate_hash($additional_settings)
-
-  if $default_manifest {
-    validate_absolute_path($default_manifest_path)
-    validate_string($default_manifest_content)
-  }
-
-  validate_string($hiera_config)
-  validate_string($external_nodes)
-  if $ca_proxy {
-    validate_string($ca_proxy)
-  }
-  if $puppetdb_host {
-    validate_string($puppetdb_host)
-  }
-
-  if $http {
-    validate_array($http_allow)
-  }
-
-  if ! is_bool($autosign) {
-    validate_absolute_path($autosign)
-    validate_string($autosign_mode)
-    validate_array($autosign_entries)
-  }
-
-  if $autosign_content {
-    validate_string($autosign_content)
-  }
-
-  validate_array($rack_arguments)
-
-  validate_re($implementation, '^(master|puppetserver)$')
-  validate_re($parser, '^(current|future)$')
-
-  if $environment_timeout {
-    validate_re($environment_timeout, '^(unlimited|0|[0-9]+[smh]{1})$')
-  }
-
-  if $implementation == 'puppetserver' {
-    validate_re($jvm_min_heap_size, '^[0-9]+[kKmMgG]$')
-    validate_re($jvm_max_heap_size, '^[0-9]+[kKmMgG]$')
-    validate_absolute_path($puppetserver_dir)
-    validate_absolute_path($puppetserver_vardir)
-    validate_absolute_path($jruby_gem_home)
-    validate_integer($max_active_instances)
-    validate_integer($max_requests_per_instance)
-    validate_integer($idle_timeout)
-    validate_integer($connect_timeout)
-    validate_array($ssl_protocols)
-    validate_array($cipher_suites)
-    validate_array($ruby_load_paths)
-    validate_array($ca_client_whitelist)
-    validate_array($admin_api_whitelist)
-    validate_bool($enable_ruby_profiler)
-    validate_bool($ca_auth_required)
-    validate_bool($use_legacy_auth_conf)
-    validate_re($puppetserver_version, '^[\d]\.[\d]+\.[\d]+$')
-    validate_bool($environment_class_cache_enabled)
-    validate_bool($allow_header_cert_info)
-  } else {
-    if $ip != $puppet::params::ip {
-      notify {
-        'ip_not_supported':
-          message  => "Bind IP address is unsupported for the ${implementation} implementation.",
-          loglevel => 'warning',
-      }
+  if $implementation == 'master' and $ip != $puppet::params::ip {
+    notify {
+      'ip_not_supported':
+        message  => "Bind IP address is unsupported for the ${implementation} implementation.",
+        loglevel => 'warning',
     }
   }
 

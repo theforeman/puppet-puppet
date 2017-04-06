@@ -588,7 +588,7 @@ class puppet (
   Optional[Stdlib::Absolutepath] $server_puppetserver_vardir = $puppet::params::server_puppetserver_vardir,
   Optional[Stdlib::Absolutepath] $server_puppetserver_rundir = $puppet::params::server_puppetserver_rundir,
   Optional[Stdlib::Absolutepath] $server_puppetserver_logdir = $puppet::params::server_puppetserver_logdir,
-  Pattern[/^[0-9\.]+$/] $server_puppetserver_version = $puppet::params::server_puppetserver_version,
+  Pattern[/^[\d]\.[\d]+\.[\d]+$/] $server_puppetserver_version = $puppet::params::server_puppetserver_version,
   Boolean $server_service_fallback = $puppet::params::server_service_fallback,
   Integer[0] $server_passenger_min_instances = $puppet::params::server_passenger_min_instances,
   Boolean $server_passenger_pre_start = $puppet::params::server_passenger_pre_start,
@@ -654,10 +654,10 @@ class puppet (
   Variant[Undef, Enum['unlimited'], Pattern[/^\d+[smhdy]?$/]] $server_environment_timeout = $puppet::params::server_environment_timeout,
   String $server_jvm_java_bin = $puppet::params::server_jvm_java_bin,
   String $server_jvm_config = $puppet::params::server_jvm_config,
-  String $server_jvm_min_heap_size = $puppet::params::server_jvm_min_heap_size,
-  String $server_jvm_max_heap_size = $puppet::params::server_jvm_max_heap_size,
+  Pattern[/^[0-9]+[kKmMgG]$/] $server_jvm_min_heap_size = $puppet::params::server_jvm_min_heap_size,
+  Pattern[/^[0-9]+[kKmMgG]$/] $server_jvm_max_heap_size = $puppet::params::server_jvm_max_heap_size,
   String $server_jvm_extra_args = $puppet::params::server_jvm_extra_args,
-  String $server_jruby_gem_home = $puppet::params::server_jruby_gem_home,
+  Optional[Stdlib::Absolutepath] $server_jruby_gem_home = $puppet::params::server_jruby_gem_home,
   Integer[1] $server_max_active_instances = $puppet::params::server_max_active_instances,
   Integer[0] $server_max_requests_per_instance = $puppet::params::server_max_requests_per_instance,
   Boolean $server_use_legacy_auth_conf = $puppet::params::server_use_legacy_auth_conf,
@@ -665,41 +665,6 @@ class puppet (
   Boolean $server_environment_class_cache_enabled = $puppet::params::server_environment_class_cache_enabled,
   Boolean $server_allow_header_cert_info = $puppet::params::server_allow_header_cert_info,
 ) inherits puppet::params {
-
-  validate_bool($listen)
-  validate_bool($pluginsync)
-  validate_bool($splay)
-  validate_bool($usecacheonfailure)
-  validate_bool($agent_noop)
-  validate_bool($agent)
-  validate_bool($remove_lock)
-  validate_bool($server)
-  validate_bool($allow_any_crl_auth)
-
-  validate_hash($additional_settings)
-  validate_hash($agent_additional_settings)
-
-  if $ca_server {
-    validate_string($ca_server)
-  }
-
-  validate_string($systemd_unit_name)
-
-  validate_string($service_name)
-
-  validate_array($listen_to)
-  validate_array($dns_alt_names)
-  validate_array($auth_allowed)
-
-  validate_absolute_path($dir)
-  validate_absolute_path($vardir)
-  validate_absolute_path($logdir)
-  validate_absolute_path($rundir)
-
-  if $manage_packages != true and $manage_packages != false {
-    validate_re($manage_packages, '^(server|agent)$')
-  }
-
   include ::puppet::config
   Class['puppet::config'] -> Class['puppet']
 
