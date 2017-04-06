@@ -87,9 +87,9 @@ describe 'puppet' do
         }
       end
 
-      describe 'with empty ca_port' do
+      describe 'with undef ca_port' do
         let :params do {
-          :ca_port => '',
+          :ca_port => :undef,
         } end
 
         it {
@@ -99,7 +99,7 @@ describe 'puppet' do
 
       describe 'with ca_port' do
         let :params do {
-          :ca_port => '8140',
+          :ca_port => 8140,
         } end
 
         it {
@@ -116,28 +116,6 @@ describe 'puppet' do
           should contain_puppet__config__main('ca_port').with({'value' => 8140})
         }
       end
-
-      # Test validate_array parameters
-      [
-        :dns_alt_names,
-      ].each do |p|
-        context "when #{p} => 'foo'" do
-          let(:params) {{ p => 'foo' }}
-          it { should raise_error(Puppet::Error, /is not an Array/) }
-        end
-      end
-
-      describe 'when directories are not absolute paths' do
-        [
-          'dir', 'logdir', 'rundir'
-        ].each do |d|
-          context "when #{d} => './somedir'" do
-            let(:params) {{ d => './somedir'}}
-            it { should raise_error(Puppet::Error, /is not an absolute path/) }
-          end
-        end
-      end
-
     end
   end
 end

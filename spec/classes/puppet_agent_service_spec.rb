@@ -117,14 +117,6 @@ describe 'puppet::agent::service' do
           end
         end
       end
-
-      describe 'when runmode => foo' do
-        let :pre_condition do
-          "class {'puppet': agent => true, runmode => 'foo'}"
-        end
-
-        it { should raise_error(Puppet::Error, /Runmode of foo not supported by puppet::agent::config!/) }
-      end
     end
   end
 end

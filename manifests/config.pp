@@ -34,7 +34,7 @@ class puppet::config(
   if $ca_server and !empty($ca_server) {
     puppet::config::main{'ca_server': value => $ca_server; }
   }
-  if $ca_port and !empty($ca_port) {
+  if $ca_port {
     puppet::config::main{'ca_port': value => $ca_port; }
   }
   if $dns_alt_names and !empty($dns_alt_names) {

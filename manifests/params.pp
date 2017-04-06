@@ -12,7 +12,7 @@ class puppet::params {
   $pluginsync          = true
   $splay               = false
   $splaylimit          = '1800'
-  $runinterval         = '1800'
+  $runinterval         = 1800
   $runmode             = 'service'
 
   # Not defined here as the commands depend on module parameter "dir"
