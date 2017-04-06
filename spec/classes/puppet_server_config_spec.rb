@@ -262,7 +262,20 @@ describe 'puppet::server::config' do
            }"
         end
 
-        it { should raise_error(Puppet::Error, /Cannot set both autosign_content and autosign_entries/) }
+        it { should raise_error(Puppet::Error, /Cannot set both autosign_content\/autosign_source and autosign_entries/) }
+      end
+
+
+      describe "when autosign_source => set to foo.bar and and autosign_entries set to ['foo.bar']=> true" do
+        let :pre_condition do
+          "class {'puppet':
+              server           => true,
+              autosign_source  => 'foo.bar',
+              autosign_entries => ['foo.bar'],
+           }"
+        end
+
+        it { should raise_error(Puppet::Error, /Cannot set both autosign_content\/autosign_source and autosign_entries/) }
       end
 
 
