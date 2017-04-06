@@ -7,19 +7,16 @@
 # $app_root::      Rack application top-level directory
 #
 # $puppetmaster::  Whether to start/stop the (Ruby) puppetmaster service
-#                  type:boolean
 #
 # $puppetserver::  Whether to start/stop the (JVM) puppetserver service
-#                  type:boolean
 #
 # $rack::          Whether to manage restarts for the Rack-based puppetmaster service
-#                  type:boolean
 #
 class puppet::server::service(
-  $app_root     = undef,
-  $puppetmaster = undef,
-  $puppetserver = undef,
-  $rack         = undef,
+  Optional[Stdlib::Absolutepath] $app_root = undef,
+  Optional[Boolean] $puppetmaster = undef,
+  Optional[Boolean] $puppetserver = undef,
+  Optional[Boolean] $rack = undef,
 ) {
   if $puppetmaster and $puppetserver {
     fail('Both puppetmaster and puppetserver cannot be enabled simultaneously')
