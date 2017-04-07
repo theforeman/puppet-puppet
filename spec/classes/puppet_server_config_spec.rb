@@ -266,11 +266,11 @@ describe 'puppet::server::config' do
       end
 
 
-      describe "when autosign_source => set to foo.bar and and autosign_entries set to ['foo.bar']=> true" do
+      describe "when autosign_source => set to puppet:///foo/bar and and autosign_entries set to ['foo.bar']=> true" do
         let :pre_condition do
           "class {'puppet':
               server           => true,
-              autosign_source  => 'foo.bar',
+              autosign_source  => 'puppet:///foo/bar',
               autosign_entries => ['foo.bar'],
            }"
         end
@@ -279,7 +279,7 @@ describe 'puppet::server::config' do
       end
 
 
-      describe "when autosign => #{confdir}/custom_autosign.sh, autosign_mode => 664 and autosign_content set to 'foo.bar'" do
+      describe "when autosign => #{confdir}/custom_autosign.sh, autosign_mode => 775 and autosign_content set to 'foo.bar'" do
         let :pre_condition do
           "class {'puppet':
               server           => true,
@@ -296,6 +296,26 @@ describe 'puppet::server::config' do
         it 'should contain custom_autosign.sh with content set' do
            should contain_file("#{confdir}/custom_autosign.sh")
            should contain_file("#{confdir}/custom_autosign.sh").with_content(/foo.bar/)
+        end
+      end
+
+      describe "when autosign => #{confdir}/custom_autosign.sh, autosign_mode => 775 and autosign_source set to 'puppet:///foo/bar'" do
+        let :pre_condition do
+          "class {'puppet':
+              server           => true,
+              autosign         => '#{confdir}/custom_autosign.sh',
+              autosign_mode    => '775',
+              autosign_source  => 'puppet:///foo/bar',
+           }"
+        end
+
+        it 'should contain puppet.conf [main] with autosign = /somedir/custom_autosign { mode = 775 }' do
+          should contain_puppet__config__master('autosign').with({'value' => "#{confdir}/custom_autosign.sh { mode = 775 }"})
+        end
+
+        it 'should contain custom_autosign.sh with content set' do
+           should contain_file("#{confdir}/custom_autosign.sh")
+           should contain_file("#{confdir}/custom_autosign.sh").with_source('puppet:///foo/bar')
         end
       end
 
