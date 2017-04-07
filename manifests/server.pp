@@ -26,6 +26,10 @@
 #                              template('another_module/autosign.sh.erb')
 #                              type:Optional[String]
 #
+# $autosign_source::           If set, use this as the source for the autosign file,
+#                              instead of autosign_content.
+#                              type:Optional[String]
+#
 # $hiera_config::              The hiera configuration file.
 #                              type:string
 #
@@ -398,6 +402,7 @@ class puppet::server(
   $autosign_entries                = $::puppet::autosign_entries,
   $autosign_mode                   = $::puppet::autosign_mode,
   $autosign_content                = $::puppet::autosign_content,
+  $autosign_source                 = $::puppet::autosign_source,
   $hiera_config                    = $::puppet::hiera_config,
   $admin_api_whitelist             = $::puppet::server_admin_api_whitelist,
   $user                            = $::puppet::server_user,
@@ -541,6 +546,10 @@ class puppet::server(
 
   if $autosign_content {
     validate_string($autosign_content)
+  }
+
+  if $autosign_source {
+    validate_string($autosign_source)
   }
 
   validate_array($rack_arguments)

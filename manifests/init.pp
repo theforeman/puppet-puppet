@@ -113,6 +113,10 @@
 #                                           template('another_module/autosign.sh.erb')
 #                                           type:Optional[String]
 #
+# $autosign_source::                        If set, use this as the source for the autosign file,
+#                                           instead of autosign_content.
+#                                           type:Optional[String]
+#
 # $usecacheonfailure::                      Switch to enable use of cached catalog on
 #                                           failure of run.
 #                                           type:Boolean
@@ -689,6 +693,7 @@ class puppet (
   $autosign_entries                       = $puppet::params::autosign_entries,
   $autosign_mode                          = $puppet::params::autosign_mode,
   $autosign_content                       = $puppet::params::autosign_content,
+  $autosign_source                        = $puppet::params::autosign_source,
   $runinterval                            = $puppet::params::runinterval,
   $usecacheonfailure                      = $puppet::params::usecacheonfailure,
   $runmode                                = $puppet::params::runmode,
