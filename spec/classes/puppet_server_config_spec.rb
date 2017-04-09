@@ -171,7 +171,7 @@ describe 'puppet::server::config' do
           should contain_puppet__config__master('parser').with({'value' => 'current'})
           should contain_puppet__config__master("autosign").with({'value' => "#{etcdir}\/autosign.conf \{ mode = 0664 \}"})
 
-          should contain_concat(conf_file)
+          should contain_concat_file(conf_file)
 
           should_not contain_puppet__config__master('storeconfigs')
 
