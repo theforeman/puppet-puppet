@@ -184,9 +184,9 @@ class puppet::server::config inherits puppet::config {
 
   # autosign file
   if $::puppet::server_ca and ! is_bool($puppet::server::autosign){
-    if $::puppet::server::autosign_content {
+    if $::puppet::server::autosign_content or $::puppet::server::autosign_source {
       if !empty($::puppet::server::autosign_entries) {
-        fail('Cannot set both autosign_content and autosign_entries')
+        fail('Cannot set both autosign_content/autosign_source and autosign_entries')
       }
       $autosign_content = $::puppet::server::autosign_content
     } elsif !empty($::puppet::server::autosign_entries) {
@@ -200,6 +200,7 @@ class puppet::server::config inherits puppet::config {
       group   => $::puppet::server::group,
       mode    => $::puppet::server::autosign_mode,
       content => $autosign_content,
+      source  => $::puppet::server::autosign_source,
     }
   }
 

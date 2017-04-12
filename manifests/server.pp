@@ -24,6 +24,9 @@
 #                              file('another_module/autosign.sh') or
 #                              template('another_module/autosign.sh.erb')
 #
+# $autosign_source::           If set, use this as the source for the autosign file,
+#                              instead of autosign_content.
+#
 # $hiera_config::              The hiera configuration file.
 #
 # $user::                      Name of the puppetmaster user.
@@ -300,6 +303,7 @@ class puppet::server(
   Array[String] $autosign_entries = $::puppet::autosign_entries,
   Pattern[/^[0-9]{3,4}$/] $autosign_mode = $::puppet::autosign_mode,
   Optional[String] $autosign_content = $::puppet::autosign_content,
+  Optional[String] $autosign_source = $::puppet::autosign_source,
   String $hiera_config = $::puppet::hiera_config,
   Array[String] $admin_api_whitelist = $::puppet::server_admin_api_whitelist,
   String $user = $::puppet::server_user,

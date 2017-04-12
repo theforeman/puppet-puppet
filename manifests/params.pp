@@ -173,6 +173,7 @@ class puppet::params {
   $autosign_entries = []
   $autosign_mode    = '0664'
   $autosign_content = undef
+  $autosign_source  = undef
 
   $puppet_cmd = "${bindir}/puppet"
 
