@@ -366,13 +366,9 @@
 #
 # $server_puppet_basedir::                  Where is the puppet code base located
 #
-# $server_enc_api::                         What version of enc script to deploy. Valid
-#                                           values are 'v2' for latest, and 'v1'
-#                                           for Foreman =< 1.2
+# $server_enc_api::                         What version of enc script to deploy.
 #
 # $server_report_api::                      What version of report processor to deploy.
-#                                           Valid values are 'v2' for latest, and 'v1'
-#                                           for Foreman =< 1.2
 #
 # $server_request_timeout::                 Timeout in node.rb script for fetching
 #                                           catalog from Foreman (in seconds).
@@ -637,8 +633,8 @@ class puppet (
   Optional[Variant[String, Array[String]]] $server_package = $puppet::params::server_package,
   Optional[String] $server_version = $puppet::params::server_version,
   String $server_certname = $puppet::params::server_certname,
-  Enum['v2', 'v1'] $server_enc_api = $puppet::params::server_enc_api,
-  Enum['v2', 'v1'] $server_report_api = $puppet::params::server_report_api,
+  Enum['v2'] $server_enc_api = $puppet::params::server_enc_api,
+  Enum['v2'] $server_report_api = $puppet::params::server_report_api,
   Integer[0] $server_request_timeout = $puppet::params::server_request_timeout,
   Optional[String] $server_ca_proxy = $puppet::params::server_ca_proxy,
   Boolean $server_strict_variables = $puppet::params::server_strict_variables,
