@@ -59,6 +59,16 @@ def do_cmd(cmd)
    ret
 end
 
+# Run a command, return its output and abort if it fails
+def do_cmd(cmd)
+   ret = %x{#{cmd}}
+   if $?.exitstatus != 0
+     puts("'#{cmd}' failed. Giving up.")
+     exit 1
+   end
+   ret
+end
+
 # You can push multiple refspecs at once, like 'git push origin branch1 branch2',
 # so we need to handle each one.
 $stdin.each_line do |line|
