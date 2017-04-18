@@ -58,7 +58,7 @@ class puppet::server::passenger (
     include ::apache::mod::proxy
     include ::apache::mod::proxy_http
 
-    $custom_fragment = "ProxyPassMatch ^/([^/]+/certificate.*)$ ${puppet_ca_proxy}/\$1"
+    $custom_fragment = "ProxyPassMatch ^/[^/]+/(certificate.*)$ ${puppet_ca_proxy}/production/\$1"
     $ssl_proxyengine = true
   } else {
     $custom_fragment = undef
