@@ -16,11 +16,6 @@ class puppet::agent::config inherits puppet::config {
     'noop':              value => $::puppet::agent_noop;
     'usecacheonfailure': value => $::puppet::usecacheonfailure;
   }
-  if !$::puppet::use_srv_records {
-    puppet::config::main {
-      'server':            value => pick($::puppet::config::puppetmaster, $::fqdn);
-    }
-  }
   if $::puppet::configtimeout != undef {
     puppet::config::agent {
       'configtimeout':     value => $::puppet::configtimeout;
