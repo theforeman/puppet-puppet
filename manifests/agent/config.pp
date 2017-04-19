@@ -17,7 +17,7 @@ class puppet::agent::config inherits puppet::config {
     'usecacheonfailure': value => $::puppet::usecacheonfailure;
   }
   if !$::puppet::use_srv_records {
-    puppet::config::agent {
+    puppet::config::main {
       'server':            value => pick($::puppet::config::puppetmaster, $::fqdn);
     }
   }
