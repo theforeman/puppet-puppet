@@ -265,6 +265,9 @@
 #
 # $connect_timeout::           How long the server will wait for a response to a connection attempt
 #
+# $web_idle_timeout::          Time in ms that Jetty allows a socket to be idle, after processing has completed.
+#                              Defaults to the Jetty default of 30s
+#
 # $ssl_protocols::             Array of SSL protocols to use.
 #                              Defaults to [ 'TLSv1.2' ]
 #
