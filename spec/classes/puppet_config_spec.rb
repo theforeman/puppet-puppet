@@ -98,6 +98,7 @@ describe 'puppet::config' do
           should contain_puppet__config__main("privatekeydir").with({'value' => '$ssldir/private_keys { group = service }'})
           should contain_puppet__config__main("hostprivkey").with({'value' => '$privatekeydir/$certname.pem { mode = 640 }'})
           should contain_puppet__config__main("show_diff").with({'value' => 'false'})
+          should contain_puppet__config__main("server").with({'value' => "#{facts[:fqdn]}"})
         end
       end
 
@@ -145,6 +146,16 @@ describe 'puppet::config' do
         end
       end
 
+      describe "when puppetmaster => 'mymaster.example.com'" do
+        let :pre_condition do
+          "class { 'puppet': puppetmaster => 'mymaster.example.com' }"
+        end
+
+        it "should contain puppet.conf [main] with server = 'mymaster.example.com'" do
+          should contain_puppet__config__main('server').with({'value' => 'mymaster.example.com'})
+        end
+      end
+
       describe "when module_repository => 'https://myforgeapi.example.com'" do
         let :pre_condition do
           "class { 'puppet': module_repository => 'https://myforgeapi.example.com' }"
@@ -166,6 +177,10 @@ describe 'puppet::config' do
             should contain_puppet__config__main("srv_domain").with({'value' => "example.org"})
             should contain_puppet__config__main("pluginsource").with({'value' => "puppet:///plugins"})
             should contain_puppet__config__main("pluginfactsource").with({'value' => "puppet:///pluginfacts"})
+          end
+
+          it 'should not contain server setting' do
+            should_not contain_puppet__config__main('server')
           end
         end
 
@@ -236,6 +251,26 @@ describe 'puppet::config' do
 
         it 'should configure puppet.conf' do
           should contain_puppet__config__main("disable_warnings").with({'value' => "deprecations"})
+        end
+      end
+
+      describe 'puppetmaster parameter overrides global puppetmaster' do
+        let(:pre_condition) { "class {'puppet': puppetmaster => 'mymaster.example.com'}" }
+        let :facts do
+          facts.merge({:puppetmaster => 'global.example.com'})
+        end
+        it do
+          should contain_puppet__config__main('server').with({'value'  => 'mymaster.example.com'})
+        end
+      end
+
+      describe 'global puppetmaster overrides fqdn' do
+        let(:pre_condition) { "include ::puppet" }
+        let :facts do
+          facts.merge({:puppetmaster => 'mymaster.example.com'})
+        end
+        it do
+          should contain_puppet__config__main('server').with({'value'  => 'mymaster.example.com'})
         end
       end
     end

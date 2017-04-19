@@ -48,6 +48,10 @@ class puppet::config(
       'use_srv_records': value => true;
       'srv_domain': value => $srv_domain;
     }
+  } else {
+    puppet::config::main {
+      'server': value => pick($puppetmaster, $::fqdn);
+    }
   }
   if $pluginsource {
     puppet::config::main{'pluginsource': value => $pluginsource; }

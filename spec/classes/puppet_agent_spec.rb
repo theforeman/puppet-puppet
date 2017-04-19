@@ -52,49 +52,11 @@ describe 'puppet::agent' do
         end
 
         it do
-          should contain_puppet__config__agent('server').with_value('foo.example.com')
-        end
-
-        it do
           should_not contain_puppet__config__agent('prerun_command')
         end
 
         it do
           should_not contain_puppet__config__agent('postrun_command')
-        end
-      end
-
-      describe 'puppetmaster parameter overrides server fqdn' do
-        let(:pre_condition) { "class {'puppet': agent => true, puppetmaster => 'mymaster.example.com'}" }
-        it do
-          should contain_puppet__config__agent('server').with({'value' => 'mymaster.example.com'})
-        end
-      end
-
-      describe 'global puppetmaster overrides fqdn' do
-        let(:pre_condition) { "class {'puppet': agent => true}" }
-        let :facts do
-          facts.merge({:puppetmaster => 'mymaster.example.com'})
-        end
-        it do
-          should contain_puppet__config__agent('server').with({'value'  => 'mymaster.example.com'})
-        end
-      end
-
-      describe 'puppetmaster parameter overrides global puppetmaster' do
-        let(:pre_condition) { "class {'puppet': agent => true, puppetmaster => 'mymaster.example.com'}" }
-        let :facts do
-          facts.merge({:puppetmaster => 'global.example.com'})
-        end
-        it do
-          should contain_puppet__config__agent('server').with({'value'  => 'mymaster.example.com'})
-        end
-      end
-
-      describe 'use_srv_records removes server setting' do
-        let(:pre_condition) { "class {'puppet': agent => true, use_srv_records => true}" }
-        it do
-          should_not contain_puppet__config__agent('server')
         end
       end
 
