@@ -50,7 +50,7 @@ class puppet::config(
     }
   } else {
     puppet::config::main {
-      'server':            value => pick($puppetmaster, $::fqdn);
+      'server': value => pick($puppetmaster, $::fqdn);
     }
   }
   if $pluginsource {
