@@ -124,6 +124,17 @@ class puppet::params {
       $server_jruby_gem_home      = undef
     }
 
+    'Archlinux' : {
+      $dir               = '/etc/puppetlabs/puppet'
+      $codedir           = '/etc/puppetlabs/code'
+      $logdir            = '/var/log/puppetlabs/puppet'
+      $rundir            = '/run/puppetlabs'
+      $ssldir            = '/etc/puppetlabs/puppet/ssl'
+      $vardir            = '/opt/puppetlabs/puppet/cache'
+      $sharedir          = '/opt/puppetlabs/puppet'
+      $bindir            = '/usr/bin'
+    }
+
     default : {
       if $aio_package {
         $dir                        = '/etc/puppetlabs/puppet'
@@ -251,9 +262,10 @@ class puppet::params {
   $server_http_allow          = []
 
   # use puppetserver (JVM) or puppet master (Ruby)?
-  $server_implementation = $aio_package ? {
-    true    => 'puppetserver',
-    default => 'master',
+  if $aio_package or ($::osfamily == 'Archlinux') {
+    $server_implementation = 'puppetserver'
+  } else {
+    $server_implementation = 'master'
   }
 
   # Need a new master template for the server?
