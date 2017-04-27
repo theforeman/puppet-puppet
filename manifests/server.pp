@@ -453,10 +453,11 @@ class puppet::server(
   class { '::puppet::server::install': }
   ~> class { '::puppet::server::config':  }
   ~> class { '::puppet::server::service':
-    app_root     => $app_root,
-    puppetmaster => $pm_service,
-    puppetserver => $ps_service,
-    rack         => $rack_service,
+    app_root      => $app_root,
+    httpd_service => $httpd_service,
+    puppetmaster  => $pm_service,
+    puppetserver  => $ps_service,
+    rack          => $rack_service,
   }
   -> Class['puppet::server']
 
