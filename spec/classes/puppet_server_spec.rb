@@ -31,6 +31,7 @@ describe 'puppet::server' do
             should contain_class('puppet::server::install')
             should contain_class('puppet::server::config')
             should contain_class('puppet::server::service').
+              with_httpd_service('httpd').
               with_puppetmaster(false).
               with_puppetserver(nil).
               with_rack(true)

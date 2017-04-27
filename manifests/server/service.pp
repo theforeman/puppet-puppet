@@ -6,14 +6,18 @@
 #
 # $app_root::      Rack application top-level directory
 #
+# $httpd_service:: Apache/httpd service name, used for ordering
+#
 # $puppetmaster::  Whether to start/stop the (Ruby) puppetmaster service
 #
 # $puppetserver::  Whether to start/stop the (JVM) puppetserver service
 #
-# $rack::          Whether to manage restarts for the Rack-based puppetmaster service
+# $rack::          Whether the Puppet server is running under Apache with Rack and Passenger
+#                  Does not manage the Apache service, only restarts and ordering.
 #
 class puppet::server::service(
   Optional[Stdlib::Absolutepath] $app_root = undef,
+  String $httpd_service = 'httpd',
   Optional[Boolean] $puppetmaster = undef,
   Optional[Boolean] $puppetserver = undef,
   Optional[Boolean] $rack = undef,
@@ -37,6 +41,10 @@ class puppet::server::service(
       ensure => $pm_ensure,
       enable => $puppetmaster,
     }
+
+    if $rack and !$puppetmaster {
+      Service[$puppetmaster_service] -> Service[$httpd_service]
+    }
   }
 
   if $puppetserver != undef {
@@ -47,6 +55,10 @@ class puppet::server::service(
     service { 'puppetserver':
       ensure => $ps_ensure,
       enable => $puppetserver,
+    }
+
+    if $rack and !$puppetserver {
+      Service['puppetserver'] -> Service[$httpd_service]
     }
   }
 

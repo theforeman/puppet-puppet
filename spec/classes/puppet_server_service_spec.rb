@@ -52,6 +52,17 @@ describe 'puppet::server::service' do
             :enable => 'false',
           })
         end
+
+        describe 'and rack => true' do
+          let(:params) { {:puppetmaster => false, :rack => true} }
+          let(:pre_condition) { 'service { "httpd": }' }
+          it do
+            should contain_service(master_service).with({
+              :ensure => 'stopped',
+              :enable => 'false',
+            }).that_comes_before('Service[httpd]')
+          end
+        end
       end
 
       describe 'when puppetserver => false' do
@@ -61,6 +72,17 @@ describe 'puppet::server::service' do
             :ensure => 'stopped',
             :enable => 'false',
           })
+        end
+
+        describe 'and rack => true' do
+          let(:params) { {:puppetserver => false, :rack => true} }
+          let(:pre_condition) { 'service { "httpd": }' }
+          it do
+            should contain_service('puppetserver').with({
+              :ensure => 'stopped',
+              :enable => 'false',
+            }).that_comes_before('Service[httpd]')
+          end
         end
       end
 
