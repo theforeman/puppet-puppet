@@ -43,10 +43,10 @@ describe 'puppet::agent' do
         it { should contain_class('puppet::agent::config') }
         it { should contain_class('puppet::agent::service') }
         it { should contain_file(confdir).with_ensure('directory') }
-        it { should contain_concat("#{confdir}/puppet.conf") }
+        it { should contain_concat_file("#{confdir}/puppet.conf") }
         it { should contain_package(client_package).with_ensure('present') }
         it do
-          should contain_concat__fragment('puppet.conf_agent').
+          should contain_concat_fragment('puppet.conf_agent').
             with_content(/^\[agent\]/).
             with({})
         end

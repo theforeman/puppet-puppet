@@ -78,14 +78,17 @@ class puppet::config(
   }
   -> case $::osfamily {
     'Windows': {
-      concat { "${puppet_dir}/puppet.conf": }
+      concat_file { "${puppet_dir}/puppet.conf":
+        tag => 'concat_file_puppet.conf',
+      }
     }
 
     default: {
-      concat { "${puppet_dir}/puppet.conf":
+      concat_file { "${puppet_dir}/puppet.conf":
         owner => 'root',
         group => $::puppet::params::root_group,
         mode  => '0644',
+        tag   => 'concat_file_puppet.conf',
       }
     }
   }

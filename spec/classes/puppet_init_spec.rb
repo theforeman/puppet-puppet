@@ -3,38 +3,21 @@ require 'spec_helper'
 describe 'puppet' do
   on_os_under_test.each do |os, facts|
     context "on #{os}" do
-      if Puppet.version < '4.0'
-        puppet_concat    = '/etc/puppet/puppet.conf'
-        puppet_directory = '/etc/puppet'
-        puppet_package   = 'puppet'
+      puppet_concat    = '/etc/puppetlabs/puppet/puppet.conf'
+      puppet_directory = '/etc/puppetlabs/puppet'
+      puppet_package   = 'puppet-agent'
+      additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
+      case facts[:osfamily]
+      when 'FreeBSD'
+        puppet_concat    = '/usr/local/etc/puppet/puppet.conf'
+        puppet_directory = '/usr/local/etc/puppet'
+        puppet_package   = 'puppet4'
         additional_facts = {}
-        case facts[:osfamily]
-        when 'FreeBSD'
-          puppet_concat    = '/usr/local/etc/puppet/puppet.conf'
-          puppet_directory = '/usr/local/etc/puppet'
-          puppet_package   = 'puppet38'
-        when 'windows'
-          puppet_concat    = 'C:/ProgramData/PuppetLabs/puppet/etc/puppet.conf'
-          puppet_directory = 'C:/ProgramData/PuppetLabs/puppet/etc'
-          puppet_package   = 'puppet'
-        end
-      else
-        puppet_concat    = '/etc/puppetlabs/puppet/puppet.conf'
-        puppet_directory = '/etc/puppetlabs/puppet'
+      when 'windows'
+        puppet_concat    = 'C:/ProgramData/PuppetLabs/puppet/etc/puppet.conf'
+        puppet_directory = 'C:/ProgramData/PuppetLabs/puppet/etc'
         puppet_package   = 'puppet-agent'
-        additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
-        case facts[:osfamily]
-        when 'FreeBSD'
-          puppet_concat    = '/usr/local/etc/puppet/puppet.conf'
-          puppet_directory = '/usr/local/etc/puppet'
-          puppet_package   = 'puppet4'
-          additional_facts = {}
-        when 'windows'
-          puppet_concat    = 'C:/ProgramData/PuppetLabs/puppet/etc/puppet.conf'
-          puppet_directory = 'C:/ProgramData/PuppetLabs/puppet/etc'
-          puppet_package   = 'puppet-agent'
-          additional_facts = {}
-        end
+        additional_facts = {}
       end
 
       let :facts do
@@ -46,15 +29,9 @@ describe 'puppet' do
         it { should contain_class('puppet::agent') }
         it { should contain_class('puppet::config') }
         it { should_not contain_class('puppet::server') }
-        if Puppet.version < '4.0'
-          it { should contain_file(puppet_directory).with_ensure('directory') }
-          it { should contain_concat(puppet_concat) }
-          it { should contain_package(puppet_package).with_ensure('present') }
-        else
-          it { should contain_file(puppet_directory).with_ensure('directory') }
-          it { should contain_concat(puppet_concat) }
-          it { should contain_package(puppet_package).with_ensure('present') }
-        end
+        it { should contain_file(puppet_directory).with_ensure('directory') }
+        it { should contain_concat_file(puppet_concat) }
+        it { should contain_package(puppet_package).with_ensure('present') }
       end
 
       describe 'with server => true', :unless => unsupported_puppetmaster_osfamily(facts[:osfamily]) do
