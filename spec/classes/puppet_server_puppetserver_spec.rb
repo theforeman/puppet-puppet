@@ -487,6 +487,21 @@ describe 'puppet::server::puppetserver' do
         end
       end
 
+      describe 'metrics API endpoint' do
+        context 'when server_puppetserver_version >= 5.0.0' do
+          let(:params) do
+            default_params.merge({
+                                     :server_puppetserver_version => '5.0.0',
+                                     :server_puppetserver_dir => '/etc/custom/puppetserver',
+                                 })
+          end
+          it {
+            should contain_file('/etc/custom/puppetserver/conf.d/web-routes.conf').
+              with_content(/^\s+"puppetlabs.trapperkeeper.services.metrics.metrics-service\/metrics-webservice": "\/metrics"/)
+          }
+        end
+      end
+
       describe 'product.conf' do
         context 'when server_puppetserver_version >= 2.7' do
           let(:params) do
