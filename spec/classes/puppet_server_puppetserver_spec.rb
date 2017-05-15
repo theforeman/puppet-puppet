@@ -95,7 +95,6 @@ describe 'puppet::server::puppetserver' do
 
         it { should contain_file('/etc/custom/puppetserver/conf.d/ca.conf') }
         it { should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf') }
-        it { should contain_file('/etc/custom/puppetserver/conf.d/web-routes.conf') }
         it { should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
                                  with_content(/ssl-host:\s0\.0\.0\.0/).
                                  with_content(/ssl-port:\s8140/).
@@ -455,49 +454,6 @@ describe 'puppet::server::puppetserver' do
               with_content(/^\s+"localhost"\,$/).
               with_content(/^\s+"puppetserver123.example.com"\,$/).
               with({}) # So we can use a trailing dot on each with_content line
-          }
-        end
-      end
-
-      describe 'status API endpoint' do
-        context 'when server_puppetserver_version >= 2.6' do
-          let(:params) do
-            default_params.merge({
-                                     :server_puppetserver_version => '2.6.0',
-                                     :server_puppetserver_dir => '/etc/custom/puppetserver',
-                                 })
-          end
-          it {
-            should contain_file('/etc/custom/puppetserver/conf.d/web-routes.conf').
-              with_content(/^\s+"puppetlabs.trapperkeeper.services.status.status-service\/status-service": "\/status"/)
-          }
-        end
-
-        context 'when server_puppetserver_version < 2.6' do
-          let(:params) do
-            default_params.merge({
-                                     :server_puppetserver_version => '2.5.0',
-                                     :server_puppetserver_dir => '/etc/custom/puppetserver',
-                                 })
-          end
-          it {
-            should contain_file('/etc/custom/puppetserver/conf.d/web-routes.conf').
-              without_content(/^\s+"puppetlabs.trapperkeeper.services.status.status-service\/status-service": "\/status"/)
-          }
-        end
-      end
-
-      describe 'metrics API endpoint' do
-        context 'when server_puppetserver_version >= 5.0.0' do
-          let(:params) do
-            default_params.merge({
-                                     :server_puppetserver_version => '5.0.0',
-                                     :server_puppetserver_dir => '/etc/custom/puppetserver',
-                                 })
-          end
-          it {
-            should contain_file('/etc/custom/puppetserver/conf.d/web-routes.conf').
-              with_content(/^\s+"puppetlabs.trapperkeeper.services.metrics.metrics-service\/metrics-webservice": "\/metrics"/)
           }
         end
       end
