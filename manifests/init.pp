@@ -565,7 +565,7 @@ class puppet (
   Array[String] $client_package = $puppet::params::client_package,
   Boolean $agent = $puppet::params::agent,
   Boolean $remove_lock = $puppet::params::remove_lock,
-  String $client_certname = $puppet::params::client_certname,
+  Variant[String, Boolean] $client_certname = $puppet::params::client_certname,
   Optional[String] $puppetmaster = $puppet::params::puppetmaster,
   String $systemd_unit_name = $puppet::params::systemd_unit_name,
   String $service_name = $puppet::params::service_name,

@@ -27,6 +27,8 @@ describe 'puppet::agent::config' do
                with({})
           }
         end
+
+        it { should contain_puppet__config__agent('certname').with(facts[:certname]) }
       end
 
       context 'with runmode => cron', :unless => (facts[:osfamily] == 'Archlinux') do
@@ -68,6 +70,14 @@ describe 'puppet::agent::config' do
           }
           it { should_not contain_file('/var/lib/puppet/state/agent_disabled.lock') }
         end
+      end
+
+      context 'with client_certname => false' do
+        let :pre_condition do
+          'class { "::puppet": client_certname => false }'
+        end
+
+        it { should_not contain_puppet__config__agent('certname') }
       end
     end
   end
