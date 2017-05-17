@@ -3,7 +3,7 @@ require 'spec_helper_acceptance'
 describe 'Scenario: install puppetserver (latest):' do
   before(:context) do
     if check_for_package(default, 'puppetserver')
-      on default, puppet('resource package puppetserver ensure=absent')
+      on default, puppet('resource package puppetserver ensure=purged')
       on default, 'rm -rf /etc/sysconfig/puppetserver /etc/puppetlabs/puppetserver'
       on default, 'find /etc/puppetlabs/puppet/ssl/ -type f -delete'
     end

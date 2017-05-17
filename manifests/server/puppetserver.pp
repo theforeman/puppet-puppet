@@ -212,11 +212,6 @@ class puppet::server::puppetserver (
     content => template('puppet/server/puppetserver/conf.d/puppetserver.conf.erb'),
   }
 
-  file { "${server_puppetserver_dir}/conf.d/web-routes.conf":
-    ensure  => file,
-    content => template('puppet/server/puppetserver/conf.d/web-routes.conf.erb'),
-  }
-
   file { "${server_puppetserver_dir}/conf.d/webserver.conf":
     ensure  => file,
     content => template('puppet/server/puppetserver/conf.d/webserver.conf.erb'),
