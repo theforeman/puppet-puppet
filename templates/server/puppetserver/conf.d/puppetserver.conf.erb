@@ -63,9 +63,10 @@ jruby-puppet: {
     max-requests-per-instance: <%= @server_max_requests_per_instance %>
 <%- if scope.function_versioncmp([@server_puppetserver_version, '2.2']) >= 0 -%>
 
-    # (optional) Authorize access to Puppet master endpoints via rules specified
-    # in the legacy Puppet auth.conf file (if true or not specified) or via rules
-    # specified in the Puppet Server HOCON-formatted auth.conf (if false).
+    # (optional) Authorize access to Puppet master endpoints via rules
+    # specified in the legacy Puppet auth.conf file (if true) or via rules
+    # specified in the Puppet Server HOCON-formatted auth.conf (if false or not
+    # specified).
     use-legacy-auth-conf: <%= @server_use_legacy_auth_conf %>
 <%- end -%>
 <%- if scope.function_versioncmp([@server_puppetserver_version, '2.3']) >= 0 -%>
@@ -91,6 +92,11 @@ http-client: {
     <%- end -%>
     ]
 
+<%- if scope.function_versioncmp([@server_puppetserver_version, '5.0']) >= 0 -%>
+    # Whether to enable http-client metrics; defaults to 'true'.
+    metrics-enabled: <%= @server_metrics %>
+
+<%- end -%>
     # The amount of time, in milliseconds, that an outbound HTTP connection
     # will wait for data to be available before closing the socket. If not
     # defined, defaults to 20 minutes. If 0, the timeout is infinite and if
@@ -107,8 +113,8 @@ http-client: {
 
 # settings related to profiling the puppet Ruby code
 profiler: {
-    # enable or disable profiling for the Ruby code; defaults to 'false'.
-    enabled: <%= @server_enable_ruby_profiler %>
+    # enable or disable profiling for the Ruby code;
+    enabled: <%= @server_metrics %>
 }
 <%- if scope.function_versioncmp([@server_puppetserver_version, '2.2']) < 0 -%>
 

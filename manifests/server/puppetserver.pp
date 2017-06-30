@@ -78,7 +78,6 @@ class puppet::server::puppetserver (
   $server_idle_timeout                    = $::puppet::server::idle_timeout,
   $server_web_idle_timeout                = $::puppet::server::web_idle_timeout,
   $server_connect_timeout                 = $::puppet::server::connect_timeout,
-  $server_enable_ruby_profiler            = $::puppet::server::enable_ruby_profiler,
   $server_ca_auth_required                = $::puppet::server::ca_auth_required,
   $server_ca_client_whitelist             = $::puppet::server::ca_client_whitelist,
   $server_admin_api_whitelist             = $::puppet::server::admin_api_whitelist,
@@ -86,6 +85,9 @@ class puppet::server::puppetserver (
   $server_use_legacy_auth_conf            = $::puppet::server::use_legacy_auth_conf,
   $server_check_for_updates               = $::puppet::server::check_for_updates,
   $server_environment_class_cache_enabled = $::puppet::server::environment_class_cache_enabled,
+  $server_jruby9k                         = $::puppet::server::puppetserver_jruby9k,
+  $server_metrics                         = $::puppet::server::puppetserver_metrics,
+  $server_experimental                    = $::puppet::server::puppetserver_experimental,
 ) {
   include ::puppet::server
 
@@ -127,6 +129,20 @@ class puppet::server::puppetserver (
       incl    => $config,
       context => "/files${config}",
       changes => "set BOOTSTRAP_CONFIG '\"${bootstrap_paths}\"'",
+    }
+
+    if versioncmp($server_puppetserver_version, '5.0') >= 0 {
+      $jruby_jar_changes = $server_jruby9k ? {
+        true    => "set JRUBY_JAR '\"/opt/puppetlabs/server/apps/puppetserver/jruby-9k.jar\"'",
+        default => 'rm JRUBY_JAR'
+      }
+
+      augeas { 'puppet::server::puppetserver::jruby_jar':
+        lens    => 'Shellvars.lns',
+        incl    => $config,
+        context => "/files${config}",
+        changes => $jruby_jar_changes,
+      }
     }
   }
 

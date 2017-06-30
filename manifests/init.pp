@@ -463,9 +463,6 @@
 #                                           can query the puppet-admin-api endpoint
 #                                           Defaults to [ '127.0.0.1', '::1', $::ipaddress ]
 #
-# $server_enable_ruby_profiler::            Should the puppetserver ruby profiler be enabled?
-#                                           Defaults to false
-#
 # $server_ca_auth_required::                Whether client certificates are needed to access the puppet-admin api
 #                                           Defaults to true
 #
@@ -485,6 +482,13 @@
 # $server_web_idle_timeout::                Time in ms that Jetty allows a socket to be idle, after processing has
 #                                           completed.
 #                                           Defaults to 30000, using the Jetty default of 30s
+#
+# $server_puppetserver_jruby9k::            For Puppetserver 5, use JRuby 9k? Defaults to false
+#
+# $server_puppetserver_metrics::            Enable metrics (Puppetserver 5.x only) and JRuby profiling?
+#                                           Defaults to true on Puppetserver 5.x and to false on Puppetserver 2.x
+#
+# $server_puppetserver_experimental::       For Puppetserver 5, enable the /puppet/experimental route? Defaults to true
 #
 # === Usage:
 #
@@ -611,7 +615,6 @@ class puppet (
   Boolean $server_default_manifest = $puppet::params::server_default_manifest,
   Stdlib::Absolutepath $server_default_manifest_path = $puppet::params::server_default_manifest_path,
   String $server_default_manifest_content = $puppet::params::server_default_manifest_content,
-  Boolean $server_enable_ruby_profiler = $puppet::params::server_enable_ruby_profiler,
   Array[String] $server_environments = $puppet::params::server_environments,
   String $server_environments_owner = $puppet::params::server_environments_owner,
   Optional[String] $server_environments_group = $puppet::params::server_environments_group,
@@ -670,6 +673,9 @@ class puppet (
   Boolean $server_environment_class_cache_enabled = $puppet::params::server_environment_class_cache_enabled,
   Boolean $server_allow_header_cert_info = $puppet::params::server_allow_header_cert_info,
   Integer[0] $server_web_idle_timeout = $puppet::params::server_web_idle_timeout,
+  Boolean $server_puppetserver_jruby9k = $puppet::params::server_puppetserver_jruby9k,
+  Boolean $server_puppetserver_metrics = $puppet::params::server_puppetserver_metrics,
+  Boolean $server_puppetserver_experimental = $puppet::params::server_puppetserver_experimental,
 ) inherits puppet::params {
   include ::puppet::config
   Class['puppet::config'] -> Class['puppet']

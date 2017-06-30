@@ -204,7 +204,7 @@ describe 'puppet::config' do
                srv_domain      => "special_domain.com"
             }'
           end
-          
+
           it 'should configure srv domain' do
             should contain_puppet__config__main('use_srv_records').with_value(true)
             should contain_puppet__config__main('srv_domain').with_value('special_domain.com')
