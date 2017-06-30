@@ -51,9 +51,11 @@ describe 'puppet::server::puppetserver' do
         :server_idle_timeout                    => 1200000,
         :server_web_idle_timeout                => 30000,
         :server_connect_timeout                 => 120000,
-        :server_enable_ruby_profiler            => false,
         :server_check_for_updates               => true,
         :server_environment_class_cache_enabled => false,
+        :server_jruby9k                         => false,
+        :server_metrics                         => true,
+        :server_experimental                    => true,
       } end
 
       describe 'with default parameters' do
@@ -484,6 +486,186 @@ describe 'puppet::server::puppetserver' do
             should contain_file('/etc/custom/puppetserver/conf.d/product.conf').
               with_ensure('absent')
           }
+        end
+      end
+
+      describe 'server_metrics' do
+            context 'when server_puppetserver_version < 5.0 and server_metrics => true' do
+          let(:params) do
+            default_params.merge({
+                                   :server_puppetserver_version => '2.7.0',
+                                   :server_puppetserver_dir => '/etc/custom/puppetserver',
+                                   :server_metrics => true,
+                                 })
+          end
+          it {
+            should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              without_content(%r{^    metrics-enabled: (.*)$}).
+              with_content(%r{^profiler: \{\n    # enable or disable profiling for the Ruby code;\n    enabled: true})
+            }
+        end
+
+        context 'when server_puppetserver_version < 5.0 and server_metrics => false' do
+          let(:params) do
+          default_params.merge({
+                                 :server_puppetserver_version => '2.7.0',
+                                 :server_puppetserver_dir => '/etc/custom/puppetserver',
+                                 :server_metrics => false,
+                               })
+        end
+        it {
+          should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+            without_content(%r{^    metrics-enabled: (.*)$}).
+            with_content(%r{^profiler: \{\n    # enable or disable profiling for the Ruby code;\n    enabled: false})
+        }
+      end
+
+        context 'when server_puppetserver_version >= 5.0 and server_metrics => true' do
+          let(:params) do
+            default_params.merge({
+                                   :server_puppetserver_version => '5.0.0',
+                                   :server_puppetserver_dir => '/etc/custom/puppetserver',
+                                   :server_metrics => true,
+                                 })
+          end
+          it {
+            should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+            with_content(%r{^    # Whether to enable http-client metrics; defaults to 'true'.\n    metrics-enabled: true$(.*)}).
+            with_content(%r{^profiler: \{\n    # enable or disable profiling for the Ruby code;\n    enabled: true})
+          }
+        end
+
+        context 'when server_puppetserver_version >= 5.0 and server_metrics => false' do
+          let(:params) do
+            default_params.merge({
+                                   :server_puppetserver_version => '5.0.0',
+                                   :server_puppetserver_dir => '/etc/custom/puppetserver',
+                                   :server_metrics => false,
+                                 })
+          end
+          it {
+            should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              with_content(%r{^    # Whether to enable http-client metrics; defaults to 'true'.\n    metrics-enabled: false$}).
+              with_content(%r{^profiler: \{\n    # enable or disable profiling for the Ruby code;\n    enabled: false})
+          }
+        end
+      end
+
+      describe 'server_experimental' do
+        context 'when server_puppetserver_version < 5.0 and server_experimental => true' do
+          let(:params) do
+            default_params.merge({
+                                   :server_puppetserver_version => '2.7.0',
+                                   :server_puppetserver_dir => '/etc/custom/puppetserver',
+                                   :server_experimental => true,
+                                 })
+          end
+          it {
+            should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
+              without_content(%r{^(\ *)path: "/puppet/experimental"$})
+          }
+        end
+
+        context 'when server_puppetserver_version < 5.0 and server_experimental => false' do
+          let(:params) do
+            default_params.merge({
+                                   :server_puppetserver_version => '2.7.0',
+                                   :server_puppetserver_dir => '/etc/custom/puppetserver',
+                                   :server_experimental => false,
+                                 })
+          end
+          it {
+            should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
+              without_content(%r{^(\ *)path: "/puppet/experimental"$})
+          }
+        end
+
+        context 'when server_puppetserver_version >= 5.0 and server_experimental => true' do
+          let(:params) do
+            default_params.merge({
+                                   :server_puppetserver_version => '5.0.0',
+                                   :server_puppetserver_dir => '/etc/custom/puppetserver',
+                                   :server_experimental => true,
+                                 })
+          end
+          it {
+            should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
+              with_content(%r{^(\ *)path: "/puppet/experimental"$})
+          }
+        end
+
+        context 'when server_puppetserver_version >= 5.0 and server_experimental => false' do
+          let(:params) do
+            default_params.merge({
+                                   :server_puppetserver_version => '5.0.0',
+                                   :server_puppetserver_dir => '/etc/custom/puppetserver',
+                                   :server_experimental => false,
+                                 })
+          end
+          it {
+            should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
+              without_content(%r{^(\ *)path: "/puppet/experimental"$})
+          }
+        end
+      end
+
+      unless facts[:osfamily] == 'FreeBSD'
+        describe 'server_jruby9k' do
+          context 'when server_puppetserver_version < 5.0 and server_jruby9k => true' do
+            let(:params) do
+              default_params.merge({
+                                     :server_puppetserver_version => '2.7.0',
+                                     :server_puppetserver_dir => '/etc/custom/puppetserver',
+                                     :server_jruby9k => true,
+                                   })
+            end
+              it { should_not contain_augeas('puppet::server::puppetserver::jruby_jar') }
+          end
+
+          context 'when server_puppetserver_version < 5.0 and server_jruby9k => false' do
+            let(:params) do
+              default_params.merge({
+                                     :server_puppetserver_version => '2.7.0',
+                                     :server_puppetserver_dir => '/etc/custom/puppetserver',
+                                     :server_jruby9k => false,
+                                   })
+            end
+            it { should_not contain_augeas('puppet::server::puppetserver::jruby_jar') }
+          end
+
+          context 'when server_puppetserver_version >= 5.0 and server_jruby9k => true' do
+            let(:params) do
+              default_params.merge({
+                                     :server_puppetserver_version => '5.0.0',
+                                     :server_puppetserver_dir => '/etc/custom/puppetserver',
+                                     :server_jruby9k => true,
+                                   })
+            end
+            it { should contain_augeas('puppet::server::puppetserver::jruby_jar').
+              with_changes(['set JRUBY_JAR \'"/opt/puppetlabs/server/apps/puppetserver/jruby-9k.jar"\'']).
+              with_context('/files/etc/default/puppetserver').
+              with_incl('/etc/default/puppetserver').
+              with_lens('Shellvars.lns').
+              with({})
+            }
+          end
+
+          context 'when server_puppetserver_version >= 5.0 and server_jruby9k => false' do
+            let(:params) do
+              default_params.merge({
+                                     :server_puppetserver_version => '5.0.0',
+                                     :server_puppetserver_dir => '/etc/custom/puppetserver',
+                                     :server_jruby9k => false,
+                                   })
+            end
+            it { should contain_augeas('puppet::server::puppetserver::jruby_jar').
+              with_changes(['rm JRUBY_JAR']).
+              with_context('/files/etc/default/puppetserver').
+              with_incl('/etc/default/puppetserver').
+              with_lens('Shellvars.lns').
+              with({})
+            }
+          end
         end
       end
 

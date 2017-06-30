@@ -289,9 +289,6 @@
 #                              can query the puppet-admin-api endpoint
 #                              Defaults to [ '127.0.0.1', '::1', $::ipaddress ]
 #
-# $enable_ruby_profiler::      Should the puppetserver ruby profiler be enabled?
-#                              Defaults to false
-#
 # $ca_auth_required::          Whether client certificates are needed to access the puppet-admin api
 #                              Defaults to true
 #
@@ -300,6 +297,12 @@
 #
 # $allow_header_cert_info::    Allow client authentication over HTTP Headers
 #                              Defaults to false, is also activated by the $http setting
+#
+# $puppetserver_jruby9k::      For Puppetserver 5, use JRuby 9k? Defaults to false
+#
+# $puppetserver_metrics::      For Puppetserver 5, enable metrics? Defaults to true
+#
+# $puppetserver_experimental:: For Puppetserver 5, enable metrics? Defaults to true
 #
 class puppet::server(
   Variant[Boolean, Stdlib::Absolutepath] $autosign = $::puppet::autosign,
@@ -348,7 +351,6 @@ class puppet::server(
   Boolean $default_manifest = $::puppet::server_default_manifest,
   Stdlib::Absolutepath $default_manifest_path = $::puppet::server_default_manifest_path,
   String $default_manifest_content = $::puppet::server_default_manifest_content,
-  Boolean $enable_ruby_profiler = $::puppet::server_enable_ruby_profiler,
   Array[String] $environments = $::puppet::server_environments,
   String $environments_owner = $::puppet::server_environments_owner,
   Optional[String] $environments_group = $::puppet::server_environments_group,
@@ -406,6 +408,9 @@ class puppet::server(
   Boolean $check_for_updates = $::puppet::server_check_for_updates,
   Boolean $environment_class_cache_enabled = $::puppet::server_environment_class_cache_enabled,
   Boolean $allow_header_cert_info = $::puppet::server_allow_header_cert_info,
+  Boolean $puppetserver_jruby9k = $::puppet::server_puppetserver_jruby9k,
+  Boolean $puppetserver_metrics = $::puppet::server_puppetserver_metrics,
+  Boolean $puppetserver_experimental = $::puppet::server_puppetserver_experimental,
 ) {
   if $implementation == 'master' and $ip != $puppet::params::ip {
     notify {

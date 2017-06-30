@@ -84,10 +84,12 @@
 path /puppet/v3/environments
 method find
 allow *
+<% if @puppetversion.to_f < 5.0 -%>
 
 path /puppet/v3/resource_type
 method search
 allow *
+<% end -%>
 <% end -%>
 
 # allow nodes to retrieve their own catalog
