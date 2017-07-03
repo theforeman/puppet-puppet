@@ -14,6 +14,8 @@ describe 'puppet::server::passenger' do
         facts.merge(additional_facts)
       end
 
+      let(:node) { 'foo.example.com' }
+
       let(:default_params) do {
         :app_root => '/etc/puppet/rack',
         :confdir => '/etc/puppet',

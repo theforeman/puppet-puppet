@@ -54,8 +54,10 @@ describe 'puppet::config' do
       end
 
       let :facts do
-        facts.merge(additional_facts).merge({:domain => 'example.org'})
+        facts.merge(additional_facts).merge({:domain => 'example.com'})
       end
+
+      let(:node) { 'foo.example.com' }
 
       describe 'with default parameters' do
         let :pre_condition do
@@ -174,7 +176,7 @@ describe 'puppet::config' do
 
           it 'should contain puppet.conf [main] with SRV settings' do
             should contain_puppet__config__main("use_srv_records").with({'value' => "true"})
-            should contain_puppet__config__main("srv_domain").with({'value' => "example.org"})
+            should contain_puppet__config__main("srv_domain").with({'value' => "example.com"})
             should contain_puppet__config__main("pluginsource").with({'value' => "puppet:///plugins"})
             should contain_puppet__config__main("pluginfactsource").with({'value' => "puppet:///pluginfacts"})
           end
@@ -186,6 +188,7 @@ describe 'puppet::config' do
 
         context 'is unset' do
           let(:facts) { facts.merge({domain: nil}) }
+
           let :pre_condition do
             'class { ::puppet:
                use_srv_records => true
@@ -204,7 +207,7 @@ describe 'puppet::config' do
                srv_domain      => "special_domain.com"
             }'
           end
-          
+
           it 'should configure srv domain' do
             should contain_puppet__config__main('use_srv_records').with_value(true)
             should contain_puppet__config__main('srv_domain').with_value('special_domain.com')

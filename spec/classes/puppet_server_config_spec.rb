@@ -65,6 +65,8 @@ describe 'puppet::server::config' do
         facts.merge({:clientcert => 'puppetmaster.example.com'}).merge(additional_facts)
       end
 
+      let(:node) { 'puppetmaster.example.com' }
+
       describe 'with no custom parameters' do
         let :pre_condition do
           "class {'puppet': server => true}"
@@ -109,7 +111,7 @@ describe 'puppet::server::config' do
 
         it 'should set up the ENC' do
           should contain_class('foreman::puppetmaster').with({
-            :foreman_url    => "https://foo.example.com",
+            :foreman_url    => "https://puppetmaster.example.com",
             :receive_facts  => true,
             :puppet_home    => puppetserver_vardir,
             :puppet_etcdir  => etcdir,
