@@ -7,7 +7,7 @@ gem 'puppet', ENV.key?('PUPPET_VERSION') ? "~> #{ENV['PUPPET_VERSION']}" : '>= 4
 
 gem 'rake'
 gem 'rspec', '~> 3.0'
-gem 'rspec-puppet', '~> 2.3'
+gem 'rspec-puppet', '~> 2.6'
 gem 'rspec-puppet-facts', '>= 1.7'
 gem 'puppetlabs_spec_helper', '>= 2.1.1'
 gem 'puppet-lint', '>= 2'
