@@ -31,5 +31,6 @@ gem 'beaker-puppet_install_helper', {"groups"=>["system_tests"]}
 gem 'metadata-json-lint'
 gem 'kafo_module_lint'
 gem 'rgen' # until https://tickets.puppetlabs.com/browse/PDOC-168 is resolved
+gem 'parallel_tests'
 
 # vim:ft=ruby
