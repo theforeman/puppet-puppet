@@ -1,5 +1,27 @@
 # Changelog
 
+## 8.0.0
+* Drop Puppet 3 support in the module code. Having Puppet 3 agents configured by a Puppet 4 server still works.
+* New or changed parameters:
+    * The `$server_enable_ruby_profiler` parameter got removed and rolled into `$server_puppetserver_metrics`.
+    * Add `$server_puppetserver_metrics` parameter to control if metrics (Puppetserver 5 only) and JRuby profiling
+      are enabled.
+    * Add `$server_puppetserver_jruby9k` parameter to allow JRuby 9000 to be used as Ruby for Puppetserver.
+    * Add `$server_puppetserver_experimental` parameter to enable the /puppet/experimental route in Puppetserver 5.
+    * Add `$autosign_source` parameter. If set, this is used as source for the autosign file, instead of
+      `$autosign_content`.
+    * The `$server_enc_api` parameter does not accept `v1` as API anymore.
+    * Add `$server_web_idle_timeout` parameter for setting the in ms that Jetty allows a socket to be idle after
+      processing has completed.
+    * The `$client_certname` parameter can now be set to a boolean. This can be used to prevent `certname` being set.
+* Other features:
+    * Add support for Puppetserver 5 configurations.
+* Other changes and fixes:
+    * Stop accepting Foreman Puppetmaster v1 APIs.
+    * Move the `server` config parameter to the `[main]` section of puppet.conf.
+    * Puppetserver's `web-routes.conf` is not managed anymore, as that has led to a number of bugs when upgrading to
+      newer versions of Puppetserver.
+
 ## 7.1.1
 * Other changes and fixes:
     * Add Puppet 3 client compatibility under rack
