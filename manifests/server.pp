@@ -300,9 +300,10 @@
 #
 # $puppetserver_jruby9k::      For Puppetserver 5, use JRuby 9k? Defaults to false
 #
-# $puppetserver_metrics::      For Puppetserver 5, enable metrics? Defaults to true
+# $puppetserver_metrics::      Enable metrics (Puppetserver 5.x only) and JRuby profiling?
+#                              Defaults to true on Puppetserver 5.x and to false on Puppetserver 2.x
 #
-# $puppetserver_experimental:: For Puppetserver 5, enable metrics? Defaults to true
+# $puppetserver_experimental:: For Puppetserver 5, enable the /puppet/experimental route? Defaults to true
 #
 class puppet::server(
   Variant[Boolean, Stdlib::Absolutepath] $autosign = $::puppet::autosign,
