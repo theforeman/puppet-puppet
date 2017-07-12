@@ -422,11 +422,16 @@ class puppet::params {
 
   # This is some very trivial "tuning". See the puppet reference:
   # https://docs.puppet.com/puppetserver/latest/tuning_guide.html
-  if 0 + $::memorysize_mb >= 2048 {
+  if $::memorysize_mb.is_a(String) {
+    $mem_in_mb = scanf($::memorysize_mb, '%i')[0]
+  } else {
+    $mem_in_mb = 0 + $::memorysize_mb
+  }
+  if $mem_in_mb >= 2048 {
     $server_jvm_min_heap_size = '2G'
     $server_jvm_max_heap_size = '2G'
     $server_max_active_instances = $::processorcount
-  } elsif 0 + $::memorysize_mb >= 1024 {
+  } elsif $mem_in_mb >= 1024 {
     $server_max_active_instances = 1
     $server_jvm_min_heap_size = '1G'
     $server_jvm_max_heap_size = '1G'
