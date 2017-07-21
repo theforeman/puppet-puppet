@@ -79,9 +79,8 @@ class Puppet3Compat
       env['QUERY_STRING'] = Rack::Utils.build_query(@req.params)
     end
 
-    if @api =~ /^file_(content|bucket_file)/ && @req.get?
-      env["HTTP_ACCEPT"] = "binary"
-    elsif @api == "file_bucket_file" && (@req.post? || @req.put?)
+    env["HTTP_ACCEPT"] = env["HTTP_ACCEPT"].split(/\s*,\s*/).map { |a| a.sub(/^raw|s$/, 'binary') }.uniq.join(', ')
+    if @api == "file_bucket_file" && (@req.post? || @req.put?)
       env["CONTENT_TYPE"] = "application/octet-stream"
     end
 
