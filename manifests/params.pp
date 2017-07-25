@@ -234,7 +234,7 @@ class puppet::params {
   $server_reports             = 'foreman'
   $server_passenger           = true
   $server_service_fallback    = true
-  $server_passenger_min_instances = $::processorcount
+  $server_passenger_min_instances = abs($::processorcount)
   $server_passenger_pre_start = true
   $server_passenger_ruby      = undef
   $server_httpd_service       = 'httpd'
@@ -430,7 +430,7 @@ class puppet::params {
   if $mem_in_mb >= 2048 {
     $server_jvm_min_heap_size = '2G'
     $server_jvm_max_heap_size = '2G'
-    $server_max_active_instances = $::processorcount
+    $server_max_active_instances = abs($::processorcount)
   } elsif $mem_in_mb >= 1024 {
     $server_max_active_instances = 1
     $server_jvm_min_heap_size = '1G'
