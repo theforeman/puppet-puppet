@@ -29,6 +29,8 @@
 #
 # $hiera_config::              The hiera configuration file.
 #
+# $manage_user::               Whether to manage the puppet user resource
+#
 # $user::                      Name of the puppetmaster user.
 #
 # $group::                     Name of the puppetmaster group.
@@ -318,6 +320,7 @@ class puppet::server(
   Optional[String] $autosign_source = $::puppet::autosign_source,
   String $hiera_config = $::puppet::hiera_config,
   Array[String] $admin_api_whitelist = $::puppet::server_admin_api_whitelist,
+  Boolean $manage_user = $::puppet::server_manage_user,
   String $user = $::puppet::server_user,
   String $group = $::puppet::server_group,
   String $dir = $::puppet::server_dir,

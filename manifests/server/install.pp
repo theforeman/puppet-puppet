@@ -10,6 +10,20 @@ class puppet::server::install {
     Class['puppet::server::install'] -> Class['foreman::config']
   }
 
+  if $::puppet::server::manage_user {
+    $shell = $::puppet::server::git_repo ? {
+      true    => $::osfamily ? {
+        /^(FreeBSD|DragonFly)$/ => '/usr/local/bin/git-shell',
+        default                 => '/usr/bin/git-shell'
+      },
+      default => undef,
+    }
+
+    user { $::puppet::server::user:
+      shell => $shell,
+    }
+  }
+
   if $::puppet::manage_packages == true or $::puppet::manage_packages == 'server' {
     $puppet4 = (versioncmp($::puppetversion, '4.0') > 0)
     $server_package_default = $::puppet::server::implementation ? {
@@ -29,6 +43,10 @@ class puppet::server::install {
     package { $server_package:
       ensure => $server_version,
     }
+
+    if $::puppet::server::manage_user {
+      Package[$server_package] -> User[$::puppet::server::user]
+    }
   }
 
   # Prevent the master service running and preventing Apache from binding to the port
@@ -43,20 +61,12 @@ class puppet::server::install {
   }
 
   if $::puppet::server::git_repo {
+    Class['git'] -> User[$::puppet::server::user]
+
     file { $puppet::vardir:
       ensure => directory,
       owner  => $::puppet::server::user,
       group  => $::puppet::server::group,
-    }
-
-    $git_shell = $::osfamily ? {
-      /^(FreeBSD|DragonFly)$/ => '/usr/local/bin/git-shell',
-      default                 => '/usr/bin/git-shell'
-    }
-
-    user { $::puppet::server::user:
-      shell   => $git_shell,
-      require => Class['::git'],
     }
   }
 }
