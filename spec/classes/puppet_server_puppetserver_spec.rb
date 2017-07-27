@@ -25,6 +25,7 @@ describe 'puppet::server::puppetserver' do
         :jvm_min_heap_size                      => '2G',
         :jvm_max_heap_size                      => '2G',
         :jvm_extra_args                         => '',
+        :jvm_cli_args                           => false, # In reality defaults to undef
         :server_ca_auth_required                => true,
         :server_ca_client_whitelist             => [ 'localhost', 'puppetserver123.example.com' ],
         :server_admin_api_whitelist             => [ 'localhost', 'puppetserver123.example.com' ],
@@ -688,6 +689,27 @@ describe 'puppet::server::puppetserver' do
                   with_changes([
                     'set JAVA_ARGS \'"-Xms2G -Xmx2G -XX:foo=bar -XX:bar=foo"\'',
                     'set JAVA_BIN /usr/bin/java',
+                  ]).
+                  with_context('/files/etc/default/puppetserver').
+                  with_incl('/etc/default/puppetserver').
+                  with_lens('Shellvars.lns').
+                  with({})
+          }
+        end
+      end
+
+      describe 'with cli_args parameter' do
+        let :params do
+          default_params.merge({
+            :jvm_cli_args => '-Djava.io.tmpdir=/var/puppettmp',
+          })
+        end
+        if facts[:osfamily] != 'FreeBSD'
+          it { should contain_augeas('puppet::server::puppetserver::jvm').
+                  with_changes([
+                    'set JAVA_ARGS \'"-Xms2G -Xmx2G"\'',
+                    'set JAVA_BIN /usr/bin/java',
+                    'set JAVA_ARGS_CLI \'"-Djava.io.tmpdir=/var/puppettmp"\'',
                   ]).
                   with_context('/files/etc/default/puppetserver').
                   with_incl('/etc/default/puppetserver').

@@ -219,7 +219,10 @@
 # $jvm_extra_args::            Additional java options to pass through.
 #                              This can be used for Java versions prior to
 #                              Java 8 to specify the max perm space to use:
-#                              For example: '-XX:MaxPermSpace=128m'.
+#                              For example: '-XX:MaxPermSize=128m'.
+#
+# $jvm_cli_args::              Java options to use when using puppetserver
+#                              subcommands (eg puppetserver gem).
 #
 # $jruby_gem_home::            Where jruby gems are located for puppetserver
 #
@@ -402,6 +405,7 @@ class puppet::server(
   Pattern[/^[0-9]+[kKmMgG]$/] $jvm_min_heap_size = $::puppet::server_jvm_min_heap_size,
   Pattern[/^[0-9]+[kKmMgG]$/] $jvm_max_heap_size = $::puppet::server_jvm_max_heap_size,
   String $jvm_extra_args = $::puppet::server_jvm_extra_args,
+  Optional[String] $jvm_cli_args = $::puppet::server_jvm_cli_args,
   Optional[Stdlib::Absolutepath] $jruby_gem_home = $::puppet::server_jruby_gem_home,
   Integer[1] $max_active_instances = $::puppet::server_max_active_instances,
   Integer[0] $max_requests_per_instance = $::puppet::server_max_requests_per_instance,

@@ -420,6 +420,8 @@ class puppet::params {
     $server_jvm_extra_args = '-Djruby.logger.class=com.puppetlabs.jruby_utils.jruby.Slf4jLogger'
   }
 
+  $server_jvm_cli_args = undef
+
   # This is some very trivial "tuning". See the puppet reference:
   # https://docs.puppet.com/puppetserver/latest/tuning_guide.html
   if $::memorysize_mb.is_a(String) {
