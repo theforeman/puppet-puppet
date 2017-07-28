@@ -566,7 +566,7 @@ class puppet (
   String $auth_template = $puppet::params::auth_template,
   Boolean $allow_any_crl_auth = $puppet::params::allow_any_crl_auth,
   Array[String] $auth_allowed = $puppet::params::auth_allowed,
-  Array[String] $client_package = $puppet::params::client_package,
+  Variant[String, Array[String]] $client_package = $puppet::params::client_package,
   Boolean $agent = $puppet::params::agent,
   Boolean $remove_lock = $puppet::params::remove_lock,
   Variant[String, Boolean] $client_certname = $puppet::params::client_certname,
