@@ -263,8 +263,8 @@ class puppet::server::config inherits puppet::config {
       ensure => directory,
     }
 
-    if $puppet::server_common_modules_path and $puppet::server_common_modules_path != '' {
-      file { $puppet::server_common_modules_path:
+    if $::puppet::server::common_modules_path and $::puppet::server::common_modules_path != '' {
+      file { $::puppet::server::common_modules_path:
         ensure => directory,
         owner  => $::puppet::server_environments_owner,
         group  => $::puppet::server_environments_group,
