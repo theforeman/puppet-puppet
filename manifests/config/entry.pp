@@ -5,9 +5,9 @@ define puppet::config::entry (
   $sectionorder = 5,
   $joiner       = ',',
 ) {
-  if is_array($value) {
+  if ($value =~ Array) {
     $_value = join(flatten($value), $joiner)
-  } elsif is_bool($value) {
+  } elsif ($value =~ Boolean) {
     $_value = bool2str($value)
   } else {
     $_value = $value

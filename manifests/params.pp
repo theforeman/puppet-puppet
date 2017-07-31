@@ -422,7 +422,7 @@ class puppet::params {
 
   # This is some very trivial "tuning". See the puppet reference:
   # https://docs.puppet.com/puppetserver/latest/tuning_guide.html
-  if $::memorysize_mb.is_a(String) {
+  if ($::memorysize_mb =~ String) {
     $mem_in_mb = scanf($::memorysize_mb, '%i')[0]
   } else {
     $mem_in_mb = 0 + $::memorysize_mb
