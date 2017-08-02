@@ -308,6 +308,8 @@
 #
 # $puppetserver_experimental:: For Puppetserver 5, enable the /puppet/experimental route? Defaults to true
 #
+# $puppetserver_trusted_agents:: Certificate names of agents that are allowed to fetch *all* catalogs. Defaults to empty array
+#
 class puppet::server(
   Variant[Boolean, Stdlib::Absolutepath] $autosign = $::puppet::autosign,
   Array[String] $autosign_entries = $::puppet::autosign_entries,
@@ -416,6 +418,7 @@ class puppet::server(
   Boolean $puppetserver_jruby9k = $::puppet::server_puppetserver_jruby9k,
   Boolean $puppetserver_metrics = $::puppet::server_puppetserver_metrics,
   Boolean $puppetserver_experimental = $::puppet::server_puppetserver_experimental,
+  Array[String] $puppetserver_trusted_agents = $::puppet::server_puppetserver_trusted_agents,
 ) {
   if $implementation == 'master' and $ip != $puppet::params::ip {
     notify {

@@ -9,7 +9,7 @@ authorization: {
                 type: regex
                 method: [get, post]
             }
-            allow: "$1"
+            allow: <%= @server_trusted_agents << '$1' %>
             sort-order: 500
             name: "puppetlabs catalog"
         },

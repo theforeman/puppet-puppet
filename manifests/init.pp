@@ -493,6 +493,9 @@
 #
 # $server_puppetserver_experimental::       For Puppetserver 5, enable the /puppet/experimental route? Defaults to true
 #
+# $server_puppetserver_trusted_agents::     Certificate names of puppet agents that are allowed to fetch *all* catalogs
+#                                           Defaults to [] and all agents are only allowed to fetch their own catalogs.
+#
 # === Usage:
 #
 # * Simple usage:
@@ -680,6 +683,7 @@ class puppet (
   Boolean $server_puppetserver_jruby9k = $puppet::params::server_puppetserver_jruby9k,
   Boolean $server_puppetserver_metrics = $puppet::params::server_puppetserver_metrics,
   Boolean $server_puppetserver_experimental = $puppet::params::server_puppetserver_experimental,
+  Array[String] $server_puppetserver_trusted_agents = $puppet::params::server_puppetserver_trusted_agents,
 ) inherits puppet::params {
   include ::puppet::config
   Class['puppet::config'] -> Class['puppet']

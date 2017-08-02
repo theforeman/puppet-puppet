@@ -66,6 +66,7 @@ describe 'puppet::server::puppetserver' do
         :server_ssl_cert_key                    => '/etc/puppetlabs/puppet/ssl/private_keys/puppetserver123.example.com.pem',
         :server_ssl_chain                       => '/etc/puppetlabs/puppet/ssl/ca/ca_crt.pem',
         :server_crl_enable                      => true,
+        :server_trusted_agents                  => [],
       } end
 
       describe 'with default parameters' do
@@ -646,6 +647,22 @@ describe 'puppet::server::puppetserver' do
           it {
             should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
               without_content(%r{^(\ *)path: "/puppet/experimental"$})
+          }
+        end
+      end
+
+      describe 'server_trusted_agents' do
+        context 'when set' do
+          let(:params) do
+            default_params.merge({
+                                   :server_puppetserver_version => '2.7.0',
+                                   :server_puppetserver_dir     => '/etc/custom/puppetserver',
+                                   :server_trusted_agents       => ['jenkins', 'octocatalog-diff'],
+                                 })
+          end
+          it {
+            should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
+              with_content(%r{^            allow: \["jenkins", "octocatalog-diff", "\$1"\]$})
           }
         end
       end

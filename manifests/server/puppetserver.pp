@@ -103,6 +103,7 @@ class puppet::server::puppetserver (
   $server_jruby9k                         = $::puppet::server::puppetserver_jruby9k,
   $server_metrics                         = $::puppet::server::puppetserver_metrics,
   $server_experimental                    = $::puppet::server::puppetserver_experimental,
+  $server_trusted_agents                  = $::puppet::server::puppetserver_trusted_agents,
 ) {
   include ::puppet::server
 
