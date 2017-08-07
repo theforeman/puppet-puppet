@@ -1,5 +1,10 @@
 # Changelog
 
+## 8.0.1
+* Handle $::memorysize_mb and $::processorcount correctly when using facter 2.x
+* Fix `client_package` puppet type, restoring full compatibility with older versions
+* update common_modules_path to work in the server::config subclass
+
 ## 8.0.0
 * Drop Puppet 3 support in the module code. Having Puppet 3 agents configured by a Puppet 4 server still works.
 * New or changed parameters:
