@@ -22,6 +22,11 @@
 # Custom options to pass through to the java binary. These get added to
 # the end of the JAVA_ARGS variable
 #
+# * `jvm_cli_args`
+# Custom options to pass through to the java binary when using a
+# puppetserver subcommand, (eg puppetserver gem). These get used
+# in the JAVA_ARGS_CLI variable.
+#
 # * `server_puppetserver_dir`
 # Puppetserver config directory
 #
@@ -58,6 +63,7 @@ class puppet::server::puppetserver (
   $config                                 = $::puppet::server::jvm_config,
   $java_bin                               = $::puppet::server::jvm_java_bin,
   $jvm_extra_args                         = $::puppet::server::jvm_extra_args,
+  $jvm_cli_args                           = $::puppet::server::jvm_cli_args,
   $jvm_min_heap_size                      = $::puppet::server::jvm_min_heap_size,
   $jvm_max_heap_size                      = $::puppet::server::jvm_max_heap_size,
   $server_puppetserver_dir                = $::puppet::server::puppetserver_dir,
@@ -106,14 +112,23 @@ class puppet::server::puppetserver (
       changes => [ "set puppetserver_java_opts '\"${jvm_cmd}\"'" ],
     }
   } else {
+    if $jvm_cli_args {
+      $changes = [
+        "set JAVA_ARGS '\"${jvm_cmd}\"'",
+        "set JAVA_BIN ${java_bin}",
+        "set JAVA_ARGS_CLI '\"${jvm_cli_args}\"'",
+      ]
+    } else {
+      $changes = [
+        "set JAVA_ARGS '\"${jvm_cmd}\"'",
+        "set JAVA_BIN ${java_bin}",
+      ]
+    }
     augeas { 'puppet::server::puppetserver::jvm':
       lens    => 'Shellvars.lns',
       incl    => $config,
       context => "/files${config}",
-      changes => [
-        "set JAVA_ARGS '\"${jvm_cmd}\"'",
-        "set JAVA_BIN ${java_bin}",
-      ],
+      changes => $changes,
     }
 
     if versioncmp($server_puppetserver_version, '2.4.99') == 0 {
