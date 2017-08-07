@@ -48,7 +48,7 @@ class puppet::server::config inherits puppet::config {
     }
   }
 
-  $autosign = is_bool($::puppet::server::autosign)? {
+  $autosign = ($::puppet::server::autosign =~ Boolean)? {
     true  => $::puppet::server::autosign,
     false => "${::puppet::server::autosign} { mode = ${::puppet::server::autosign_mode} }"
   }
@@ -183,7 +183,7 @@ class puppet::server::config inherits puppet::config {
   }
 
   # autosign file
-  if $::puppet::server_ca and ! is_bool($puppet::server::autosign){
+  if $::puppet::server_ca and !($puppet::server::autosign =~ Boolean) {
     if $::puppet::server::autosign_content or $::puppet::server::autosign_source {
       if !empty($::puppet::server::autosign_entries) {
         fail('Cannot set both autosign_content/autosign_source and autosign_entries')
