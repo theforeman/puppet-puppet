@@ -464,34 +464,43 @@ describe 'puppet::server::puppetserver' do
       describe 'product.conf' do
         context 'when server_puppetserver_version >= 2.7' do
           let(:params) do
-            default_params.merge({
+            default_params.merge(
               :server_puppetserver_version => '2.7.0',
-              :server_puppetserver_dir => '/etc/custom/puppetserver',
-              :server_check_for_updates => false,
-            })
+              :server_puppetserver_dir     => '/etc/custom/puppetserver',
+              :server_check_for_updates    => false,
+            )
           end
           it {
             should contain_file('/etc/custom/puppetserver/conf.d/product.conf').
-              with_content(/^\s+check-for-updates: false/)
+              with_ensure('file')
+          }
+          it {
+            should contain_hocon_setting('server_check_for_updates').
+              with_path('/etc/custom/puppetserver/conf.d/product.conf').
+              with_setting('product.check-for-updates').
+              with_value(false)
           }
         end
 
         context 'when server_puppetserver_version < 2.7' do
           let(:params) do
-            default_params.merge({
+            default_params.merge(
               :server_puppetserver_version => '2.6.0',
               :server_puppetserver_dir => '/etc/custom/puppetserver',
-            })
+            )
           end
           it {
             should contain_file('/etc/custom/puppetserver/conf.d/product.conf').
               with_ensure('absent')
           }
+          it {
+            should_not contain_hocon_setting('server_check_for_updates')
+          }
         end
       end
 
       describe 'server_metrics' do
-            context 'when server_puppetserver_version < 5.0 and server_metrics => true' do
+        context 'when server_puppetserver_version < 5.0 and server_metrics => true' do
           let(:params) do
             default_params.merge({
                                    :server_puppetserver_version => '2.7.0',
@@ -829,7 +838,6 @@ describe 'puppet::server::puppetserver' do
         end
 
         it { should raise_error(Puppet::Error, /setting \$server_http_allow is not supported for puppetserver as it would have no effect/) }
-
       end
     end
   end

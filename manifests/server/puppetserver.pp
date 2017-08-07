@@ -104,7 +104,7 @@ class puppet::server::puppetserver (
   $puppetserver_package = pick($::puppet::server::package, 'puppetserver')
 
   $jvm_cmd_arr = ["-Xms${jvm_min_heap_size}", "-Xmx${jvm_max_heap_size}", $jvm_extra_args]
-  $jvm_cmd = strip(join(flatten($jvm_cmd_arr),' '))
+  $jvm_cmd = strip(join(flatten($jvm_cmd_arr), ' '))
 
   if $::osfamily == 'FreeBSD' {
     augeas { 'puppet::server::puppetserver::jvm':
@@ -253,14 +253,23 @@ class puppet::server::puppetserver (
     content => template('puppet/server/puppetserver/conf.d/auth.conf.erb'),
   }
 
+  $product_conf = "${server_puppetserver_dir}/conf.d/product.conf"
+
   if versioncmp($server_puppetserver_version, '2.7') >= 0 {
     $product_conf_ensure = file
+
+    hocon_setting { 'server_check_for_updates':
+      ensure  => present,
+      path    => $product_conf,
+      setting => 'product.check-for-updates',
+      value   => $server_check_for_updates,
+      require => File[$product_conf],
+    }
   } else {
     $product_conf_ensure = absent
   }
 
-  file { "${server_puppetserver_dir}/conf.d/product.conf":
-    ensure  => $product_conf_ensure,
-    content => template('puppet/server/puppetserver/conf.d/product.conf.erb'),
+  file { $product_conf:
+    ensure => $product_conf_ensure,
   }
 }
