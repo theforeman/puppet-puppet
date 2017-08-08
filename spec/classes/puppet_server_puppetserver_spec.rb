@@ -107,12 +107,23 @@ describe 'puppet::server::puppetserver' do
 
         it { should contain_file('/etc/custom/puppetserver/conf.d/ca.conf') }
         it { should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf') }
-        it { should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
-                                 with_content(/ssl-host:\s0\.0\.0\.0/).
-                                 with_content(/ssl-port:\s8140/).
-                                 without_content(/ host:\s/).
-                                 without_content(/ port:\s8139/).
-                                 with({})
+        it { should contain_hocon_setting('webserver.ssl-host').
+            with_path('/etc/custom/puppetserver/conf.d/webserver.conf').
+            with_setting('webserver.ssl-host').
+            with_value('0.0.0.0').
+            with_ensure('present')
+          }
+        it { should contain_hocon_setting('webserver.ssl-port').
+            with_path('/etc/custom/puppetserver/conf.d/webserver.conf').
+            with_setting('webserver.ssl-port').
+            with_value('8140').
+            with_ensure('present')
+          }
+        it { should contain_hocon_setting('webserver.host').
+            with_ensure('absent')
+        }
+        it { should contain_hocon_setting('webserver.port').
+            with_ensure('absent')
         }
         it { should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
           with_content(/allow-header-cert-info: false/).
@@ -484,11 +495,12 @@ describe 'puppet::server::puppetserver' do
               with_ensure('file')
           }
           it {
-            should contain_hocon_setting('server_check_for_updates').
+            should contain_hocon_setting('product.check-for-updates').
               with_path('/etc/custom/puppetserver/conf.d/product.conf').
               with_setting('product.check-for-updates').
-              with_value(false)
-          }
+              with_value(false).
+              with_ensure('present')
+            }
         end
 
         context 'when server_puppetserver_version < 2.7' do
@@ -503,7 +515,7 @@ describe 'puppet::server::puppetserver' do
               with_ensure('absent')
           }
           it {
-            should_not contain_hocon_setting('server_check_for_updates')
+            should_not contain_hocon_setting('product.check-for-updates')
           }
         end
       end

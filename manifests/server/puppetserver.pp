@@ -252,14 +252,82 @@ class puppet::server::puppetserver (
     content => template('puppet/server/puppetserver/conf.d/puppetserver.conf.erb'),
   }
 
-  file { "${server_puppetserver_dir}/conf.d/webserver.conf":
-    ensure  => file,
-    content => template('puppet/server/puppetserver/conf.d/webserver.conf.erb'),
-  }
-
   file { "${server_puppetserver_dir}/conf.d/auth.conf":
     ensure  => file,
     content => template('puppet/server/puppetserver/conf.d/auth.conf.erb'),
+  }
+
+  $webserver_conf = "${server_puppetserver_dir}/conf.d/webserver.conf"
+
+  file { $webserver_conf:
+    ensure  => file,
+  }
+
+  $webserver_general_settings = {
+    'webserver.access-log-config'         => "${server_puppetserver_dir}/request-logging.xml",
+    'webserver.client-auth'               => 'want',
+    'webserver.ssl-host'                  => $server_ip,
+    'webserver.ssl-port'                  => $server_port,
+    'webserver.ssl-cert'                  => $server_ssl_cert,
+    'webserver.ssl-key'                   => $server_ssl_cert_key,
+    'webserver.ssl-ca-cert'               => $server_ssl_ca_cert,
+    'webserver.idle-timeout-milliseconds' => $server_web_idle_timeout,
+  }
+
+  $webserver_general_settings.each |$setting, $value| {
+    hocon_setting { $setting:
+      ensure  => present,
+      path    => $webserver_conf,
+      setting => $setting,
+      value   => $value,
+      require => File[$webserver_conf],
+    }
+  }
+
+  $webserver_http_settings_ensure = $server_http ? {
+    true    => present,
+    default => absent,
+  }
+
+  $webserver_http_settings = {
+    'webserver.host' => $server_ip,
+    'webserver.port' => $server_http_port,
+  }
+
+  $webserver_http_settings.each |$setting, $value| {
+    hocon_setting { $setting:
+      ensure  => $webserver_http_settings_ensure,
+      path    => $webserver_conf,
+      setting => $setting,
+      value   => $value,
+      require => File[$webserver_conf],
+    }
+  }
+
+  $webserver_crl_settings_ensure = $server_crl_enable ? {
+    true    => present,
+    default => absent,
+  }
+
+  hocon_setting { 'webserver.ssl-crl-path':
+    ensure  => $webserver_crl_settings_ensure,
+    path    => $webserver_conf,
+    setting => 'webserver.ssl-crl-path',
+    value   => $server_ssl_ca_crl,
+    require => File[$webserver_conf],
+  }
+
+  $webserver_ca_settings_ensure = $server_ca ? {
+    true    => present,
+    default => absent,
+  }
+
+  hocon_setting { 'webserver.ssl-cert-chain':
+    ensure  => $webserver_ca_settings_ensure,
+    path    => $webserver_conf,
+    setting => 'webserver.ssl-cert-chain',
+    value   => $server_ssl_chain,
+    require => File[$webserver_conf],
   }
 
   $product_conf = "${server_puppetserver_dir}/conf.d/product.conf"
@@ -267,7 +335,7 @@ class puppet::server::puppetserver (
   if versioncmp($server_puppetserver_version, '2.7') >= 0 {
     $product_conf_ensure = file
 
-    hocon_setting { 'server_check_for_updates':
+    hocon_setting { 'product.check-for-updates':
       ensure  => present,
       path    => $product_conf,
       setting => 'product.check-for-updates',
