@@ -56,6 +56,15 @@ describe 'puppet::server::puppetserver' do
         :server_jruby9k                         => false,
         :server_metrics                         => true,
         :server_experimental                    => true,
+        :server_ip                              => '0.0.0.0',
+        :server_port                            => '8140',
+        :server_http_port                       => '8139',
+        :server_ssl_ca_crl                      => '/etc/puppetlabs/puppet/ssl/ca/ca_crl.pem',
+        :server_ssl_ca_cert                     => '/etc/puppetlabs/puppet/ssl/ca/ca_crt.pem',
+        :server_ssl_cert                        => '/etc/puppetlabs/puppet/ssl/certs/puppetserver123.example.com.pem',
+        :server_ssl_cert_key                    => '/etc/puppetlabs/puppet/ssl/private_keys/puppetserver123.example.com.pem',
+        :server_ssl_chain                       => '/etc/puppetlabs/puppet/ssl/ca/ca_crt.pem',
+        :server_crl_enable                      => true,
       } end
 
       describe 'with default parameters' do
@@ -463,11 +472,11 @@ describe 'puppet::server::puppetserver' do
       describe 'product.conf' do
         context 'when server_puppetserver_version >= 2.7' do
           let(:params) do
-            default_params.merge({
+            default_params.merge(
               :server_puppetserver_version => '2.7.0',
-              :server_puppetserver_dir => '/etc/custom/puppetserver',
-              :server_check_for_updates => false,
-            })
+              :server_puppetserver_dir     => '/etc/custom/puppetserver',
+              :server_check_for_updates    => false,
+            )
           end
           it {
             should contain_file('/etc/custom/puppetserver/conf.d/product.conf').
@@ -477,10 +486,10 @@ describe 'puppet::server::puppetserver' do
 
         context 'when server_puppetserver_version < 2.7' do
           let(:params) do
-            default_params.merge({
+            default_params.merge(
               :server_puppetserver_version => '2.6.0',
               :server_puppetserver_dir => '/etc/custom/puppetserver',
-            })
+            )
           end
           it {
             should contain_file('/etc/custom/puppetserver/conf.d/product.conf').
@@ -490,7 +499,7 @@ describe 'puppet::server::puppetserver' do
       end
 
       describe 'server_metrics' do
-            context 'when server_puppetserver_version < 5.0 and server_metrics => true' do
+        context 'when server_puppetserver_version < 5.0 and server_metrics => true' do
           let(:params) do
             default_params.merge({
                                    :server_puppetserver_version => '2.7.0',
@@ -715,99 +724,6 @@ describe 'puppet::server::puppetserver' do
                   with({})
           }
         end
-      end
-
-      describe 'with server_ip parameter given to the puppet class' do
-        let(:params) do
-          default_params.merge({
-            :server_puppetserver_dir => '/etc/custom/puppetserver',
-          })
-        end
-
-        let :pre_condition do
-          "class {'puppet': server_ip => '127.0.0.1', server_implementation => 'puppetserver'}"
-        end
-
-        it 'should put the correct ip address in webserver.conf' do
-          should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').with_content(/ssl-host:\s127\.0\.0\.1/)
-        end
-      end
-
-      describe 'with server_certname parameter given to the puppet class' do
-        let(:params) do
-          default_params.merge({
-            :server_puppetserver_dir => '/etc/custom/puppetserver',
-          })
-        end
-
-        let :pre_condition do
-          "class {'puppet': server_certname => 'puppetserver43.example.com', server_implementation => 'puppetserver', server_ssl_dir => '/etc/custom/puppet/ssl'}"
-        end
-
-        it 'should put the correct ssl key path in webserver.conf' do
-          should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
-            with_content(%r{ssl-key: /etc/custom/puppet/ssl/private_keys/puppetserver43\.example\.com\.pem})
-        end
-
-        it 'should put the correct ssl cert path in webserver.conf' do
-          should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
-            with_content(%r{ssl-cert: /etc/custom/puppet/ssl/certs/puppetserver43\.example\.com\.pem})
-        end
-      end
-
-      describe 'with server_http parameter set to true for the puppet class' do
-        let(:params) do
-          default_params.merge({
-            :server_puppetserver_dir => '/etc/custom/puppetserver',
-          })
-        end
-
-        let :pre_condition do
-          "class {'puppet': server_http => true, server_implementation => 'puppetserver'}"
-        end
-
-        it { should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
-          with_content(/ host:\s0\.0\.0\.0/).
-          with_content(/ port:\s8139/).
-          with({})
-        }
-
-        it { should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
-          with_content(/allow-header-cert-info: true/).
-          with({})
-        }
-      end
-
-      describe 'with server_allow_header_cert_info parameter set to true for the puppet class' do
-        let(:params) do
-          default_params.merge({
-            :server_puppetserver_dir => '/etc/custom/puppetserver',
-           })
-        end
-
-        let :pre_condition do
-          "class {'puppet': server_allow_header_cert_info => true, server_implementation => 'puppetserver'}"
-        end
-
-        it { should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
-            with_content(/allow-header-cert-info: true/).
-            with({})
-        }
-      end
-
-      describe 'with server_http_allow parameter set for the puppet class' do
-        let(:params) do
-          default_params.merge({
-            :server_puppetserver_dir => '/etc/custom/puppetserver',
-          })
-        end
-
-        let :pre_condition do
-          "class {'puppet': server => true, server_http => true, server_http_allow => ['1.2.3.4'], server_implementation => 'puppetserver'}"
-        end
-
-        it { should raise_error(Puppet::Error, /setting \$server_http_allow is not supported for puppetserver as it would have no effect/) }
-
       end
     end
   end
