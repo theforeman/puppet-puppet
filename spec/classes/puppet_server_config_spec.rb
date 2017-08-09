@@ -810,20 +810,109 @@ describe 'puppet::server::config' do
       end
 
       describe 'with ssl_chain_filepath overwritten' do
-	let :pre_condition do
+        let :pre_condition do
           "class {'puppet':
-              server                      => true,
-              server_implementation       => 'puppetserver',
-              server_ca                   => true,
-              server_puppetserver_dir     => '/etc/custom/puppetserver',
-              server_jruby_gem_home       => '/opt/puppetlabs/server/data/puppetserver/jruby-gems',
-              server_ssl_chain_filepath   => '/etc/example/certchain.pem',
+              server                    => true,
+              server_implementation     => 'puppetserver',
+              server_ca                 => true,
+              server_puppetserver_dir   => '/etc/custom/puppetserver',
+              server_jruby_gem_home     => '/opt/puppetlabs/server/data/puppetserver/jruby-gems',
+              server_ssl_chain_filepath => '/etc/example/certchain.pem',
            }"
         end
         it 'should use the server_ssl_chain_filepath file' do
            should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
              with_content(/ssl-cert-chain: \/etc\/example\/certchain.pem/)
         end
+      end
+
+      describe 'with server_ip parameter given to the puppet class' do
+        let :pre_condition do
+          "class {'puppet':
+             server                  => true,
+             server_implementation   => 'puppetserver',
+             server_puppetserver_dir => '/etc/custom/puppetserver',
+             server_ip               => '127.0.0.1',
+           }"
+        end
+
+        it 'should put the correct ip address in webserver.conf' do
+          should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').with_content(/ssl-host:\s127\.0\.0\.1/)
+        end
+      end
+
+      describe 'with server_certname parameter' do
+        let :pre_condition do
+          "class {'puppet':
+             server                  => true,
+             server_implementation   => 'puppetserver',
+             server_puppetserver_dir => '/etc/custom/puppetserver',
+             server_certname         => 'puppetserver43.example.com',
+             server_ssl_dir          => '/etc/custom/puppet/ssl',
+           }"
+        end
+
+        it 'should put the correct ssl key path in webserver.conf' do
+          should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
+              with_content(%r{ssl-key: /etc/custom/puppet/ssl/private_keys/puppetserver43\.example\.com\.pem})
+        end
+
+        it 'should put the correct ssl cert path in webserver.conf' do
+          should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
+              with_content(%r{ssl-cert: /etc/custom/puppet/ssl/certs/puppetserver43\.example\.com\.pem})
+        end
+      end
+
+      describe 'with server_http parameter set to true for the puppet class' do
+        let :pre_condition do
+          "class {'puppet':
+             server                  => true,
+             server_implementation   => 'puppetserver',
+             server_puppetserver_dir => '/etc/custom/puppetserver',
+             server_http             => true,
+           }"
+        end
+
+        it { should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
+            with_content(/ host:\s0\.0\.0\.0/).
+            with_content(/ port:\s8139/).
+            with({})
+        }
+
+        it { should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
+            with_content(/allow-header-cert-info: true/).
+            with({})
+        }
+      end
+
+      describe 'with server_allow_header_cert_info parameter set to true for the puppet class' do
+        let :pre_condition do
+          "class {'puppet':
+             server                        => true,
+             server_implementation         => 'puppetserver',
+             server_puppetserver_dir       => '/etc/custom/puppetserver',
+             server_allow_header_cert_info => true,
+           }"
+        end
+
+        it { should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
+            with_content(/allow-header-cert-info: true/).
+            with({})
+        }
+      end
+
+      describe 'with server_http_allow parameter set for the puppet class' do
+        let :pre_condition do
+          "class {'puppet':
+             server                  => true,
+             server_implementation   => 'puppetserver',
+             server_puppetserver_dir => '/etc/custom/puppetserver',
+             server_http             => true,
+             server_http_allow       => ['1.2.3.4'],
+           }"
+        end
+
+        it { should raise_error(Puppet::Error, /setting \$server_http_allow is not supported for puppetserver as it would have no effect/) }
       end
     end
   end
