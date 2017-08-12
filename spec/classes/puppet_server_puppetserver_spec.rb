@@ -105,7 +105,9 @@ describe 'puppet::server::puppetserver' do
           }
         end
 
-        it { should contain_file('/etc/custom/puppetserver/conf.d/ca.conf') }
+        it { should contain_file('/etc/custom/puppetserver/conf.d/ca.conf').
+          with_ensure('absent')
+        }
         it { should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf') }
         it { should contain_hocon_setting('webserver.ssl-host').
             with_path('/etc/custom/puppetserver/conf.d/webserver.conf').
@@ -463,11 +465,19 @@ describe 'puppet::server::puppetserver' do
           }
           it {
             should contain_file('/etc/custom/puppetserver/conf.d/ca.conf').
-              with_content(/^\s+authorization-required: true$/).
-              with_content(/^\s+client-whitelist: \[$/).
-              with_content(/^\s+"localhost"\,$/).
-              with_content(/^\s+"puppetserver123.example.com"\,$/).
-              with({}) # So we can use a trailing dot on each with_content line
+              with_ensure('file')
+          }
+          it { should contain_hocon_setting('certificate-authority.certificate-status.authorization-required').
+            with_path('/etc/custom/puppetserver/conf.d/ca.conf').
+            with_setting('certificate-authority.certificate-status.authorization-required').
+            with_value(true).
+            with_ensure('present')
+          }
+          it { should contain_hocon_setting('certificate-authority.certificate-status.client-whitelist').
+            with_path('/etc/custom/puppetserver/conf.d/ca.conf').
+            with_setting('certificate-authority.certificate-status.client-whitelist').
+            with_value(['localhost', 'puppetserver123.example.com']).
+            with_ensure('present')
           }
           it {
             should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').

@@ -236,15 +236,37 @@ class puppet::server::puppetserver (
     }
   }
 
+  $ca_conf = "${server_puppetserver_dir}/conf.d/ca.conf"
+
   if versioncmp($server_puppetserver_version, '2.2') < 0 {
     $ca_conf_ensure = file
+
+    hocon_setting { 'certificate-authority.certificate-status.authorization-required':
+      ensure  => present,
+      path    => $ca_conf,
+      setting => 'certificate-authority.certificate-status.authorization-required',
+      value   => $server_ca_auth_required,
+      require => File[$ca_conf],
+    }
+
+    $ca_conf_client_whitelist_ensure = $server_ca_auth_required ? {
+      true    => present,
+      default => absent,
+    }
+
+    hocon_setting { 'certificate-authority.certificate-status.client-whitelist':
+      ensure  => $ca_conf_client_whitelist_ensure,
+      path    => $ca_conf,
+      setting => 'certificate-authority.certificate-status.client-whitelist',
+      value   => $server_ca_client_whitelist,
+      require => File[$ca_conf],
+    }
   } else {
     $ca_conf_ensure = absent
   }
 
-  file { "${server_puppetserver_dir}/conf.d/ca.conf":
-    ensure  => $ca_conf_ensure,
-    content => template('puppet/server/puppetserver/conf.d/ca.conf.erb'),
+  file { $ca_conf:
+    ensure => $ca_conf_ensure,
   }
 
   file { "${server_puppetserver_dir}/conf.d/puppetserver.conf":
