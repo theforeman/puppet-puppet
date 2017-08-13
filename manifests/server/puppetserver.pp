@@ -253,9 +253,88 @@ class puppet::server::puppetserver (
     ensure => absent,
   }
 
-  file { "${server_puppetserver_dir}/conf.d/puppetserver.conf":
+  $puppetserver_conf = "${server_puppetserver_dir}/conf.d/puppetserver.conf"
+
+  file { $puppetserver_conf:
     ensure  => file,
-    content => template('puppet/server/puppetserver/conf.d/puppetserver.conf.erb'),
+  }
+
+  $puppetserver_settings = {
+    'jruby-puppet.ruby-load-path'              => $server_ruby_load_paths,
+    'jruby-puppet.gem-home'                    => $server_jruby_gem_home,
+    'jruby-puppet.master-conf-dir'             => $server_dir,
+    'jruby-puppet.master-code-dir'             => $codedir,
+    'jruby-puppet.master-var-dir'              => $server_puppetserver_vardir,
+    'jruby-puppet.master-run-dir'              => $server_puppetserver_rundir,
+    'jruby-puppet.master-log-dir'              => $server_puppetserver_logdir,
+    'jruby-puppet.max-active-instances'        => $server_max_active_instances,
+    'jruby-puppet.max-requests-per-instance'   => $server_max_requests_per_instance,
+    'jruby-puppet.use-legacy-auth-conf'        => $server_use_legacy_auth_conf,
+    'http-client.ssl-protocols'                => $server_ssl_protocols,
+    'http-client.cipher-suites'                => $server_cipher_suites,
+    'http-client.idle-timeout-milliseconds'    => $server_idle_timeout,
+    'http-client.connect-timeout-milliseconds' => $server_connect_timeout,
+    'profiler.enabled'                         => $server_metrics,
+  }
+
+  $puppetserver_settings.each |$setting, $value| {
+    $type = $value ? {
+      Array   => 'array',
+      default => undef,
+    }
+
+    hocon_setting { $setting:
+      ensure  => present,
+      path    => $puppetserver_conf,
+      setting => $setting,
+      value   => $value,
+      type    => $type,
+      require => File[$puppetserver_conf],
+    }
+  }
+
+  if versioncmp($server_puppetserver_version, '2.3') >= 0 {
+    $environment_class_cache_ensure = present
+  } else {
+    $environment_class_cache_ensure = absent
+  }
+
+  hocon_setting { 'jruby-puppet.environment-class-cache-enabled':
+    ensure  => $environment_class_cache_ensure,
+    path    => $puppetserver_conf,
+    setting => 'jruby-puppet.environment-class-cache-enabled',
+    value   => $server_environment_class_cache_enabled,
+    require => File[$puppetserver_conf],
+  }
+
+  # TODO: See https://tickets.puppetlabs.com/browse/HC-100
+  # if versioncmp($server_puppetserver_version, '2.7') >= 0 {
+  #   $jruby_gem_path_ensure = present
+  # } else {
+  #   $jruby_gem_path_ensure = absent
+  # }
+  #
+  # hocon_setting { 'jruby-puppet.gem-path':
+  #   ensure  => $jruby_gem_path_ensure,
+  #   path    => $puppetserver_conf,
+  #   setting => 'jruby-puppet.gem-path',
+  #   value   => [$server_jruby_gem_home, "${server_puppetserver_vardir}/vendored-jruby-gems"],
+  #   type    => 'array',
+  #   require => File[$puppetserver_conf],
+  # }
+
+  if versioncmp($server_puppetserver_version, '5.0') >= 0 {
+    $server_metric_ensure = present
+  } else {
+    $server_metric_ensure = absent
+  }
+
+  hocon_setting { 'http-client.metrics-enabled':
+    ensure  => $server_metric_ensure,
+    path    => $puppetserver_conf,
+    setting => 'http-client.metrics-enabled',
+    value   => $server_metrics,
+    require => File[$puppetserver_conf],
   }
 
   $auth_conf = "${server_puppetserver_dir}/conf.d/auth.conf"

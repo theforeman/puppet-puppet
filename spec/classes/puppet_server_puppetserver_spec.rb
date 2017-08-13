@@ -112,15 +112,7 @@ describe 'puppet::server::puppetserver' do
         end
 
         it { should contain_file('/etc/custom/puppetserver/conf.d/ca.conf').with_ensure('absent') }
-        it {
-          should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').
-            without_content(/^# Settings related to the puppet-admin HTTP API$/).
-            without_content(/^puppet-admin: \{$/).
-            without_content(/^\s+client-whitelist: \[$/).
-            without_content(/^\s+"localhost"\,$/).
-            without_content(/^\s+"puppetserver123.example.com"\,$/).
-            with({}) # So we can use a trailing dot on each with_content line
-        }
+        it { should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').with_ensure('file') }
         it {
           should contain_hocon_setting('webserver.ssl-host').
             with_path('/etc/custom/puppetserver/conf.d/webserver.conf').
@@ -169,10 +161,14 @@ describe 'puppet::server::puppetserver' do
           let(:params) do
             default_params.merge(:server_puppetserver_dir => '/etc/custom/puppetserver')
           end
-          it 'should have master-var-dir: /opt/puppetlabs/server/data/puppetserver' do
-            content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
-            expect(content).to include(%Q[    master-var-dir: /opt/puppetlabs/server/data/puppetserver\n])
-          end
+          it { should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').with_ensure('file') }
+          it {
+            should contain_hocon_setting('jruby-puppet.master-var-dir').
+              with_path('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              with_setting('jruby-puppet.master-var-dir').
+              with_value('/opt/puppetlabs/server/data/puppetserver').
+              with_ensure('present')
+          }
         end
         context 'with custom server_puppetserver_vardir' do
           let(:params) do
@@ -181,10 +177,14 @@ describe 'puppet::server::puppetserver' do
               :server_puppetserver_vardir => '/opt/custom/puppetlabs/server/data/puppetserver',
             )
           end
-          it 'should have master-var-dir: /opt/puppetlabs/server/data/puppetserver' do
-            content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
-            expect(content).to include(%Q[    master-var-dir: /opt/custom/puppetlabs/server/data/puppetserver\n])
-          end
+          it { should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').with_ensure('file') }
+          it {
+            should contain_hocon_setting('jruby-puppet.master-var-dir').
+              with_path('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              with_setting('jruby-puppet.master-var-dir').
+              with_value('/opt/custom/puppetlabs/server/data/puppetserver').
+              with_ensure('present')
+          }
         end
       end
 
@@ -193,10 +193,14 @@ describe 'puppet::server::puppetserver' do
           let(:params) do
             default_params.merge(:server_puppetserver_dir => '/etc/custom/puppetserver')
           end
-          it 'should have use-legacy-auth-conf: false in puppetserver.conf' do
-            content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
-            expect(content).to include(%Q[    use-legacy-auth-conf: false\n])
-          end
+          it { should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').with_ensure('file') }
+          it {
+            should contain_hocon_setting('jruby-puppet.use-legacy-auth-conf').
+              with_path('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              with_setting('jruby-puppet.use-legacy-auth-conf').
+              with_value(false).
+              with_ensure('present')
+          }
         end
         context 'when use-legacy-auth-conf = true' do
           let(:params) do
@@ -205,10 +209,14 @@ describe 'puppet::server::puppetserver' do
               :server_puppetserver_dir     => '/etc/custom/puppetserver',
             )
           end
-          it 'should have use-legacy-auth-conf: true in puppetserver.conf' do
-            content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
-            expect(content).to include(%Q[    use-legacy-auth-conf: true\n])
-          end
+          it { should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').with_ensure('file') }
+          it {
+            should contain_hocon_setting('jruby-puppet.use-legacy-auth-conf').
+              with_path('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              with_setting('jruby-puppet.use-legacy-auth-conf').
+              with_value(true).
+              with_ensure('present')
+          }
         end
       end
 
@@ -217,10 +225,14 @@ describe 'puppet::server::puppetserver' do
           let(:params) do
             default_params.merge(:server_puppetserver_dir => '/etc/custom/puppetserver')
           end
-          it 'should have environment-class-cache-enabled: false in puppetserver.conf' do
-            content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
-            expect(content).to include(%Q[    environment-class-cache-enabled: false\n])
-          end
+          it { should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').with_ensure('file') }
+          it {
+            should contain_hocon_setting('jruby-puppet.environment-class-cache-enabled').
+              with_path('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              with_setting('jruby-puppet.environment-class-cache-enabled').
+              with_value(false).
+              with_ensure('present')
+          }
         end
         context 'when environment-class-cache-enabled = true' do
           let(:params) do
@@ -229,10 +241,14 @@ describe 'puppet::server::puppetserver' do
               :server_puppetserver_dir                => '/etc/custom/puppetserver',
             )
           end
-          it 'should have environment-class-cache-enabled: true in puppetserver.conf' do
-            content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
-            expect(content).to include(%Q[    environment-class-cache-enabled: true\n])
-          end
+          it { should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').with_ensure('file') }
+          it {
+            should contain_hocon_setting('jruby-puppet.environment-class-cache-enabled').
+              with_path('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              with_setting('jruby-puppet.environment-class-cache-enabled').
+              with_value(true).
+              with_ensure('present')
+          }
         end
         context 'when server_puppetserver_version < 2.4' do
           let(:params) do
@@ -241,10 +257,13 @@ describe 'puppet::server::puppetserver' do
               :server_puppetserver_dir     => '/etc/custom/puppetserver',
             )
           end
-          it 'should not have a environment-class-cache-enabled setting in puppetserver.conf' do
-            content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
-            expect(content).not_to include('environment-class-cache-enabled')
-          end
+          it { should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').with_ensure('file') }
+          it {
+            should contain_hocon_setting('jruby-puppet.environment-class-cache-enabled').
+              with_path('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              with_setting('jruby-puppet.environment-class-cache-enabled').
+              with_ensure('absent')
+          }
         end
       end
 
@@ -252,21 +271,27 @@ describe 'puppet::server::puppetserver' do
         context 'with default parameters' do
           let(:params) do
             default_params.merge(:server_puppetserver_dir => '/etc/custom/puppetserver')
-            end
-          it 'should have max-requests-per-instance: /opt/puppetlabs/server/data/puppetserver' do
-            content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
-            expect(content).to include(%Q[    max-requests-per-instance: 0\n])
           end
+          it { should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').with_ensure('file') }
+          it {
+            should contain_hocon_setting('jruby-puppet.max-requests-per-instance').
+              with_path('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              with_setting('jruby-puppet.max-requests-per-instance').
+              with_ensure('present')
+          }
         end
         context 'custom server_max_requests_per_instance' do
           let(:params) do
             default_params.merge(:server_max_requests_per_instance => 123456)
           end
-
-          it 'should have custom max-requests-per-instance: /opt/puppetlabs/server/data/puppetserver' do
-            content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
-            expect(content).to include(%Q[    max-requests-per-instance: 123456\n])
-          end
+          it { should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').with_ensure('file') }
+          it {
+            should contain_hocon_setting('jruby-puppet.max-requests-per-instance').
+              with_path('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              with_setting('jruby-puppet.max-requests-per-instance').
+              with_value(123456).
+              with_ensure('present')
+          }
         end
       end
 
@@ -477,12 +502,21 @@ describe 'puppet::server::puppetserver' do
               :server_metrics              => true,
             )
           end
-          it {
-            should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').
-              without_content(%r{^    metrics-enabled: (.*)$}).
-              with_content(%r{^profiler: \{\n    # enable or disable profiling for the Ruby code;\n    enabled: true})
-          }
           it { should_not contain_file('/etc/custom/puppetserver/conf.d/metrics.conf') }
+          it { should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').with_ensure('file') }
+          it {
+            should contain_hocon_setting('http-client.metrics-enabled').
+              with_path('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              with_setting('http-client.metrics-enabled').
+              with_ensure('absent')
+          }
+          it {
+            should contain_hocon_setting('profiler.enabled').
+              with_path('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              with_setting('profiler.enabled').
+              with_value(true).
+              with_ensure('present')
+          }
         end
 
         context 'when server_puppetserver_version < 5.0 and server_metrics => false' do
@@ -493,12 +527,21 @@ describe 'puppet::server::puppetserver' do
               :server_metrics              => false,
             )
           end
-          it {
-            should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').
-              without_content(%r{^    metrics-enabled: (.*)$}).
-              with_content(%r{^profiler: \{\n    # enable or disable profiling for the Ruby code;\n    enabled: false})
-          }
           it { should_not contain_file('/etc/custom/puppetserver/conf.d/metrics.conf') }
+          it { should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').with_ensure('file') }
+          it {
+            should contain_hocon_setting('http-client.metrics-enabled').
+              with_path('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              with_setting('http-client.metrics-enabled').
+              with_ensure('absent')
+          }
+          it {
+            should contain_hocon_setting('profiler.enabled').
+              with_path('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              with_setting('profiler.enabled').
+              with_value(false).
+              with_ensure('present')
+          }
         end
 
         context 'when server_puppetserver_version >= 5.0 and server_metrics => true' do
@@ -509,10 +552,20 @@ describe 'puppet::server::puppetserver' do
               :server_metrics              => true,
             )
           end
+          it { should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').with_ensure('file') }
           it {
-            should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').
-            with_content(%r{^    # Whether to enable http-client metrics; defaults to 'true'.\n    metrics-enabled: true$(.*)}).
-            with_content(%r{^profiler: \{\n    # enable or disable profiling for the Ruby code;\n    enabled: true})
+            should contain_hocon_setting('http-client.metrics-enabled').
+              with_path('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              with_setting('http-client.metrics-enabled').
+              with_value(true).
+              with_ensure('present')
+          }
+          it {
+            should contain_hocon_setting('profiler.enabled').
+              with_path('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              with_setting('profiler.enabled').
+              with_value(true).
+              with_ensure('present')
           }
           it { should contain_file('/etc/custom/puppetserver/conf.d/metrics.conf').with_ensure('file') }
           it {
@@ -547,12 +600,22 @@ describe 'puppet::server::puppetserver' do
               :server_metrics              => false,
             )
           end
-          it {
-            should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').
-              with_content(%r{^    # Whether to enable http-client metrics; defaults to 'true'.\n    metrics-enabled: false$}).
-              with_content(%r{^profiler: \{\n    # enable or disable profiling for the Ruby code;\n    enabled: false})
-          }
           it { should contain_file('/etc/custom/puppetserver/conf.d/metrics.conf').with_ensure('absent') }
+          it { should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').with_ensure('file') }
+          it {
+            should contain_hocon_setting('http-client.metrics-enabled').
+              with_path('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              with_setting('http-client.metrics-enabled').
+              with_value(false).
+              with_ensure('present')
+          }
+          it {
+            should contain_hocon_setting('profiler.enabled').
+              with_path('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              with_setting('profiler.enabled').
+              with_value(false).
+              with_ensure('present')
+          }
         end
       end
 
