@@ -12,7 +12,11 @@ describe 'puppet::agent::install' do
         additional_facts = {}
       else
         if facts[:osfamily] == 'FreeBSD'
-          client_package = 'puppet4'
+          if Puppet.version < '5.0'
+            client_package = 'puppet4'
+          else
+            client_package = 'puppet5'
+          end
           additional_facts = {}
         else
           client_package = 'puppet-agent'
