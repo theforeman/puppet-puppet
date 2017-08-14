@@ -13,7 +13,7 @@ The Puppet master is configured under Apache and Passenger by default, unless
 3.x based installation, `server_implementation` can be set to `puppetserver`
 to switch to the JVM-based Puppet Server.
 
-When using Puppet Server 2 (version 2.0 was the first version to support Puppet 4),
+When using Puppet Server (version 2.2.x is the lowest version, this module supports),
 the module supports and assumes you will be installing the latest version.
 If you know you'll be installing an earlier or specific version, you will
 need to override `server_puppetserver_version`. More information in the Puppet
@@ -186,7 +186,7 @@ Currently supported values and configuration behaviours are:
   and `ca.cfg`
 * `2.3.x`, `2.4.x` - configures the certificate authority and
   versioned-code-service in `bootstrap.cfg`
-* `2.2.x` or lower - configures the certificate authority in `bootstrap.cfg`
+* `2.2.x` - configures the certificate authority in `bootstrap.cfg`
 
 # Contributing
 
