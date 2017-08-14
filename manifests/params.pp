@@ -327,7 +327,9 @@ class puppet::params {
       default => ['puppet-common', 'puppet']
     }
   } elsif ($::osfamily =~ /(FreeBSD|DragonFly)/) {
-    if (versioncmp($::puppetversion, '4.0') > 0) {
+    if (versioncmp($::puppetversion, '5.0') > 0) {
+      $client_package = ['puppet5']
+    } elsif (versioncmp($::puppetversion, '4.0') > 0) {
       $client_package = ['puppet4']
     } else {
       $client_package = ['puppet38']
