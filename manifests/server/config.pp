@@ -167,10 +167,11 @@ class puppet::server::config inherits puppet::config {
     }
 
     file { $::puppet::server::ssl_ca_crl:
-      ensure => file,
-      owner  => $::puppet::server::user,
-      group  => $::puppet::server::group,
-      mode   => '0644',
+      ensure  => file,
+      owner   => $::puppet::server::user,
+      group   => $::puppet::server::group,
+      mode    => '0644',
+      require => Exec['puppet_server_config-generate_ca_cert'],
     }
   } elsif $::puppet::server::ca_crl_sync {
     # If not a ca AND sync the crl from the ca master
