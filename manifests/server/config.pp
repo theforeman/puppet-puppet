@@ -165,6 +165,13 @@ class puppet::server::config inherits puppet::config {
                   Exec['puppet_server_config-create_ssl_dir'],
                   ],
     }
+
+    file { $::puppet::server::ssl_ca_crl:
+      ensure => file,
+      owner  => $::puppet::server::user,
+      group  => $::puppet::server::group,
+      mode   => '0644',
+    }
   } elsif $::puppet::server::ca_crl_sync {
     # If not a ca AND sync the crl from the ca master
     if defined('$::servername') {
