@@ -37,11 +37,7 @@ class puppet::params {
   $dns_alt_names       = []
   $use_srv_records     = false
 
-  # On versions < 3.7.5 the defined function was optional as such strict variables cannot be used
-  # In some edge cases 'domain' fact may be not defined
-  if versioncmp($::puppetversion, '3.7.5') < 0 {
-    $srv_domain = $::domain
-  } elsif defined('$::domain') {
+  if defined('$::domain') {
     $srv_domain = $::domain
   } else {
     $srv_domain = undef
@@ -216,7 +212,7 @@ class puppet::params {
   # Custom puppetmaster
   # needed due to a PUP-4072
   # more information in https://github.com/theforeman/puppet-foreman/commit/5fe3239da0c6fbac76172f61042a69ab3a7eb4e6
-  if versioncmp($::puppetversion, '3.7.5') < 0 or defined('$::puppetmaster') {
+  if defined('$::puppetmaster') {
     $puppetmaster             = $::puppetmaster
   } else {
     $puppetmaster             = undef
@@ -276,7 +272,7 @@ class puppet::params {
   # Dynamic environments config (deprecated when directory_environments is true)
   $server_dynamic_environments = false
   # Directory environments config
-  $server_directory_environments = versioncmp($::puppetversion, '3.6.0') >= 0
+  $server_directory_environments = true
   # Owner of the environments dir: for cases external service needs write
   # access to manage it.
   $server_environments_owner   = $user
