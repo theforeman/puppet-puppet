@@ -27,7 +27,11 @@ describe 'puppet' do
         when 'FreeBSD'
           puppet_concat    = '/usr/local/etc/puppet/puppet.conf'
           puppet_directory = '/usr/local/etc/puppet'
-          puppet_package   = 'puppet4'
+          if Puppet.version < '5.0'
+            puppet_package   = 'puppet4'
+          else
+            puppet_package   = 'puppet5'
+          end
           additional_facts = {}
         when 'windows'
           puppet_concat    = 'C:/ProgramData/PuppetLabs/puppet/etc/puppet.conf'

@@ -21,12 +21,16 @@ describe 'puppet::agent' do
         additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
         case facts[:osfamily]
           when 'FreeBSD'
-            client_package = 'puppet4'
-            confdir        = '/usr/local/etc/puppet'
+            if Puppet.version < '5.0'
+              client_package = 'puppet4'
+            else
+              client_package = 'puppet5'
+            end
+            confdir          = '/usr/local/etc/puppet'
             additional_facts = {}
         when 'windows'
-          client_package = 'puppet-agent'
-          confdir        = 'C:/ProgramData/PuppetLabs/puppet/etc'
+          client_package   = 'puppet-agent'
+          confdir          = 'C:/ProgramData/PuppetLabs/puppet/etc'
           additional_facts = {}
         end
       end
