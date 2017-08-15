@@ -166,7 +166,7 @@ class puppet::server::config inherits puppet::config {
                   ],
     }
 
-    file { $::puppet::server::ssl_ca_crl:
+    file { "${::puppet::server::ssl_dir}/crl.pem":
       ensure  => file,
       owner   => $::puppet::server::user,
       group   => $::puppet::server::group,
