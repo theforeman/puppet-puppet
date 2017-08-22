@@ -1,5 +1,9 @@
 # Changelog
 
+## 8.0.2
+* Handle FreeBSD puppet5 package
+* Make `puppet::server::passenger::ssl_protocol` and `puppet::server::passenger::ssl_cipher` parameters to allow overriding via hiera
+
 ## 8.0.1
 * Handle $::memorysize_mb and $::processorcount correctly when using facter 2.x
 * Fix `client_package` puppet type, restoring full compatibility with older versions
