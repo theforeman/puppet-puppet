@@ -209,9 +209,6 @@ class puppet::params {
   $remove_lock                = true
   $client_certname            = $::clientcert
 
-  # Custom puppetmaster
-  # needed due to a PUP-4072
-  # more information in https://github.com/theforeman/puppet-foreman/commit/5fe3239da0c6fbac76172f61042a69ab3a7eb4e6
   if defined('$::puppetmaster') {
     $puppetmaster             = $::puppetmaster
   } else {
