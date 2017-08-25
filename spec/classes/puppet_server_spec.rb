@@ -38,7 +38,7 @@ describe 'puppet::server' do
           end
           it { should_not contain_notify('ip_not_supported') }
           # No server_package for FreeBSD
-          if not facts[:osfamily] == 'FreeBSD'
+          unless facts[:osfamily] == 'FreeBSD'
             it { should contain_package(server_package) }
           end
           if facts[:osfamily] == 'Debian'
@@ -57,11 +57,11 @@ describe 'puppet::server' do
         end
 
         let(:facts) do
-          facts.merge({
+          facts.merge(
             :fqdn       => 'PUPPETMASTER.example.com',
             # clientcert is always lowercase by Puppet design
             :clientcert => 'puppetmaster.example.com',
-          })
+          )
         end
 
         describe 'with no custom parameters' do
@@ -126,6 +126,9 @@ describe 'puppet::server' do
       end
 
       describe 'with server_implementation => "puppetserver"' do
+        let :facts do
+          facts.merge(:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0')
+        end
         let :pre_condition do
           "class {'puppet': server => true, server_implementation => 'puppetserver'}"
         end
