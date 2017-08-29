@@ -282,17 +282,19 @@ class puppet::server::config inherits puppet::config {
     # ENC script, reporting script etc.
     anchor { 'puppet::server::config_start': }
     -> class {'::foreman::puppetmaster':
-      foreman_url    => $::puppet::server::foreman_url,
-      receive_facts  => $::puppet::server::server_foreman_facts,
-      puppet_home    => $::puppet::server::puppetserver_vardir,
-      puppet_basedir => $::puppet::server::puppet_basedir,
-      puppet_etcdir  => $puppet::dir,
-      enc_api        => $::puppet::server::enc_api,
-      report_api     => $::puppet::server::report_api,
-      timeout        => $::puppet::server::request_timeout,
-      ssl_ca         => pick($::puppet::server::foreman_ssl_ca, $::puppet::server::ssl_ca_cert),
-      ssl_cert       => pick($::puppet::server::foreman_ssl_cert, $::puppet::server::ssl_cert),
-      ssl_key        => pick($::puppet::server::foreman_ssl_key, $::puppet::server::ssl_cert_key),
+      foreman_url      => $::puppet::server::foreman_url,
+      foreman_user     => $::puppet::server::foreman_user,
+      foreman_password => $::puppet::server::foreman_password,
+      receive_facts    => $::puppet::server::server_foreman_facts,
+      puppet_home      => $::puppet::server::puppetserver_vardir,
+      puppet_basedir   => $::puppet::server::puppet_basedir,
+      puppet_etcdir    => $puppet::dir,
+      enc_api          => $::puppet::server::enc_api,
+      report_api       => $::puppet::server::report_api,
+      timeout          => $::puppet::server::request_timeout,
+      ssl_ca           => pick($::puppet::server::foreman_ssl_ca, $::puppet::server::ssl_ca_cert),
+      ssl_cert         => pick($::puppet::server::foreman_ssl_cert, $::puppet::server::ssl_cert),
+      ssl_key          => pick($::puppet::server::foreman_ssl_key, $::puppet::server::ssl_cert_key),
     }
     ~> anchor { 'puppet::server::config_end': }
   }

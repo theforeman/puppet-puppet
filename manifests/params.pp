@@ -390,6 +390,8 @@ class puppet::params {
     false => undef,
   }
   $server_foreman_url      = "https://${lower_fqdn}"
+  $server_foreman_user     = undef
+  $server_foreman_password = undef
   $server_foreman_ssl_ca   = undef
   $server_foreman_ssl_cert = undef
   $server_foreman_ssl_key  = undef
