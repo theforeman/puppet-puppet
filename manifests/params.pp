@@ -3,6 +3,7 @@ class puppet::params {
 
   # Basic config
   $version             = 'present'
+  $manage_user         = true
   $user                = 'puppet'
   $group               = 'puppet'
   $ip                  = '0.0.0.0'

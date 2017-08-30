@@ -36,6 +36,7 @@ describe 'puppet::server' do
               with_puppetserver(nil).
               with_rack(true)
           end
+          it { should contain_user('puppet') }
           it { should_not contain_notify('ip_not_supported') }
           # No server_package for FreeBSD
           unless facts[:osfamily] == 'FreeBSD'

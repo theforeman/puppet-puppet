@@ -326,6 +326,8 @@
 #
 # === Advanced server parameters:
 #
+# $server_manage_user::                     Whether to manage the server user resource
+#
 # $server_httpd_service::                   Apache/httpd service name to notify
 #                                           on configuration changes. Defaults
 #                                           to 'httpd' based on the default
@@ -583,6 +585,7 @@ class puppet (
   String $environment = $puppet::params::environment,
   Boolean $server = $puppet::params::server,
   Array[String] $server_admin_api_whitelist = $puppet::params::server_admin_api_whitelist,
+  Boolean $server_manage_user = $puppet::params::manage_user,
   String $server_user = $puppet::params::user,
   String $server_group = $puppet::params::group,
   String $server_dir = $puppet::params::dir,

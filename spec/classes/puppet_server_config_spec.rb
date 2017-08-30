@@ -409,6 +409,18 @@ describe 'puppet::server::config' do
           })
         end
 
+        it 'should create the puppet user' do
+          shell = case facts[:osfamily]
+                  when /^(FreeBSD|DragonFly)$/
+                    '/usr/local/bin/git-shell'
+                  else
+                    '/usr/bin/git-shell'
+                  end
+          should contain_user('puppet')
+            .with_shell(shell)
+            .that_requires('Class[git]')
+        end
+
         it 'should create the git repo' do
           should contain_file(vardir).with({
             :ensure => 'directory',
