@@ -18,7 +18,7 @@ describe 'puppet::agent::service::systemd' do
       end
 
       let :facts do
-        facts.merge(additional_facts)
+        facts.merge(additional_facts).merge(:ipaddress => '192.0.2.100')
       end
 
       describe 'when runmode is not systemd' do
@@ -81,7 +81,7 @@ describe 'puppet::agent::service::systemd' do
             })
 
             should contain_file('/etc/systemd/system/puppet-run.timer').
-            with_content(/.*OnCalendar\=\*-\*-\* \*\:15,45:00.*/)
+              with_content(/.*OnCalendar\=\*-\*-\* \*\:10,40:00.*/)
 
             should contain_file('/etc/systemd/system/puppet-run.service').
             with_content(/.*ExecStart=#{bindir}\/puppet agent --config #{confdir}\/puppet.conf --onetime --no-daemonize.*/)
