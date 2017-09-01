@@ -104,6 +104,7 @@ class puppet::server::puppetserver (
   $server_metrics                         = $::puppet::server::puppetserver_metrics,
   $server_experimental                    = $::puppet::server::puppetserver_experimental,
   $server_trusted_agents                  = $::puppet::server::puppetserver_trusted_agents,
+  $allow_header_cert_info                 = $::puppet::server::allow_header_cert_info,
 ) {
   include ::puppet::server
 
