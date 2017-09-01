@@ -4,7 +4,7 @@ describe 'puppet::server::service' do
   on_os_under_test.each do |os, facts|
     next if facts[:osfamily] == 'windows'
     context "on #{os}" do
-      if Puppet.version > '4.0' && facts[:osfamily] == 'Debian'
+      if facts[:osfamily] == 'Debian'
         master_service = 'puppet-master'
       else
         master_service = 'puppetmaster'

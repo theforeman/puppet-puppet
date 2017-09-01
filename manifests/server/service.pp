@@ -26,7 +26,7 @@ class puppet::server::service(
     fail('Both puppetmaster and puppetserver cannot be enabled simultaneously')
   }
 
-  if $::osfamily == 'Debian' and (versioncmp($::puppetversion, '4.0') > 0) {
+  if $::osfamily == 'Debian' {
     $puppetmaster_service = 'puppet-master'
   } else {
     $puppetmaster_service = 'puppetmaster'

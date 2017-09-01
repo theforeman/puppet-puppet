@@ -3,17 +3,12 @@ require 'spec_helper'
 describe 'puppet::agent::service::cron' do
   on_os_under_test.each do |os, facts|
     context "on #{os}" do
-      if Puppet.version < '4.0'
-        confdir = '/etc/puppet'
-        bindir = '/usr/bin'
-      else
-        confdir = '/etc/puppetlabs/puppet'
-        bindir = '/opt/puppetlabs/bin'
-      end
-
       if facts[:osfamily] == 'FreeBSD'
         bindir = '/usr/local/bin'
         confdir = '/usr/local/etc/puppet'
+      else
+        confdir = '/etc/puppetlabs/puppet'
+        bindir = '/opt/puppetlabs/bin'
       end
 
       let :facts do

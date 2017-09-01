@@ -3,22 +3,14 @@ require 'spec_helper'
 describe 'puppet::agent::install' do
   on_os_under_test.each do |os, facts|
     context "on #{os}" do
-      if Puppet.version < '4.0'
-        if facts[:osfamily] == 'FreeBSD'
-          client_package = 'puppet38'
+      if facts[:osfamily] == 'FreeBSD'
+        if Puppet.version < '5.0'
+          client_package = 'puppet4'
         else
-          client_package = 'puppet'
+          client_package = 'puppet5'
         end
       else
-        if facts[:osfamily] == 'FreeBSD'
-          if Puppet.version < '5.0'
-            client_package = 'puppet4'
-          else
-            client_package = 'puppet5'
-          end
-        else
-          client_package = 'puppet-agent'
-        end
+        client_package = 'puppet-agent'
       end
 
       let (:facts) do

@@ -5,24 +5,6 @@ describe 'puppet::server::env' do
     next if facts[:osfamily] == 'windows'
     next if facts[:osfamily] == 'Archlinux'
     context "on #{os}" do
-      if Puppet.version < '4.0'
-        codedir = '/etc/puppet'
-        confdir = '/etc/puppet'
-        logdir  = '/var/log/puppet'
-        rundir  = '/var/run/puppet'
-        ssldir  = '/var/lib/puppet/ssl'
-        vardir  = '/var/lib/puppet'
-        sharedir = '/usr/share/puppet'
-      else
-        codedir = '/etc/puppetlabs/code'
-        confdir = '/etc/puppetlabs/puppet'
-        logdir  = '/var/log/puppetlabs/puppet'
-        rundir  = '/var/run/puppetlabs'
-        ssldir  = '/etc/puppetlabs/puppet/ssl'
-        vardir  = '/opt/puppetlabs/puppet/cache'
-        sharedir = '/opt/puppetlabs/puppet'
-      end
-
       if facts[:osfamily] == 'FreeBSD'
         codedir = '/usr/local/etc/puppet'
         confdir = '/usr/local/etc/puppet'
@@ -31,6 +13,14 @@ describe 'puppet::server::env' do
         ssldir  = '/var/puppet/ssl'
         vardir  = '/var/puppet'
         sharedir = '/usr/local/share/puppet'
+      else
+        codedir = '/etc/puppetlabs/code'
+        confdir = '/etc/puppetlabs/puppet'
+        logdir  = '/var/log/puppetlabs/puppet'
+        rundir  = '/var/run/puppetlabs'
+        ssldir  = '/etc/puppetlabs/puppet/ssl'
+        vardir  = '/opt/puppetlabs/puppet/cache'
+        sharedir = '/opt/puppetlabs/puppet'
       end
 
       let(:facts) { facts }
@@ -120,8 +110,7 @@ describe 'puppet::server::env' do
 
           it 'should set config_version in environment.conf' do
             should contain_file("#{codedir}/environments/foo/environment.conf").
-              with_content(%r{\Aconfig_version\s+= bar\n\z}).
-              with({}) # So we can use a trailing dot on each with_content line
+              with_content(%r{\Aconfig_version\s+= bar\n\z})
           end
         end
 
@@ -161,8 +150,7 @@ describe 'puppet::server::env' do
 
           it 'should set config_version in environment.conf' do
             should contain_file("#{codedir}/environments/foo/environment.conf").
-              with_content(%r{\Aconfig_version\s+= bar\n\z}).
-              with({}) # So we can use a trailing dot on each with_content line
+              with_content(%r{\Aconfig_version\s+= bar\n\z})
           end
         end
 
@@ -195,8 +183,7 @@ describe 'puppet::server::env' do
           it 'should produce a symbolic link "environments" in codedir' do
             should contain_file("#{codedir}/environments").
               with_target('/foo').
-              with_ensure('link').
-              with({}) # So we can use a trailing dot on each with_content line
+              with_ensure('link')
           end
         end
       end
@@ -215,8 +202,7 @@ describe 'puppet::server::env' do
 
           it 'should set modulepath in environment.conf' do
             should contain_file("#{codedir}/environments/foo/environment.conf").
-              with_content(%r{\Amodulepath\s+= /etc/puppet/example/modules:/etc/puppet/vendor/modules\n}).
-              with({}) # So we can use a trailing dot on each with_content line
+              with_content(%r{\Amodulepath\s+= /etc/puppet/example/modules:/etc/puppet/vendor/modules\n})
           end
         end
       end
@@ -287,8 +273,7 @@ describe 'puppet::server::env' do
 
           it 'should set manifest in environment.conf' do
             should contain_file("#{codedir}/environments/foo/environment.conf").
-              with_content(%r{\Amanifest\s+= manifests/local.pp\n\z}).
-              with({}) # So we can use a trailing dot on each with_content line
+              with_content(%r{\Amanifest\s+= manifests/local.pp\n\z})
           end
         end
       end
@@ -307,8 +292,7 @@ describe 'puppet::server::env' do
 
           it 'should set environment_timeout in environment.conf' do
             should contain_file("#{codedir}/environments/foo/environment.conf").
-              with_content(%r{\Aenvironment_timeout\s+= unlimited\n\z}).
-              with({}) # So we can use a trailing dot on each with_content line
+              with_content(%r{\Aenvironment_timeout\s+= unlimited\n\z})
           end
         end
       end

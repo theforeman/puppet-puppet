@@ -7,19 +7,13 @@ describe 'puppet::server' do
       if facts[:osfamily] == 'FreeBSD'
         ssldir = '/var/puppet/ssl'
       else
-        if facts[:puppetversion].to_f > 4.0
-          ssldir = '/etc/puppetlabs/puppet/ssl'
-        else
-          ssldir = '/var/lib/puppet/ssl'
-        end
+        ssldir = '/etc/puppetlabs/puppet/ssl'
       end
 
-      server_package = 'puppet-server'
       if facts[:osfamily] == 'Debian'
-        server_package = 'puppetmaster'
-        if facts[:puppetversion].to_f > 4.0
-          server_package = 'puppet-master'
-        end
+        server_package = 'puppet-master'
+      else
+        server_package = 'puppet-server'
       end
 
       let(:facts) { facts }

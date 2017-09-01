@@ -3,15 +3,14 @@ require 'spec_helper'
 describe 'puppet::agent::service::systemd' do
   on_os_under_test.each do |os, facts|
     context "on #{os}" do
-      if Puppet.version < '4.0'
-        confdir = '/etc/puppet'
-      else
-        confdir = '/etc/puppetlabs/puppet'
-      end
-
       if facts[:osfamily] == 'FreeBSD'
+        bindir = '/usr/local/bin'
         confdir = '/usr/local/etc/puppet'
       elsif facts[:osfamily] == 'Archlinux'
+        bindir = '/usr/bin'
+        confdir = '/etc/puppetlabs/puppet'
+      else
+        bindir = '/opt/puppetlabs/bin'
         confdir = '/etc/puppetlabs/puppet'
       end
 
@@ -61,28 +60,16 @@ describe 'puppet::agent::service::systemd' do
           "class {'puppet': agent => true, runmode => 'systemd.timer'}"
         end
 
-        if Puppet.version < '4.0'
-          bindir = '/usr/bin'
-        elsif facts[:osfamily] == 'FreeBSD'
-          bindir = '/usr/local/bin'
-        elsif facts[:osfamily] == 'Archlinux'
-          bindir = '/usr/bin'
-        else
-          bindir = '/opt/puppetlabs/bin'
-        end
-
         case os
         when /\Adebian-(8|9)/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-16/, /\Aarchlinux-/
           it 'should enable systemd timer' do
-            should contain_class('puppet::agent::service::systemd').with({
-              'enabled' => true,
-            })
+            should contain_class('puppet::agent::service::systemd').with_enabled(true)
 
             should contain_file('/etc/systemd/system/puppet-run.timer').
               with_content(/.*OnCalendar\=\*-\*-\* \*\:10,40:00.*/)
 
             should contain_file('/etc/systemd/system/puppet-run.service').
-            with_content(/.*ExecStart=#{bindir}\/puppet agent --config #{confdir}\/puppet.conf --onetime --no-daemonize.*/)
+              with_content(/.*ExecStart=#{bindir}\/puppet agent --config #{confdir}\/puppet.conf --onetime --no-daemonize.*/)
 
             should contain_exec('systemctl-daemon-reload-puppet').with({
               :refreshonly => true,

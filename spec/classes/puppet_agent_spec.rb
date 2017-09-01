@@ -3,32 +3,20 @@ require 'spec_helper'
 describe 'puppet::agent' do
   on_os_under_test.each do |os, facts|
     context "on #{os}" do
-      if Puppet.version < '4.0'
-        client_package = 'puppet'
-        confdir        = '/etc/puppet'
-        case facts[:osfamily]
-        when 'FreeBSD'
-          client_package = 'puppet38'
-          confdir        = '/usr/local/etc/puppet'
-        when 'windows'
-          client_package = 'puppet'
-          confdir        = 'C:/ProgramData/PuppetLabs/puppet/etc'
+      case facts[:osfamily]
+      when 'FreeBSD'
+        if Puppet.version < '5.0'
+          client_package = 'puppet4'
+        else
+          client_package = 'puppet5'
         end
+        confdir          = '/usr/local/etc/puppet'
+      when 'windows'
+        client_package = 'puppet-agent'
+        confdir        = 'C:/ProgramData/PuppetLabs/puppet/etc'
       else
         client_package = 'puppet-agent'
         confdir        = '/etc/puppetlabs/puppet'
-        case facts[:osfamily]
-          when 'FreeBSD'
-            if Puppet.version < '5.0'
-              client_package = 'puppet4'
-            else
-              client_package = 'puppet5'
-            end
-            confdir          = '/usr/local/etc/puppet'
-        when 'windows'
-          client_package   = 'puppet-agent'
-          confdir          = 'C:/ProgramData/PuppetLabs/puppet/etc'
-        end
       end
 
       let :facts do

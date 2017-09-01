@@ -3,14 +3,10 @@ require 'spec_helper'
 describe 'puppet::agent::service::daemon' do
   on_os_under_test.each do |os, facts|
     context "on #{os}" do
-      if Puppet.version < '4.0'
-        confdir = '/etc/puppet'
-      else
-        confdir = '/etc/puppetlabs/puppet'
-      end
-
       if facts[:osfamily] == 'FreeBSD'
         confdir = '/usr/local/etc/puppet'
+      else
+        confdir = '/etc/puppetlabs/puppet'
       end
 
       let :facts do

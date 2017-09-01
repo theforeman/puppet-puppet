@@ -63,13 +63,11 @@ def verify_concat_fragment_exact_contents(subject, title, expected_lines)
   expect(content.split(/\n/).reject { |line| line =~ /(^#|^$|^\s+#)/ }).to match_array(expected_lines)
 end
 
-if Puppet.version >= '4.0'
-  aio = on_os_under_test.reject do |os, facts|
-    ['FreeBSD', 'DragonFly', 'Windows'].include?(facts[:operatingsystem])
-  end.keys
+aio = on_os_under_test.reject do |os, facts|
+  ['FreeBSD', 'DragonFly', 'Windows'].include?(facts[:operatingsystem])
+end.keys
 
-  add_custom_fact :rubysitedir, '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0', :confine => aio
-end
+add_custom_fact :rubysitedir, '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0', :confine => aio
 
 def unsupported_puppetmaster_osfamily(osfamily)
   ['Archlinux', 'windows', 'Suse'].include?(osfamily)

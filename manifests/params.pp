@@ -23,11 +23,7 @@ class puppet::params {
   $agent_noop          = false
   $show_diff           = false
   $module_repository   = undef
-  if versioncmp($::puppetversion, '4.0') < 0 or versioncmp($::puppetversion, '4.5') >= 0 {
-    $hiera_config            = '$confdir/hiera.yaml'
-  } else {
-    $hiera_config            = '$codedir/hiera.yaml'
-  }
+  $hiera_config        = '$confdir/hiera.yaml'
   $usecacheonfailure   = true
   $ca_server           = undef
   $ca_port             = undef
@@ -52,16 +48,8 @@ class puppet::params {
   $syslogfacility      = undef
   $environment         = $::environment
 
-  if versioncmp($::puppetversion, '4.0') < 0 {
-    $aio_package      = false
-    $deb_naio_package = false
-  } elsif $::osfamily == 'Windows' or $::rubysitedir =~ /\/opt\/puppetlabs\/puppet/ {
-    $aio_package      = true
-    $deb_naio_package = false
-  } else {
-    $aio_package      = false
-    $deb_naio_package = ($::osfamily == 'Debian')
-  }
+  $aio_package      = ($::osfamily == 'Windows' or $::rubysitedir =~ /\/opt\/puppetlabs\/puppet/)
+  $deb_naio_package = ($::osfamily == 'Debian')
 
   case $::osfamily {
     'Windows' : {
@@ -160,11 +148,7 @@ class puppet::params {
     }
   }
 
-  if versioncmp($::puppetversion, '4.0') < 0 {
-    $configtimeout = 120
-  } else {
-    $configtimeout = undef
-  }
+  $configtimeout = undef
 
   $autosign         = "${dir}/autosign.conf"
   $autosign_entries = []
@@ -315,7 +299,7 @@ class puppet::params {
 
   if $aio_package {
     $client_package = ['puppet-agent']
-  } elsif ($::osfamily == 'Debian') {
+  } elsif $::osfamily == 'Debian' {
     $client_package = $deb_naio_package ? {
       true    => ['puppet'],
       default => ['puppet-common', 'puppet']
@@ -323,10 +307,8 @@ class puppet::params {
   } elsif ($::osfamily =~ /(FreeBSD|DragonFly)/) {
     if (versioncmp($::puppetversion, '5.0') > 0) {
       $client_package = ['puppet5']
-    } elsif (versioncmp($::puppetversion, '4.0') > 0) {
-      $client_package = ['puppet4']
     } else {
-      $client_package = ['puppet38']
+      $client_package = ['puppet4']
     }
   } else {
     $client_package = ['puppet']

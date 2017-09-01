@@ -22,7 +22,6 @@ ARGV << "--vardir"  << "<%= @vardir %>"
 ARGV << "<%= server_rack_argument %>"
 <% end -%>
 
-<% if @puppetversion.to_f >= 4.0 -%>
 # always_cache_features is a performance improvement and safe for a master to
 # apply. This is intended to allow agents to recognize new features that may be
 # delivered during catalog compilation.
@@ -95,7 +94,6 @@ end
 
 use Puppet3Compat
 
-<% end -%>
 # NOTE: it's unfortunate that we have to use the "CommandLine" class
 #  here to launch the app, but it contains some initialization logic
 #  (such as triggering the parsing of the config file) that is very

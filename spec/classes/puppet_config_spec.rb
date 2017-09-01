@@ -3,52 +3,38 @@ require 'spec_helper'
 describe 'puppet::config' do
   on_os_under_test.each do |os, facts|
     context "on #{os}" do
-      if Puppet.version < '4.0'
-        codedir          = '/etc/puppet'
-        confdir          = '/etc/puppet'
-        logdir           = '/var/log/puppet'
-        rundir           = '/var/run/puppet'
-        ssldir           = '/var/lib/puppet/ssl'
-        vardir           = '/var/lib/puppet'
-        sharedir         = '/usr/share/puppet'
-        dir_owner        = 'puppet'
-        dir_group        = 'puppet'
-      else
-        codedir          = '/etc/puppetlabs/code'
-        confdir          = '/etc/puppetlabs/puppet'
-        logdir           = '/var/log/puppetlabs/puppet'
-        rundir           = '/var/run/puppetlabs'
-        ssldir           = '/etc/puppetlabs/puppet/ssl'
-        vardir           = '/opt/puppetlabs/puppet/cache'
-        sharedir         = '/opt/puppetlabs/puppet'
-        dir_owner        = 'root'
-        dir_group        = nil
-      end
 
       case facts[:osfamily]
       when 'FreeBSD'
-        codedir  = '/usr/local/etc/puppet'
-        confdir  = '/usr/local/etc/puppet'
-        logdir   = '/var/log/puppet'
-        rundir   = '/var/run/puppet'
-        ssldir   = '/var/puppet/ssl'
-        vardir   = '/var/puppet'
-        sharedir = '/usr/local/share/puppet'
-      when 'Suse'
-        if Puppet.version < '4.0'
-          dir_owner = 'root'
-          dir_group = nil
-        end
+        dir_owner = 'puppet'
+        dir_group = 'puppet'
+        codedir   = '/usr/local/etc/puppet'
+        confdir   = '/usr/local/etc/puppet'
+        logdir    = '/var/log/puppet'
+        rundir    = '/var/run/puppet'
+        ssldir    = '/var/puppet/ssl'
+        vardir    = '/var/puppet'
+        sharedir  = '/usr/local/share/puppet'
       when 'windows'
         dir_owner = nil
         dir_group = nil
-        codedir  = 'C:/ProgramData/PuppetLabs/puppet/etc'
-        confdir  = 'C:/ProgramData/PuppetLabs/puppet/etc'
-        logdir   = 'C:/ProgramData/PuppetLabs/puppet/var/log'
-        rundir   = 'C:/ProgramData/PuppetLabs/puppet/var/run'
-        ssldir   = 'C:/ProgramData/PuppetLabs/puppet/etc/ssl'
-        vardir   = 'C:/ProgramData/PuppetLabs/puppet/var'
-        sharedir = 'C:/ProgramData/PuppetLabs/puppet/share'
+        codedir   = 'C:/ProgramData/PuppetLabs/puppet/etc'
+        confdir   = 'C:/ProgramData/PuppetLabs/puppet/etc'
+        logdir    = 'C:/ProgramData/PuppetLabs/puppet/var/log'
+        rundir    = 'C:/ProgramData/PuppetLabs/puppet/var/run'
+        ssldir    = 'C:/ProgramData/PuppetLabs/puppet/etc/ssl'
+        vardir    = 'C:/ProgramData/PuppetLabs/puppet/var'
+        sharedir  = 'C:/ProgramData/PuppetLabs/puppet/share'
+      else
+        dir_owner = 'root'
+        dir_group = nil
+        codedir   = '/etc/puppetlabs/code'
+        confdir   = '/etc/puppetlabs/puppet'
+        logdir    = '/var/log/puppetlabs/puppet'
+        rundir    = '/var/run/puppetlabs'
+        ssldir    = '/etc/puppetlabs/puppet/ssl'
+        vardir    = '/opt/puppetlabs/puppet/cache'
+        sharedir  = '/opt/puppetlabs/puppet'
       end
 
       let :facts do
@@ -67,13 +53,8 @@ describe 'puppet::config' do
         end
 
         it 'should contain auth.conf' do
-          if Puppet.version >= '4.0'
-            should_not contain_file("#{confdir}/auth.conf").with_content(%r{^path /certificate_revocation_list/ca\nmethod find$})
-            should contain_file("#{confdir}/auth.conf").with_content(%r{/puppet/v3/})
-          else
-            should contain_file("#{confdir}/auth.conf").with_content(%r{^path /certificate_revocation_list/ca\nmethod find$})
-            should_not contain_file("#{confdir}/auth.conf").with_content(%r{/puppet/v3/})
-          end
+          should_not contain_file("#{confdir}/auth.conf").with_content(%r{^path /certificate_revocation_list/ca\nmethod find$})
+          should contain_file("#{confdir}/auth.conf").with_content(%r{/puppet/v3/})
         end
 
         it 'should_not contain default_manifest setting in puppet.conf' do
@@ -106,11 +87,7 @@ describe 'puppet::config' do
         end
 
         it 'should contain auth.conf with auth any' do
-          if Puppet.version >= '4.0'
-            should contain_file("#{confdir}/auth.conf").with_content(%r{^path /puppet-ca/v1/certificate_revocation_list/ca\nauth any$})
-          else
-            should contain_file("#{confdir}/auth.conf").with_content(%r{^path /certificate_revocation_list/ca\nauth any$})
-          end
+          should contain_file("#{confdir}/auth.conf").with_content(%r{^path /puppet-ca/v1/certificate_revocation_list/ca\nauth any$})
         end
       end
 
