@@ -251,9 +251,289 @@ class puppet::server::puppetserver (
     content => template('puppet/server/puppetserver/conf.d/puppetserver.conf.erb'),
   }
 
-  file { "${server_puppetserver_dir}/conf.d/auth.conf":
+  $auth_conf = "${server_puppetserver_dir}/conf.d/auth.conf"
+
+  file { $auth_conf:
     ensure  => file,
-    content => template('puppet/server/puppetserver/conf.d/auth.conf.erb'),
+  }
+
+  hocon_setting { 'authorization.version':
+    ensure  => present,
+    path    => $auth_conf,
+    setting => 'authorization.version',
+    value   => 1,
+    require => File[$auth_conf],
+  }
+
+  hocon_setting { 'authorization.allow-header-cert-info':
+    ensure  => present,
+    path    => $auth_conf,
+    setting => 'authorization.allow-header-cert-info',
+    value   => $allow_header_cert_info or $server_http,
+    require => File[$auth_conf],
+  }
+
+  puppet_authorization::rule { 'puppetlabs catalog':
+    match_request_path   => '^/puppet/v3/catalog/([^/]+)$',
+    match_request_type   => 'regex',
+    match_request_method => ['get', 'post'],
+    allow                => flatten(['$1', $server_trusted_agents]),
+    sort_order           => 500,
+    path                 => $auth_conf,
+    require              => File[$auth_conf],
+  }
+
+  puppet_authorization::rule { 'puppetlabs certificate':
+    match_request_path    => '/puppet-ca/v1/certificate/',
+    match_request_type    => 'path',
+    match_request_method  => 'get',
+    allow_unauthenticated => true,
+    sort_order            => 500,
+    path                  => $auth_conf,
+    require               => File[$auth_conf],
+  }
+
+  puppet_authorization::rule { 'puppetlabs crl':
+    match_request_path    => '/puppet-ca/v1/certificate_revocation_list/ca',
+    match_request_type    => 'path',
+    match_request_method  => 'get',
+    allow_unauthenticated => true,
+    sort_order            => 500,
+    path                  => $auth_conf,
+    require               => File[$auth_conf],
+  }
+
+  puppet_authorization::rule { 'puppetlabs csr':
+    match_request_path    => '/puppet-ca/v1/certificate_request',
+    match_request_type    => 'path',
+    match_request_method  => ['get', 'put'],
+    allow_unauthenticated => true,
+    sort_order            => 500,
+    path                  => $auth_conf,
+    require               => File[$auth_conf],
+  }
+
+  puppet_authorization::rule { 'puppetlabs environments':
+    match_request_path   => '/puppet/v3/environments',
+    match_request_type   => 'path',
+    match_request_method => 'get',
+    allow                => '*',
+    sort_order           => 500,
+    path                 => $auth_conf,
+    require              => File[$auth_conf],
+  }
+
+  puppet_authorization::rule { 'puppetlabs environment classes':
+    match_request_path   => '/puppet/v3/environment_classes',
+    match_request_type   => 'path',
+    match_request_method => 'get',
+    allow                => '*',
+    sort_order           => 500,
+    path                 => $auth_conf,
+    require              => File[$auth_conf],
+  }
+
+  puppet_authorization::rule { 'puppetlabs node':
+    match_request_path   => '^/puppet/v3/node/([^/]+)$',
+    match_request_type   => 'regex',
+    match_request_method => 'get',
+    allow                => '$1',
+    sort_order           => 500,
+    path                 => $auth_conf,
+    require              => File[$auth_conf],
+  }
+
+  puppet_authorization::rule { 'puppetlabs report':
+    match_request_path   => '^/puppet/v3/report/([^/]+)$',
+    match_request_type   => 'regex',
+    match_request_method => 'put',
+    allow                => '$1',
+    sort_order           => 500,
+    path                 => $auth_conf,
+    require              => File[$auth_conf],
+  }
+
+  puppet_authorization::rule { 'puppetlabs status':
+    match_request_path    => '/puppet/v3/status',
+    match_request_type    => 'path',
+    match_request_method  => 'get',
+    allow_unauthenticated => true,
+    sort_order            => 500,
+    path                  => $auth_conf,
+    require               => File[$auth_conf],
+  }
+
+  puppet_authorization::rule { 'puppetlabs static file content':
+    match_request_path   => '/puppet/v3/static_file_content',
+    match_request_type   => 'path',
+    match_request_method => 'get',
+    allow                => '*',
+    sort_order           => 500,
+    path                 => $auth_conf,
+    require              => File[$auth_conf],
+  }
+
+  puppet_authorization::rule { 'environment-cache':
+    match_request_path   => '/puppet-admin-api/v1/environment-cache',
+    match_request_type   => 'path',
+    match_request_method => 'delete',
+    allow                => $server_admin_api_whitelist,
+    sort_order           => 200,
+    path                 => $auth_conf,
+    require              => File[$auth_conf],
+  }
+
+  puppet_authorization::rule { 'jruby-pool':
+    match_request_path   => '/puppet-admin-api/v1/jruby-pool',
+    match_request_type   => 'path',
+    match_request_method => 'delete',
+    allow                => $server_admin_api_whitelist,
+    sort_order           => 200,
+    path                 => $auth_conf,
+    require              => File[$auth_conf],
+  }
+
+  puppet_authorization::rule { 'puppetlabs deny all':
+    match_request_path => '/',
+    match_request_type => 'path',
+    deny               => '*',
+    sort_order         => 999,
+    path               => $auth_conf,
+    require            => File[$auth_conf],
+  }
+
+  $auth_conf_setting_ensure = $server_ca ? {
+    true    => present,
+    default => absent,
+  }
+
+  if $server_ca_auth_required {
+    puppet_authorization::rule { 'certificate_status':
+      ensure               => $auth_conf_setting_ensure,
+      match_request_path   => '/puppet-ca/v1/certificate_status/',
+      match_request_type   => 'path',
+      match_request_method => [ 'get', 'put', 'delete' ],
+      allow                => $server_ca_client_whitelist,
+      sort_order           => 200,
+      path                 => $auth_conf,
+      require              => File[$auth_conf],
+    }
+
+    puppet_authorization::rule { 'certificate_statuses':
+      ensure               => $auth_conf_setting_ensure,
+      match_request_path   => '/puppet-ca/v1/certificate_statuses/',
+      match_request_type   => 'path',
+      match_request_method => 'get',
+      allow                => $server_ca_client_whitelist,
+      sort_order           => 200,
+      path                 => $auth_conf,
+      require              => File[$auth_conf],
+    }
+  } else {
+    puppet_authorization::rule { 'certificate_status':
+      ensure                => $auth_conf_setting_ensure,
+      match_request_path    => '/puppet-ca/v1/certificate_status/',
+      match_request_type    => 'path',
+      match_request_method  => [ 'get', 'put', 'delete' ],
+      allow_unauthenticated => true,
+      sort_order            => 200,
+      path                  => $auth_conf,
+      require               => File[$auth_conf],
+    }
+
+    puppet_authorization::rule { 'certificate_statuses':
+      ensure                => $auth_conf_setting_ensure,
+      match_request_path    => '/puppet-ca/v1/certificate_statuses/',
+      match_request_type    => 'path',
+      match_request_method  => 'get',
+      allow_unauthenticated => true,
+      sort_order            => 200,
+      path                  => $auth_conf,
+      require               => File[$auth_conf],
+    }
+  }
+
+  $is_puppetserver2 = versioncmp($server_puppetserver_version, '5.0') < 0
+  $is_puppetserver5 = versioncmp($server_puppetserver_version, '5.0') >= 0
+
+  $auth_conf_puppetserver_2_settings_ensure = $is_puppetserver2 ? {
+    true    => present,
+    default => absent,
+  }
+
+  $auth_conf_puppetserver_5_settings_ensure = $is_puppetserver5 ? {
+    true    => present,
+    default => absent,
+  }
+
+  puppet_authorization::rule { 'puppetlabs file bucket file':
+    ensure               => $auth_conf_puppetserver_5_settings_ensure,
+    match_request_path   => '/puppet/v3/file_bucket_file',
+    match_request_type   => 'path',
+    match_request_method => ['get', 'head', 'post', 'put'],
+    allow                => '*',
+    sort_order           => 500,
+    path                 => $auth_conf,
+    require              => File[$auth_conf],
+  }
+
+  puppet_authorization::rule { 'puppetlabs file content':
+    ensure               => $auth_conf_puppetserver_5_settings_ensure,
+    match_request_path   => '/puppet/v3/file_content',
+    match_request_type   => 'path',
+    match_request_method => ['get', 'post'],
+    allow                => '*',
+    sort_order           => 500,
+    path                 => $auth_conf,
+    require              => File[$auth_conf],
+  }
+
+  puppet_authorization::rule { 'puppetlabs file metadata':
+    ensure               => $auth_conf_puppetserver_5_settings_ensure,
+    match_request_path   => '/puppet/v3/file_metadata',
+    match_request_type   => 'path',
+    match_request_method => ['get', 'post'],
+    allow                => '*',
+    sort_order           => 500,
+    path                 => $auth_conf,
+    require              => File[$auth_conf],
+  }
+
+  if $is_puppetserver2 or ($is_puppetserver5 and !$server_experimental) {
+    $auth_conf_experimental_ensure = absent
+  } else {
+    $auth_conf_experimental_ensure = present
+  }
+
+  puppet_authorization::rule { 'puppetlabs experimental':
+    ensure                => $auth_conf_experimental_ensure,
+    match_request_path    => '/puppet/experimental',
+    match_request_type    => 'path',
+    allow_unauthenticated => true,
+    sort_order            => 500,
+    path                  => $auth_conf,
+    require               => File[$auth_conf],
+  }
+
+  puppet_authorization::rule { 'puppetlabs resource type':
+    ensure               => $auth_conf_puppetserver_2_settings_ensure,
+    match_request_path   => '/puppet/v3/resource_type',
+    match_request_type   => 'path',
+    match_request_method => ['get', 'post'],
+    allow                => '*',
+    sort_order           => 500,
+    path                 => $auth_conf,
+    require              => File[$auth_conf],
+  }
+
+  puppet_authorization::rule { 'puppetlabs file':
+    ensure             => $auth_conf_puppetserver_2_settings_ensure,
+    match_request_path => '/puppet/v3/file',
+    match_request_type => 'path',
+    allow              => '*',
+    sort_order         => 500,
+    path               => $auth_conf,
+    require            => File[$auth_conf],
   }
 
   $webserver_conf = "${server_puppetserver_dir}/conf.d/webserver.conf"
