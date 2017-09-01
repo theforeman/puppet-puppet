@@ -67,6 +67,7 @@ describe 'puppet::server::puppetserver' do
         :server_ssl_chain                       => '/etc/puppetlabs/puppet/ssl/ca/ca_crt.pem',
         :server_crl_enable                      => true,
         :server_trusted_agents                  => [],
+        :allow_header_cert_info                 => false,
       } end
 
       describe 'with default parameters' do
