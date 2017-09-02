@@ -12,9 +12,3 @@ spec/spec_helper.rb:
     def unsupported_puppetmaster_osfamily(osfamily)
       ['Archlinux', 'windows', 'Suse'].include?(osfamily)
     end
-spec/spec_helper_acceptance.rb:
-  modules:
-    - puppet-extlib
-    - puppetlabs-apache
-    - puppetlabs-concat
-    - puppetlabs-stdlib
