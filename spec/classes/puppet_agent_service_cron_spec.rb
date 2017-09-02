@@ -19,7 +19,7 @@ describe 'puppet::agent::service::cron' do
       end
 
       let :facts do
-        facts.merge(additional_facts)
+        facts.merge(additional_facts).merge(:ipaddress => '192.0.2.100')
       end
 
       describe 'when runmode is not cron' do
@@ -47,7 +47,7 @@ describe 'puppet::agent::service::cron' do
             should contain_cron('puppet').with({
               :command  => "#{bindir}/puppet agent --config #{confdir}/puppet.conf --onetime --no-daemonize",
               :user     => 'root',
-              :minute   => ['15','45'],
+              :minute   => ['10','40'],
               :hour     => '*',
             })
           end
