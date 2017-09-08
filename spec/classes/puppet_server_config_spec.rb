@@ -917,9 +917,10 @@ describe 'puppet::server::config' do
           with_value('8139')
         }
 
-        it { should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
-            with_content(/allow-header-cert-info: true/).
-            with({})
+        it { should contain_hocon_setting('authorization.allow-header-cert-info').
+          with_path('/etc/custom/puppetserver/conf.d/auth.conf').
+          with_setting('authorization.allow-header-cert-info').
+          with_value(true)
         }
       end
 
@@ -933,9 +934,10 @@ describe 'puppet::server::config' do
            }"
         end
 
-        it { should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
-            with_content(/allow-header-cert-info: true/).
-            with({})
+        it { should contain_hocon_setting('authorization.allow-header-cert-info').
+          with_path('/etc/custom/puppetserver/conf.d/auth.conf').
+          with_setting('authorization.allow-header-cert-info').
+          with_value(true)
         }
       end
 
