@@ -102,6 +102,13 @@ class puppet::server::puppetserver (
   $server_environment_class_cache_enabled = $::puppet::server::environment_class_cache_enabled,
   $server_jruby9k                         = $::puppet::server::puppetserver_jruby9k,
   $server_metrics                         = $::puppet::server::puppetserver_metrics,
+  $metrics_jmx_enable                     = $::puppet::server::metrics_jmx_enable,
+  $metrics_graphite_enable                = $::puppet::server::metrics_graphite_enable,
+  $metrics_graphite_host                  = $::puppet::server::metrics_graphite_host,
+  $metrics_graphite_port                  = $::puppet::server::metrics_graphite_port,
+  $metrics_server_id                      = $::puppet::server::metrics_server_id,
+  $metrics_graphite_interval              = $::puppet::server::metrics_graphite_interval,
+  $metrics_allowed                        = $::puppet::server::metrics_allowed,
   $server_experimental                    = $::puppet::server::puppetserver_experimental,
   $server_trusted_agents                  = $::puppet::server::puppetserver_trusted_agents,
   $allow_header_cert_info                 = $::puppet::server::allow_header_cert_info,
@@ -254,6 +261,13 @@ class puppet::server::puppetserver (
   file { "${server_puppetserver_dir}/conf.d/auth.conf":
     ensure  => file,
     content => template('puppet/server/puppetserver/conf.d/auth.conf.erb'),
+  }
+  
+  if versioncmp($server_puppetserver_version, '5.0') >= 0 and $server_metrics {
+    file { "${server_puppetserver_dir}/conf.d/metrics.conf":
+      ensure  => file,
+      content => template('puppet/server/puppetserver/conf.d/metrics.conf.erb'),
+    }
   }
 
   $webserver_conf = "${server_puppetserver_dir}/conf.d/webserver.conf"

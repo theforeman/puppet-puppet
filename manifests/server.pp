@@ -308,6 +308,24 @@
 # $puppetserver_metrics::      Enable metrics (Puppetserver 5.x only) and JRuby profiling?
 #                              Defaults to true on Puppetserver 5.x and to false on Puppetserver 2.x
 #
+#
+# $metrics_jmx_enable::        Enable or disable JMX metrics reporter. Defaults to true
+#
+# $metrics_graphite_enable::   Enable or disable Graphite metrics reporter. Defaults to true
+#
+# $metrics_graphite_host::     Graphite server host. Defaults to "127.0.0.1"
+#
+# $metrics_graphite_port::     Graphite server port. Defaults to 2003
+#
+# $metrics_server_id::         A server id that will be used as part of the namespace for metrics produced
+#                              Defaults to $fqdn
+#
+# $metrics_graphite_interval:: How often to send metrics to graphite (in seconds)
+#                              Defaults to 5
+#
+# $metrics_allowed::           Specify metrics to allow in addition to those in the default list
+#                              Defaults to undef
+#
 # $puppetserver_experimental:: For Puppetserver 5, enable the /puppet/experimental route? Defaults to true
 #
 # $puppetserver_trusted_agents:: Certificate names of agents that are allowed to fetch *all* catalogs. Defaults to empty array
@@ -420,6 +438,13 @@ class puppet::server(
   Boolean $allow_header_cert_info = $::puppet::server_allow_header_cert_info,
   Boolean $puppetserver_jruby9k = $::puppet::server_puppetserver_jruby9k,
   Boolean $puppetserver_metrics = $::puppet::server_puppetserver_metrics,
+  Boolean $metrics_jmx_enable = $::puppet::server_metrics_jmx_enable,
+  Boolean $metrics_graphite_enable = $::puppet::server_metrics_graphite_enable,
+  String $metrics_graphite_host = $::puppet::server_metrics_graphite_host,
+  Integer $metrics_graphite_port = $::puppet::server_metrics_graphite_port,
+  String $metrics_server_id = $::puppet::server_metrics_server_id,
+  Integer $metrics_graphite_interval = $::puppet::server_metrics_graphite_interval,
+  Variant[Undef, Array] $metrics_allowed = $::puppet::server_metrics_allowed,
   Boolean $puppetserver_experimental = $::puppet::server_puppetserver_experimental,
   Array[String] $puppetserver_trusted_agents = $::puppet::server_puppetserver_trusted_agents,
 ) {

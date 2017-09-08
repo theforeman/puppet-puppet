@@ -56,6 +56,13 @@ describe 'puppet::server::puppetserver' do
         :server_environment_class_cache_enabled => false,
         :server_jruby9k                         => false,
         :server_metrics                         => true,
+        :metrics_jmx_enable                     => true,
+        :metrics_graphite_enable                => true,
+        :metrics_graphite_host                  => 'graphitehost.example.com',
+        :metrics_graphite_port                  => 2003,
+        :metrics_server_id                      => 'puppetserver.example.com',
+        :metrics_graphite_interval              => 5,
+        :metrics_allowed                        => [],
         :server_experimental                    => true,
         :server_ip                              => '0.0.0.0',
         :server_port                            => '8140',
@@ -449,6 +456,7 @@ describe 'puppet::server::puppetserver' do
               without_content(%r{^    metrics-enabled: (.*)$}).
               with_content(%r{^profiler: \{\n    # enable or disable profiling for the Ruby code;\n    enabled: true})
             }
+          it { should_not contain_file('/etc/custom/puppetserver/conf.d/metrics.conf') }
         end
 
         context 'when server_puppetserver_version < 5.0 and server_metrics => false' do
@@ -464,6 +472,7 @@ describe 'puppet::server::puppetserver' do
               without_content(%r{^    metrics-enabled: (.*)$}).
               with_content(%r{^profiler: \{\n    # enable or disable profiling for the Ruby code;\n    enabled: false})
           }
+          it { should_not contain_file('/etc/custom/puppetserver/conf.d/metrics.conf') }
         end
 
         context 'when server_puppetserver_version >= 5.0 and server_metrics => true' do
@@ -478,6 +487,15 @@ describe 'puppet::server::puppetserver' do
             should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').
             with_content(%r{^    # Whether to enable http-client metrics; defaults to 'true'.\n    metrics-enabled: true$(.*)}).
             with_content(%r{^profiler: \{\n    # enable or disable profiling for the Ruby code;\n    enabled: true})
+          }
+          it {
+            should contain_file('/etc/custom/puppetserver/conf.d/metrics.conf').
+            with_content(%r{^    server-id: "puppetserver.example.com"}).
+            with_content(%r{^                jmx: \{\n                    enabled: true}).
+            with_content(%r{^                graphite: \{\n                    enabled: true}).
+            with_content(%r{^            host: "graphitehost.example.com"}).
+            with_content(%r{^            port: 2003}).
+            with_content(%r{^            update-interval-seconds: 5})
           }
         end
 
@@ -494,6 +512,7 @@ describe 'puppet::server::puppetserver' do
               with_content(%r{^    # Whether to enable http-client metrics; defaults to 'true'.\n    metrics-enabled: false$}).
               with_content(%r{^profiler: \{\n    # enable or disable profiling for the Ruby code;\n    enabled: false})
           }
+          it { should_not contain_file('/etc/custom/puppetserver/conf.d/metrics.conf') }
         end
       end
 
