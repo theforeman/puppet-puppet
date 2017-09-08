@@ -262,7 +262,7 @@ class puppet::server::puppetserver (
     ensure  => file,
     content => template('puppet/server/puppetserver/conf.d/auth.conf.erb'),
   }
-  
+
   if versioncmp($server_puppetserver_version, '5.0') >= 0 and $server_metrics {
     file { "${server_puppetserver_dir}/conf.d/metrics.conf":
       ensure  => file,
