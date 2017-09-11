@@ -708,7 +708,7 @@ class puppet (
   Optional[Integer] $server_metrics_graphite_port = $::puppet::params::server_metrics_graphite_port,
   Optional[String] $server_metrics_server_id = $::puppet::params::server_metrics_server_id,
   Optional[Integer] $server_metrics_graphite_interval = $::puppet::params::server_metrics_graphite_interval,
-  Optional[Variant[Undef,Array]] $server_metrics_allowed = $::puppet::params::server_metrics_allowed,
+  Optional[Array] $server_metrics_allowed = $::puppet::params::server_metrics_allowed,
   Boolean $server_puppetserver_experimental = $puppet::params::server_puppetserver_experimental,
   Array[String] $server_puppetserver_trusted_agents = $puppet::params::server_puppetserver_trusted_agents,
 ) inherits puppet::params {
