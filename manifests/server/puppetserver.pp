@@ -102,6 +102,13 @@ class puppet::server::puppetserver (
   $server_environment_class_cache_enabled = $::puppet::server::environment_class_cache_enabled,
   $server_jruby9k                         = $::puppet::server::puppetserver_jruby9k,
   $server_metrics                         = $::puppet::server::puppetserver_metrics,
+  $metrics_jmx_enable                     = $::puppet::server::metrics_jmx_enable,
+  $metrics_graphite_enable                = $::puppet::server::metrics_graphite_enable,
+  $metrics_graphite_host                  = $::puppet::server::metrics_graphite_host,
+  $metrics_graphite_port                  = $::puppet::server::metrics_graphite_port,
+  $metrics_server_id                      = $::puppet::server::metrics_server_id,
+  $metrics_graphite_interval              = $::puppet::server::metrics_graphite_interval,
+  $metrics_allowed                        = $::puppet::server::metrics_allowed,
   $server_experimental                    = $::puppet::server::puppetserver_experimental,
   $server_trusted_agents                  = $::puppet::server::puppetserver_trusted_agents,
   $allow_header_cert_info                 = $::puppet::server::allow_header_cert_info,
@@ -627,5 +634,51 @@ class puppet::server::puppetserver (
 
   file { $product_conf:
     ensure => $product_conf_ensure,
+  }
+
+  if versioncmp($server_puppetserver_version, '5.0') >= 0 {
+    $metrics_conf = "${server_puppetserver_dir}/conf.d/metrics.conf"
+
+    $metrics_conf_ensure = $server_metrics ? {
+      true    => file,
+      default => absent
+    }
+
+    file { $metrics_conf:
+      ensure  => $metrics_conf_ensure,
+    }
+
+    $metrics_general_settings = {
+      'metrics.server-id'                                          => $metrics_server_id,
+      'metrics.registries.puppetserver.reporters.jmx.enabled'      => $metrics_jmx_enable,
+      'metrics.registries.puppetserver.reporters.graphite.enabled' => $metrics_graphite_enable,
+      'metrics.reporters.graphite.host'                            => $metrics_graphite_host,
+      'metrics.reporters.graphite.port'                            => $metrics_graphite_port,
+      'metrics.reporters.graphite.update-interval-seconds'         => $metrics_graphite_interval,
+    }
+
+    $metrics_general_settings.each |$setting, $value| {
+      hocon_setting { $setting:
+        ensure  => present,
+        path    => $metrics_conf,
+        setting => $setting,
+        value   => $value,
+        require => File[$metrics_conf],
+      }
+    }
+
+    $metrics_allowed_settings = $metrics_allowed ? {
+      undef   => absent,
+      default => present,
+    }
+
+    hocon_setting { 'metrics.registries.puppetserver.metrics-allowed':
+      ensure  => $metrics_allowed_settings,
+      path    => $metrics_conf,
+      setting => 'metrics.registries.puppetserver.metrics-allowed',
+      value   => $metrics_allowed,
+      type    => 'array',
+      require => File[$metrics_conf],
+    }
   }
 }

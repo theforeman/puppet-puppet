@@ -475,6 +475,15 @@ class puppet::params {
   # this switch also controls Ruby profiling, by default disabled for Puppetserver 2.x, enabled for 5.x
   $server_puppetserver_metrics = versioncmp($::puppetversion, '5.0.0') >= 0
 
+  # Puppetserver metrics shipping
+  $server_metrics_jmx_enable        = true
+  $server_metrics_graphite_enable   = false
+  $server_metrics_graphite_host     = '127.0.0.1'
+  $server_metrics_graphite_port     = 2003
+  $server_metrics_server_id         = $lower_fqdn
+  $server_metrics_graphite_interval = 5
+  $server_metrics_allowed           = undef
+
   # For Puppetserver 5, should the /puppet/experimental route be enabled?
   $server_puppetserver_experimental = true
 

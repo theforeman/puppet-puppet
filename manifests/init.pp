@@ -493,6 +493,23 @@
 # $server_puppetserver_metrics::            Enable metrics (Puppetserver 5.x only) and JRuby profiling?
 #                                           Defaults to true on Puppetserver 5.x and to false on Puppetserver 2.x
 #
+# $server_metrics_jmx_enable::              Enable or disable JMX metrics reporter. Defaults to true
+#
+# $server_metrics_graphite_enable::         Enable or disable Graphite metrics reporter. Defaults to false
+#
+# $server_metrics_graphite_host::           Graphite server host. Defaults to "127.0.0.1"
+#
+# $server_metrics_graphite_port::           Graphite server port. Defaults to 2003
+#
+# $server_metrics_server_id::               A server id that will be used as part of the namespace for metrics produced
+#                                           Defaults to $fqdn
+#
+# $server_metrics_graphite_interval::       How often to send metrics to graphite (in seconds)
+#                                           Defaults to 5
+#
+# $server_metrics_allowed::                 Specify metrics to allow in addition to those in the default list
+#                                           Defaults to undef
+#
 # $server_puppetserver_experimental::       For Puppetserver 5, enable the /puppet/experimental route? Defaults to true
 #
 # $server_puppetserver_trusted_agents::     Certificate names of puppet agents that are allowed to fetch *all* catalogs
@@ -685,6 +702,13 @@ class puppet (
   Integer[0] $server_web_idle_timeout = $puppet::params::server_web_idle_timeout,
   Boolean $server_puppetserver_jruby9k = $puppet::params::server_puppetserver_jruby9k,
   Boolean $server_puppetserver_metrics = $puppet::params::server_puppetserver_metrics,
+  Boolean $server_metrics_jmx_enable = $::puppet::params::server_metrics_jmx_enable,
+  Boolean $server_metrics_graphite_enable = $::puppet::params::server_metrics_graphite_enable,
+  String $server_metrics_graphite_host = $::puppet::params::server_metrics_graphite_host,
+  Integer $server_metrics_graphite_port = $::puppet::params::server_metrics_graphite_port,
+  String $server_metrics_server_id = $::puppet::params::server_metrics_server_id,
+  Integer $server_metrics_graphite_interval = $::puppet::params::server_metrics_graphite_interval,
+  Optional[Array] $server_metrics_allowed = $::puppet::params::server_metrics_allowed,
   Boolean $server_puppetserver_experimental = $puppet::params::server_puppetserver_experimental,
   Array[String] $server_puppetserver_trusted_agents = $puppet::params::server_puppetserver_trusted_agents,
 ) inherits puppet::params {
