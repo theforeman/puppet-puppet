@@ -477,7 +477,7 @@ class puppet::params {
 
   # Puppetserver metrics shipping
   $server_metrics_jmx_enable        = true
-  $server_metrics_graphite_enable   = true
+  $server_metrics_graphite_enable   = false
   $server_metrics_graphite_host     = '127.0.0.1'
   $server_metrics_graphite_port     = 2003
   $server_metrics_server_id         = $lower_fqdn

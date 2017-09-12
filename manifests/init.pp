@@ -495,7 +495,7 @@
 #
 # $server_metrics_jmx_enable::              Enable or disable JMX metrics reporter. Defaults to true
 #
-# $server_metrics_graphite_enable::         Enable or disable Graphite metrics reporter. Defaults to true
+# $server_metrics_graphite_enable::         Enable or disable Graphite metrics reporter. Defaults to false
 #
 # $server_metrics_graphite_host::           Graphite server host. Defaults to "127.0.0.1"
 #
