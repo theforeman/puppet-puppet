@@ -543,6 +543,22 @@ class puppet::server::puppetserver (
     require            => File[$auth_conf],
   }
 
+  if versioncmp($server_puppetserver_version, '5.1') >= 0 {
+    $auth_conf_tasks_ensure = present
+  } else {
+    $auth_conf_tasks_ensure = absent
+  }
+
+  puppet_authorization::rule { 'puppet tasks information':
+    ensure             => $auth_conf_tasks_ensure,
+    match_request_path => '/puppet/v3/tasks',
+    match_request_type => 'path',
+    allow              => '*',
+    sort_order         => 500,
+    path               => $auth_conf,
+    require            => File[$auth_conf],
+  }
+
   $webserver_conf = "${server_puppetserver_dir}/conf.d/webserver.conf"
 
   file { $webserver_conf:

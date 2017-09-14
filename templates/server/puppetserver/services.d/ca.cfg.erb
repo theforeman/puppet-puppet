@@ -2,3 +2,6 @@
 <%= '#' unless @server_ca -%>puppetlabs.services.ca.certificate-authority-service/certificate-authority-service
 # To disable the CA service, comment out the above line and uncomment the line below
 <%= '#' if @server_ca -%>puppetlabs.services.ca.certificate-authority-disabled-service/certificate-authority-disabled-service
+<%- if scope.function_versioncmp([@server_puppetserver_version, '5.1']) >= 0 -%>
+puppetlabs.trapperkeeper.services.watcher.filesystem-watch-service/filesystem-watch-service
+<%- end -%>
