@@ -242,6 +242,17 @@ authorization: {
             sort-order: 500
             name: "puppetlabs static file content"
         },
+<%- if scope.function_versioncmp([@server_puppetserver_version, '5.1']) >= 0 -%>
+        {
+            match-request: {
+                path: "/puppet/v3/tasks"
+                type: path
+            }
+            allow: "*"
+            sort-order: 500
+            name: "puppet tasks information"
+        },
+<%- end -%>
 <%- if scope.function_versioncmp([@server_puppetserver_version, '5.0']) >= 0 && @server_experimental -%>
         {
             # Allow all users access to the experimental endpoint

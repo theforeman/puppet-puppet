@@ -1,5 +1,8 @@
 # Changelog
 
+## 8.0.3
+* Add support for Puppetserver 5.1 configurations.
+
 ## 8.0.2
 * Handle FreeBSD puppet5 package
 * Make `puppet::server::passenger::ssl_protocol` and `puppet::server::passenger::ssl_cipher` parameters to allow overriding via hiera

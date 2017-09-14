@@ -179,7 +179,8 @@ version available.
 
 Currently supported values and configuration behaviours are:
 
-* `5.0.0` (default for Puppet >= 5) - configures metrics service and `/puppet/experimental` route
+* `5.1.0` (default for Puppet >= 5.1) - configures CRL reload service and `/puppet/v3/tasks` route
+* `5.0.0` (default for Puppet 5.0.x) - configures metrics service and `/puppet/experimental` route
 * `2.7.x` (default for Puppet < 5) - creates `product.conf`
 * `2.5.x`, `2.6.x` - configures the certificate authority in `ca.cfg`
 * `2.4.99` - configures for both 2.4 and 2.5, with `bootstrap.cfg`
