@@ -1,13 +1,29 @@
+---
 fixtures:
-  repositories:
-    apache:           'https://github.com/puppetlabs/puppetlabs-apache'
-    concat:           'https://github.com/puppetlabs/puppetlabs-concat'
-    extlib:           'https://github.com/voxpupuli/puppet-extlib'
-    foreman:          'https://github.com/theforeman/puppet-foreman'
-    git:              'https://github.com/theforeman/puppet-git'
-    inifile:          'https://github.com/puppetlabs/puppetlabs-inifile.git'
-    puppetdb:         'https://github.com/puppetlabs/puppetlabs-puppetdb.git'
-    stdlib:           'https://github.com/puppetlabs/puppetlabs-stdlib.git'
-
   symlinks:
     puppet: "#{source_dir}"
+  forge_modules:
+    apache:
+      repo: puppetlabs-apache
+      ref: 1.11.1
+    concat:
+      repo: puppetlabs-concat
+      ref: 2.2.1
+    extlib:
+      repo: puppet-extlib
+      ref: 1.1.0
+    foreman:
+      repo: theforeman-foreman
+      ref: 7.2.0
+    git:
+      repo: theforeman-git
+      ref: 2.0.0
+    inifile:
+      repo: puppetlabs-inifile
+      ref: 1.6.0
+    puppetdb:
+      repo: puppetlabs-puppetdb
+      ref: 6.0.0
+    stdlib:
+      repo: puppetlabs-stdlib
+      ref: 4.20.0

@@ -28,7 +28,19 @@ gem 'json_pure', '~> 1.0', {"platforms"=>["ruby_19"], "groups"=>["test"]}
 gem 'logging', '~> 2.1.0', {"platforms"=>["ruby_19"], "groups"=>["test"]}
 gem 'beaker-rspec', {"groups"=>["system_tests"]}
 gem 'beaker-puppet_install_helper', {"groups"=>["system_tests"]}
-gem 'metadata-json-lint'
 gem 'kafo_module_lint'
+
+metadata_version = '> 0'
+
+if RUBY_VERSION < '2.0'
+  gem 'rdoc', '< 4'
+  gem 'public_suffix', '< 1.5'
+
+  metadata_version = '< 1.2'
+elsif RUBY_VERSION < '2.1'
+  gem 'public_suffix', '< 3'
+end
+
+gem 'metadata-json-lint', metadata_version
 
 # vim:ft=ruby
