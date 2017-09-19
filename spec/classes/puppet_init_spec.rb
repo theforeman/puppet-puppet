@@ -7,7 +7,6 @@ describe 'puppet' do
         puppet_concat    = '/etc/puppet/puppet.conf'
         puppet_directory = '/etc/puppet'
         puppet_package   = 'puppet'
-        additional_facts = {}
         case facts[:osfamily]
         when 'FreeBSD'
           puppet_concat    = '/usr/local/etc/puppet/puppet.conf'
@@ -22,7 +21,6 @@ describe 'puppet' do
         puppet_concat    = '/etc/puppetlabs/puppet/puppet.conf'
         puppet_directory = '/etc/puppetlabs/puppet'
         puppet_package   = 'puppet-agent'
-        additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
         case facts[:osfamily]
         when 'FreeBSD'
           puppet_concat    = '/usr/local/etc/puppet/puppet.conf'
@@ -32,17 +30,15 @@ describe 'puppet' do
           else
             puppet_package   = 'puppet5'
           end
-          additional_facts = {}
         when 'windows'
           puppet_concat    = 'C:/ProgramData/PuppetLabs/puppet/etc/puppet.conf'
           puppet_directory = 'C:/ProgramData/PuppetLabs/puppet/etc'
           puppet_package   = 'puppet-agent'
-          additional_facts = {}
         end
       end
 
       let :facts do
-        facts.merge(additional_facts)
+        facts
       end
 
       describe 'with no custom parameters' do

@@ -9,7 +9,6 @@ describe 'puppet::agent::install' do
         else
           client_package = 'puppet'
         end
-        additional_facts = {}
       else
         if facts[:osfamily] == 'FreeBSD'
           if Puppet.version < '5.0'
@@ -17,19 +16,13 @@ describe 'puppet::agent::install' do
           else
             client_package = 'puppet5'
           end
-          additional_facts = {}
         else
           client_package = 'puppet-agent'
-          if facts[:osfamily] == 'windows'
-            additional_facts = {}
-          else
-            additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
-          end
         end
       end
 
       let (:facts) do
-        facts.merge(additional_facts)
+        facts
       end
 
       describe 'with default parameters' do

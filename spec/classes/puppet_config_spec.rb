@@ -13,7 +13,6 @@ describe 'puppet::config' do
         sharedir         = '/usr/share/puppet'
         dir_owner        = 'puppet'
         dir_group        = 'puppet'
-        additional_facts = {}
       else
         codedir          = '/etc/puppetlabs/code'
         confdir          = '/etc/puppetlabs/puppet'
@@ -24,7 +23,6 @@ describe 'puppet::config' do
         sharedir         = '/opt/puppetlabs/puppet'
         dir_owner        = 'root'
         dir_group        = nil
-        additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
       end
 
       case facts[:osfamily]
@@ -54,7 +52,7 @@ describe 'puppet::config' do
       end
 
       let :facts do
-        facts.merge(additional_facts).merge({:domain => 'example.org'})
+        facts.merge(domain: 'example.org')
       end
 
       describe 'with default parameters' do

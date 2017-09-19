@@ -14,11 +14,9 @@ describe 'puppet::agent' do
           client_package = 'puppet'
           confdir        = 'C:/ProgramData/PuppetLabs/puppet/etc'
         end
-        additional_facts = {}
       else
         client_package = 'puppet-agent'
         confdir        = '/etc/puppetlabs/puppet'
-        additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
         case facts[:osfamily]
           when 'FreeBSD'
             if Puppet.version < '5.0'
@@ -27,16 +25,14 @@ describe 'puppet::agent' do
               client_package = 'puppet5'
             end
             confdir          = '/usr/local/etc/puppet'
-            additional_facts = {}
         when 'windows'
           client_package   = 'puppet-agent'
           confdir          = 'C:/ProgramData/PuppetLabs/puppet/etc'
-          additional_facts = {}
         end
       end
 
       let :facts do
-        facts.merge(additional_facts)
+        facts
       end
 
       describe 'with no custom parameters' do

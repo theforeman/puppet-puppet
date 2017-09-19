@@ -13,7 +13,6 @@ describe 'puppet::server::env' do
         ssldir  = '/var/lib/puppet/ssl'
         vardir  = '/var/lib/puppet'
         sharedir = '/usr/share/puppet'
-        additional_facts = {}
       else
         codedir = '/etc/puppetlabs/code'
         confdir = '/etc/puppetlabs/puppet'
@@ -22,7 +21,6 @@ describe 'puppet::server::env' do
         ssldir  = '/etc/puppetlabs/puppet/ssl'
         vardir  = '/opt/puppetlabs/puppet/cache'
         sharedir = '/opt/puppetlabs/puppet'
-        additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
       end
 
       if facts[:osfamily] == 'FreeBSD'
@@ -33,10 +31,9 @@ describe 'puppet::server::env' do
         ssldir  = '/var/puppet/ssl'
         vardir  = '/var/puppet'
         sharedir = '/usr/local/share/puppet'
-        additional_facts = {}
       end
 
-      let(:facts) { facts.merge(additional_facts) }
+      let(:facts) { facts }
 
       let(:title) { 'foo' }
 

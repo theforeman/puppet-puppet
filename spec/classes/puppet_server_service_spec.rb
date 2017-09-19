@@ -4,18 +4,14 @@ describe 'puppet::server::service' do
   on_os_under_test.each do |os, facts|
     next if facts[:osfamily] == 'windows'
     context "on #{os}" do
-      master_service = 'puppetmaster'
-      if Puppet.version < '4.0'
-        additional_facts = {}
+      if Puppet.version > '4.0' && facts[:osfamily] == 'Debian'
+        master_service = 'puppet-master'
       else
-        additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
-        if facts[:osfamily] == 'Debian'
-          master_service = 'puppet-master'
-        end
+        master_service = 'puppetmaster'
       end
 
       let(:facts) do
-        facts.merge(additional_facts)
+        facts
       end
 
       describe 'default_parameters' do

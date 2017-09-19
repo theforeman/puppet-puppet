@@ -5,10 +5,8 @@ describe 'puppet::agent::service' do
     context "on #{os}" do
       if Puppet.version < '4.0'
         confdir = '/etc/puppet'
-        additional_facts = {}
       else
         confdir = '/etc/puppetlabs/puppet'
-        additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
       end
 
       if facts[:osfamily] == 'FreeBSD'
@@ -16,7 +14,7 @@ describe 'puppet::agent::service' do
       end
 
       let :facts do
-        facts.merge(additional_facts)
+        facts
       end
 
       describe 'with no custom parameters' do

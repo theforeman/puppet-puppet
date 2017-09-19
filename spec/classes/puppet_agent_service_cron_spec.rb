@@ -6,11 +6,9 @@ describe 'puppet::agent::service::cron' do
       if Puppet.version < '4.0'
         confdir = '/etc/puppet'
         bindir = '/usr/bin'
-        additional_facts = {}
       else
         confdir = '/etc/puppetlabs/puppet'
         bindir = '/opt/puppetlabs/bin'
-        additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
       end
 
       if facts[:osfamily] == 'FreeBSD'
@@ -19,7 +17,7 @@ describe 'puppet::agent::service::cron' do
       end
 
       let :facts do
-        facts.merge(additional_facts).merge(:ipaddress => '192.0.2.100')
+        facts.merge(ipaddress: '192.0.2.100')
       end
 
       describe 'when runmode is not cron' do

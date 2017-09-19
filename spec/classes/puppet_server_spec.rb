@@ -7,7 +7,11 @@ describe 'puppet::server' do
       if facts[:osfamily] == 'FreeBSD'
         ssldir = '/var/puppet/ssl'
       else
-        ssldir = '/var/lib/puppet/ssl'
+        if facts[:puppetversion].to_f > 4.0
+          ssldir = '/etc/puppetlabs/puppet/ssl'
+        else
+          ssldir = '/var/lib/puppet/ssl'
+        end
       end
 
       server_package = 'puppet-server'
@@ -22,7 +26,7 @@ describe 'puppet::server' do
 
       describe 'basic case' do
         let :pre_condition do
-          "class {'puppet': server => true}"
+          "class {'puppet': server => true, server_implementation => 'master'}"
         end
 
         describe 'with no custom parameters' do
@@ -54,7 +58,7 @@ describe 'puppet::server' do
 
       describe 'with uppercase hostname' do
         let :pre_condition do
-          "class {'puppet': server => true}"
+          "class {'puppet': server => true, server_implementation => 'master'}"
         end
 
         let(:facts) do
@@ -78,7 +82,7 @@ describe 'puppet::server' do
       describe 'with ip parameter' do
         describe 'with default server implementation' do
           let :pre_condition do
-            "class {'puppet': server_ip => '127.0.0.1'}"
+            "class {'puppet': server_ip => '127.0.0.1', server_implementation => 'master'}"
           end
 
           it 'should issue a warning because server_ip is not supported by default implementation' do
@@ -99,7 +103,7 @@ describe 'puppet::server' do
 
       describe 'with server_passenger => false' do
         let :pre_condition do
-          "class {'puppet': server => true, server_passenger => false}"
+          "class {'puppet': server => true, server_implementation => 'master', server_passenger => false}"
         end
 
         it { should compile.with_all_deps }
@@ -113,7 +117,7 @@ describe 'puppet::server' do
 
         describe "and server_service_fallback => false" do
           let :pre_condition do
-            "class {'puppet': server => true, server_passenger => false, server_service_fallback => false}"
+            "class {'puppet': server => true, server_implementation => 'master', server_passenger => false, server_service_fallback => false}"
           end
 
           it { should compile.with_all_deps }
@@ -127,9 +131,6 @@ describe 'puppet::server' do
       end
 
       describe 'with server_implementation => "puppetserver"' do
-        let :facts do
-          facts.merge(:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0')
-        end
         let :pre_condition do
           "class {'puppet': server => true, server_implementation => 'puppetserver'}"
         end

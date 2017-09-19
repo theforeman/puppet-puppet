@@ -24,7 +24,6 @@ describe 'puppet::server::config' do
         sharedir            = '/usr/share/puppet'
         etcdir              = '/etc/puppet'
         puppetcacmd         = '/usr/bin/puppet cert'
-        additional_facts    = {}
       else
         codedir             = '/etc/puppetlabs/code'
         confdir             = '/etc/puppetlabs/puppet'
@@ -40,7 +39,6 @@ describe 'puppet::server::config' do
         sharedir            = '/opt/puppetlabs/puppet'
         etcdir              = '/etc/puppetlabs/puppet'
         puppetcacmd         = '/opt/puppetlabs/bin/puppet cert'
-        additional_facts    = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
       end
 
       if facts[:osfamily] == 'FreeBSD'
@@ -58,11 +56,10 @@ describe 'puppet::server::config' do
         sharedir            = '/usr/local/share/puppet'
         etcdir              = '/usr/local/etc/puppet'
         puppetcacmd         = '/usr/local/bin/puppet cert'
-        additional_facts    = {}
       end
 
       let(:facts) do
-        facts.merge({:clientcert => 'puppetmaster.example.com'}).merge(additional_facts)
+        facts.merge(clientcert: 'puppetmaster.example.com')
       end
 
       describe 'with no custom parameters' do
