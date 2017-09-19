@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.1.2
+* Other changes and fixes:
+    * Make passenger SSL settings parameters (#20546)
+
 ## 7.1.1
 * Other changes and fixes:
     * Add Puppet 3 client compatibility under rack
