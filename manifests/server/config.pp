@@ -129,6 +129,12 @@ class puppet::server::config inherits puppet::config {
     mode   => '0750',
   }
 
+  # Create Foreman share dir which does not depend on Puppet version
+  exec { 'mkdir -p /usr/share/puppet/modules':
+    creates => '/usr/share/puppet/modules',
+    path    => ['/usr/bin', '/bin'],
+  }
+
   ## SSL and CA configuration
   # Open read permissions to private keys to puppet group for foreman, proxy etc.
   file { "${::puppet::server::ssl_dir}/private_keys":
