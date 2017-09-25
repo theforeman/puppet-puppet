@@ -25,6 +25,7 @@ describe 'puppet::server::config' do
         etcdir              = '/etc/puppet'
         puppetcacmd         = '/usr/bin/puppet cert'
         additional_facts    = {}
+        common_modules_path = ["#{codedir}/environments/common","#{codedir}/modules","#{sharedir}/modules"]
       else
         codedir             = '/etc/puppetlabs/code'
         confdir             = '/etc/puppetlabs/puppet'
@@ -41,6 +42,7 @@ describe 'puppet::server::config' do
         etcdir              = '/etc/puppetlabs/puppet'
         puppetcacmd         = '/opt/puppetlabs/bin/puppet cert'
         additional_facts    = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
+        common_modules_path = ["#{codedir}/environments/common","#{codedir}/modules","#{sharedir}/modules","/usr/share/puppet/modules"]
       end
 
       if facts[:osfamily] == 'FreeBSD'
@@ -158,7 +160,7 @@ describe 'puppet::server::config' do
           if Puppet.version >= '3.6'
             should contain_puppet__config__main("environmentpath").with({'value' => "#{codedir}/environments"})
             should contain_puppet__config__main("basemodulepath").with({
-              'value'  => ["#{codedir}/environments/common","#{codedir}/modules","#{sharedir}/modules"],
+              'value'  => common_modules_path,
               'joiner' => ':'})
           end
 
@@ -455,7 +457,7 @@ describe 'puppet::server::config' do
 
           it 'should configure puppet.conf' do
             should contain_puppet__config__main('environmentpath').with({'value' => "#{environments_dir}"})
-            should contain_puppet__config__main('basemodulepath').with({'value' => ["#{environments_dir}/common","#{codedir}/modules","#{sharedir}/modules"]})
+            should contain_puppet__config__main('basemodulepath').with({'value' => common_modules_path})
           end
 
           it { should_not contain_puppet__server__env('development') }
