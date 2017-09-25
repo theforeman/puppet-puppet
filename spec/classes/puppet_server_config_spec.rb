@@ -158,7 +158,7 @@ describe 'puppet::server::config' do
           if Puppet.version >= '3.6'
             should contain_puppet__config__main("environmentpath").with({'value' => "#{codedir}/environments"})
             should contain_puppet__config__main("basemodulepath").with({
-              'value'  => ["#{codedir}/environments/common","#{codedir}/modules","#{sharedir}/modules"],
+              'value'  => ["#{codedir}/environments/common","#{codedir}/modules","#{sharedir}/modules","/usr/share/puppet/modules"],
               'joiner' => ':'})
           end
 
@@ -498,7 +498,7 @@ describe 'puppet::server::config' do
 
           it 'should configure puppet.conf' do
             should contain_puppet__config__main('environmentpath').with({'value' => "#{environments_dir}"})
-            should contain_puppet__config__main('basemodulepath').with({'value' => ["#{environments_dir}/common","#{codedir}/modules","#{sharedir}/modules"]})
+            should contain_puppet__config__main('basemodulepath').with({'value' => ["#{environments_dir}/common","#{codedir}/modules","#{sharedir}/modules","/usr/share/puppet/modules"]})
           end
 
           it { should_not contain_puppet__server__env('development') }
