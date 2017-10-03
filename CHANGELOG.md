@@ -1,5 +1,10 @@
 # Changelog
 
+# 7.1.3
+
+* Other changes and fixes:
+    * Include /usr/share/puppet/modules in the modulepath
+
 ## 7.1.2
 * Other changes and fixes:
     * Make passenger SSL settings parameters (#20546)
