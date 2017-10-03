@@ -14,6 +14,7 @@ describe 'puppet::server::env' do
         vardir  = '/var/lib/puppet'
         sharedir = '/usr/share/puppet'
         additional_facts = {}
+        common_modules_path = ["#{codedir}/environments/common","#{codedir}/modules","#{sharedir}/modules"]
       else
         codedir = '/etc/puppetlabs/code'
         confdir = '/etc/puppetlabs/puppet'
@@ -23,6 +24,7 @@ describe 'puppet::server::env' do
         vardir  = '/opt/puppetlabs/puppet/cache'
         sharedir = '/opt/puppetlabs/puppet'
         additional_facts = {:rubysitedir => '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0'}
+        common_modules_path = ["#{codedir}/environments/common","#{codedir}/modules","#{sharedir}/modules","/usr/share/puppet/modules"]
       end
 
       if facts[:osfamily] == 'FreeBSD'
@@ -106,7 +108,7 @@ describe 'puppet::server::env' do
             should_not contain_puppet__config__environment('foo_config_version')
             should contain_puppet__config__environment('foo_modulepath').with({
               'key'    => 'modulepath',
-              'value'  => ["#{codedir}/environments/foo/modules",["#{codedir}/environments/common","#{codedir}/modules","#{sharedir}/modules"]],
+              'value'  => ["#{codedir}/environments/foo/modules", common_modules_path],
               'joiner' => ':',
               })
 
@@ -139,7 +141,7 @@ describe 'puppet::server::env' do
             should_not contain_puppet__config__environment('foo_templatedir')
             should contain_puppet__config__environment('foo_modulepath').with({
               'key'    => 'modulepath',
-              'value'  => ["#{codedir}/environments/foo/modules",["#{codedir}/environments/common","#{codedir}/modules","#{sharedir}/modules"]],
+              'value'  => ["#{codedir}/environments/foo/modules", common_modules_path],
               'joiner' => ':',
               })
             should contain_puppet__config__environment('foo_config_version').with({
@@ -180,7 +182,7 @@ describe 'puppet::server::env' do
             should_not contain_puppet__config__environment('foo_templatedir')
             should contain_puppet__config__environment('foo_modulepath').with({
               'key'    => 'modulepath',
-              'value'  => ["#{codedir}/environments/foo/modules",["#{codedir}/environments/common","#{codedir}/modules","#{sharedir}/modules"]],
+              'value'  => ["#{codedir}/environments/foo/modules", common_modules_path],
               'joiner' => ':',
               })
             should contain_puppet__config__environment('foo_config_version').with({
@@ -269,7 +271,7 @@ describe 'puppet::server::env' do
             should_not contain_puppet__config__environment('foo_config_version')
             should contain_puppet__config__environment('foo_modulepath').with({
               'key'    => 'modulepath',
-              'value'  => ["#{basedir}/foo/modules",["#{codedir}/environments/common","#{codedir}/modules","#{sharedir}/modules"]],
+              'value'  => ["#{basedir}/foo/modules", common_modules_path],
               'joiner' => ':',
               })
           end
