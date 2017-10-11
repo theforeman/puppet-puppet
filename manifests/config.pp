@@ -63,12 +63,8 @@ class puppet::config(
     puppet::config::main{'syslogfacility': value => $syslogfacility; }
   }
 
-  # we need to store this in a variable, because older puppet doesn't
-  # like resource{function(): ... }
-  $additional_settings_keys = keys($additional_settings)
-  puppet::config::additional_settings{ $additional_settings_keys:
-    hash     => $additional_settings,
-    resource => '::puppet::config::main',
+  $additional_settings.each |$key,$value| {
+    puppet::config::main { $key: value => $value }
   }
 
   file { $puppet_dir:

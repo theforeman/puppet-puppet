@@ -114,12 +114,8 @@ class puppet::server::config inherits puppet::config {
     }
   }
 
-  # we need to store this in a variable, because older puppet doesn't
-  # like resource{function(): ... }
-  $additional_settings_keys = keys($::puppet::server_additional_settings)
-  puppet::config::additional_settings{ $additional_settings_keys:
-    hash     => $::puppet::server_additional_settings,
-    resource => '::puppet::config::master',
+  $::puppet::server_additional_settings.each |$key,$value| {
+    puppet::config::master { $key: value => $value }
   }
 
   file { "${puppet::vardir}/reports":
