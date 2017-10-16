@@ -1,5 +1,8 @@
 # Changelog
 
+## 8.0.4
+* Bump allowed version of puppet-extlib to 3.0.0
+
 ## 8.0.3
 * Add support for Puppetserver 5.1 configurations.
 
