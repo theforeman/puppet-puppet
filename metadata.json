@@ -12,7 +12,7 @@
     "foreman",
     "puppet",
     "puppetmaster",
-    "puppet-server"
+    "puppetserver"
   ],
   "dependencies": [
     {

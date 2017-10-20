@@ -10,7 +10,7 @@ describe 'puppet::server' do
         ssldir = '/var/lib/puppet/ssl'
       end
 
-      server_package = 'puppet-server'
+      server_package = 'puppetserver'
       if facts[:osfamily] == 'Debian'
         server_package = 'puppetmaster'
         if facts[:puppetversion].to_f > 4.0
