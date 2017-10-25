@@ -33,7 +33,7 @@ class puppet::server::install {
                                       default => ['puppetmaster-common', 'puppetmaster'],
                                     },
         /^(FreeBSD|DragonFly)$/ => [],
-        default                 => ['puppet-server'],
+        default                 => ['puppetserver'],
       },
       'puppetserver' => 'puppetserver',
     }
