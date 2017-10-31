@@ -107,13 +107,13 @@ class puppet::server::passenger (
     # Best we can do is reverse the Order directive and add our own 'Deny from all' for good measure.
     $directories_http = [
       merge($directory, {
-        'order'           => false,
-        'deny'            => false,
-        'allow'           => false,
-        'custom_fragment' => join([
-            'Order deny,allow',
-            'Deny from all',
-            inline_template("<%- if @http_allow and Array(@http_allow).join(' ') != '' -%>Allow from <%= @http_allow.join(' ') %><%- end -%>"),
+          'order'           => false,
+          'deny'            => false,
+          'allow'           => false,
+          'custom_fragment' => join([
+              'Order deny,allow',
+              'Deny from all',
+              inline_template("<%- if @http_allow and Array(@http_allow).join(' ') != '' -%>Allow from <%= @http_allow.join(' ') %><%- end -%>"),
           ], "\n")
       }),
     ]
@@ -130,7 +130,7 @@ class puppet::server::passenger (
           },
           'SetEnvIf X-Client-Verify "(.*)" SSL_CLIENT_VERIFY=$1',
           'SetEnvIf X-SSL-Client-DN "(.*)" SSL_CLIENT_S_DN=$1',
-        ], "\n"),
+      ], "\n"),
       options                 => ['None'],
       passenger_pre_start     => $http_pre_start,
       passenger_min_instances => $passenger_min_instances,
