@@ -101,8 +101,7 @@ class puppet::server::config inherits puppet::config {
       'storeconfigs_backend': value => $server_storeconfigs_backend;
     }
   }
-  if !$::puppet::server::directory_environments  and
-    ( $::puppet::server::git_repo or $::puppet::server::dynamic_environments ) {
+  if !$::puppet::server::directory_environments and ($::puppet::server::git_repo or $::puppet::server::dynamic_environments) {
     puppet::config::master {
       'manifest':   value => "${::puppet::server::envs_dir}/\$environment/manifests/site.pp";
       'modulepath': value => "${::puppet::server::envs_dir}/\$environment/modules";
@@ -163,9 +162,10 @@ class puppet::server::config inherits puppet::config {
       creates => $::puppet::server::ssl_cert,
       command => "${::puppet::puppetca_cmd} --generate ${::puppet::server::certname} --allow-dns-alt-names",
       umask   => '0022',
-      require => [Concat["${::puppet::server::dir}/puppet.conf"],
-                  Exec['puppet_server_config-create_ssl_dir'],
-                  ],
+      require => [
+        Concat["${::puppet::server::dir}/puppet.conf"],
+        Exec['puppet_server_config-create_ssl_dir'],
+      ],
     }
   } elsif $::puppet::server::ca_crl_sync {
     # If not a ca AND sync the crl from the ca master

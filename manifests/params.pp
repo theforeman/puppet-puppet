@@ -327,9 +327,10 @@ class puppet::params {
   case $::osfamily {
     'Debian' : {
       $agent_restart_command = "/usr/sbin/service ${service_name} reload"
-      if  ($::operatingsystem == 'Debian') and (versioncmp($::operatingsystemrelease, '8.0') >= 0) or
-          ($::operatingsystem == 'Ubuntu') and (versioncmp($::operatingsystemrelease, '15.04') >= 0)
-      {
+      if (
+        ($::operatingsystem == 'Debian') and (versioncmp($::operatingsystemrelease, '8.0') >= 0) or
+        ($::operatingsystem == 'Ubuntu') and (versioncmp($::operatingsystemrelease, '15.04') >= 0)
+      ) {
         $unavailable_runmodes = []
       } else {
         $unavailable_runmodes = ['systemd.timer']
