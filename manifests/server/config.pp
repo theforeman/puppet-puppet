@@ -123,7 +123,7 @@ class puppet::server::config inherits puppet::config {
     owner  => 'root',
     group  => 'root',
     mode   => '0755',
-  }
+  } ->
   
   file { "${puppet::vardir}/reports":
     ensure => directory,
