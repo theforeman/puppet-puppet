@@ -117,6 +117,13 @@ class puppet::server::config inherits puppet::config {
     puppet::config::master { $key: value => $value }
   }
 
+  file { "${puppet::vardir}":
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
+  } ->
+  
   file { "${puppet::vardir}/reports":
     ensure => directory,
     owner  => $::puppet::server::user,
