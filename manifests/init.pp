@@ -8,6 +8,9 @@
 #                                           install. The version should be the exact
 #                                           match for your distro.
 #                                           You can also use certain values like 'latest'.
+#                                           Note that when you specify exact versions you
+#                                           should also override $server_version since
+#                                           that defaults to $version.
 #
 # $user::                                   Override the name of the puppet user.
 #
@@ -433,9 +436,10 @@
 # $server_puppetserver_dir::                The path of the puppetserver config dir
 #
 # $server_puppetserver_version::            The version of puppetserver 2 installed (or being installed)
-#                                           Unfortunately, different versions of puppetserver need configuring differently,
-#                                           and there's no easy way of determining which version is being installed.
-#                                           Defaults to '2.3.1' but can be overriden if you're installing an older version.
+#                                           Unfortunately, different versions of puppetserver need
+#                                           configuring differently. The default is derived from the
+#                                           installed puppet version. Generally it's not needed to
+#                                           override this but when upgrading it might be.
 #
 # $server_max_active_instances::            Max number of active jruby instances. Defaults to
 #                                           processor count
