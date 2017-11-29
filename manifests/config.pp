@@ -26,6 +26,7 @@ class puppet::config(
     'privatekeydir': value => '$ssldir/private_keys { group = service }';
     'hostprivkey': value => '$privatekeydir/$certname.pem { mode = 640 }';
     'show_diff': value  => $::puppet::show_diff;
+    'codedir': value => $::puppet::codedir;
   }
 
   if $module_repository and !empty($module_repository) {
