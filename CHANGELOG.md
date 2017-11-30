@@ -1,5 +1,23 @@
 # Changelog
 
+## 8.1.0
+
+* Set the codedir in puppet.conf
+* Improve parameter documentation around versions
+* Stop shipping development code (spec, Rakefile, Gemfile) in releases
+* Remove EOL OSes and add new ones to metadata.json
+* Avoid duplicate declaration issues when `server_additonal_settings` and `additional_settings` contain same key
+* Re-add the /usr/share/puppet/modules directory to the default `server_common_modules_path`
+* Add configuration of puppetserver graphite metrics
+* Always manage the puppet user
+* Remove code for Puppet < 4.5 and Puppetserver < 2.2
+* Add `puppetserver_trusted_agents` parameter
+* use puppetlabs-hocon for authconf, ca.conf, product.conf and webserver.conf
+* Add `server_jvm_cli_args` parameter
+
+## 8.0.4
+* Bump allowed version of puppet-extlib to 3.0.0
+
 ## 8.0.3
 * Add support for Puppetserver 5.1 configurations.
 
