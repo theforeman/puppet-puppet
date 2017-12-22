@@ -31,6 +31,8 @@ describe 'puppet::server::puppetserver' do
                                                      'TLS_RSA_WITH_AES_128_CBC_SHA', ],
         :server_max_active_instances            => 2,
         :server_max_requests_per_instance       => 0,
+        :server_max_queued_requests             => 0,
+        :server_max_retry_delay                 => 1800,
         :server_http                            => false,
         :server_http_allow                      => [],
         :server_ca                              => true,
@@ -266,6 +268,86 @@ describe 'puppet::server::puppetserver' do
           it 'should have custom max-requests-per-instance: /opt/puppetlabs/server/data/puppetserver' do
             content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
             expect(content).to include(%Q[    max-requests-per-instance: 123456\n])
+          end
+        end
+      end
+
+      describe 'server_max_queued_requests' do
+        context 'when server_puppetserver_version >= 5.0 with default parameters' do
+          let(:params) do
+            default_params.merge(
+              :server_puppetserver_dir     => '/etc/custom/puppetserver',
+              :server_puppetserver_version => '5.0.0',
+            )
+          end
+          it 'should have max-queued-requests: 0' do
+            should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              with_content(%r{^    max-queued-requests: 0\n})
+          end
+        end
+        context 'when server_puppetserver_version >= 5.0 with custom server_max_queued_requests' do
+          let(:params) do
+            default_params.merge(
+              :server_puppetserver_dir     => '/etc/custom/puppetserver',
+              :server_puppetserver_version => '5.0.0',
+              :server_max_queued_requests  => 100,
+            )
+          end
+          it 'should have custom max-queued-requests: 100' do
+            should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              with_content(%r{^    max-queued-requests: 100\n})
+          end
+        end
+        context 'when server_puppetserver_version < 5.0 with default parameters' do
+          let(:params) do
+            default_params.merge(
+              :server_puppetserver_dir     => '/etc/custom/puppetserver',
+              :server_puppetserver_version => '2.7.0',
+            )
+          end
+          it 'should not have max-queued-requests' do
+            should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              without_content(%r{^    max-queued-requests: (.*)$})
+          end
+        end
+      end
+
+      describe 'server_max_retry_delay' do
+        context 'when server_puppetserver_version >= 5.0 with default parameters' do
+          let(:params) do
+            default_params.merge(
+              :server_puppetserver_dir     => '/etc/custom/puppetserver',
+              :server_puppetserver_version => '5.0.0',
+            )
+          end
+          it 'should have max-retry-delay: 1800' do
+            should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              with_content(%r{^    max-retry-delay: 1800\n})
+          end
+        end
+        context 'when server_puppetserver_version >= 5.0 custom server_max_retry_delay' do
+          let(:params) do
+            default_params.merge(
+              :server_puppetserver_dir     => '/etc/custom/puppetserver',
+              :server_puppetserver_version => '5.0.0',
+              :server_max_retry_delay      => 100
+            )
+          end
+          it 'should have custom max-retry-delay: 100' do
+            should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              with_content(%r{^    max-retry-delay: 100\n})
+          end
+        end
+        context 'when server_puppetserver_version < 5.0 with default parameters' do
+          let(:params) do
+            default_params.merge(
+              :server_puppetserver_dir     => '/etc/custom/puppetserver',
+              :server_puppetserver_version => '2.7.0',
+            )
+          end
+          it 'should not have max-retry-delay' do
+            should contain_file('/etc/custom/puppetserver/conf.d/puppetserver.conf').
+              without_content(%r{^    max-retry-delay: (.*)$})
           end
         end
       end

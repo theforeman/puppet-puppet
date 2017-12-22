@@ -48,6 +48,14 @@
 # * `server_max_requests_per_instance`
 # Puppetserver number of max requests per jruby instance
 #
+# * `server_max_queued_requests`
+# The maximum number of requests that may be queued waiting
+# to borrow a JRuby from the pool.
+#
+# * `server_max_retry_delay`
+# Sets the upper limit for the random sleep set as a Retry-After
+# header on 503 responses returned when max-queued-requests is enabled.
+#
 # === Example
 #
 # @example
@@ -75,6 +83,8 @@ class puppet::server::puppetserver (
   $server_cipher_suites                   = $::puppet::server::cipher_suites,
   $server_max_active_instances            = $::puppet::server::max_active_instances,
   $server_max_requests_per_instance       = $::puppet::server::max_requests_per_instance,
+  $server_max_queued_requests             = $::puppet::server::max_queued_requests,
+  $server_max_retry_delay                 = $::puppet::server::max_retry_delay,
   $server_ssl_protocols                   = $::puppet::server::ssl_protocols,
   $server_ssl_ca_crl                      = $::puppet::server::ssl_ca_crl,
   $server_ssl_ca_cert                     = $::puppet::server::ssl_ca_cert,
