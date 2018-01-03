@@ -408,10 +408,10 @@ class puppet::params {
   } else {
     $mem_in_mb = 0 + $::memorysize_mb
   }
-  if $mem_in_mb >= 2048 {
+  if $mem_in_mb >= 3072 {
     $server_jvm_min_heap_size = '2G'
     $server_jvm_max_heap_size = '2G'
-    $server_max_active_instances = abs($::processorcount)
+    $server_max_active_instances = min(abs($::processorcount), 4)
   } elsif $mem_in_mb >= 1024 {
     $server_max_active_instances = 1
     $server_jvm_min_heap_size = '1G'
