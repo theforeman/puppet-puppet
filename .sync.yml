@@ -4,6 +4,9 @@
     - docker/centos-7
     - docker/centos-6
     - docker/debian-8
+  env:
+    global:
+      - PARALLEL_TEST_PROCESSORS=8
 Rakefile:
   param_docs_pattern:
     - manifests/init.pp
