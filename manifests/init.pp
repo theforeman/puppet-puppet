@@ -446,6 +446,14 @@
 #
 # $server_max_requests_per_instance::       Max number of requests a jruby instances will handle. Defaults to 0 (disabled)
 #
+# $server_max_queued_requests::             The maximum number of requests that may be queued waiting to borrow a
+#                                           JRuby from the pool. (Puppetserver 5.x only)
+#                                           Defaults to 0 (disabled) for Puppetserver >= 5.0
+#
+# $server_max_retry_delay::                 Sets the upper limit for the random sleep set as a Retry-After header on 
+#                                           503 responses returned when max-queued-requests is enabled. (Puppetserver 5.x only)
+#                                           Defaults to 1800 for Puppetserver >= 5.0
+#
 # $server_idle_timeout::                    How long the server will wait for a response on an existing connection
 #
 # $server_connect_timeout::                 How long the server will wait for a response to a connection attempt
@@ -699,6 +707,8 @@ class puppet (
   Optional[Stdlib::Absolutepath] $server_jruby_gem_home = $puppet::params::server_jruby_gem_home,
   Integer[1] $server_max_active_instances = $puppet::params::server_max_active_instances,
   Integer[0] $server_max_requests_per_instance = $puppet::params::server_max_requests_per_instance,
+  Integer[0] $server_max_queued_requests = $puppet::params::server_max_queued_requests,
+  Integer[0] $server_max_retry_delay = $puppet::params::server_max_retry_delay,
   Boolean $server_use_legacy_auth_conf = $puppet::params::server_use_legacy_auth_conf,
   Boolean $server_check_for_updates = $puppet::params::server_check_for_updates,
   Boolean $server_environment_class_cache_enabled = $puppet::params::server_environment_class_cache_enabled,

@@ -56,6 +56,13 @@ jruby-puppet: {
     # (optional) the number of HTTP requests a given JRuby instance will handle in its lifetime.
     max-requests-per-instance: <%= @server_max_requests_per_instance %>
 
+<%- if scope.function_versioncmp([@server_puppetserver_version, '5.0']) >= 0 -%>
+    # (optional) The maximum number of requests that may be queued waiting to borrow a JRuby from the pool.
+    max-queued-requests: <%= @server_max_queued_requests %>
+
+    # (optional) Sets the upper limit for the random sleep set as a Retry-After header on 503 responses returned when max-queued-requests is enabled.
+    max-retry-delay: <%= @server_max_retry_delay %>
+<%- end -%>
     # (optional) Authorize access to Puppet master endpoints via rules
     # specified in the legacy Puppet auth.conf file (if true) or via rules
     # specified in the Puppet Server HOCON-formatted auth.conf (if false or not

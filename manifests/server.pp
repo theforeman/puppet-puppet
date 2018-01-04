@@ -432,6 +432,8 @@ class puppet::server(
   Optional[Stdlib::Absolutepath] $jruby_gem_home = $::puppet::server_jruby_gem_home,
   Integer[1] $max_active_instances = $::puppet::server_max_active_instances,
   Integer[0] $max_requests_per_instance = $::puppet::server_max_requests_per_instance,
+  Integer[0] $max_queued_requests = $puppet::server_max_queued_requests,
+  Integer[0] $max_retry_delay = $puppet::server_max_retry_delay,
   Boolean $use_legacy_auth_conf = $::puppet::server_use_legacy_auth_conf,
   Boolean $check_for_updates = $::puppet::server_check_for_updates,
   Boolean $environment_class_cache_enabled = $::puppet::server_environment_class_cache_enabled,
