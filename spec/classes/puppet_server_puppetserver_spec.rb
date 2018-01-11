@@ -71,6 +71,7 @@ describe 'puppet::server::puppetserver' do
         :server_crl_enable                      => true,
         :server_trusted_agents                  => [],
         :allow_header_cert_info                 => false,
+        :compile_mode                           => 'off', # In reality defaults to undef
       } end
 
       describe 'with default parameters' do

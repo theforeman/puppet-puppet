@@ -122,6 +122,7 @@ class puppet::server::puppetserver (
   $server_experimental                    = $::puppet::server::puppetserver_experimental,
   $server_trusted_agents                  = $::puppet::server::puppetserver_trusted_agents,
   $allow_header_cert_info                 = $::puppet::server::allow_header_cert_info,
+  $compile_mode                           = $::puppet::server::compile_mode,
 ) {
   include ::puppet::server
 

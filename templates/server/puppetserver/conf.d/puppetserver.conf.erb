@@ -73,6 +73,9 @@ jruby-puppet: {
     # (optional) enable or disable environment class cache
     environment-class-cache-enabled: <%= @server_environment_class_cache_enabled %>
 <%- end -%>
+<%- if @compile_mode %>
+    compile-mode: <%= @compile_mode %>
+<%- end -%>
 }
 
 # settings related to HTTP client requests made by Puppet Server
