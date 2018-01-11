@@ -527,6 +527,8 @@
 # $server_puppetserver_trusted_agents::     Certificate names of puppet agents that are allowed to fetch *all* catalogs
 #                                           Defaults to [] and all agents are only allowed to fetch their own catalogs.
 #
+# $server_compile_mode::                    Used to control JRuby's "CompileMode", which may improve performance.
+#                                           Defaults to undef (off).
 # === Usage:
 #
 # * Simple usage:
@@ -725,6 +727,7 @@ class puppet (
   Optional[Array] $server_metrics_allowed = $::puppet::params::server_metrics_allowed,
   Boolean $server_puppetserver_experimental = $puppet::params::server_puppetserver_experimental,
   Array[String] $server_puppetserver_trusted_agents = $puppet::params::server_puppetserver_trusted_agents,
+  Optional[Enum['off', 'jit', 'force']] $server_compile_mode = $puppet::params::server_compile_mode,
 ) inherits puppet::params {
   include ::puppet::config
   Class['puppet::config'] -> Class['puppet']

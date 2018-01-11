@@ -449,6 +449,7 @@ class puppet::server(
   Variant[Undef, Array] $metrics_allowed = $::puppet::server_metrics_allowed,
   Boolean $puppetserver_experimental = $::puppet::server_puppetserver_experimental,
   Array[String] $puppetserver_trusted_agents = $::puppet::server_puppetserver_trusted_agents,
+  Optional[Enum['off', 'jit', 'force']] $compile_mode = $::puppet::server_compile_mode,
 ) {
   if $implementation == 'master' and $ip != $puppet::params::ip {
     notify {

@@ -31,6 +31,7 @@ class puppet::params {
   $server_crl_enable   = undef
   $prerun_command      = undef
   $postrun_command     = undef
+  $server_compile_mode = undef
   $dns_alt_names       = []
   $use_srv_records     = false
 
