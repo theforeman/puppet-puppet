@@ -487,11 +487,9 @@ class puppet::server(
   if $implementation == 'master' {
     $pm_service   = !$passenger and $service_fallback
     $ps_service   = undef
-    $rack_service = $passenger
   } elsif $implementation == 'puppetserver' {
     $pm_service   = undef
     $ps_service   = true
-    $rack_service = false
   }
 
   class { '::puppet::server::install': }
@@ -501,7 +499,7 @@ class puppet::server(
     httpd_service => $httpd_service,
     puppetmaster  => $pm_service,
     puppetserver  => $ps_service,
-    rack          => $rack_service,
+    rack          => $passenger,
   }
   -> Class['puppet::server']
 

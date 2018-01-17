@@ -135,7 +135,7 @@ describe 'puppet::server' do
           should contain_class('puppet::server::service').
             with_puppetmaster(nil).
             with_puppetserver(true).
-            with_rack(false)
+            with_rack(true)
         end
         it { should contain_class('puppet::server::puppetserver') }
         it { should contain_package('puppetserver') }
