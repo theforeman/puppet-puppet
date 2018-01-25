@@ -1,5 +1,15 @@
 # Changelog
 
+## [8.2.0](https://github.com/theforeman/puppet-puppet/tree/8.2.0) (2018-01-25)
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/8.1.0...8.2.0)
+
+**Implemented enhancements:**
+
+- Make max-queued-requests and max-retry-delay configurable [\#569](https://github.com/theforeman/puppet-puppet/issues/569)
+- add compile\_mode parameter to puppetserver.conf [\#574](https://github.com/theforeman/puppet-puppet/pull/574) ([miksercz](https://github.com/miksercz))
+- Make performance tuning defaults more safe [\#572](https://github.com/theforeman/puppet-puppet/pull/572) ([kasimon](https://github.com/kasimon))
+- Add `server_max_queued_requests` and `server_max_retry_delay` parameters [\#570](https://github.com/theforeman/puppet-puppet/pull/570) ([baurmatt](https://github.com/baurmatt))
+
 ## 8.1.0
 
 * Set the codedir in puppet.conf
