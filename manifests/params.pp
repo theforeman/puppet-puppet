@@ -15,6 +15,7 @@ class puppet::params {
   $splaylimit          = '1800'
   $runinterval         = 1800
   $runtimeout          = 0
+  $disable_i18n        = false
   $runmode             = 'service'
 
   # Not defined here as the commands depend on module parameter "dir"

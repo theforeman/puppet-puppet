@@ -76,6 +76,11 @@
 #                                           to take. A Puppet agent run that exceeds this timeout
 #                                           will be aborted. Defaults to 0, which is unlimited.
 #
+# $disable_i18n::                           If true, turns off all translations of Puppet and module
+#                                           log messages, which affects error, warning and info log
+#                                           messages, as well as any translations in the report
+#                                           and CLI. Defaults to false.
+#
 # $autosign::                               If set to a boolean, autosign is enabled or disabled
 #                                           for all incoming requests. Otherwise this has to be
 #                                           set to the full file path of an autosign.conf file or
@@ -581,6 +586,7 @@ class puppet (
   Optional[String] $autosign_source = $puppet::params::autosign_source,
   Integer[0] $runinterval = $puppet::params::runinterval,
   Integer[0] $runtimeout = $puppet::params::runtimeout,
+  Boolean $disable_i18n = $puppet::params::disable_i18n,
   Boolean $usecacheonfailure = $puppet::params::usecacheonfailure,
   Enum['cron', 'service', 'systemd.timer', 'none'] $runmode = $puppet::params::runmode,
   Array[Enum['cron', 'service', 'systemd.timer', 'none']] $unavailable_runmodes = $puppet::params::unavailable_runmodes,
