@@ -72,6 +72,10 @@
 # $runinterval::                            Set up the interval (in seconds) to run
 #                                           the puppet agent.
 #
+# $runtimeout::                             The maximum amount of time an agent run is allowed
+#                                           to take. A Puppet agent run that exceeds this timeout
+#                                           will be aborted. Defaults to 0, which is unlimited.
+#
 # $autosign::                               If set to a boolean, autosign is enabled or disabled
 #                                           for all incoming requests. Otherwise this has to be
 #                                           set to the full file path of an autosign.conf file or
@@ -450,7 +454,7 @@
 #                                           JRuby from the pool. (Puppetserver 5.x only)
 #                                           Defaults to 0 (disabled) for Puppetserver >= 5.0
 #
-# $server_max_retry_delay::                 Sets the upper limit for the random sleep set as a Retry-After header on 
+# $server_max_retry_delay::                 Sets the upper limit for the random sleep set as a Retry-After header on
 #                                           503 responses returned when max-queued-requests is enabled. (Puppetserver 5.x only)
 #                                           Defaults to 1800 for Puppetserver >= 5.0
 #
@@ -576,6 +580,7 @@ class puppet (
   Optional[String] $autosign_content = $puppet::params::autosign_content,
   Optional[String] $autosign_source = $puppet::params::autosign_source,
   Integer[0] $runinterval = $puppet::params::runinterval,
+  Integer[0] $runtimeout = $puppet::params::runtimeout,
   Boolean $usecacheonfailure = $puppet::params::usecacheonfailure,
   Enum['cron', 'service', 'systemd.timer', 'none'] $runmode = $puppet::params::runmode,
   Array[Enum['cron', 'service', 'systemd.timer', 'none']] $unavailable_runmodes = $puppet::params::unavailable_runmodes,
