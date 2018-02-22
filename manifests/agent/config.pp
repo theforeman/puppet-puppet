@@ -12,6 +12,8 @@ class puppet::agent::config inherits puppet::config {
     'splay':             value => $::puppet::splay;
     'splaylimit':        value => $::puppet::splaylimit;
     'runinterval':       value => $::puppet::runinterval;
+    'runtimeout':        value => $::puppet::runtimeout;
+    'disable_i18n':      value => $::puppet::disable_i18n;
     'noop':              value => $::puppet::agent_noop;
     'usecacheonfailure': value => $::puppet::usecacheonfailure;
   }
