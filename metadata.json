@@ -17,7 +17,7 @@
   "dependencies": [
     {
       "name": "puppetlabs/apache",
-      "version_requirement": ">= 1.2.0 < 3.0.0"
+      "version_requirement": ">= 1.2.0 < 4.0.0"
     },
     {
       "name": "puppetlabs/puppet_authorization",
