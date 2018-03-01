@@ -85,6 +85,46 @@ describe 'puppet' do
 
         it { should contain_puppet__config__main('ca_port').with_value(8140) }
       end
+
+      describe 'with package_source => Httpurl' do
+        let :params do {
+          :package_source => 'https://example.com:123/test'
+        } end
+
+        if facts[:osfamily] != 'windows'
+          it { is_expected.to compile }
+        end
+      end
+
+      describe 'with package_source => Unixpath' do
+        let :params do {
+          :package_source => '/test/folder/path/source.rpm'
+        } end
+
+        if facts[:osfamily] != 'windows'
+          it { is_expected.to compile }
+        end
+      end
+
+      describe 'with package_source => Windowspath' do
+        let :params do {
+          :package_source => 'C:\test\folder\path\source.exe'
+        } end
+
+        if facts[:osfamily] != 'windows'
+          it { is_expected.to compile }
+        end
+      end
+
+      describe 'with package_source => foo' do
+        let :params do {
+          :package_source => 'foo'
+        } end
+
+        if facts[:osfamily] != 'windows'
+          it { is_expected.not_to compile }
+        end
+      end
     end
   end
 end

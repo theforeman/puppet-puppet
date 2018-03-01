@@ -563,7 +563,7 @@ class puppet (
   Optional[String] $dir_owner = $puppet::params::dir_owner,
   Optional[String] $dir_group = $puppet::params::dir_group,
   Optional[String] $package_provider = $puppet::params::package_provider,
-  Optional[Stdlib::Absolutepath] $package_source = $puppet::params::package_source,
+  Optional[Variant[Stdlib::Absolutepath, Stdlib::Httpurl]] $package_source = $puppet::params::package_source,
   Integer[0, 65535] $port = $puppet::params::port,
   Boolean $listen = $puppet::params::listen,
   Array[String] $listen_to = $puppet::params::listen_to,
