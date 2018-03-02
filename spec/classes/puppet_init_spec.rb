@@ -75,14 +75,6 @@ describe 'puppet' do
           :ca_port => 8140,
         } end
 
-        it { should contain_puppet__config__main('ca_port').with_value('8140') }
-      end
-
-      describe 'with ca_port' do
-        let :params do {
-          :ca_port => 8140,
-        } end
-
         it { should contain_puppet__config__main('ca_port').with_value(8140) }
       end
 
