@@ -113,6 +113,9 @@
 # $systemd_cmd::                            Specify command to launch when runmode is
 #                                           set 'systemd.timer'.
 #
+# $systemd_randomizeddelaysec::             Adds a random delay between 0 and this value
+#                                           (in seconds) to the timer.
+#
 # $show_diff::                              Show and report changed files with diff output
 #
 # $module_repository::                      Use a different puppet module repository
@@ -581,6 +584,7 @@ class puppet (
   Array[Enum['cron', 'service', 'systemd.timer', 'none']] $unavailable_runmodes = $puppet::params::unavailable_runmodes,
   Optional[String] $cron_cmd = $puppet::params::cron_cmd,
   Optional[String] $systemd_cmd = $puppet::params::systemd_cmd,
+  Optional[Integer[0]] $systemd_randomizeddelaysec = $puppet::params::systemd_randomizeddelaysec,
   Boolean $agent_noop = $puppet::params::agent_noop,
   Boolean $show_diff = $puppet::params::show_diff,
   Optional[Stdlib::HTTPUrl] $module_repository = $puppet::params::module_repository,

@@ -18,6 +18,8 @@ class puppet::agent::service::systemd (
           default => $::puppet::systemd_cmd,
         }
 
+        $randomizeddelaysec = $::puppet::systemd_randomizeddelaysec
+
         file { "/etc/systemd/system/${::puppet::systemd_unit_name}.timer":
           content => template('puppet/agent/systemd.puppet-run.timer.erb'),
           notify  => [
