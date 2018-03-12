@@ -68,6 +68,9 @@ describe 'puppet::agent::service::systemd' do
             should contain_file('/etc/systemd/system/puppet-run.timer').
               with_content(/.*OnCalendar\=\*-\*-\* \*\:10,40:00.*/)
 
+            should contain_file('/etc/systemd/system/puppet-run.timer').
+              with_content(/.*RandomizedDelaySec\=0.*/)
+
             should contain_file('/etc/systemd/system/puppet-run.service').
               with_content(/.*ExecStart=#{bindir}\/puppet agent --config #{confdir}\/puppet.conf --onetime --no-daemonize.*/)
 
