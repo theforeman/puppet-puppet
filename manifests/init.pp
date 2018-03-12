@@ -114,7 +114,8 @@
 #                                           set 'systemd.timer'.
 #
 # $systemd_randomizeddelaysec::             Adds a random delay between 0 and this value
-#                                           (in seconds) to the timer.
+#                                           (in seconds) to the timer. Only relevant when
+#                                           runmode is 'systemd.timer'.
 #
 # $show_diff::                              Show and report changed files with diff output
 #
