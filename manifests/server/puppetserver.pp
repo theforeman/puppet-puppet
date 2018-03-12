@@ -157,6 +157,11 @@ class puppet::server::puppetserver (
         "set JAVA_BIN ${java_bin}",
       ]
     }
+
+    if $::operatingsystem == 'ubuntu' and $::operatingsystemrelease == '16.04' {
+      contain ::puppet::server::java::security
+    }
+
     augeas { 'puppet::server::puppetserver::jvm':
       lens    => 'Shellvars.lns',
       incl    => $config,
