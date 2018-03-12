@@ -584,7 +584,7 @@ class puppet (
   Array[Enum['cron', 'service', 'systemd.timer', 'none']] $unavailable_runmodes = $puppet::params::unavailable_runmodes,
   Optional[String] $cron_cmd = $puppet::params::cron_cmd,
   Optional[String] $systemd_cmd = $puppet::params::systemd_cmd,
-  Optional[Integer[0]] $systemd_randomizeddelaysec = $puppet::params::systemd_randomizeddelaysec,
+  Integer[0] $systemd_randomizeddelaysec = $puppet::params::systemd_randomizeddelaysec,
   Boolean $agent_noop = $puppet::params::agent_noop,
   Boolean $show_diff = $puppet::params::show_diff,
   Optional[Stdlib::HTTPUrl] $module_repository = $puppet::params::module_repository,
