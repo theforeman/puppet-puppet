@@ -199,6 +199,8 @@
 # $dir_group::                              Group of the base puppet directory, used when
 #                                           puppet::server is false.
 #
+# $report::                                 Send reports to the Puppet Master
+#
 # == puppet::server parameters
 #
 # $server::                                 Should a puppet master be installed as well as the client
