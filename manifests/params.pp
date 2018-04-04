@@ -15,6 +15,7 @@ class puppet::params {
   $splaylimit          = '1800'
   $runinterval         = 1800
   $runmode             = 'service'
+  $report              = true
 
   # Not defined here as the commands depend on module parameter "dir"
   $cron_cmd            = undef
