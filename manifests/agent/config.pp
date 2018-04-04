@@ -4,7 +4,7 @@ class puppet::agent::config inherits puppet::config {
     'classfile':         value => $::puppet::classfile;
     'localconfig':       value => '$vardir/localconfig';
     'default_schedules': value => false;
-    'report':            value => true;
+    'report':            value => $::puppet::report;
     'pluginsync':        value => $::puppet::pluginsync;
     'masterport':        value => $::puppet::port;
     'environment':       value => $::puppet::environment;
