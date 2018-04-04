@@ -29,6 +29,7 @@ describe 'puppet::agent::config' do
         end
 
         it { should contain_puppet__config__agent('certname').with(facts[:certname]) }
+        it { should contain_puppet__config__agent('report').with({'value'=>'true'}) }
       end
 
       context 'with runmode => cron', :unless => (facts[:osfamily] == 'Archlinux') do
@@ -78,6 +79,14 @@ describe 'puppet::agent::config' do
         end
 
         it { should_not contain_puppet__config__agent('certname') }
+      end
+
+      context 'with report => false' do
+        let :pre_condition do
+          'class { "::puppet": report => false }'
+        end
+
+        it { should contain_puppet__config__agent('report').with({'value'=>'false'}) }
       end
     end
   end
