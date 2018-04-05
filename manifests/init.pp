@@ -12,37 +12,9 @@
 #                                           should also override $server_version since
 #                                           that defaults to $version.
 #
-# $user::                                   Override the name of the puppet user.
-#
-# $group::                                  Override the name of the puppet group.
-#
-# $dir::                                    Override the puppet directory.
-#
-# $codedir::                                Override the puppet code directory.
-#
-# $vardir::                                 Override the puppet var directory.
-#
-# $logdir::                                 Override the log directory.
-#
-# $rundir::                                 Override the PID directory.
-#
-# $ssldir::                                 Override where SSL certificates are kept.
-#
-# $sharedir::                               Override the system data directory.
-#
 # $manage_packages::                        Should this module install packages or not.
 #                                           Can also install only server packages with value
 #                                           of 'server' or only agent packages with 'agent'.
-#
-# $package_provider::                       The provider used to install the agent.
-#                                           Defaults to chocolatey on Windows
-#                                           Defaults to undef elsewhere
-#
-# $package_source::                         The location of the file to be used by the
-#                                           agent's package resource.
-#                                           Defaults to undef. If 'windows' or 'msi' are
-#                                           used as the provider then this setting is
-#                                           required.
 #
 # $port::                                   Override the port of the master we connect to.
 #
@@ -100,13 +72,6 @@
 #
 # $runmode::                                Select the mode to setup the puppet agent.
 #
-# $unavailable_runmodes::                   Runmodes that are not available for the
-#                                           current system. This module will not try
-#                                           to disable these modes. Default is []
-#                                           on Linux, ['cron', 'systemd.timer'] on
-#                                           Windows and ['systemd.timer'] on other
-#                                           systems.
-#
 # $cron_cmd::                               Specify command to launch when runmode is
 #                                           set 'cron'.
 #
@@ -133,13 +98,53 @@
 # $dns_alt_names::                          Use additional DNS names when generating a
 #                                           certificate.  Defaults to an empty Array.
 #
-# $classfile::                              The file in which puppet agent stores a list
-#                                           of the classes associated with the retrieved
-#                                           configuration.
-#
 # $hiera_config::                           The hiera configuration file.
 #
 # $syslogfacility::                         Facility name to use when logging to syslog
+#
+# $use_srv_records::                        Whether DNS SRV records will be used to resolve
+#                                           the Puppet master
+#
+# $srv_domain::                             Search domain for SRV records
+#
+# $additional_settings::                    A hash of additional main settings.
+#
+# == Advanced puppet parameters
+#
+# $user::                                   Override the name of the puppet user.
+#
+# $group::                                  Override the name of the puppet group.
+#
+# $dir::                                    Override the puppet directory.
+#
+# $codedir::                                Override the puppet code directory.
+#
+# $vardir::                                 Override the puppet var directory.
+#
+# $logdir::                                 Override the log directory.
+#
+# $rundir::                                 Override the PID directory.
+#
+# $ssldir::                                 Override where SSL certificates are kept.
+#
+# $sharedir::                               Override the system data directory.
+#
+# $package_provider::                       The provider used to install the agent.
+#                                           Defaults to chocolatey on Windows
+#                                           Defaults to undef elsewhere
+#
+# $package_source::                         The location of the file to be used by the
+#                                           agent's package resource.
+#                                           Defaults to undef. If 'windows' or 'msi' are
+#                                           used as the provider then this setting is
+#                                           required.
+#
+# $unavailable_runmodes::                   Runmodes that are not available for the
+#                                           current system. This module will not try
+#                                           to disable these modes. Default is []
+#                                           on Linux, ['cron', 'systemd.timer'] on
+#                                           Windows and ['systemd.timer'] on other
+#                                           systems.
 #
 # $auth_template::                          Use a custom template for the auth
 #                                           configuration.
@@ -153,16 +158,15 @@
 #
 # $pluginfactsource::                       URL to retrieve Puppet facts from during pluginsync
 #
-# $additional_settings::                    A hash of additional main settings.
+# $classfile::                              The file in which puppet agent stores a list
+#                                           of the classes associated with the retrieved
+#                                           configuration.
 #
 # == puppet::agent parameters
 #
 # $agent::                                  Should a puppet agent be installed
 #
 # $agent_noop::                             Run the agent in noop mode.
-#
-# $client_package::                         Install a custom package to provide
-#                                           the puppet client
 #
 # $puppetmaster::                           Hostname of your puppetmaster (server
 #                                           directive in puppet.conf)
@@ -171,21 +175,28 @@
 #
 # $postrun_command::                        A command which gets excuted after each Puppet run
 #
-# $systemd_unit_name::                      The name of the puppet systemd units.
-#
-# $service_name::                           The name of the puppet agent service.
-#
-# $agent_restart_command::                  The command which gets excuted on puppet service restart
-#
 # $environment::                            Default environment of the Puppet agent
 #
 # $agent_additional_settings::              A hash of additional agent settings.
 #                                           Example: {stringify_facts => true}
 #
-# $remove_lock::                            Remove the agent lock when running.
-#
 # $client_certname::                        The node's certificate name, and the unique
 #                                           identifier it uses when requesting catalogs.
+#
+# $report::                                 Send reports to the Puppet Master
+#
+# == advanced agent parameters
+#
+# $service_name::                           The name of the puppet agent service.
+#
+# $agent_restart_command::                  The command which gets excuted on puppet service restart
+#
+# $client_package::                         Install a custom package to provide
+#                                           the puppet client
+#
+# $systemd_unit_name::                      The name of the puppet systemd units.
+#
+# $remove_lock::                            Remove the agent lock when running.
 #
 # $dir_owner::                              Owner of the base puppet directory, used when
 #                                           puppet::server is false.
@@ -193,17 +204,9 @@
 # $dir_group::                              Group of the base puppet directory, used when
 #                                           puppet::server is false.
 #
-# $report::                                 Send reports to the Puppet Master
-#
 # == puppet::server parameters
 #
 # $server::                                 Should a puppet master be installed as well as the client
-#
-# $server_user::                            Name of the puppetmaster user.
-#
-# $server_group::                           Name of the puppetmaster group.
-#
-# $server_dir::                             Puppet configuration directory
 #
 # $server_ip::                              Bind ip address of the puppetmaster
 #
@@ -218,27 +221,10 @@
 #                                           Defaults to false. Note unless you are using an external CA. It is recommended
 #                                           to set this to true. See $server_ca_crl_sync to enable syncing from CA Puppet Master
 #
-# $server_http::                            Should the puppet master listen on HTTP as well as HTTPS.
-#                                           Useful for load balancer or reverse proxy scenarios. Note that
-#                                           the HTTP puppet master denies access from all clients by default,
-#                                           allowed clients must be specified with $server_http_allow.
-#
-# $server_http_port::                       Puppet master HTTP port; defaults to 8139.
-#
-# $server_http_allow::                      Array of allowed clients for the HTTP puppet master. Passed
-#                                           to Apache's 'Allow' directive.
-#
 # $server_reports::                         List of report types to include on the puppetmaster
 #
 # $server_implementation::                  Puppet master implementation, either "master" (traditional
 #                                           Ruby) or "puppetserver" (JVM-based)
-#
-# $server_passenger::                       If set to true, we will configure apache with
-#                                           passenger. If set to false, we will enable the
-#                                           default puppetmaster service unless
-#                                           service_fallback is set to false. See 'Advanced
-#                                           server parameters' for more information.
-#                                           Only applicable when server_implementation is "master".
 #
 # $server_external_nodes::                  External nodes classifier executable
 #
@@ -261,11 +247,6 @@
 #
 # $server_environments_mode::               Environments directory mode.
 #
-# $server_envs_dir::                        Directory that holds puppet environments
-#
-# $server_envs_target::                     Indicates that $envs_dir should be
-#                                           a symbolic link to this target
-#
 # $server_common_modules_path::             Common modules paths (only when
 #                                           $server_git_repo_path and $server_dynamic_environments
 #                                           are false)
@@ -281,21 +262,9 @@
 # $server_git_branch_map::                  Git branch to puppet env mapping for the
 #                                           default post receive hook
 #
-# $server_post_hook_content::               Which template to use for git post hook
-#
-# $server_post_hook_name::                  Name of a git hook
-#
 # $server_storeconfigs_backend::            Do you use storeconfigs? (note: not required)
 #                                           false if you don't, "active_record" for 2.X
 #                                           style db, "puppetdb" for puppetdb
-#
-# $server_app_root::                        Directory where the application lives
-#
-# $server_ssl_dir::                         SSL directory
-#
-# $server_package::                         Custom package name for puppet master
-#
-# $server_version::                         Custom package version for puppet master
 #
 # $server_certname::                        The name to use when handling certificates.
 #
@@ -305,26 +274,43 @@
 # $server_additional_settings::             A hash of additional settings.
 #                                           Example: {trusted_node_data => true, ordering => 'manifest'}
 #
-# $server_rack_arguments::                  Arguments passed to rack app ARGV in addition to --confdir and
-#                                           --vardir.  The default is an empty array.
-#
 # $server_puppetdb_host::                   PuppetDB host
 #
 # $server_puppetdb_port::                   PuppetDB port
 #
 # $server_puppetdb_swf::                    PuppetDB soft_write_failure
 #
-# $server_parser::                          Sets the parser to use. Valid options are 'current' or 'future'.
-#                                           Defaults to 'current'.
-#
 # === Advanced server parameters:
 #
 # $server_manage_user::                     Whether to manage the server user resource
+#
+# $server_user::                            Name of the puppetmaster user.
+#
+# $server_group::                           Name of the puppetmaster group.
+#
+# $server_dir::                             Puppet configuration directory
+#
+# $server_http::                            Should the puppet master listen on HTTP as well as HTTPS.
+#                                           Useful for load balancer or reverse proxy scenarios. Note that
+#                                           the HTTP puppet master denies access from all clients by default,
+#                                           allowed clients must be specified with $server_http_allow.
+#
+# $server_http_port::                       Puppet master HTTP port; defaults to 8139.
+#
+# $server_http_allow::                      Array of allowed clients for the HTTP puppet master. Passed
+#                                           to Apache's 'Allow' directive.
 #
 # $server_httpd_service::                   Apache/httpd service name to notify
 #                                           on configuration changes. Defaults
 #                                           to 'httpd' based on the default
 #                                           apache module included with foreman-installer.
+#
+# $server_passenger::                       If set to true, we will configure apache with
+#                                           passenger. If set to false, we will enable the
+#                                           default puppetmaster service unless
+#                                           service_fallback is set to false. See 'Advanced
+#                                           server parameters' for more information.
+#                                           Only applicable when server_implementation is "master".
 #
 # $server_service_fallback::                If passenger is not used, do we want to fallback
 #                                           to using the puppetmaster service? Set to false
@@ -370,10 +356,18 @@
 #
 # $server_environment_timeout::             Timeout for cached compiled catalogs (10s, 5m, ...)
 #
+# $server_envs_dir::                        Directory that holds puppet environments
+#
+# $server_envs_target::                     Indicates that $envs_dir should be
+#                                           a symbolic link to this target
+#
 # $server_ca_proxy::                        The actual server that handles puppet CA.
 #                                           Setting this to anything non-empty causes
 #                                           the apache vhost to set up a proxy for all
 #                                           certificates pointing to the value.
+#
+# $server_rack_arguments::                  Arguments passed to rack app ARGV in addition to --confdir and
+#                                           --vardir.  The default is an empty array.
 #
 # $server_jvm_java_bin::                    Set the default java to use.
 #
@@ -409,6 +403,15 @@
 # $server_default_manifest_content::        A string to set the content of the default_manifest
 #                                           If set to '' it will not manage the file
 #
+# $server_app_root::                        Directory where the application lives. Only relevant
+#                                           for the rack-based service
+#
+# $server_package::                         Custom package name for puppet master
+#
+# $server_version::                         Custom package version for puppet master
+#
+# $server_ssl_dir::                         SSL directory
+#
 # $server_ssl_dir_manage::                  Toggle if ssl_dir should be added to the [master]
 #                                           configuration section. This is necessary to
 #                                           disable in case CA is delegated to a separate instance
@@ -440,7 +443,7 @@
 #                                           JRuby from the pool. (Puppetserver 5.x only)
 #                                           Defaults to 0 (disabled) for Puppetserver >= 5.0
 #
-# $server_max_retry_delay::                 Sets the upper limit for the random sleep set as a Retry-After header on 
+# $server_max_retry_delay::                 Sets the upper limit for the random sleep set as a Retry-After header on
 #                                           503 responses returned when max-queued-requests is enabled. (Puppetserver 5.x only)
 #                                           Defaults to 1800 for Puppetserver >= 5.0
 #
@@ -478,6 +481,10 @@
 #
 # $server_check_for_updates::               Should the puppetserver phone home to check for available updates?
 #                                           Defaults to true
+#
+# $server_post_hook_content::               Which template to use for git post hook
+#
+# $server_post_hook_name::                  Name of a git hook
 #
 # $server_environment_class_cache_enabled:: Enable environment class cache in conjunction with the use of the
 #                                           environment_classes API.
@@ -519,6 +526,10 @@
 #
 # $server_compile_mode::                    Used to control JRuby's "CompileMode", which may improve performance.
 #                                           Defaults to undef (off).
+#
+# $server_parser::                          Sets the parser to use. Valid options are 'current' or 'future'.
+#                                           Defaults to 'current'.
+#
 # === Usage:
 #
 # * Simple usage:
