@@ -87,13 +87,6 @@ wrapper classes or even your ENC (if it supports param classes). For example:
       server_git_repo => true
     }
 
-    # You need need your own template for puppet.conf?
-    class { '::puppet':
-      agent_template  => 'puppetagent/puppet.conf.core.erb',
-      server          => true,
-      server_template => 'puppetserver/puppet.conf.master.erb',
-    }
-
     # Maybe you're using gitolite, new hooks, and a different port?
     class { '::puppet':
       server                   => true

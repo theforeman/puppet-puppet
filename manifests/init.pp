@@ -144,9 +144,6 @@
 # $auth_template::                          Use a custom template for the auth
 #                                           configuration.
 #
-# $main_template::                          Use a custom template for the main puppet
-#                                           configuration.
-#
 # $use_srv_records::                        Whether DNS SRV records will be used to resolve
 #                                           the Puppet master
 #
@@ -163,9 +160,6 @@
 # $agent::                                  Should a puppet agent be installed
 #
 # $agent_noop::                             Run the agent in noop mode.
-#
-# $agent_template::                         Use a custom template for the agent puppet
-#                                           configuration.
 #
 # $client_package::                         Install a custom package to provide
 #                                           the puppet client
@@ -245,12 +239,6 @@
 #                                           Only applicable when server_implementation is "master".
 #
 # $server_external_nodes::                  External nodes classifier executable
-#
-# $server_template::                        Which template should be used for master
-#                                           configuration
-#
-# $server_main_template::                   Which template should be used for master
-#                                           related configuration in the [main] section
 #
 # $server_git_repo::                        Use git repository as a source of modules
 #
@@ -600,8 +588,6 @@ class puppet (
   Optional[String] $agent_restart_command = $puppet::params::agent_restart_command,
   String $classfile = $puppet::params::classfile,
   String $hiera_config = $puppet::params::hiera_config,
-  String $main_template = $puppet::params::main_template,
-  String $agent_template = $puppet::params::agent_template,
   String $auth_template = $puppet::params::auth_template,
   Boolean $allow_any_crl_auth = $puppet::params::allow_any_crl_auth,
   Array[String] $auth_allowed = $puppet::params::auth_allowed,
@@ -644,8 +630,6 @@ class puppet (
   Optional[String] $server_passenger_ruby = $puppet::params::server_passenger_ruby,
   String $server_httpd_service = $puppet::params::server_httpd_service,
   Variant[Undef, String[0], Stdlib::Absolutepath] $server_external_nodes = $puppet::params::server_external_nodes,
-  String $server_template = $puppet::params::server_template,
-  String $server_main_template = $puppet::params::server_main_template,
   Array[String] $server_cipher_suites = $puppet::params::server_cipher_suites,
   Optional[String] $server_config_version = $puppet::params::server_config_version,
   Integer[0] $server_connect_timeout = $puppet::params::server_connect_timeout,

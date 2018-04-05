@@ -7,7 +7,6 @@ class puppet::config(
   $ca_port             = $::puppet::ca_port,
   $dns_alt_names       = $::puppet::dns_alt_names,
   $listen_to           = $::puppet::listen_to,
-  $main_template       = $::puppet::main_template,
   $module_repository   = $::puppet::module_repository,
   $pluginsource        = $::puppet::pluginsource,
   $pluginfactsource    = $::puppet::pluginfactsource,
