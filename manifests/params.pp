@@ -53,6 +53,8 @@ class puppet::params {
   $aio_package      = ($::osfamily == 'Windows' or $::rubysitedir =~ /\/opt\/puppetlabs\/puppet/)
   $deb_naio_package = ($::osfamily == 'Debian')
 
+  $systemd_randomizeddelaysec = 0
+
   case $::osfamily {
     'Windows' : {
       # Windows prefixes normal paths with the Data Directory's path and leaves 'puppet' off the end
