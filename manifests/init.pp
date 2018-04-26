@@ -47,9 +47,9 @@
 # $autosign::                               If set to a boolean, autosign is enabled or disabled
 #                                           for all incoming requests. Otherwise this has to be
 #                                           set to the full file path of an autosign.conf file or
-#                                           an autosign script. If this is set to a script, make
-#                                           sure that script considers the content of autosign.conf
-#                                           as otherwise Foreman functionality might be broken.
+#                                           an autosign script. Do not change if you want to use
+#                                           foreman's default token verification. The script will
+#                                           be provided by puppet-foreman_proxy for PuppetCAs.
 #
 # $autosign_entries::                       A list of certnames or domain name globs
 #                                           whose certificate requests will automatically be signed.
