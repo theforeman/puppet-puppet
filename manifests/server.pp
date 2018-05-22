@@ -427,7 +427,7 @@ class puppet::server(
   String $jvm_config = $::puppet::server_jvm_config,
   Pattern[/^[0-9]+[kKmMgG]$/] $jvm_min_heap_size = $::puppet::server_jvm_min_heap_size,
   Pattern[/^[0-9]+[kKmMgG]$/] $jvm_max_heap_size = $::puppet::server_jvm_max_heap_size,
-  String $jvm_extra_args = $::puppet::server_jvm_extra_args,
+  Variant[String,Array[String]] $jvm_extra_args = $::puppet::server_jvm_extra_args,
   Optional[String] $jvm_cli_args = $::puppet::server_jvm_cli_args,
   Optional[Stdlib::Absolutepath] $jruby_gem_home = $::puppet::server_jruby_gem_home,
   Integer[1] $max_active_instances = $::puppet::server_max_active_instances,
