@@ -18,6 +18,7 @@
 **Fixed bugs:**
 
 - Use the correct Stdlib::HTTPUrl [\#584](https://github.com/theforeman/puppet-puppet/pull/584) ([ekohl](https://github.com/ekohl))
+- Allow arrays for `server_jvm_extra_args` parameter [\#596](https://github.com/theforeman/puppet-puppet/pull/596) ([alexjfisher](https://github.com/alexjfisher))
 
 **Merged pull requests:**
 
