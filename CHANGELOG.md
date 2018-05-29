@@ -1,5 +1,32 @@
 # Changelog
 
+## [9.0.0](https://github.com/theforeman/puppet-puppet/tree/9.0.0) (2018-05-07)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/8.2.0...9.0.0)
+
+**Breaking changes:**
+
+- Remove unused \_template options [\#588](https://github.com/theforeman/puppet-puppet/pull/588) ([ekohl](https://github.com/ekohl))
+
+**Implemented enhancements:**
+
+- adding support for Amazon Linux [\#590](https://github.com/theforeman/puppet-puppet/pull/590) ([RobReus](https://github.com/RobReus))
+- Allow reports to be disabled [\#587](https://github.com/theforeman/puppet-puppet/pull/587) ([sanyu](https://github.com/sanyu))
+- Add systemd\_randomizeddelaysec [\#585](https://github.com/theforeman/puppet-puppet/pull/585) ([jcharaoui](https://github.com/jcharaoui))
+- Allowing the package\_source to be an Httpurl [\#582](https://github.com/theforeman/puppet-puppet/pull/582) ([MAXxATTAXx](https://github.com/MAXxATTAXx))
+
+**Fixed bugs:**
+
+- Use the correct Stdlib::HTTPUrl [\#584](https://github.com/theforeman/puppet-puppet/pull/584) ([ekohl](https://github.com/ekohl))
+- Allow arrays for `server_jvm_extra_args` parameter [\#596](https://github.com/theforeman/puppet-puppet/pull/596) ([alexjfisher](https://github.com/alexjfisher))
+
+**Merged pull requests:**
+
+- Move some settings into an advanced section [\#589](https://github.com/theforeman/puppet-puppet/pull/589) ([ekohl](https://github.com/ekohl))
+- Remove duplicate with ca\_port test [\#583](https://github.com/theforeman/puppet-puppet/pull/583) ([ekohl](https://github.com/ekohl))
+- permit puppetlabs-apache 3.x [\#581](https://github.com/theforeman/puppet-puppet/pull/581) ([mmoll](https://github.com/mmoll))
+- Cosmetic fix to metadata.json [\#580](https://github.com/theforeman/puppet-puppet/pull/580) ([alexjfisher](https://github.com/alexjfisher))
+
 ## [8.2.0](https://github.com/theforeman/puppet-puppet/tree/8.2.0) (2018-01-25)
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/8.1.0...8.2.0)
 
