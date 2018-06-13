@@ -1,5 +1,13 @@
 # Changelog
 
+## [9.0.1](https://github.com/theforeman/puppet-puppet/tree/9.0.1) (2018-06-13)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/9.0.0...9.0.1)
+
+**Fixed bugs:**
+
+- Support ssl-protocols option for puppetserver configuration [\#598](https://github.com/theforeman/puppet-puppet/pull/598) ([stbenjam](https://github.com/stbenjam))
+
 ## [9.0.0](https://github.com/theforeman/puppet-puppet/tree/9.0.0) (2018-05-07)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/8.2.0...9.0.0)
