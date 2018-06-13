@@ -16,4 +16,6 @@ webserver: {
 <%- if scope.lookupvar('puppet::server::ca') -%>
     ssl-cert-chain: <%= scope.lookupvar('puppet::server::ssl_chain') %>
 <%- end -%>
+    ssl-protocols: <%= scope.lookupvar('puppet::server::ssl_protocols') %>
+    cipher-suites: <%= scope.lookupvar('puppet::server::cipher_suites') %>
 }
