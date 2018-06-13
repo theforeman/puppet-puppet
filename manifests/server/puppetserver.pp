@@ -585,6 +585,8 @@ class puppet::server::puppetserver (
     'webserver.ssl-key'                   => $server_ssl_cert_key,
     'webserver.ssl-ca-cert'               => $server_ssl_ca_cert,
     'webserver.idle-timeout-milliseconds' => $server_web_idle_timeout,
+    'webserver.ssl-protocols'             => $server_ssl_protocols,
+    'webserver.cipher-suites'             => $server_cipher_suites,
   }
 
   $webserver_general_settings.each |$setting, $value| {

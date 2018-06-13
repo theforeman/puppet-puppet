@@ -770,6 +770,47 @@ describe 'puppet::server::config' do
         end
       end
 
+      describe 'with ssl_protocols overwritten' do
+        let :pre_condition do
+          "class {'puppet':
+              server                    => true,
+              server_implementation     => 'puppetserver',
+              server_ca                 => true,
+              server_puppetserver_dir   => '/etc/custom/puppetserver',
+              server_ssl_protocols      => ['TLSv1.1', 'TLSv1.2'],
+           }"
+        end
+
+        it 'should set the ssl protocols' do
+          should contain_hocon_setting('webserver.ssl-protocols').
+            with_path('/etc/custom/puppetserver/conf.d/webserver.conf').
+            with_setting('webserver.ssl-protocols').
+            with_value(['TLSv1.1', 'TLSv1.2']).
+            with_ensure('present')
+        end
+      end
+
+      describe 'with cipher-suites overwritten' do
+        let :pre_condition do
+          "class {'puppet':
+              server                    => true,
+              server_implementation     => 'puppetserver',
+              server_ca                 => true,
+              server_puppetserver_dir   => '/etc/custom/puppetserver',
+              server_cipher_suites      => ['TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA'],
+           }"
+        end
+
+        it 'should set the cipher suite' do
+          should contain_hocon_setting('webserver.cipher-suites').
+            with_path('/etc/custom/puppetserver/conf.d/webserver.conf').
+            with_setting('webserver.cipher-suites').
+            with_value(['TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA']).
+            with_ensure('present')
+        end
+      end
+
+
       describe 'with ssl_chain_filepath overwritten' do
         let :pre_condition do
           "class {'puppet':
