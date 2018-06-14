@@ -1,5 +1,10 @@
 # Changelog
 
+# 7.1.4
+
+* Other changes and fixes:
+    * Support ssl-protocols option for puppetserver configuration
+
 # 7.1.3
 
 * Other changes and fixes:
