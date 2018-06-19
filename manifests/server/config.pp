@@ -124,10 +124,12 @@ class puppet::server::config inherits puppet::config {
     mode   => '0750',
   }
 
-  # Create Foreman share dir which does not depend on Puppet version
-  exec { 'mkdir -p /usr/share/puppet/modules':
-    creates => '/usr/share/puppet/modules',
-    path    => ['/usr/bin', '/bin'],
+  if '/usr/share/puppet/modules' in $puppet::server::common_modules_path {
+    # Create Foreman share dir which does not depend on Puppet version
+    exec { 'mkdir -p /usr/share/puppet/modules':
+      creates => '/usr/share/puppet/modules',
+      path    => ['/usr/bin', '/bin'],
+    }
   }
 
   ## SSL and CA configuration
