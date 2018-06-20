@@ -142,13 +142,11 @@ describe 'puppet::server::config' do
           should contain_puppet__config__master('ca').with({'value' => 'true'})
           should contain_puppet__config__master('ssldir').with({'value' => "#{ssldir}"})
           should contain_puppet__config__master('parser').with({'value' => 'current'})
-          should contain_puppet__config__master("autosign").with({'value' => "#{etcdir}\/autosign.conf \{ mode = 0664 \}"})
+          should contain_puppet__config__master("autosign").with_value("/usr/libexec/puppet_signscript.rb { mode = 0770 }")
 
           should contain_concat(conf_file)
 
           should_not contain_puppet__config__master('storeconfigs')
-
-          should contain_file("#{etcdir}/autosign.conf")
         end
 
         it 'should not set configtimeout' do
@@ -191,12 +189,14 @@ describe 'puppet::server::config' do
       describe "when autosign_entries is not set" do
         let :pre_condition do
           "class {'puppet':
-              server  => true,
+              server        => true,
+              autosign      => \"#{confdir}/autosign.conf\",
+              autosign_mode => '0664',
            }"
         end
 
         it 'should contain autosign.conf with out content set' do
-          should contain_file("#{confdir}/autosign.conf")
+          should_not contain_file("#{confdir}/autosign.conf")
           should_not contain_file("#{confdir}/autosign.conf").with_content(/# Managed by Puppet/)
           should_not contain_file("#{confdir}/autosign.conf").with_content(/foo.bar/)
         end
@@ -207,6 +207,8 @@ describe 'puppet::server::config' do
           "class {'puppet':
               server           => true,
               autosign_entries => ['foo.bar'],
+              autosign         => \"#{confdir}/autosign.conf\",
+              autosign_mode    => '0664',
            }"
         end
 
@@ -221,6 +223,8 @@ describe 'puppet::server::config' do
         let :pre_condition do
           "class {'puppet':
               server           => true,
+              autosign         => \"#{confdir}/autosign.conf\",
+              autosign_mode    => '0664',
               autosign_content => 'foo.bar',
               autosign_entries => ['foo.bar'],
            }"
@@ -235,6 +239,8 @@ describe 'puppet::server::config' do
               server           => true,
               autosign_source  => 'puppet:///foo/bar',
               autosign_entries => ['foo.bar'],
+              autosign         => \"#{confdir}/autosign.conf\",
+              autosign_mode    => '0664',
            }"
         end
 

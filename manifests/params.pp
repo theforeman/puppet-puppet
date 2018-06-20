@@ -154,9 +154,9 @@ class puppet::params {
 
   $configtimeout = undef
 
-  $autosign         = "${dir}/autosign.conf"
+  $autosign         = '/usr/libexec/puppet_signscript.rb'
   $autosign_entries = []
-  $autosign_mode    = '0664'
+  $autosign_mode    = '0770'
   $autosign_content = undef
   $autosign_source  = undef
 

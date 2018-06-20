@@ -198,13 +198,15 @@ class puppet::server::config inherits puppet::config {
     } else {
       $autosign_content = undef
     }
-    file { $::puppet::server::autosign:
-      ensure  => file,
-      owner   => $::puppet::server::user,
-      group   => $::puppet::server::group,
-      mode    => $::puppet::server::autosign_mode,
-      content => $autosign_content,
-      source  => $::puppet::server::autosign_source,
+    if $autosign_content != undef or $::puppet::server::autosign_source != undef {
+      file { $::puppet::server::autosign:
+        ensure  => file,
+        owner   => $::puppet::server::user,
+        group   => $::puppet::server::group,
+        mode    => $::puppet::server::autosign_mode,
+        content => $autosign_content,
+        source  => $::puppet::server::autosign_source,
+      }
     }
   }
 
