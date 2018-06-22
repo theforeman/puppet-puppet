@@ -110,7 +110,7 @@ describe 'puppet::server::env' do
 
           it 'should set config_version in environment.conf' do
             should contain_file("#{codedir}/environments/foo/environment.conf").
-              with_content(%r{\Aconfig_version\s+= bar\n\z})
+              with_content(%r{^config_version\s+= bar\n$})
           end
         end
 
@@ -150,7 +150,7 @@ describe 'puppet::server::env' do
 
           it 'should set config_version in environment.conf' do
             should contain_file("#{codedir}/environments/foo/environment.conf").
-              with_content(%r{\Aconfig_version\s+= bar\n\z})
+              with_content(%r{^config_version\s+= bar\n$})
           end
         end
 
@@ -202,7 +202,7 @@ describe 'puppet::server::env' do
 
           it 'should set modulepath in environment.conf' do
             should contain_file("#{codedir}/environments/foo/environment.conf").
-              with_content(%r{\Amodulepath\s+= /etc/puppet/example/modules:/etc/puppet/vendor/modules\n})
+              with_content(%r{^modulepath\s+= /etc/puppet/example/modules:/etc/puppet/vendor/modules\n})
           end
         end
       end
@@ -273,7 +273,7 @@ describe 'puppet::server::env' do
 
           it 'should set manifest in environment.conf' do
             should contain_file("#{codedir}/environments/foo/environment.conf").
-              with_content(%r{\Amanifest\s+= manifests/local.pp\n\z})
+              with_content(%r{^manifest\s+= manifests/local.pp\n$})
           end
         end
       end
@@ -292,7 +292,7 @@ describe 'puppet::server::env' do
 
           it 'should set environment_timeout in environment.conf' do
             should contain_file("#{codedir}/environments/foo/environment.conf").
-              with_content(%r{\Aenvironment_timeout\s+= unlimited\n\z})
+              with_content(%r{^environment_timeout\s+= unlimited\n$})
           end
         end
       end
