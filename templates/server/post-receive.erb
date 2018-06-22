@@ -1,7 +1,7 @@
-<% @template_header = ''
-ERB.new(File.read(File.expand_path("../_header.erb",File.dirname(file))), nil, nil, "@template_header").result(binding) -%>
 #!/usr/bin/env ruby
-<%= @template_header %>
+#
+# Managed by Puppet
+#
 
 require 'fileutils'
 require 'etc'
