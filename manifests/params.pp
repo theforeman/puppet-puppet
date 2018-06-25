@@ -280,6 +280,7 @@ class puppet::params {
   # Override these if you need your own hooks
   $server_post_hook_content   = 'puppet/server/post-receive.erb'
   $server_post_hook_name      = 'post-receive'
+  $server_custom_trusted_oid_mapping = undef
 
   # PuppetDB config
   $server_puppetdb_host = undef
