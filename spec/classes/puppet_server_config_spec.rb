@@ -159,6 +159,10 @@ describe 'puppet::server::config' do
           should_not contain_class('puppetdb')
           should_not contain_class('puppetdb::master::config')
         end
+
+        it 'should not configure custom_trusted_oid_mapping.yaml' do
+          should_not contain_file('#{confdir}/custom_trusted_oid_mapping.yaml')
+        end
       end
 
       describe "when autosign => true" do
@@ -812,6 +816,35 @@ describe 'puppet::server::config' do
         it 'should use the server_ssl_chain_filepath file' do
           should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
             with_content(/ssl-cert-chain: \/etc\/example\/certchain.pem/)
+        end
+      end
+
+      describe 'with server_custom_trusted_oid_mapping overwritten' do
+        let :pre_condition do
+          "class {'puppet':
+              server                            => true,
+              server_custom_trusted_oid_mapping => {
+                '1.3.6.1.4.1.34380.1.2.1.1' => {
+                  shortname => 'myshortname',
+                  longname  => 'My Long Name',
+                },
+                '1.3.6.1.4.1.34380.1.2.1.2' => {
+                  shortname => 'myothershortname',
+                },
+              }
+           }"
+        end
+
+        it 'should have a configured custom_trusted_oid_mapping.yaml' do
+          verify_exact_contents(catalogue, "#{confdir}/custom_trusted_oid_mapping.yaml", [
+            '---',
+            'oid_mapping:',
+            '  1.3.6.1.4.1.34380.1.2.1.1:',
+            '    shortname: myshortname',
+            '    longname: My Long Name',
+            '  1.3.6.1.4.1.34380.1.2.1.2:',
+            '    shortname: myothershortname',
+          ])
         end
       end
 

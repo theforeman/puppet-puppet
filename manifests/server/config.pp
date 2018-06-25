@@ -150,6 +150,19 @@ class puppet::server::config inherits puppet::config {
     }
   }
 
+  if $puppet::server::custom_trusted_oid_mapping {
+    $_custom_trusted_oid_mapping = {
+      oid_mapping => $puppet::server::custom_trusted_oid_mapping,
+    }
+    file { "${::puppet::dir}/custom_trusted_oid_mapping.yaml":
+      ensure  => file,
+      owner   => 'root',
+      group   => $::puppet::params::root_group,
+      mode    => '0644',
+      content => to_yaml($_custom_trusted_oid_mapping),
+    }
+  }
+
   # If the ssl dir is not the default dir, it needs to be created before running
   # the generate ca cert or it will fail.
   exec {'puppet_server_config-create_ssl_dir':

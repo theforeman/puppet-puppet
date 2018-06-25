@@ -473,6 +473,9 @@
 #                                           can query the certificate-status endpoint
 #                                           Defaults to [ '127.0.0.1', '::1', $::ipaddress ]
 #
+# $server_custom_trusted_oid_mapping::      A hash of custom trusted oid mappings. Defaults to undef
+#                                           Example: { 1.3.6.1.4.1.34380.1.2.1.1 => { shortname => 'myshortname' } }
+#
 # $server_admin_api_whitelist::             The whitelist of clients that
 #                                           can query the puppet-admin-api endpoint
 #                                           Defaults to [ '127.0.0.1', '::1', $::ipaddress ]
@@ -632,6 +635,7 @@ class puppet (
   Optional[Boolean] $server_crl_enable = $puppet::params::server_crl_enable,
   Boolean $server_ca_auth_required = $puppet::params::server_ca_auth_required,
   Array[String] $server_ca_client_whitelist = $puppet::params::server_ca_client_whitelist,
+  Optional[Puppet::Custom_trusted_oid_mapping] $server_custom_trusted_oid_mapping = $puppet::params::server_custom_trusted_oid_mapping,
   Boolean $server_http = $puppet::params::server_http,
   Integer $server_http_port = $puppet::params::server_http_port,
   Array[String] $server_http_allow = $puppet::params::server_http_allow,

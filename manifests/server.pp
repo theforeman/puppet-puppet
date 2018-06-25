@@ -4,331 +4,334 @@
 #
 # == puppet::server parameters
 #
-# $autosign::                  If set to a boolean, autosign is enabled or disabled
-#                              for all incoming requests. Otherwise this has to be
-#                              set to the full file path of an autosign.conf file or
-#                              an autosign script. If this is set to a script, make
-#                              sure that script considers the content of autosign.conf
-#                              as otherwise Foreman functionality might be broken.
+# $autosign::                          If set to a boolean, autosign is enabled or disabled
+#                                      for all incoming requests. Otherwise this has to be
+#                                      set to the full file path of an autosign.conf file or
+#                                      an autosign script. If this is set to a script, make
+#                                      sure that script considers the content of autosign.conf
+#                                      as otherwise Foreman functionality might be broken.
 #
-# $autosign_entries::          A list of certnames or domain name globs
-#                              whose certificate requests will automatically be signed.
-#                              Defaults to an empty Array.
+# $autosign_entries::                  A list of certnames or domain name globs
+#                                      whose certificate requests will automatically be signed.
+#                                      Defaults to an empty Array.
 #
-# $autosign_mode::             mode of the autosign file/script
+# $autosign_mode::                     mode of the autosign file/script
 #
-# $autosign_content::          If set, write the autosign file content
-#                              using the value of this parameter.
-#                              Cannot be used at the same time as autosign_entries
-#                              For example, could be a string, or
-#                              file('another_module/autosign.sh') or
-#                              template('another_module/autosign.sh.erb')
+# $autosign_content::                  If set, write the autosign file content
+#                                      using the value of this parameter.
+#                                      Cannot be used at the same time as autosign_entries
+#                                      For example, could be a string, or
+#                                      file('another_module/autosign.sh') or
+#                                      template('another_module/autosign.sh.erb')
 #
-# $autosign_source::           If set, use this as the source for the autosign file,
-#                              instead of autosign_content.
+# $autosign_source::                   If set, use this as the source for the autosign file,
+#                                      instead of autosign_content.
 #
-# $hiera_config::              The hiera configuration file.
+# $hiera_config::                      The hiera configuration file.
 #
-# $manage_user::               Whether to manage the puppet user resource
+# $manage_user::                       Whether to manage the puppet user resource
 #
-# $user::                      Name of the puppetmaster user.
+# $user::                              Name of the puppetmaster user.
 #
-# $group::                     Name of the puppetmaster group.
+# $group::                             Name of the puppetmaster group.
 #
-# $dir::                       Puppet configuration directory
+# $dir::                               Puppet configuration directory
 #
-# $ip::                        Bind ip address of the puppetmaster
+# $ip::                                Bind ip address of the puppetmaster
 #
-# $port::                      Puppet master port
+# $port::                              Puppet master port
 #
-# $ca::                        Provide puppet CA
+# $ca::                                Provide puppet CA
 #
-# $ca_crl_filepath::           Path to ca_crl file
+# $ca_crl_filepath::                   Path to ca_crl file
 #
-# $ca_crl_sync::               Sync the puppet ca crl to compile masters. Requires compile masters to
-#                              be agents of the CA master (MOM) defaults to false
+# $ca_crl_sync::                       Sync the puppet ca crl to compile masters. Requires compile masters to
+#                                      be agents of the CA master (MOM) defaults to false
 #
-# $crl_enable::                Enable CRL processing, defaults to true when $ca is true else defaults
-#                              to false
+# $crl_enable::                        Enable CRL processing, defaults to true when $ca is true else defaults
+#                                      to false
 #
-# $http::                      Should the puppet master listen on HTTP as well as HTTPS.
-#                              Useful for load balancer or reverse proxy scenarios. Note that
-#                              the HTTP puppet master denies access from all clients by default,
-#                              allowed clients must be specified with $http_allow.
+# $http::                              Should the puppet master listen on HTTP as well as HTTPS.
+#                                      Useful for load balancer or reverse proxy scenarios. Note that
+#                                      the HTTP puppet master denies access from all clients by default,
+#                                      allowed clients must be specified with $http_allow.
 #
-# $http_port::                 Puppet master HTTP port; defaults to 8139.
+# $http_port::                         Puppet master HTTP port; defaults to 8139.
 #
-# $http_allow::                Array of allowed clients for the HTTP puppet master. Passed
-#                              to Apache's 'Allow' directive.
+# $http_allow::                        Array of allowed clients for the HTTP puppet master. Passed
+#                                      to Apache's 'Allow' directive.
 #
-# $reports::                   List of report types to include on the puppetmaster
+# $reports::                           List of report types to include on the puppetmaster
 #
-# $implementation::            Puppet master implementation, either "master" (traditional
-#                              Ruby) or "puppetserver" (JVM-based)
+# $implementation::                    Puppet master implementation, either "master" (traditional
+#                                      Ruby) or "puppetserver" (JVM-based)
 #
-# $passenger::                 If set to true, we will configure apache with
-#                              passenger. If set to false, we will enable the
-#                              default puppetmaster service unless
-#                              service_fallback is set to false. See 'Advanced
-#                              server parameters' for more information.
-#                              Only applicable when server_implementation is "master".
+# $passenger::                         If set to true, we will configure apache with
+#                                      passenger. If set to false, we will enable the
+#                                      default puppetmaster service unless
+#                                      service_fallback is set to false. See 'Advanced
+#                                      server parameters' for more information.
+#                                      Only applicable when server_implementation is "master".
 #
-# $external_nodes::            External nodes classifier executable
+# $external_nodes::                    External nodes classifier executable
 #
-# $git_repo::                  Use git repository as a source of modules
+# $git_repo::                          Use git repository as a source of modules
 #
-# $dynamic_environments::      Use $environment in the modulepath
-#                              Deprecated when $directory_environments is true,
-#                              set $environments to [] instead.
+# $dynamic_environments::              Use $environment in the modulepath
+#                                      Deprecated when $directory_environments is true,
+#                                      set $environments to [] instead.
 #
-# $directory_environments::    Enable directory environments, defaulting to true
-#                              with Puppet 3.6.0 or higher
+# $directory_environments::            Enable directory environments, defaulting to true
+#                                      with Puppet 3.6.0 or higher
 #
-# $environments::              Environments to setup (creates directories).
-#                              Applies only when $dynamic_environments
-#                              is false
+# $environments::                      Environments to setup (creates directories).
+#                                      Applies only when $dynamic_environments
+#                                      is false
 #
-# $environments_owner::        The owner of the environments directory
+# $environments_owner::                The owner of the environments directory
 #
-# $environments_group::        The group owning the environments directory
+# $environments_group::                The group owning the environments directory
 #
-# $environments_mode::         Environments directory mode.
+# $environments_mode::                 Environments directory mode.
 #
-# $envs_dir::                  Directory that holds puppet environments
+# $envs_dir::                          Directory that holds puppet environments
 #
-# $envs_target::               Indicates that $envs_dir should be
-#                              a symbolic link to this target
+# $envs_target::                       Indicates that $envs_dir should be
+#                                      a symbolic link to this target
 #
-# $common_modules_path::       Common modules paths (only when
-#                              $git_repo_path and $dynamic_environments
-#                              are false)
+# $common_modules_path::               Common modules paths (only when
+#                                      $git_repo_path and $dynamic_environments
+#                                      are false)
 #
-# $git_repo_path::             Git repository path
+# $git_repo_path::                     Git repository path
 #
-# $git_repo_mode::             Git repository mode
+# $git_repo_mode::                     Git repository mode
 #
-# $git_repo_group::            Git repository group
+# $git_repo_group::                    Git repository group
 #
-# $git_repo_user::             Git repository user
+# $git_repo_user::                     Git repository user
 #
-# $git_branch_map::            Git branch to puppet env mapping for the
-#                              default post receive hook
+# $git_branch_map::                    Git branch to puppet env mapping for the
+#                                      default post receive hook
 #
-# $post_hook_content::         Which template to use for git post hook
+# $post_hook_content::                 Which template to use for git post hook
 #
-# $post_hook_name::            Name of a git hook
+# $post_hook_name::                    Name of a git hook
 #
-# $storeconfigs_backend::      Do you use storeconfigs? (note: not required)
-#                              false if you don't, "active_record" for 2.X
-#                              style db, "puppetdb" for puppetdb
+# $storeconfigs_backend::              Do you use storeconfigs? (note: not required)
+#                                      false if you don't, "active_record" for 2.X
+#                                      style db, "puppetdb" for puppetdb
 #
-# $app_root::                  Directory where the application lives
+# $app_root::                          Directory where the application lives
 #
-# $ssl_dir::                   SSL directory
+# $ssl_dir::                           SSL directory
 #
-# $package::                   Custom package name for puppet master
+# $package::                           Custom package name for puppet master
 #
-# $version::                   Custom package version for puppet master
+# $version::                           Custom package version for puppet master
 #
-# $certname::                  The name to use when handling certificates.
+# $certname::                          The name to use when handling certificates.
 #
-# $strict_variables::          if set to true, it will throw parse errors
-#                              when accessing undeclared variables.
+# $strict_variables::                  if set to true, it will throw parse errors
+#                                      when accessing undeclared variables.
 #
-# $additional_settings::       A hash of additional settings.
-#                              Example: {trusted_node_data => true, ordering => 'manifest'}
+# $additional_settings::               A hash of additional settings.
+#                                      Example: {trusted_node_data => true, ordering => 'manifest'}
 #
-# $rack_arguments::            Arguments passed to rack app ARGV in addition to --confdir and
-#                              --vardir.  The default is an empty array.
+# $rack_arguments::                    Arguments passed to rack app ARGV in addition to --confdir and
+#                                      --vardir.  The default is an empty array.
 #
-# $puppetdb_host::             PuppetDB host
+# $puppetdb_host::                     PuppetDB host
 #
-# $puppetdb_port::             PuppetDB port
+# $puppetdb_port::                     PuppetDB port
 #
-# $puppetdb_swf::              PuppetDB soft_write_failure
+# $puppetdb_swf::                      PuppetDB soft_write_failure
 #
-# $parser::                    Sets the parser to use. Valid options are 'current' or 'future'.
-#                              Defaults to 'current'.
+# $parser::                            Sets the parser to use. Valid options are 'current' or 'future'.
+#                                      Defaults to 'current'.
 #
 # === Advanced server parameters:
 #
-# $httpd_service::             Apache/httpd service name to notify
-#                              on configuration changes. Defaults
-#                              to 'httpd' based on the default
-#                              apache module included with foreman-installer.
+# $httpd_service::                     Apache/httpd service name to notify
+#                                      on configuration changes. Defaults
+#                                      to 'httpd' based on the default
+#                                      apache module included with foreman-installer.
 #
-# $service_fallback::          If passenger is not used, do we want to fallback
-#                              to using the puppetmaster service? Set to false
-#                              if you disabled passenger and you do NOT want to
-#                              use the puppetmaster service. Defaults to true.
+# $service_fallback::                  If passenger is not used, do we want to fallback
+#                                      to using the puppetmaster service? Set to false
+#                                      if you disabled passenger and you do NOT want to
+#                                      use the puppetmaster service. Defaults to true.
 #
-# $passenger_min_instances::   The PassengerMinInstances parameter. Sets the
-#                              minimum number of application processes to run.
-#                              Defaults to the number of processors on your
-#                              system.
+# $passenger_min_instances::           The PassengerMinInstances parameter. Sets the
+#                                      minimum number of application processes to run.
+#                                      Defaults to the number of processors on your
+#                                      system.
 #
-# $passenger_pre_start::       Pre-start the first passenger worker instance
-#                              process during httpd start.
+# $passenger_pre_start::               Pre-start the first passenger worker instance
+#                                      process during httpd start.
 #
-# $passenger_ruby::            The PassengerRuby parameter. Sets the Ruby
-#                              interpreter for serving the puppetmaster rack
-#                              application.
+# $passenger_ruby::                    The PassengerRuby parameter. Sets the Ruby
+#                                      interpreter for serving the puppetmaster rack
+#                                      application.
 #
-# $config_version::            How to determine the configuration version. When
-#                              using git_repo, by default a git describe
-#                              approach will be installed.
+# $config_version::                    How to determine the configuration version. When
+#                                      using git_repo, by default a git describe
+#                                      approach will be installed.
 #
-# $server_foreman_facts::      Should foreman receive facts from puppet
+# $server_foreman_facts::              Should foreman receive facts from puppet
 #
-# $foreman::                   Should foreman integration be installed
+# $foreman::                           Should foreman integration be installed
 #
-# $foreman_url::               Foreman URL
+# $foreman_url::                       Foreman URL
 #
-# $foreman_ssl_ca::            SSL CA of the Foreman server
+# $foreman_ssl_ca::                    SSL CA of the Foreman server
 #
-# $foreman_ssl_cert::          Client certificate for authenticating against Foreman server
+# $foreman_ssl_cert::                  Client certificate for authenticating against Foreman server
 #
-# $foreman_ssl_key::           Key for authenticating against Foreman server
+# $foreman_ssl_key::                   Key for authenticating against Foreman server
 #
-# $puppet_basedir::            Where is the puppet code base located
+# $puppet_basedir::                    Where is the puppet code base located
 #
-# $enc_api::                   What version of enc script to deploy. Valid
-#                              values are 'v2' for latest, and 'v1'
-#                              for Foreman =< 1.2
+# $enc_api::                           What version of enc script to deploy. Valid
+#                                      values are 'v2' for latest, and 'v1'
+#                                      for Foreman =< 1.2
 #
-# $report_api::                What version of report processor to deploy.
-#                              Valid values are 'v2' for latest, and 'v1'
-#                              for Foreman =< 1.2
+# $report_api::                        What version of report processor to deploy.
+#                                      Valid values are 'v2' for latest, and 'v1'
+#                                      for Foreman =< 1.2
 #
-# $request_timeout::           Timeout in node.rb script for fetching
-#                              catalog from Foreman (in seconds).
+# $request_timeout::                   Timeout in node.rb script for fetching
+#                                      catalog from Foreman (in seconds).
 #
-# $environment_timeout::       Timeout for cached compiled catalogs (10s, 5m, ...)
+# $environment_timeout::               Timeout for cached compiled catalogs (10s, 5m, ...)
 #
-# $ca_proxy::                  The actual server that handles puppet CA.
-#                              Setting this to anything non-empty causes
-#                              the apache vhost to set up a proxy for all
-#                              certificates pointing to the value.
+# $ca_proxy::                          The actual server that handles puppet CA.
+#                                      Setting this to anything non-empty causes
+#                                      the apache vhost to set up a proxy for all
+#                                      certificates pointing to the value.
 #
-# $jvm_java_bin::              Set the default java to use.
+# $jvm_java_bin::                      Set the default java to use.
 #
-# $jvm_config::                Specify the puppetserver jvm configuration file.
+# $jvm_config::                        Specify the puppetserver jvm configuration file.
 #
-# $jvm_min_heap_size::         Specify the minimum jvm heap space.
+# $jvm_min_heap_size::                 Specify the minimum jvm heap space.
 #
-# $jvm_max_heap_size::         Specify the maximum jvm heap space.
+# $jvm_max_heap_size::                 Specify the maximum jvm heap space.
 #
-# $jvm_extra_args::            Additional java options to pass through.
-#                              This can be used for Java versions prior to
-#                              Java 8 to specify the max perm space to use:
-#                              For example: '-XX:MaxPermSize=128m'.
+# $jvm_extra_args::                    Additional java options to pass through.
+#                                      This can be used for Java versions prior to
+#                                      Java 8 to specify the max perm space to use:
+#                                      For example: '-XX:MaxPermSize=128m'.
 #
-# $jvm_cli_args::              Java options to use when using puppetserver
-#                              subcommands (eg puppetserver gem).
+# $jvm_cli_args::                      Java options to use when using puppetserver
+#                                      subcommands (eg puppetserver gem).
 #
-# $jruby_gem_home::            Where jruby gems are located for puppetserver
+# $jruby_gem_home::                    Where jruby gems are located for puppetserver
 #
-# $allow_any_crl_auth::        Allow any authentication for the CRL. This
-#                              is needed on the puppet CA to accept clients
-#                              from a the puppet CA proxy.
+# $allow_any_crl_auth::                Allow any authentication for the CRL. This
+#                                      is needed on the puppet CA to accept clients
+#                                      from a the puppet CA proxy.
 #
-# $auth_allowed::              An array of authenticated nodes allowed to
-#                              access all catalog and node endpoints.
-#                              default to ['$1']
+# $auth_allowed::                      An array of authenticated nodes allowed to
+#                                      access all catalog and node endpoints.
+#                                      default to ['$1']
 #
-# $default_manifest::          Toggle if default_manifest setting should
-#                              be added to the [main] section
+# $default_manifest::                  Toggle if default_manifest setting should
+#                                      be added to the [main] section
 #
-# $default_manifest_path::     A string setting the path to the default_manifest
+# $default_manifest_path::             A string setting the path to the default_manifest
 #
-# $default_manifest_content::  A string to set the content of the default_manifest
-#                              If set to '' it will not manage the file
+# $default_manifest_content::          A string to set the content of the default_manifest
+#                                      If set to '' it will not manage the file
 #
-# $ssl_dir_manage::            Toggle if ssl_dir should be added to the [master]
-#                              configuration section. This is necessary to
-#                              disable in case CA is delegated to a separate instance
+# $ssl_dir_manage::                    Toggle if ssl_dir should be added to the [master]
+#                                      configuration section. This is necessary to
+#                                      disable in case CA is delegated to a separate instance
 #
-# $ssl_key_manage::            Toggle if "private_keys/${::puppet::server::certname}.pem"
-#                              should be created with default user and group. This is used in
-#                              the default Forman setup to reuse the key for TLS communication.
+# $ssl_key_manage::                    Toggle if "private_keys/${::puppet::server::certname}.pem"
+#                                      should be created with default user and group. This is used in
+#                                      the default Forman setup to reuse the key for TLS communication.
 #
-# $puppetserver_vardir::       The path of the puppetserver var dir
+# $puppetserver_vardir::               The path of the puppetserver var dir
 #
-# $puppetserver_dir::          The path of the puppetserver config dir
+# $puppetserver_dir::                  The path of the puppetserver config dir
 #
-# $puppetserver_version::      The version of puppetserver 2 installed (or being installed)
-#                              Unfortunately, different versions of puppetserver need configuring differently,
-#                              and there's no easy way of determining which version is being installed.
-#                              Defaults to '2.3.1' but can be overriden if you're installing an older version.
+# $puppetserver_version::              The version of puppetserver 2 installed (or being installed)
+#                                      Unfortunately, different versions of puppetserver need configuring differently,
+#                                      and there's no easy way of determining which version is being installed.
+#                                      Defaults to '2.3.1' but can be overriden if you're installing an older version.
 #
-# $max_active_instances::      Max number of active jruby instances. Defaults to
-#                              processor count
+# $max_active_instances::              Max number of active jruby instances. Defaults to
+#                                      processor count
 #
-# $max_requests_per_instance:: Max number of requests per jruby instance. Defaults to 0 (disabled)
+# $max_requests_per_instance::         Max number of requests per jruby instance. Defaults to 0 (disabled)
 #
-# $idle_timeout::              How long the server will wait for a response on an existing connection
+# $idle_timeout::                      How long the server will wait for a response on an existing connection
 #
-# $connect_timeout::           How long the server will wait for a response to a connection attempt
+# $connect_timeout::                   How long the server will wait for a response to a connection attempt
 #
-# $web_idle_timeout::          Time in ms that Jetty allows a socket to be idle, after processing has completed.
-#                              Defaults to the Jetty default of 30s
+# $web_idle_timeout::                  Time in ms that Jetty allows a socket to be idle, after processing has completed.
+#                                      Defaults to the Jetty default of 30s
 #
-# $ssl_protocols::             Array of SSL protocols to use.
-#                              Defaults to [ 'TLSv1.2' ]
+# $ssl_protocols::                     Array of SSL protocols to use.
+#                                      Defaults to [ 'TLSv1.2' ]
 #
-# $ssl_chain_filepath::        Path to certificate chain for puppetserver
-#                              Defaults to "${ssl_dir}/ca/ca_crt.pem"
+# $ssl_chain_filepath::                Path to certificate chain for puppetserver
+#                                      Defaults to "${ssl_dir}/ca/ca_crt.pem"
 #
-# $cipher_suites::             List of SSL ciphers to use in negotiation
-#                              Defaults to [ 'TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA',
-#                              'TLS_RSA_WITH_AES_128_CBC_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA', ]
+# $cipher_suites::                     List of SSL ciphers to use in negotiation
+#                                      Defaults to [ 'TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA',
+#                                      'TLS_RSA_WITH_AES_128_CBC_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA', ]
 #
-# $ruby_load_paths::           List of ruby paths
-#                              Defaults based on $::puppetversion
+# $ruby_load_paths::                   List of ruby paths
+#                                      Defaults based on $::puppetversion
 #
-# $ca_client_whitelist::       The whitelist of client certificates that
-#                              can query the certificate-status endpoint
-#                              Defaults to [ '127.0.0.1', '::1', $::ipaddress ]
+# $ca_client_whitelist::               The whitelist of client certificates that
+#                                      can query the certificate-status endpoint
+#                                      Defaults to [ '127.0.0.1', '::1', $::ipaddress ]
+
+# $server_custom_trusted_oid_mapping:: A hash of custom trusted oid mappings. Defaults to undef
+#                                      Example: { 1.3.6.1.4.1.34380.1.2.1.1 => { shortname => 'myshortname' } }
 #
-# $admin_api_whitelist::       The whitelist of clients that
-#                              can query the puppet-admin-api endpoint
-#                              Defaults to [ '127.0.0.1', '::1', $::ipaddress ]
+# $admin_api_whitelist::               The whitelist of clients that
+#                                      can query the puppet-admin-api endpoint
+#                                      Defaults to [ '127.0.0.1', '::1', $::ipaddress ]
 #
-# $ca_auth_required::          Whether client certificates are needed to access the puppet-admin api
-#                              Defaults to true
+# $ca_auth_required::                  Whether client certificates are needed to access the puppet-admin api
+#                                      Defaults to true
 #
-# $use_legacy_auth_conf::      Should the puppetserver use the legacy puppet auth.conf?
-#                              Defaults to false (the puppetserver will use its own conf.d/auth.conf)
+# $use_legacy_auth_conf::              Should the puppetserver use the legacy puppet auth.conf?
+#                                      Defaults to false (the puppetserver will use its own conf.d/auth.conf)
 #
-# $allow_header_cert_info::    Allow client authentication over HTTP Headers
-#                              Defaults to false, is also activated by the $http setting
+# $allow_header_cert_info::            Allow client authentication over HTTP Headers
+#                                      Defaults to false, is also activated by the $http setting
 #
-# $puppetserver_jruby9k::      For Puppetserver 5, use JRuby 9k? Defaults to false
+# $puppetserver_jruby9k::              For Puppetserver 5, use JRuby 9k? Defaults to false
 #
-# $puppetserver_metrics::      Enable metrics (Puppetserver 5.x only) and JRuby profiling?
-#                              Defaults to true on Puppetserver 5.x and to false on Puppetserver 2.x
+# $puppetserver_metrics::              Enable metrics (Puppetserver 5.x only) and JRuby profiling?
+#                                      Defaults to true on Puppetserver 5.x and to false on Puppetserver 2.x
 #
 #
-# $metrics_jmx_enable::        Enable or disable JMX metrics reporter. Defaults to true
+# $metrics_jmx_enable::                Enable or disable JMX metrics reporter. Defaults to true
 #
-# $metrics_graphite_enable::   Enable or disable Graphite metrics reporter. Defaults to false
+# $metrics_graphite_enable::           Enable or disable Graphite metrics reporter. Defaults to false
 #
-# $metrics_graphite_host::     Graphite server host. Defaults to "127.0.0.1"
+# $metrics_graphite_host::             Graphite server host. Defaults to "127.0.0.1"
 #
-# $metrics_graphite_port::     Graphite server port. Defaults to 2003
+# $metrics_graphite_port::             Graphite server port. Defaults to 2003
 #
-# $metrics_server_id::         A server id that will be used as part of the namespace for metrics produced
-#                              Defaults to $fqdn
+# $metrics_server_id::                 A server id that will be used as part of the namespace for metrics produced
+#                                      Defaults to $fqdn
 #
-# $metrics_graphite_interval:: How often to send metrics to graphite (in seconds)
-#                              Defaults to 5
+# $metrics_graphite_interval::         How often to send metrics to graphite (in seconds)
+#                                      Defaults to 5
 #
-# $metrics_allowed::           Specify metrics to allow in addition to those in the default list
-#                              Defaults to undef
+# $metrics_allowed::                   Specify metrics to allow in addition to those in the default list
+#                                      Defaults to undef
 #
-# $puppetserver_experimental:: For Puppetserver 5, enable the /puppet/experimental route? Defaults to true
+# $puppetserver_experimental::         For Puppetserver 5, enable the /puppet/experimental route? Defaults to true
 #
-# $puppetserver_trusted_agents:: Certificate names of agents that are allowed to fetch *all* catalogs. Defaults to empty array
+# $puppetserver_trusted_agents::       Certificate names of agents that are allowed to fetch *all* catalogs. Defaults to empty array
 #
 class puppet::server(
   Variant[Boolean, Stdlib::Absolutepath] $autosign = $::puppet::autosign,
@@ -351,6 +354,7 @@ class puppet::server(
   Optional[Boolean] $crl_enable = $::puppet::server_crl_enable,
   Boolean $ca_auth_required = $::puppet::server_ca_auth_required,
   Array[String] $ca_client_whitelist = $::puppet::server_ca_client_whitelist,
+  Optional[Puppet::Custom_trusted_oid_mapping] $custom_trusted_oid_mapping = $::puppet::server_custom_trusted_oid_mapping,
   Boolean $http = $::puppet::server_http,
   Integer $http_port = $::puppet::server_http_port,
   Array[String] $http_allow = $::puppet::server_http_allow,
