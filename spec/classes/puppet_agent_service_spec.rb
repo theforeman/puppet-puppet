@@ -23,7 +23,7 @@ describe 'puppet::agent::service' do
           should contain_class('puppet::agent::service::cron').with(:enabled => false)
         end
         case os
-        when /\Adebian-(8|9)/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-16/, /\Aarchlinux-/
+        when /\Adebian-/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-(16|18)/, /\Aarchlinux-/
           it do
             should contain_class('puppet::agent::service::systemd').with(:enabled => false)
             should contain_service('puppet-run.timer').with(:ensure => :stopped)
@@ -45,7 +45,7 @@ describe 'puppet::agent::service' do
           it do
             should raise_error(Puppet::Error, /Runmode of cron not supported on #{facts[:kernel]} operating systems!/)
           end
-        when /\Adebian-(8|9)/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-16/
+        when /\Adebian-/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-(16|18)/
           it do
             should contain_class('puppet::agent::service::cron').with(:enabled => true)
             should contain_class('puppet::agent::service::daemon').with(:enabled => false)
@@ -67,7 +67,7 @@ describe 'puppet::agent::service' do
           "class {'puppet': agent => true, runmode => 'systemd.timer'}"
         end
         case os
-        when /\Adebian-(8|9)/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-16/, /\Aarchlinux-/
+        when /\Adebian-/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-(16|18)/, /\Aarchlinux-/
           it do
             should contain_class('puppet::agent::service::daemon').with(:enabled => false)
             should contain_class('puppet::agent::service::cron').with(:enabled => false)
@@ -99,7 +99,7 @@ describe 'puppet::agent::service' do
           should contain_class('puppet::agent::service::cron').with(:enabled => false)
         end
         case os
-        when /\Adebian-(8|9)/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-16/, /\Aarchlinux-/
+        when /\Adebian-/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-(16|18)/, /\Aarchlinux-/
           it do
             should contain_class('puppet::agent::service::systemd').with(:enabled => false)
             should contain_service('puppet-run.timer').with(:ensure => :stopped)
