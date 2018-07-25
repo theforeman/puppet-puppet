@@ -5,17 +5,17 @@ define puppet::server::combine_certs(
   $cert     = $::puppet::server::ssl_cert,
   $key      = $::puppet::server::ssl_cert_key,
 ) {
-    $dir = dirname($combined)
+  $dir = dirname($combined)
 
-    $file_cert = file($cert)
-    $file_key  = file($key)
+  $file_cert = file($cert)
+  $file_key  = file($key)
 
-    file { $dir:
-      ensure => directory,
-    }
-
-    file { $combined:
-      ensure  => file,
-      content => "${file_cert}${file_key}",
-    }
+  file { $dir:
+    ensure => directory,
   }
+
+  file { $combined:
+    ensure  => file,
+    content => "${file_cert}${file_key}",
+  }
+}
