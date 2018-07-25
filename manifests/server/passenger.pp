@@ -32,19 +32,19 @@ class puppet::server::passenger (
   $ssl_combined_name = basename($ssl_cert)
   $ssl_combined = "${ssl_dir}/combined/${ssl_combined_name}"
 
-  define combined_certs($combined, $cert, $key) {
+  define puppet::server::passenger::combined_certs($combined, $cert, $key) {
     $dir = dirname($combined)
 
     $file_cert = file($cert)
-    $file_key = file($key)
+    $file_key  = file($key)
 
     file { $dir:
-      ensure => directory
+      ensure => directory,
     }
 
     file { $combined:
-      ensure => file,
-      content => "${file_cert}${file_key}"
+      ensure  => file,
+      content => "${file_cert}${file_key}",
     }
   }
 
@@ -76,10 +76,10 @@ class puppet::server::passenger (
   ]
 
   if $puppet_ca_proxy and $puppet_ca_proxy != '' {
-    combined_certs { $ssl_combined:
+    puppet::server::passenger::combined_certs { $ssl_combined:
       combined => $ssl_combined,
       cert     => $ssl_cert,
-      key      => $ssl_cert_key
+      key      => $ssl_cert_key,
     }
 
     include ::apache::mod::proxy
