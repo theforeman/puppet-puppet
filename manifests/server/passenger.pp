@@ -29,6 +29,25 @@ class puppet::server::passenger (
   include ::apache::mod::passenger
   contain 'puppet::server::rack' # lint:ignore:relative_classname_inclusion (PUP-1597)
 
+  $ssl_combined_name = basename($ssl_cert)
+  $ssl_combined = "${ssl_dir}/combined/${ssl_combined_name}"
+
+  define puppet::server::passenger::combined_certs($combined, $cert, $key) {
+    $dir = dirname($combined)
+
+    $file_cert = file($cert)
+    $file_key  = file($key)
+
+    file { $dir:
+      ensure => directory,
+    }
+
+    file { $combined:
+      ensure  => file,
+      content => "${file_cert}${file_key}",
+    }
+  }
+
   $directory = {
     'path'              => "${app_root}/public/",
     'passenger_enabled' => 'On',
@@ -57,10 +76,16 @@ class puppet::server::passenger (
   ]
 
   if $puppet_ca_proxy and $puppet_ca_proxy != '' {
+    puppet::server::passenger::combined_certs { $ssl_combined:
+      combined => $ssl_combined,
+      cert     => $ssl_cert,
+      key      => $ssl_cert_key,
+    }
+
     include ::apache::mod::proxy
     include ::apache::mod::proxy_http
 
-    $custom_fragment = "ProxyPassMatch ^/([^/]+/certificate.*)$ ${puppet_ca_proxy}/\$1"
+    $custom_fragment = "ProxyPassMatch ^/([^/]+/certificate.*)$ ${puppet_ca_proxy}/\$1\n  SSLProxyMachineCertificateFile ${ssl_combined}"
     $ssl_proxyengine = true
   } else {
     $custom_fragment = undef
