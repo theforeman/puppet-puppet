@@ -1,9 +1,9 @@
 # combine the public x509 certificate and private key into one file
 #
 define puppet::server::combine_certs(
-  $combined = $::puppet::server::passenger::ssl_combined,
-  $cert     = $::puppet::server::ssl_cert,
-  $key      = $::puppet::server::ssl_cert_key,
+  $combined = undef,
+  $cert     = undef,
+  $key      = undef,
 ) {
   $dir = dirname($combined)
 

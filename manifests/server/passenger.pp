@@ -60,7 +60,11 @@ class puppet::server::passenger (
   ]
 
   if $puppet_ca_proxy and $puppet_ca_proxy != '' {
-    puppet::server::combine_certs { $ssl_combined: }
+    puppet::server::combine_certs { $ssl_combined:
+      combined => $ssl_combined,
+      cert     => $ssl_cert,
+      key      => $ssl_cert_key,
+    }
 
     include ::apache::mod::proxy
     include ::apache::mod::proxy_http
