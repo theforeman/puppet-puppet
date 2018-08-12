@@ -411,6 +411,16 @@ class puppet::server::puppetserver (
     require              => File[$auth_conf],
   }
 
+  puppet_authorization::rule { 'puppetlabs status service':
+    match_request_path    => '/status/v1/services',
+    match_request_type    => 'path',
+    match_request_method  => 'get',
+    sort_order            => 500,
+    allow_unauthenticated => true,
+    path                  => $auth_conf,
+    require               => File[$auth_conf],
+  }
+
   puppet_authorization::rule { 'puppetlabs deny all':
     match_request_path => '/',
     match_request_type => 'path',
