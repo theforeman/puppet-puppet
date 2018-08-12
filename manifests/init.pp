@@ -343,6 +343,10 @@
 #
 # $server_foreman_url::                     Foreman URL
 #
+# $server_foreman_user::                    Foreman authentication username
+#
+# $server_foreman_password::                Foreman authentication password
+#
 # $server_foreman_ssl_ca::                  SSL CA of the Foreman server
 #
 # $server_foreman_ssl_cert::                Client certificate for authenticating against Foreman server
@@ -693,6 +697,8 @@ class puppet (
   Array[String] $server_rack_arguments = $puppet::params::server_rack_arguments,
   Boolean $server_foreman = $puppet::params::server_foreman,
   Stdlib::HTTPUrl $server_foreman_url = $puppet::params::server_foreman_url,
+  Optional[String] $server_foreman_user = $puppet::params::server_foreman_user,
+  Optional[String] $server_foreman_password = $puppet::params::server_foreman_password,
   Optional[Stdlib::Absolutepath] $server_foreman_ssl_ca = $puppet::params::server_foreman_ssl_ca,
   Optional[Stdlib::Absolutepath] $server_foreman_ssl_cert = $puppet::params::server_foreman_ssl_cert,
   Optional[Stdlib::Absolutepath] $server_foreman_ssl_key = $puppet::params::server_foreman_ssl_key,

@@ -413,6 +413,8 @@ class puppet::server(
   Array[String] $rack_arguments = $::puppet::server_rack_arguments,
   Boolean $foreman = $::puppet::server_foreman,
   Stdlib::HTTPUrl $foreman_url = $::puppet::server_foreman_url,
+  Optional[String] $foreman_user = $::puppet::server_foreman_user,
+  Optional[String] $foreman_password = $::puppet::server_foreman_password,
   Optional[Stdlib::Absolutepath] $foreman_ssl_ca = $::puppet::server_foreman_ssl_ca,
   Optional[Stdlib::Absolutepath] $foreman_ssl_cert = $::puppet::server_foreman_ssl_cert,
   Optional[Stdlib::Absolutepath] $foreman_ssl_key = $::puppet::server_foreman_ssl_key,

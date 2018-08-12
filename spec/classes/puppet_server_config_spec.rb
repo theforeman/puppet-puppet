@@ -524,6 +524,23 @@ describe 'puppet::server::config' do
         end
       end
 
+      describe 'with foreman authentication overrides' do
+        let :pre_condition do
+          "class {'puppet':
+              server                  => true,
+              server_foreman_user     => 'username',
+              server_foreman_password => 'password',
+           }"
+        end
+
+        it 'should pass foreman authentication parameters to the ENC' do
+          should contain_class('foreman::puppetmaster').with({
+            :foreman_user     => 'username',
+            :foreman_password => 'password',
+          })
+        end
+      end
+
       describe 'with a PuppetDB host set' do
         let :pre_condition do
           "class {'puppet':
