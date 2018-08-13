@@ -140,30 +140,18 @@ describe 'puppet::server::puppetserver' do
         }
         it { should contain_hocon_setting('webserver.host').with_ensure('absent') }
         it { should contain_hocon_setting('webserver.port').with_ensure('absent') }
-
         it {
-          should contain_hocon_setting('authorization.allow-header-cert-info').
-            with_path('/etc/custom/puppetserver/conf.d/auth.conf').
-            with_setting('authorization.allow-header-cert-info').
-            with_value(false)
-        }
-        it {
-          should contain_puppet_authorization__rule('certificate_status').
-            with_match_request_path('/puppet-ca/v1/certificate_status/').
-            with_ensure('present')
-        }
-        it {
-          should contain_puppet_authorization__rule('certificate_statuses').
-            with_match_request_path('/puppet-ca/v1/certificate_statuses/').
-            with_ensure('present')
-        }
-        it {
-          should contain_puppet_authorization__rule('environment-cache').
-            with_match_request_path('/puppet-admin-api/v1/environment-cache')
-        }
-        it {
-          should contain_puppet_authorization__rule('jruby-pool').
-            with_match_request_path('/puppet-admin-api/v1/jruby-pool')
+          should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
+            with_content(/allow-header-cert-info: false/).
+            with_content(/^\s+path: "\/puppet-ca\/v1\/certificate_status\/"/).
+            with_content(/^\s+name: "certificate_status"/).
+            with_content(/^\s+path: "\/puppet-ca\/v1\/certificate_statuses\/"/).
+            with_content(/^\s+name: "certificate_statuses"/).
+            with_content(/^\s+path: "\/puppet-admin-api\/v1\/environment-cache"/).
+            with_content(/^\s+name: "environment-cache"/).
+            with_content(/^\s+path: "\/puppet-admin-api\/v1\/jruby-pool"/).
+            with_content(/^\s+name: "jruby-pool"/).
+            with({}) # So we can use a trailing dot on each with_content line
         }
       end
 
@@ -644,15 +632,13 @@ describe 'puppet::server::puppetserver' do
           let(:params) do
             default_params.merge(
               :server_puppetserver_version => '2.7.0',
-              :server_puppetserver_dir     => '/etc/custom/puppetserver',
-              :server_experimental         => true,
+              :server_puppetserver_dir => '/etc/custom/puppetserver',
+              :server_experimental => true,
             )
           end
-
           it {
-            should contain_puppet_authorization__rule('puppetlabs experimental').
-              with_ensure('absent').
-              with_path('/etc/custom/puppetserver/conf.d/auth.conf')
+            should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
+              without_content(%r{^(\ *)path: "/puppet/experimental"$})
           }
         end
 
@@ -660,15 +646,13 @@ describe 'puppet::server::puppetserver' do
           let(:params) do
             default_params.merge(
               :server_puppetserver_version => '2.7.0',
-              :server_puppetserver_dir     => '/etc/custom/puppetserver',
-              :server_experimental         => false,
+              :server_puppetserver_dir => '/etc/custom/puppetserver',
+              :server_experimental => false,
             )
           end
-
           it {
-            should contain_puppet_authorization__rule('puppetlabs experimental').
-              with_ensure('absent').
-              with_path('/etc/custom/puppetserver/conf.d/auth.conf')
+            should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
+              without_content(%r{^(\ *)path: "/puppet/experimental"$})
           }
         end
 
@@ -676,16 +660,13 @@ describe 'puppet::server::puppetserver' do
           let(:params) do
             default_params.merge(
               :server_puppetserver_version => '5.0.0',
-              :server_puppetserver_dir     => '/etc/custom/puppetserver',
-              :server_experimental         => true,
+              :server_puppetserver_dir => '/etc/custom/puppetserver',
+              :server_experimental => true,
             )
           end
-
           it {
-            should contain_puppet_authorization__rule('puppetlabs experimental').
-              with_ensure('present').
-              with_path('/etc/custom/puppetserver/conf.d/auth.conf').
-              with_match_request_path('/puppet/experimental')
+            should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
+              with_content(%r{^(\ *)path: "/puppet/experimental"$})
           }
         end
 
@@ -693,14 +674,13 @@ describe 'puppet::server::puppetserver' do
           let(:params) do
             default_params.merge(
               :server_puppetserver_version => '5.0.0',
-              :server_puppetserver_dir     => '/etc/custom/puppetserver',
-              :server_experimental         => false,
+              :server_puppetserver_dir => '/etc/custom/puppetserver',
+              :server_experimental => false,
             )
           end
           it {
-            should contain_puppet_authorization__rule('puppetlabs experimental').
-              with_ensure('absent').
-              with_path('/etc/custom/puppetserver/conf.d/auth.conf')
+            should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
+              without_content(%r{^(\ *)path: "/puppet/experimental"$})
           }
         end
       end
@@ -713,11 +693,10 @@ describe 'puppet::server::puppetserver' do
               :server_puppetserver_dir     => '/etc/custom/puppetserver',
             )
           end
-    
+
           it {
-            should contain_puppet_authorization__rule('puppet tasks information').
-              with_ensure('absent').
-              with_path('/etc/custom/puppetserver/conf.d/auth.conf')
+            should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
+              without_content(%r{^(\ *)path: "/puppet/v3/tasks"$})
           }
         end
 
@@ -728,11 +707,10 @@ describe 'puppet::server::puppetserver' do
               :server_puppetserver_dir     => '/etc/custom/puppetserver',
             )
           end
-  
+
           it {
-            should contain_puppet_authorization__rule('puppet tasks information').
-              with_ensure('present').
-              with_path('/etc/custom/puppetserver/conf.d/auth.conf')
+            should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
+              with_content(%r{^(\ *)path: "/puppet/v3/tasks"$})
           }
         end
       end
@@ -748,10 +726,8 @@ describe 'puppet::server::puppetserver' do
             )
           end
           it {
-            should contain_puppet_authorization__rule('puppetlabs catalog').
-              with_ensure('present').
-              with_path('/etc/custom/puppetserver/conf.d/auth.conf').
-              with_allow(['$1', 'jenkins', 'octocatalog-diff'])
+            should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
+              with_content(%r{^            allow: \["jenkins", "octocatalog-diff", "\$1"\]$})
           }
         end
       end
