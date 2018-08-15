@@ -516,14 +516,7 @@ describe 'puppet::server::puppetserver' do
           end
           it {
             should contain_file('/etc/custom/puppetserver/conf.d/product.conf').
-              with_ensure('file')
-          }
-          it {
-            should contain_hocon_setting('product.check-for-updates').
-              with_path('/etc/custom/puppetserver/conf.d/product.conf').
-              with_setting('product.check-for-updates').
-              with_value(false).
-              with_ensure('present')
+              with_content(/^\s+check-for-updates: false/)
           }
         end
 
@@ -535,7 +528,6 @@ describe 'puppet::server::puppetserver' do
             )
           end
           it { should contain_file('/etc/custom/puppetserver/conf.d/product.conf').with_ensure('absent') }
-          it { should_not contain_hocon_setting('product.check-for-updates') }
         end
       end
 
