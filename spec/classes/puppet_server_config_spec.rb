@@ -723,11 +723,8 @@ describe 'puppet::server::config' do
           end
 
           it 'should use the ca_crl.pem file' do
-            should contain_hocon_setting('webserver.ssl-crl-path').
-              with_path('/etc/custom/puppetserver/conf.d/webserver.conf').
-              with_setting('webserver.ssl-crl-path').
-              with_value("#{ssldir}/ca/ca_crl.pem").
-              with_ensure('present')
+            should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
+              with_content(/ssl-crl-path: #{ssldir}\/ca\/ca_crl.pem/)
           end
         end
 
@@ -743,10 +740,8 @@ describe 'puppet::server::config' do
           end
 
           it 'should use the ca_crl.pem file' do
-            should contain_hocon_setting('webserver.ssl-crl-path').
-              with_path('/etc/custom/puppetserver/conf.d/webserver.conf').
-              with_setting('webserver.ssl-crl-path').
-              with_ensure('absent')
+            should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
+              without_content(/ssl-crl-path: #{ssldir}\/crl.pem/)
           end
         end
         context 'as non-ca with server_crl_enable' do
@@ -761,11 +756,8 @@ describe 'puppet::server::config' do
             }"
           end
           it 'should use the crl.pem file' do
-            should contain_hocon_setting('webserver.ssl-crl-path').
-              with_path('/etc/custom/puppetserver/conf.d/webserver.conf').
-              with_setting('webserver.ssl-crl-path').
-              with_value("#{ssldir}/crl.pem").
-              with_ensure('present')
+             should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
+               with_content(/ssl-crl-path: #{ssldir}\/crl.pem/)
           end
         end
       end
@@ -782,11 +774,8 @@ describe 'puppet::server::config' do
         end
 
         it 'should set the ssl protocols' do
-          should contain_hocon_setting('webserver.ssl-protocols').
-            with_path('/etc/custom/puppetserver/conf.d/webserver.conf').
-            with_setting('webserver.ssl-protocols').
-            with_value(['TLSv1.1', 'TLSv1.2']).
-            with_ensure('present')
+          should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
+            with_content(/ssl-protocols: \[\n( +)TLSv1.1,\n( +)TLSv1.2,\n( +)\]/)
         end
       end
 
@@ -802,11 +791,8 @@ describe 'puppet::server::config' do
         end
 
         it 'should set the cipher suite' do
-          should contain_hocon_setting('webserver.cipher-suites').
-            with_path('/etc/custom/puppetserver/conf.d/webserver.conf').
-            with_setting('webserver.cipher-suites').
-            with_value(['TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA']).
-            with_ensure('present')
+          should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
+            with_content(/cipher-suites: \[\n( +)TLS_RSA_WITH_AES_256_CBC_SHA256,\n( +)TLS_RSA_WITH_AES_256_CBC_SHA,\n( +)\]/)
         end
       end
 
@@ -824,11 +810,8 @@ describe 'puppet::server::config' do
         end
 
         it 'should use the server_ssl_chain_filepath file' do
-          should contain_hocon_setting('webserver.ssl-cert-chain').
-            with_path('/etc/custom/puppetserver/conf.d/webserver.conf').
-            with_setting('webserver.ssl-cert-chain').
-            with_value('/etc/example/certchain.pem').
-            with_ensure('present')
+          should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
+            with_content(/ssl-cert-chain: \/etc\/example\/certchain.pem/)
         end
       end
 
@@ -843,11 +826,7 @@ describe 'puppet::server::config' do
         end
 
         it 'should put the correct ip address in webserver.conf' do
-          should contain_hocon_setting('webserver.ssl-host').
-            with_path('/etc/custom/puppetserver/conf.d/webserver.conf').
-            with_setting('webserver.ssl-host').
-            with_value('127.0.0.1').
-            with_ensure('present')
+          should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').with_content(/ssl-host:\s127\.0\.0\.1/)
         end
       end
 
@@ -863,19 +842,13 @@ describe 'puppet::server::config' do
         end
 
         it 'should put the correct ssl key path in webserver.conf' do
-          should contain_hocon_setting('webserver.ssl-key').
-            with_path('/etc/custom/puppetserver/conf.d/webserver.conf').
-            with_setting('webserver.ssl-key').
-            with_value('/etc/custom/puppet/ssl/private_keys/puppetserver43.example.com.pem').
-            with_ensure('present')
+          should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
+            with_content(%r{ssl-key: /etc/custom/puppet/ssl/private_keys/puppetserver43\.example\.com\.pem})
         end
 
         it 'should put the correct ssl cert path in webserver.conf' do
-          should contain_hocon_setting('webserver.ssl-cert').
-            with_path('/etc/custom/puppetserver/conf.d/webserver.conf').
-            with_setting('webserver.ssl-cert').
-            with_value('/etc/custom/puppet/ssl/certs/puppetserver43.example.com.pem').
-            with_ensure('present')
+          should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
+            with_content(%r{ssl-cert: /etc/custom/puppet/ssl/certs/puppetserver43\.example\.com\.pem})
         end
       end
 
@@ -890,10 +863,10 @@ describe 'puppet::server::config' do
         end
 
         it do
-          should contain_hocon_setting('webserver.host').
-            with_path('/etc/custom/puppetserver/conf.d/webserver.conf').
-            with_setting('webserver.host').
-            with_value('0.0.0.0')
+          should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
+            with_content(/ host:\s0\.0\.0\.0/).
+            with_content(/ port:\s8139/).
+            with({})
         end
 
         it { should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
