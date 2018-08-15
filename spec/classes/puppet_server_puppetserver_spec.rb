@@ -124,22 +124,13 @@ describe 'puppet::server::puppetserver' do
             without_content(/^\s+"puppetserver123.example.com"\,$/).
             with({}) # So we can use a trailing dot on each with_content line
         }
-        it {
-          should contain_hocon_setting('webserver.ssl-host').
-            with_path('/etc/custom/puppetserver/conf.d/webserver.conf').
-            with_setting('webserver.ssl-host').
-            with_value('0.0.0.0').
-            with_ensure('present')
+        it { should contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
+                                 with_content(/ssl-host:\s0\.0\.0\.0/).
+                                 with_content(/ssl-port:\s8140/).
+                                 without_content(/ host:\s/).
+                                 without_content(/ port:\s8139/).
+                                 with({})
         }
-        it {
-          should contain_hocon_setting('webserver.ssl-port').
-            with_path('/etc/custom/puppetserver/conf.d/webserver.conf').
-            with_setting('webserver.ssl-port').
-            with_value('8140').
-            with_ensure('present')
-        }
-        it { should contain_hocon_setting('webserver.host').with_ensure('absent') }
-        it { should contain_hocon_setting('webserver.port').with_ensure('absent') }
         it {
           should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
             with_content(/allow-header-cert-info: false/).
