@@ -349,24 +349,15 @@ class puppet::server::puppetserver (
     require => File[$webserver_conf],
   }
 
-  $product_conf = "${server_puppetserver_dir}/conf.d/product.conf"
-
   if versioncmp($server_puppetserver_version, '2.7') >= 0 {
     $product_conf_ensure = file
-
-    hocon_setting { 'product.check-for-updates':
-      ensure  => present,
-      path    => $product_conf,
-      setting => 'product.check-for-updates',
-      value   => $server_check_for_updates,
-      require => File[$product_conf],
-    }
   } else {
     $product_conf_ensure = absent
   }
 
-  file { $product_conf:
-    ensure => $product_conf_ensure,
+  file { "${server_puppetserver_dir}/conf.d/product.conf":
+    ensure  => $product_conf_ensure,
+    content => template('puppet/server/puppetserver/conf.d/product.conf.erb'),
   }
 
   if versioncmp($server_puppetserver_version, '5.0') >= 0 {
