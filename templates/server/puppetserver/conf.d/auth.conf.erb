@@ -46,6 +46,17 @@ authorization: {
             sort-order: 500
             name: "puppetlabs csr"
         },
+        {
+            # Allow unauthenticated access to the status service endpoint
+            match-request: {
+                path: "/status/v1/services"
+                type: path
+                method: get
+            }
+            allow-unauthenticated: true
+            sort-order: 500
+            name: "puppetlabs status service"
+        },
 <%- if @server_ca -%>
         {
             match-request: {
