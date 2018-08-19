@@ -1,0 +1,58 @@
+# settings related to metrics
+metrics: {
+    # a server id that will be used as part of the namespace for metrics produced
+    # by this server
+    server-id: "<%= @metrics_server_id %>"
+    registries: {
+        puppetserver: {
+            # specify metrics to allow in addition to those in the default list
+<% if @metrics_allowed -%>
+            metrics-allowed: [
+<%- @metrics_allowed.each do |allowed_host| -%>
+                "<%= allowed_host %>",
+<%- end -%>
+            ]
+<%- else -%>>
+            #metrics-allowed: ["compiler.compile.production"]
+<% end -%>
+            reporters: {
+                # enable or disable JMX metrics reporter
+                jmx: {
+                    enabled: <%= @metrics_jmx_enable %>
+                }
+                # enable or disable Graphite metrics reporter
+                graphite: {
+                    enabled: <%= @metrics_graphite_enable %>
+                }
+            }
+        }
+    }
+
+    # this section is used to configure settings for reporters that will send
+    # the metrics to various destinations for external viewing
+    reporters: {
+        graphite: {
+            # graphite host
+            host: "<%= @metrics_graphite_host %>"
+            # graphite metrics port
+            port: <%= @metrics_graphite_port %>
+            # how often to send metrics to graphite
+            update-interval-seconds: <%= @metrics_graphite_interval %>
+        }
+    }
+    metrics-webservice: {
+        jolokia: {
+            # Enable or disable the Jolokia-based metrics/v2 endpoint.
+            # Default is true.
+            # enabled: false
+
+            # Configure any of the settings listed at:
+            #   https://jolokia.org/reference/html/agents.html#war-agent-installation
+            servlet-init-params: {
+                # Specify a custom security policy:
+                #  https://jolokia.org/reference/html/security.html
+                # policyLocation: "file:///etc/puppetlabs/puppetserver/jolokia-access.xml"
+            }
+        }
+    }
+}
