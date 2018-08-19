@@ -300,39 +300,7 @@ class puppet::server::puppetserver (
 
     file { $metrics_conf:
       ensure  => $metrics_conf_ensure,
-    }
-
-    $metrics_general_settings = {
-      'metrics.server-id'                                          => $metrics_server_id,
-      'metrics.registries.puppetserver.reporters.jmx.enabled'      => $metrics_jmx_enable,
-      'metrics.registries.puppetserver.reporters.graphite.enabled' => $metrics_graphite_enable,
-      'metrics.reporters.graphite.host'                            => $metrics_graphite_host,
-      'metrics.reporters.graphite.port'                            => $metrics_graphite_port,
-      'metrics.reporters.graphite.update-interval-seconds'         => $metrics_graphite_interval,
-    }
-
-    $metrics_general_settings.each |$setting, $value| {
-      hocon_setting { $setting:
-        ensure  => present,
-        path    => $metrics_conf,
-        setting => $setting,
-        value   => $value,
-        require => File[$metrics_conf],
-      }
-    }
-
-    $metrics_allowed_settings = $metrics_allowed ? {
-      undef   => absent,
-      default => present,
-    }
-
-    hocon_setting { 'metrics.registries.puppetserver.metrics-allowed':
-      ensure  => $metrics_allowed_settings,
-      path    => $metrics_conf,
-      setting => 'metrics.registries.puppetserver.metrics-allowed',
-      value   => $metrics_allowed,
-      type    => 'array',
-      require => File[$metrics_conf],
+      content => template('puppet/server/puppetserver/conf.d/metrics.conf.erb'),
     }
   }
 }

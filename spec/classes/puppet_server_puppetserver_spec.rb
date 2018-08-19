@@ -568,28 +568,15 @@ describe 'puppet::server::puppetserver' do
             with_content(%r{^    # Whether to enable http-client metrics; defaults to 'true'.\n    metrics-enabled: true$(.*)}).
             with_content(%r{^profiler: \{\n    # enable or disable profiling for the Ruby code;\n    enabled: true})
           }
-          it { should contain_file('/etc/custom/puppetserver/conf.d/metrics.conf').with_ensure('file') }
           it {
-            should contain_hocon_setting('metrics.server-id').
-              with_path('/etc/custom/puppetserver/conf.d/metrics.conf').
-              with_setting('metrics.server-id').
-              with_value('puppetserver.example.com').
-              with_ensure('present')
-          }
-          it {
-            should contain_hocon_setting('metrics.reporters.graphite.host').
-              with_path('/etc/custom/puppetserver/conf.d/metrics.conf').
-              with_setting('metrics.reporters.graphite.host').
-              with_value('graphitehost.example.com').
-              with_ensure('present')
-          }
-          it {
-            should contain_hocon_setting('metrics.registries.puppetserver.metrics-allowed').
-              with_path('/etc/custom/puppetserver/conf.d/metrics.conf').
-              with_setting('metrics.registries.puppetserver.metrics-allowed').
-              with_value(['single.element.array']).
-              with_type('array').
-              with_ensure('present')
+            should contain_file('/etc/custom/puppetserver/conf.d/metrics.conf').
+              with_content(%r{^( *)metrics-allowed: \[\n( *)"single.element.array",\n( *)\]}).
+              with_content(%r{^( *)server-id: "puppetserver.example.com"}).
+              with_content(%r{^( *)jmx: \{\n( *)enabled: true}).
+              with_content(%r{^( *)graphite: \{\n( *)enabled: true}).
+              with_content(%r{^( *)host: "graphitehost.example.com"}).
+              with_content(%r{^( *)port: 2003}).
+              with_content(%r{^( *)update-interval-seconds: 5})
           }
         end
 
