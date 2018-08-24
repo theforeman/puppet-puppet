@@ -12,7 +12,7 @@ class puppet::params {
   $listen_to           = []
   $pluginsync          = true
   $splay               = false
-  $splaylimit          = '1800'
+  $splaylimit          = 1800
   $runinterval         = 1800
   $runmode             = 'service'
   $report              = true
