@@ -1,11 +1,11 @@
 # Set up the puppet server config
 class puppet::server::config inherits puppet::config {
   if $::puppet::server::passenger and $::puppet::server::implementation == 'master' {
-    contain 'puppet::server::passenger' # lint:ignore:relative_classname_inclusion (PUP-1597)
+    contain 'puppet::server::passenger'
   }
 
   if $::puppet::server::implementation == 'puppetserver' {
-    contain 'puppet::server::puppetserver' # lint:ignore:relative_classname_inclusion (PUP-1597)
+    contain 'puppet::server::puppetserver'
     unless empty($::puppet::server::puppetserver_vardir) {
       puppet::config::master {
         'vardir': value => $::puppet::server::puppetserver_vardir;
