@@ -8,6 +8,3 @@ fixtures:
     inifile:  'https://github.com/puppetlabs/puppetlabs-inifile.git'
     puppetdb: 'https://github.com/puppetlabs/puppetlabs-puppetdb.git'
     stdlib:   'https://github.com/puppetlabs/puppetlabs-stdlib.git'
-
-  symlinks:
-    puppet: "#{source_dir}"
