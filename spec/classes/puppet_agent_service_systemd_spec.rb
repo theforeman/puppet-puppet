@@ -15,7 +15,9 @@ describe 'puppet::agent::service::systemd' do
       end
 
       let :facts do
-        facts.merge(ipaddress: '192.0.2.100')
+        result = facts.merge(ipaddress: '192.0.2.100')
+        result[:networking]['ip'] = '192.0.2.100' if result[:networking]
+        result
       end
 
       describe 'when runmode is not systemd' do
