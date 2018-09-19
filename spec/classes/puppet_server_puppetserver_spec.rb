@@ -830,6 +830,41 @@ describe 'puppet::server::puppetserver' do
         end
       end
 
+      describe 'gem-path' do
+        context 'when server_puppetserver_version > 2.7 but < 5.3' do
+          let(:params) do
+            default_params.merge(
+              :server_puppetserver_version => '5.0.0',
+            )
+          end
+
+          it 'should have gem-path: [${jruby-puppet.gem-home}, "/opt/puppetlabs/server/data/puppetserver/vendored-jruby-gems"] in config' do
+            content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
+            expect(content).to include(%Q[    gem-path: [${jruby-puppet.gem-home}, "/opt/puppetlabs/server/data/puppetserver/vendored-jruby-gems"]\n])
+          end
+        end
+
+        context 'when server_puppetserver_version >= 5.3' do
+          let(:params) do
+            default_params.merge(
+              :server_puppetserver_version => '5.3.0',
+            )
+          end
+
+          if facts[:osfamily] == 'FreeBSD'
+            it 'should have gem-path: [${jruby-puppet.gem-home}, "/opt/puppetlabs/server/data/puppetserver/vendored-jruby-gems", "/opt/puppetlabs/puppet/lib/ruby/vendor_gems"] in config' do
+              content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
+              expect(content).to include(%Q[    gem-path: [${jruby-puppet.gem-home}, "/var/puppet/server/data/puppetserver/vendored-jruby-gems"]\n])
+            end
+          else
+            it 'should have gem-path: [${jruby-puppet.gem-home}, "/opt/puppetlabs/server/data/puppetserver/vendored-jruby-gems", "/opt/puppetlabs/puppet/lib/ruby/vendor_gems"] in config' do
+              content = catalogue.resource('file', '/etc/custom/puppetserver/conf.d/puppetserver.conf').send(:parameters)[:content]
+              expect(content).to include(%Q[    gem-path: [${jruby-puppet.gem-home}, "/opt/puppetlabs/server/data/puppetserver/vendored-jruby-gems", "/opt/puppetlabs/puppet/lib/ruby/vendor_gems"]\n])
+            end
+          end
+        end
+      end
+
       describe 'when server_puppetserver_version < 2.2' do
         let(:params) do
           default_params.merge(:server_puppetserver_version => '2.1.0')
