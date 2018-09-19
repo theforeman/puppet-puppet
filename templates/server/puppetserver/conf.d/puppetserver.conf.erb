@@ -16,7 +16,7 @@ jruby-puppet: {
     # This setting defines the complete "GEM_PATH" for jruby.  If set, it should include
     # the gem-home directory as well as any other directories that gems can be loaded
     # from (including the vendored gems directory for gems that ship with puppetserver)
-    gem-path: [${jruby-puppet.gem-home}, "<%= @server_puppetserver_vardir %>/vendored-jruby-gems"]
+    gem-path: [<%= @server_gem_paths.join(', ') %>]
 
 <%- end -%>
     # PLEASE NOTE: Use caution when modifying the below settings. Modifying
