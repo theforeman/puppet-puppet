@@ -288,37 +288,30 @@ class puppet::params {
   $systemd_unit_name = 'puppet-run'
   # Mechanisms to manage and reload/restart the agent
   # If supported on the OS, reloading is prefered since it does not kill a currently active puppet run
-  case $facts['os']['family'] {
-    'Debian' : {
-      $agent_restart_command = "/usr/sbin/service ${service_name} reload"
-      $unavailable_runmodes = []
+  if $facts['service_provider'] == 'systemd' {
+    $agent_restart_command = "/bin/systemctl reload-or-restart ${service_name}"
+    $unavailable_runmodes = $facts['os']['family'] ? {
+      'Archlinux' => ['cron'],
+      default     => [],
     }
-    'Redhat' : {
-      # PSBM is a CentOS 6 based distribution
-      # it reports its $osreleasemajor as 2, not 6.
-      # thats why we're matching for '2' in both parts
-      # Amazon Linux is like RHEL6 but reports its osreleasemajor as 2017 or 2018.
-      $agent_restart_command = $facts['os']['release']['major'] ? {
-        /^(2|5|6|2017|2018)$/ => "/sbin/service ${service_name} reload",
-        '7'       => "/usr/bin/systemctl reload-or-restart ${service_name}",
-        default   => undef,
+  } else {
+    case $facts['os']['family'] {
+      'Debian': {
+        $agent_restart_command = "/usr/sbin/service ${service_name} reload"
+        $unavailable_runmodes = ['systemd.timer']
       }
-      $unavailable_runmodes = $facts['os']['release']['major'] ? {
-        /^(2|5|6|2017|2018)$/ => ['systemd.timer'],
-        default   => [],
+      'RedHat': {
+        $agent_restart_command = "/sbin/service ${service_name} reload"
+        $unavailable_runmodes = ['systemd.timer']
       }
-    }
-    'Windows': {
-      $agent_restart_command = undef
-      $unavailable_runmodes = ['cron', 'systemd.timer']
-    }
-    'Archlinux': {
-      $agent_restart_command = "/usr/bin/systemctl reload-or-restart ${service_name}"
-      $unavailable_runmodes = ['cron']
-    }
-    default  : {
-      $agent_restart_command = undef
-      $unavailable_runmodes = ['systemd.timer']
+      'Windows': {
+        $agent_restart_command = undef
+        $unavailable_runmodes = ['cron', 'systemd.timer']
+      }
+      default  : {
+        $agent_restart_command = undef
+        $unavailable_runmodes = ['systemd.timer']
+      }
     }
   }
 
