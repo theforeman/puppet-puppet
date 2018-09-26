@@ -1,9 +1,9 @@
 # Puppet agent
 class puppet::agent {
-  class { '::puppet::agent::install': }
-  -> class { '::puppet::agent::config': }
-  ~> class { '::puppet::agent::service': }
-  -> Class['::puppet::agent']
+  contain puppet::agent::install
+  contain puppet::agent::config
+  contain puppet::agent::service
 
-  Class['puppet::config'] ~> Class['puppet::agent::service']
+  Class['puppet::agent::install'] ~> Class['puppet::agent::config']
+  Class['puppet::config', 'puppet::agent::config'] ~> Class['puppet::agent::service']
 }

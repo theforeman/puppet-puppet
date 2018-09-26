@@ -498,16 +498,18 @@ class puppet::server(
     $rack_service = false
   }
 
-  class { '::puppet::server::install': }
-  ~> class { '::puppet::server::config':  }
-  ~> class { '::puppet::server::service':
+  class { 'puppet::server::service':
     app_root      => $app_root,
     httpd_service => $httpd_service,
     puppetmaster  => $pm_service,
     puppetserver  => $ps_service,
     rack          => $rack_service,
   }
-  -> Class['puppet::server']
 
-  Class['puppet::config'] ~> Class['puppet::server::service']
+  contain puppet::server::install
+  contain puppet::server::config
+  contain puppet::server::service
+
+  Class['puppet::server::install'] ~> Class['puppet::server::config']
+  Class['puppet::config', 'puppet::server::config'] ~> Class['puppet::server::service']
 }

@@ -736,17 +736,14 @@ class puppet (
   Array[String] $server_puppetserver_trusted_agents = $puppet::params::server_puppetserver_trusted_agents,
   Optional[Enum['off', 'jit', 'force']] $server_compile_mode = $puppet::params::server_compile_mode,
 ) inherits puppet::params {
-  include ::puppet::config
-  Class['puppet::config'] -> Class['puppet']
+  contain puppet::config
 
   if $agent == true {
-    include ::puppet::agent
-    Class['puppet::agent'] -> Class['puppet']
+    contain puppet::agent
   }
 
   if $server == true {
-    include ::puppet::server
-    Class['puppet::server'] -> Class['puppet']
+    contain puppet::server
   }
 
   # Ensure the server is running before the agent needs it, and that
