@@ -31,6 +31,12 @@ class puppet::agent::service {
     fail("Runmode of ${puppet::runmode} not supported on ${::kernel} operating systems!")
   }
 
+  # Ensure the service is started after registering the Foreman proxy
+  # Relationship is duplicated there as defined() is parse-order dependent
+  if defined(Foreman_smartproxy) {
+    Foreman_smartproxy <| |> -> Class['puppet::agent::service']
+  }
+
   class { 'puppet::agent::service::daemon':
     enabled => $service_enabled,
   }
