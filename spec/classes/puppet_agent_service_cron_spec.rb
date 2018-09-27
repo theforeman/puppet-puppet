@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'deep_merge'
 
 describe 'puppet::agent::service::cron' do
   on_os_under_test.each do |os, facts|
@@ -12,7 +13,7 @@ describe 'puppet::agent::service::cron' do
       end
 
       let :facts do
-        facts.merge(ipaddress: '192.0.2.100')
+        facts.deep_merge(networking: { ip: '192.0.2.100' })
       end
 
       describe 'when runmode is not cron' do

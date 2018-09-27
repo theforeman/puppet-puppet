@@ -35,7 +35,7 @@ end
 
 # Use the above environment variables to limit the platforms under test
 def on_os_under_test
-  on_supported_os.reject do |os, facts|
+  on_supported_os(facterversion: '3.0.0').reject do |os, facts|
     (only_test_os() && !only_test_os.include?(os)) ||
       (exclude_test_os() && exclude_test_os.include?(os))
   end
