@@ -220,7 +220,7 @@ authorization: {
             sort-order: 500
             name: "puppetlabs report"
         },
-<%- if scope.function_versioncmp([@server_puppetserver_version, '5.5']) >= 0 -%>
+<%- if scope.function_versioncmp([@server_puppetserver_version, '5.3']) >= 0 -%>
         {
             # Allow nodes to update their own facts
             match-request: {
