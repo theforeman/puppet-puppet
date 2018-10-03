@@ -707,6 +707,35 @@ describe 'puppet::server::puppetserver' do
         end
       end
 
+      describe 'puppet facts upload' do
+        context 'when server_puppetserver_version >= 5.3' do
+          let(:params) do
+            default_params.merge(
+              :server_puppetserver_version => '5.3.0',
+              :server_puppetserver_dir     => '/etc/custom/puppetserver',
+            )
+          end
+
+          it {
+            should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
+              with_content(%r{^(\ *)path: "\^/puppet/v3/facts/(.*)$})
+          }
+        end
+
+        context 'when server_puppetserver_version < 5.3' do
+          let(:params) do
+            default_params.merge(
+              :server_puppetserver_version => '5.2.0',
+              :server_puppetserver_dir     => '/etc/custom/puppetserver',
+            )
+          end
+
+          it {
+            should contain_file('/etc/custom/puppetserver/conf.d/auth.conf').
+              without_content(%r{^(\ *)path: "\^/puppet/v3/facts/(.*)$})
+          }
+        end
+      end
 
       describe 'server_trusted_agents' do
         context 'when set' do
