@@ -449,7 +449,9 @@ class puppet::params {
   $server_use_legacy_auth_conf      = false
 
   # For Puppetserver, certain configuration parameters are version specific. We assume a particular version here.
-  if versioncmp($::puppetversion, '5.1.0') >= 0 {
+  if versioncmp($::puppetversion, '5.3.0') >= 0 {
+    $server_puppetserver_version = '5.3.0'
+  } elsif versioncmp($::puppetversion, '5.1.0') >= 0 {
     $server_puppetserver_version = '5.1.0'
   } elsif versioncmp($::puppetversion, '5.0.0') >= 0 {
     $server_puppetserver_version = '5.0.0'
