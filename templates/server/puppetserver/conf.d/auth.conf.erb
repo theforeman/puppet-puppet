@@ -46,6 +46,44 @@ authorization: {
             sort-order: 500
             name: "puppetlabs csr"
         },
+<%- if @server_ca -%>
+        {
+            match-request: {
+                path: "/puppet-ca/v1/certificate_status"
+                type: path
+                method: [get, put, delete]
+            }
+<%- if @server_ca_auth_required == false -%>
+            allow-unauthenticated: true
+<%- else -%>
+            allow: [
+<%- @server_ca_client_whitelist.each do |client| -%>
+                "<%= client %>",
+<%- end -%>
+            ]
+<%- end -%>
+            sort-order: 500
+            name: "puppetlabs cert status"
+        },
+        {
+            match-request: {
+                path: "/puppet-ca/v1/certificate_statuses"
+                type: path
+                method: get
+            }
+<%- if @server_ca_auth_required == false -%>
+            allow-unauthenticated: true
+<%- else -%>
+            allow: [
+<%- @server_ca_client_whitelist.each do |client| -%>
+                "<%= client %>",
+<%- end -%>
+            ]
+<%- end -%>
+            sort-order: 500
+            name: "puppetlabs cert statuses"
+        },
+<%- end -%>
         {
             # Allow unauthenticated access to the status service endpoint
             match-request: {
@@ -55,46 +93,8 @@ authorization: {
             }
             allow-unauthenticated: true
             sort-order: 500
-            name: "puppetlabs status service"
+            name: "puppetlabs status service - full"
         },
-<%- if @server_ca -%>
-        {
-            match-request: {
-                path: "/puppet-ca/v1/certificate_status/"
-                type: path
-                method: [ get, put, delete ]
-            }
-<%- if @server_ca_auth_required == false -%>
-            allow-unauthenticated: true
-<%- else -%>
-            allow: [
-<%- @server_ca_client_whitelist.each do |client| -%>
-                "<%= client %>",
-<%- end -%>
-            ]
-<%- end -%>
-            sort-order: 200
-            name: "certificate_status"
-        },
-        {
-            match-request: {
-                path: "/puppet-ca/v1/certificate_statuses/"
-                type: path
-                method: get
-            }
-<%- if @server_ca_auth_required == false -%>
-            allow-unauthenticated: true
-<%- else -%>
-            allow: [
-<%- @server_ca_client_whitelist.each do |client| -%>
-                "<%= client %>",
-<%- end -%>
-            ]
-<%- end -%>
-            sort-order: 200
-            name: "certificate_statuses"
-        },
-<%- end -%>
         {
             match-request: {
                 path: "/puppet-admin-api/v1/environment-cache"

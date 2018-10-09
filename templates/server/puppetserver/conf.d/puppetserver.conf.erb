@@ -62,6 +62,7 @@ jruby-puppet: {
 
     # (optional) Sets the upper limit for the random sleep set as a Retry-After header on 503 responses returned when max-queued-requests is enabled.
     max-retry-delay: <%= @server_max_retry_delay %>
+
 <%- end -%>
     # (optional) Authorize access to Puppet master endpoints via rules
     # specified in the legacy Puppet auth.conf file (if true) or via rules
@@ -74,20 +75,21 @@ jruby-puppet: {
     environment-class-cache-enabled: <%= @server_environment_class_cache_enabled %>
 <%- end -%>
 <%- if @compile_mode %>
+
     compile-mode: <%= @compile_mode %>
 <%- end -%>
 }
 
-# settings related to HTTP client requests made by Puppet Server
+# settings related to HTTPS client requests made by Puppet Server
 http-client: {
-    # A list of acceptable protocols for making HTTP requests
+    # A list of acceptable protocols for making HTTPS requests
     ssl-protocols: [
     <%- @server_ssl_protocols.each do |protocol| -%>
         <%= protocol %>,
     <%- end -%>
     ]
 
-    # A list of acceptable cipher suites for making HTTP requests
+    # A list of acceptable cipher suites for making HTTPS requests
     cipher-suites: [
     <%- @server_cipher_suites.each do |cipher| -%>
         <%= cipher %>,

@@ -15,6 +15,7 @@ metrics: {
 <%- else -%>
             #metrics-allowed: ["compiler.compile.production"]
 <% end -%>
+
             reporters: {
                 # enable or disable JMX metrics reporter
                 jmx: {
@@ -25,6 +26,7 @@ metrics: {
                     enabled: <%= @metrics_graphite_enable %>
                 }
             }
+
         }
     }
 
@@ -55,4 +57,5 @@ metrics: {
             }
         }
     }
+
 }
