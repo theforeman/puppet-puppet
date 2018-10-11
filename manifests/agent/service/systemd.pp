@@ -10,7 +10,7 @@ class puppet::agent::service::systemd (
 
     if $enabled {
       # Use the same times as for cron
-      $times = ip_to_cron($::puppet::runinterval)
+      $times = extlib::ip_to_cron($::puppet::runinterval)
 
       $command = $::puppet::systemd_cmd ? {
         undef   => "${::puppet::puppet_cmd} agent --config ${::puppet::dir}/puppet.conf --onetime --no-daemonize --detailed-exitcode --no-usecacheonfailure",
