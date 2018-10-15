@@ -4,6 +4,8 @@ describe 'puppet::config' do
   on_os_under_test.each do |os, facts|
     context "on #{os}" do
 
+      newline = facts[:osfamily] == 'windows' ? "\r\n" : "\n"
+
       case facts[:osfamily]
       when 'FreeBSD'
         dir_owner = 'puppet'
@@ -53,7 +55,7 @@ describe 'puppet::config' do
         end
 
         it 'should contain auth.conf' do
-          should_not contain_file("#{confdir}/auth.conf").with_content(%r{^path /certificate_revocation_list/ca\nmethod find$})
+          should_not contain_file("#{confdir}/auth.conf").with_content(%r{^path /certificate_revocation_list/ca#{newline}method find#{newline}})
           should contain_file("#{confdir}/auth.conf").with_content(%r{/puppet/v3/})
         end
 
@@ -87,7 +89,7 @@ describe 'puppet::config' do
         end
 
         it 'should contain auth.conf with auth any' do
-          should contain_file("#{confdir}/auth.conf").with_content(%r{^path /puppet-ca/v1/certificate_revocation_list/ca\nauth any$})
+          should contain_file("#{confdir}/auth.conf").with_content(%r{^path /puppet-ca/v1/certificate_revocation_list/ca#{newline}auth any#{newline}})
         end
       end
 
@@ -97,7 +99,7 @@ describe 'puppet::config' do
         end
 
         it 'should contain auth.conf with allow' do
-          should contain_file("#{confdir}/auth.conf").with_content(%r{^allow \$1, puppetproxy$})
+          should contain_file("#{confdir}/auth.conf").with_content(%r{^allow \$1, puppetproxy#{newline}})
         end
       end
 
@@ -193,7 +195,7 @@ describe 'puppet::config' do
         end
 
         it 'should contain auth.conf with auth any' do
-          should contain_file("#{confdir}/auth.conf").with_content(%r{^path /run\nauth any\nmethod save\nallow node1.example.com,node2.example.com$})
+          should contain_file("#{confdir}/auth.conf").with_content(%r{^path /run#{newline}auth any#{newline}method save#{newline}allow node1.example.com,node2.example.com#{newline}})
         end
       end
 
@@ -203,7 +205,7 @@ describe 'puppet::config' do
         end
 
         it 'should contain auth.conf with auth any' do
-          should contain_file("#{confdir}/auth.conf").with_content(%r{^path /run\nauth any\nmethod save\nallow master.example.com$})
+          should contain_file("#{confdir}/auth.conf").with_content(%r{^path /run#{newline}auth any#{newline}method save#{newline}allow master.example.com#{newline}})
         end
       end
 
@@ -213,7 +215,7 @@ describe 'puppet::config' do
         end
 
         it 'should contain auth.conf with auth any' do
-          should contain_file("#{confdir}/auth.conf").with_content(%r{^path /run\nauth any\nmethod save\nallow #{facts[:fqdn]}$})
+          should contain_file("#{confdir}/auth.conf").with_content(%r{^path /run#{newline}auth any#{newline}method save#{newline}allow #{facts[:fqdn]}#{newline}})
         end
       end
 
