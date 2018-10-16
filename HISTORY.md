@@ -1,38 +1,3 @@
-# Changelog
-
-## [10.0.0](https://github.com/theforeman/puppet-puppet/tree/10.0.0) (2018-10-16)
-
-[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/9.1.0...10.0.0)
-
-**Breaking changes:**
-
-- don't use pupetlabs-hocon for metrics.conf [\#622](https://github.com/theforeman/puppet-puppet/pull/622) ([mmoll](https://github.com/mmoll))
-- Revert "use puppetlabs-hocon for webserver.conf" [\#620](https://github.com/theforeman/puppet-puppet/pull/620) ([mmoll](https://github.com/mmoll))
-- Revert "use puppetlabs-hocon for product.conf" [\#618](https://github.com/theforeman/puppet-puppet/pull/618) ([mmoll](https://github.com/mmoll))
-- Revert "use puppetlabs-{hocon, puppet\_authorization} for auth.conf [\#615](https://github.com/theforeman/puppet-puppet/pull/615) ([mmoll](https://github.com/mmoll))
-
-**Implemented enhancements:**
-
-- reduce diff to Puppet distributed files [\#638](https://github.com/theforeman/puppet-puppet/pull/638) ([mmoll](https://github.com/mmoll))
-- Make `splaylimit` & `runinterval` types consistent [\#623](https://github.com/theforeman/puppet-puppet/pull/623) ([alexjfisher](https://github.com/alexjfisher))
-- add status service endpoint [\#621](https://github.com/theforeman/puppet-puppet/pull/621) ([mmoll](https://github.com/mmoll))
-- updated auth.conf for the "puppet facts upload" command \(puppetserver 5.5\) [\#619](https://github.com/theforeman/puppet-puppet/pull/619) ([slauger](https://github.com/slauger))
-- Add ability to configure custom\_trusted\_oid\_mapping.yaml [\#603](https://github.com/theforeman/puppet-puppet/pull/603) ([baurmatt](https://github.com/baurmatt))
-
-**Fixed bugs:**
-
-- Add shared gem path for Puppetserver \>= 5.3 [\#631](https://github.com/theforeman/puppet-puppet/pull/631) ([baurmatt](https://github.com/baurmatt))
-
-**Merged pull requests:**
-
-- Allow puppet/extlib 3 [\#637](https://github.com/theforeman/puppet-puppet/pull/637) ([alexjfisher](https://github.com/alexjfisher))
-- Use facter 3 facts during tests [\#636](https://github.com/theforeman/puppet-puppet/pull/636) ([alexjfisher](https://github.com/alexjfisher))
-- Contain classes [\#635](https://github.com/theforeman/puppet-puppet/pull/635) ([ekohl](https://github.com/ekohl))
-- Use `contain` instead of `anchor` pattern [\#627](https://github.com/theforeman/puppet-puppet/pull/627) ([alexjfisher](https://github.com/alexjfisher))
-- removing redundant \> character [\#626](https://github.com/theforeman/puppet-puppet/pull/626) ([attachmentgenie](https://github.com/attachmentgenie))
-- allow puppetlabs-stdlib 5.x [\#625](https://github.com/theforeman/puppet-puppet/pull/625) ([mmoll](https://github.com/mmoll))
-- allow puppetlabs-concat 5.x [\#624](https://github.com/theforeman/puppet-puppet/pull/624) ([mmoll](https://github.com/mmoll))
-
 ## [9.1.0](https://github.com/theforeman/puppet-puppet/tree/9.1.0) (2018-07-16)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/9.0.3...9.1.0)
