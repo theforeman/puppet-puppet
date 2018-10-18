@@ -10,7 +10,11 @@ describe 'puppet' do
         confdir             = '/usr/local/etc/puppet'
         environments_dir    = '/usr/local/etc/puppet/environments'
         etcdir              = '/usr/local/etc/puppet'
-        puppetcacmd         = '/usr/local/bin/puppet cert'
+        if facts[:puppetversion] >= '6.0'
+          puppetcacmd         = '/usr/local/bin/puppetserver ca setup'
+        else
+          puppetcacmd         = '/usr/local/bin/puppet cert --generate puppetmaster.example.com --allow-dns-alt-names'
+        end
         puppetserver_logdir = '/var/log/puppetserver'
         puppetserver_rundir = '/var/run/puppetserver'
         puppetserver_vardir = '/var/puppet/server/data/puppetserver'
@@ -24,7 +28,11 @@ describe 'puppet' do
         confdir             = '/etc/puppetlabs/puppet'
         environments_dir    = '/etc/puppetlabs/code/environments'
         etcdir              = '/etc/puppetlabs/puppet'
-        puppetcacmd         = '/opt/puppetlabs/bin/puppet cert'
+        if facts[:puppetversion] >= '6.0'
+          puppetcacmd         = '/opt/puppetlabs/bin/puppetserver ca setup'
+        else
+          puppetcacmd         = '/opt/puppetlabs/bin/puppet cert --generate puppetmaster.example.com --allow-dns-alt-names'
+        end
         puppetserver_logdir = '/var/log/puppetlabs/puppetserver'
         puppetserver_rundir = '/var/run/puppetlabs/puppetserver'
         puppetserver_vardir = '/opt/puppetlabs/server/data/puppetserver'
@@ -96,7 +104,7 @@ describe 'puppet' do
 
           should contain_exec('puppet_server_config-generate_ca_cert') \
             .with_creates("#{ssldir}/certs/puppetmaster.example.com.pem") \
-            .with_command("#{puppetcacmd} --generate puppetmaster.example.com --allow-dns-alt-names") \
+            .with_command(puppetcacmd) \
             .with_umask('0022') \
             .that_requires(["Concat[#{conf_file}]", 'Exec[puppet_server_config-create_ssl_dir]'])
         end

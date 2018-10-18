@@ -161,6 +161,7 @@ class puppet::params {
   $autosign_source  = undef
 
   $puppet_cmd = "${bindir}/puppet"
+  $puppetserver_cmd = "${bindir}/puppetserver"
 
   $manage_packages = true
 
@@ -316,8 +317,6 @@ class puppet::params {
   } else {
     $client_package = ['puppet']
   }
-
-  $puppetca_cmd  = "${puppet_cmd} cert"
 
   # Puppet service name
   $service_name = 'puppet'
