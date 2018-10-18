@@ -317,7 +317,6 @@ class puppet::params {
     $client_package = ['puppet']
   }
 
-  $puppetrun_cmd = "${puppet_cmd} kick"
   $puppetca_cmd  = "${puppet_cmd} cert"
 
   # Puppet service name
