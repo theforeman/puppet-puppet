@@ -1,25 +1,19 @@
 # Set up the puppet server config
 class puppet::server::config inherits puppet::config {
-  if $::puppet::server::passenger and $::puppet::server::implementation == 'master' {
-    contain 'puppet::server::passenger'
+  contain 'puppet::server::puppetserver'
+  unless empty($::puppet::server::puppetserver_vardir) {
+    puppet::config::master {
+      'vardir': value => $::puppet::server::puppetserver_vardir;
+    }
   }
-
-  if $::puppet::server::implementation == 'puppetserver' {
-    contain 'puppet::server::puppetserver'
-    unless empty($::puppet::server::puppetserver_vardir) {
-      puppet::config::master {
-        'vardir': value => $::puppet::server::puppetserver_vardir;
-      }
+  unless empty($::puppet::server::puppetserver_rundir) {
+    puppet::config::master {
+      'rundir': value => $::puppet::server::puppetserver_rundir;
     }
-    unless empty($::puppet::server::puppetserver_rundir) {
-      puppet::config::master {
-        'rundir': value => $::puppet::server::puppetserver_rundir;
-      }
-    }
-    unless empty($::puppet::server::puppetserver_logdir) {
-      puppet::config::master {
-        'logdir': value => $::puppet::server::puppetserver_logdir;
-      }
+  }
+  unless empty($::puppet::server::puppetserver_logdir) {
+    puppet::config::master {
+      'logdir': value => $::puppet::server::puppetserver_logdir;
     }
   }
 
@@ -199,10 +193,6 @@ class puppet::server::config inherits puppet::config {
         content => file($::settings::cacrl, $::settings::hostcrl, '/dev/null'),
       }
     }
-  }
-
-  if $::puppet::server::passenger and $::puppet::server::implementation == 'master' and $::puppet::server::ca {
-    Exec['puppet_server_config-generate_ca_cert'] ~> Service[$::puppet::server::httpd_service]
   }
 
   # autosign file

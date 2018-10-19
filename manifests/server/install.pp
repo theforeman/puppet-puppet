@@ -25,15 +25,7 @@ class puppet::server::install {
   }
 
   if $::puppet::manage_packages == true or $::puppet::manage_packages == 'server' {
-    $server_package_default = $::puppet::server::implementation ? {
-      'master'       => $::osfamily ? {
-        'Debian'                => ['puppet-master'],
-        /^(FreeBSD|DragonFly)$/ => [],
-        default                 => ['puppet-server'],
-      },
-      'puppetserver' => 'puppetserver',
-    }
-    $server_package = pick($::puppet::server::package, $server_package_default)
+    $server_package = pick($::puppet::server::package, 'puppetserver')
     $server_version = pick($::puppet::server::version, $::puppet::version)
 
     package { $server_package:
@@ -42,17 +34,6 @@ class puppet::server::install {
 
     if $::puppet::server::manage_user {
       Package[$server_package] -> User[$::puppet::server::user]
-    }
-  }
-
-  # Prevent the master service running and preventing Apache from binding to the port
-  if $::puppet::server::passenger and $::osfamily == 'Debian' {
-    file { '/etc/default/puppetmaster':
-      content => "START=no\n",
-    }
-
-    if $::puppet::manage_packages == true or $::puppet::manage_packages == 'server' {
-      File['/etc/default/puppetmaster'] -> Package[$server_package]
     }
   }
 

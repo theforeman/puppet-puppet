@@ -95,7 +95,6 @@ class puppet::server::puppetserver (
   $server_ip                              = $::puppet::server::ip,
   $server_port                            = $::puppet::server::port,
   $server_http                            = $::puppet::server::http,
-  $server_http_allow                      = $::puppet::server::http_allow,
   $server_http_port                       = $::puppet::server::http_port,
   $server_ca                              = $::puppet::server::ca,
   $server_dir                             = $::puppet::server::dir,
@@ -135,10 +134,6 @@ class puppet::server::puppetserver (
 
   if versioncmp($server_puppetserver_version, '2.2') < 0 {
     fail('puppetserver <2.2 is not supported by this module version')
-  }
-
-  if !(empty($server_http_allow)) {
-    fail('setting $server_http_allow is not supported for puppetserver as it would have no effect')
   }
 
   $puppetserver_package = pick($::puppet::server::package, 'puppetserver')

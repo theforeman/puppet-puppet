@@ -52,26 +52,11 @@
 #                                      to false
 #
 # $http::                              Should the puppet master listen on HTTP as well as HTTPS.
-#                                      Useful for load balancer or reverse proxy scenarios. Note that
-#                                      the HTTP puppet master denies access from all clients by default,
-#                                      allowed clients must be specified with $http_allow.
+#                                      Useful for load balancer or reverse proxy scenarios.
 #
 # $http_port::                         Puppet master HTTP port; defaults to 8139.
 #
-# $http_allow::                        Array of allowed clients for the HTTP puppet master. Passed
-#                                      to Apache's 'Allow' directive.
-#
 # $reports::                           List of report types to include on the puppetmaster
-#
-# $implementation::                    Puppet master implementation, either "master" (traditional
-#                                      Ruby) or "puppetserver" (JVM-based)
-#
-# $passenger::                         If set to true, we will configure apache with
-#                                      passenger. If set to false, we will enable the
-#                                      default puppetmaster service unless
-#                                      service_fallback is set to false. See 'Advanced
-#                                      server parameters' for more information.
-#                                      Only applicable when server_implementation is "master".
 #
 # $external_nodes::                    External nodes classifier executable
 #
@@ -122,8 +107,6 @@
 #                                      false if you don't, "active_record" for 2.X
 #                                      style db, "puppetdb" for puppetdb
 #
-# $app_root::                          Directory where the application lives
-#
 # $ssl_dir::                           SSL directory
 #
 # $package::                           Custom package name for puppet master
@@ -138,9 +121,6 @@
 # $additional_settings::               A hash of additional settings.
 #                                      Example: {trusted_node_data => true, ordering => 'manifest'}
 #
-# $rack_arguments::                    Arguments passed to rack app ARGV in addition to --confdir and
-#                                      --vardir.  The default is an empty array.
-#
 # $puppetdb_host::                     PuppetDB host
 #
 # $puppetdb_port::                     PuppetDB port
@@ -151,28 +131,6 @@
 #                                      Defaults to 'current'.
 #
 # === Advanced server parameters:
-#
-# $httpd_service::                     Apache/httpd service name to notify
-#                                      on configuration changes. Defaults
-#                                      to 'httpd' based on the default
-#                                      apache module included with foreman-installer.
-#
-# $service_fallback::                  If passenger is not used, do we want to fallback
-#                                      to using the puppetmaster service? Set to false
-#                                      if you disabled passenger and you do NOT want to
-#                                      use the puppetmaster service. Defaults to true.
-#
-# $passenger_min_instances::           The PassengerMinInstances parameter. Sets the
-#                                      minimum number of application processes to run.
-#                                      Defaults to the number of processors on your
-#                                      system.
-#
-# $passenger_pre_start::               Pre-start the first passenger worker instance
-#                                      process during httpd start.
-#
-# $passenger_ruby::                    The PassengerRuby parameter. Sets the Ruby
-#                                      interpreter for serving the puppetmaster rack
-#                                      application.
 #
 # $config_version::                    How to determine the configuration version. When
 #                                      using git_repo, by default a git describe
@@ -364,20 +322,12 @@ class puppet::server(
   Optional[Puppet::Custom_trusted_oid_mapping] $custom_trusted_oid_mapping = $::puppet::server_custom_trusted_oid_mapping,
   Boolean $http = $::puppet::server_http,
   Integer $http_port = $::puppet::server_http_port,
-  Array[String] $http_allow = $::puppet::server_http_allow,
   String $reports = $::puppet::server_reports,
-  Enum['master', 'puppetserver'] $implementation = $::puppet::server_implementation,
-  Boolean $passenger = $::puppet::server_passenger,
   Stdlib::Absolutepath $puppetserver_vardir = $::puppet::server_puppetserver_vardir,
   Optional[Stdlib::Absolutepath] $puppetserver_rundir = $::puppet::server_puppetserver_rundir,
   Optional[Stdlib::Absolutepath] $puppetserver_logdir = $::puppet::server_puppetserver_logdir,
   Stdlib::Absolutepath $puppetserver_dir = $::puppet::server_puppetserver_dir,
   Pattern[/^[\d]\.[\d]+\.[\d]+$/] $puppetserver_version = $::puppet::server_puppetserver_version,
-  Boolean $service_fallback = $::puppet::server_service_fallback,
-  Integer[0] $passenger_min_instances = $::puppet::server_passenger_min_instances,
-  Boolean $passenger_pre_start = $::puppet::server_passenger_pre_start,
-  Optional[String] $passenger_ruby = $::puppet::server_passenger_ruby,
-  String $httpd_service = $::puppet::server_httpd_service,
   Variant[Undef, String[0], Stdlib::Absolutepath] $external_nodes = $::puppet::server_external_nodes,
   Array[String] $cipher_suites = $::puppet::server_cipher_suites,
   Optional[String] $config_version = $::puppet::server_config_version,
@@ -405,7 +355,6 @@ class puppet::server(
   String $post_hook_content = $::puppet::server_post_hook_content,
   String $post_hook_name = $::puppet::server_post_hook_name,
   Variant[Undef, Boolean, Enum['active_record', 'puppetdb']] $storeconfigs_backend = $::puppet::server_storeconfigs_backend,
-  Stdlib::Absolutepath $app_root = $::puppet::server_app_root,
   Array[Stdlib::Absolutepath] $ruby_load_paths = $::puppet::server_ruby_load_paths,
   Stdlib::Absolutepath $ssl_dir = $::puppet::server_ssl_dir,
   Boolean $ssl_dir_manage = $::puppet::server_ssl_dir_manage,
@@ -421,7 +370,6 @@ class puppet::server(
   Optional[String] $ca_proxy = $::puppet::server_ca_proxy,
   Boolean $strict_variables = $::puppet::server_strict_variables,
   Hash[String, Data] $additional_settings = $::puppet::server_additional_settings,
-  Array[String] $rack_arguments = $::puppet::server_rack_arguments,
   Boolean $foreman = $::puppet::server_foreman,
   Stdlib::HTTPUrl $foreman_url = $::puppet::server_foreman_url,
   Optional[Stdlib::Absolutepath] $foreman_ssl_ca = $::puppet::server_foreman_ssl_ca,
@@ -469,14 +417,6 @@ class puppet::server(
   Boolean $ca_allow_sans = $::puppet::server_ca_allow_sans,
   Boolean $ca_allow_auth_extensions = $::puppet::server_ca_allow_auth_extensions,
 ) {
-  if $implementation == 'master' and $ip != $puppet::params::ip {
-    notify {
-      'ip_not_supported':
-        message  => "Bind IP address is unsupported for the ${implementation} implementation.",
-        loglevel => 'warning',
-    }
-  }
-
   if $ca {
     $ssl_ca_cert     = "${ssl_dir}/ca/ca_crt.pem"
     $ssl_ca_crl      = "${ssl_dir}/ca/ca_crl.pem"
@@ -500,24 +440,6 @@ class puppet::server(
     }
   } else {
     $config_version_cmd = $config_version
-  }
-
-  if $implementation == 'master' {
-    $pm_service   = !$passenger and $service_fallback
-    $ps_service   = undef
-    $rack_service = $passenger
-  } elsif $implementation == 'puppetserver' {
-    $pm_service   = undef
-    $ps_service   = true
-    $rack_service = false
-  }
-
-  class { 'puppet::server::service':
-    app_root      => $app_root,
-    httpd_service => $httpd_service,
-    puppetmaster  => $pm_service,
-    puppetserver  => $ps_service,
-    rack          => $rack_service,
   }
 
   contain puppet::server::install

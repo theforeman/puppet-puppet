@@ -7,12 +7,6 @@ Installs and configures the Puppet agent and optionally a Puppet master (when
 `server` is true).  Part of the [Foreman installer](https://github.com/theforeman/foreman-installer)
 or to be used as a Puppet module.
 
-The Puppet master is configured under Apache and Passenger by default, unless
-`server_passenger` is set to false. When using Puppet Labs AIO packages
-(puppet-agent) the JVM-based Puppet Server is installed by default. For Puppet
-3.x based installation, `server_implementation` can be set to `puppetserver`
-to switch to the JVM-based Puppet Server.
-
 When using Puppet Server (version 2.2.x is the lowest version, this module supports),
 the module supports and assumes you will be installing the latest version.
 If you know you'll be installing an earlier or specific version, you will
@@ -143,12 +137,7 @@ and `X-SSL-Subject` HTTP headers to have been set on the front end server.
 
 The listening port can be configured by setting `server_http_port` (which defaults to 8139).
 
-For passenger setups, this HTTP instance accepts no connections by default (`deny all` in the `<Directory>`
-snippet). Allowed hosts can be configured by setting the `server_http_allow` parameter
-(which expects an array).
-
-For puppetserver, this HTTP instance accepts **ALL** connections and no further restrictions can be configured. The
-`server_http_allow` parameter has no effect at all!
+For puppetserver, this HTTP instance accepts **ALL** connections and no further restrictions can be configured.
 
 **Note that running an HTTP puppetmaster is a huge security risk when improperly
 configured. Allowed hosts should be tightly controlled; anyone with access to an allowed
@@ -159,7 +148,6 @@ host can access all client catalogues and client certificates.**
       server               => true,
       server_http          => true,
       server_http_port     => 8130, # default: 8139
-      server_http_allow    => ['10.20.30.1', 'puppetbalancer.my.corp'],
     }
 
 ## Puppet Server configuration
