@@ -14,7 +14,6 @@ describe 'puppet' do
       let(:params) do
         {
           server: true,
-          server_implementation: 'puppetserver',
           # We set these values because they're calculated
           server_jvm_config: '/etc/default/puppetserver',
           server_jvm_min_heap_size: '2G',

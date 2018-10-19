@@ -213,12 +213,6 @@ class puppet::params {
   $server_ca                  = true
   $server_ca_crl_sync         = false
   $server_reports             = 'foreman'
-  $server_passenger           = true
-  $server_service_fallback    = true
-  $server_passenger_min_instances = abs($::processorcount)
-  $server_passenger_pre_start = true
-  $server_passenger_ruby      = undef
-  $server_httpd_service       = 'httpd'
   $server_external_nodes      = "${dir}/node.rb"
   $server_enc_api             = 'v2'
   $server_report_api          = 'v2'
@@ -226,16 +220,8 @@ class puppet::params {
   $server_ca_proxy            = undef
   $server_certname            = $::clientcert
   $server_strict_variables    = false
-  $server_rack_arguments      = []
   $server_http                = false
   $server_http_port           = 8139
-  $server_http_allow          = []
-
-  # use puppetserver (JVM) or puppet master (Ruby)?
-  $server_implementation = $aio_package ? {
-    true    => 'puppetserver',
-    default => 'master',
-  }
 
   # Need a new master template for the server?
   $server_template      = 'puppet/server/puppet.conf.erb'
@@ -294,10 +280,7 @@ class puppet::params {
   # - puppetdb for puppetdb
   $server_storeconfigs_backend = undef
 
-  # Passenger config
-  $server_app_root = "${dir}/rack"
   $server_ssl_dir  = $ssldir
-
   $server_package     = undef
   $server_version     = undef
 
