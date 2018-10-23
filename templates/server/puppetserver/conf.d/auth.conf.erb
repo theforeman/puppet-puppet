@@ -48,6 +48,7 @@ authorization: {
         },
 <%- if @server_ca -%>
         {
+            # Allow the CA CLI to access the certificate_status endpoint
             match-request: {
                 path: "/puppet-ca/v1/certificate_status"
                 type: path
@@ -60,12 +61,20 @@ authorization: {
 <%- @server_ca_client_whitelist.each do |client| -%>
                 "<%= client %>",
 <%- end -%>
+<%- if scope.function_versioncmp([@server_puppetserver_version, '5.3.6']) >= 0 -%>
+                {
+                    extensions: {
+                        pp_cli_auth: "true"
+                    }
+                }
+<%- end -%>
             ]
 <%- end -%>
             sort-order: 500
             name: "puppetlabs cert status"
         },
         {
+            # Allow the CA CLI to access the certificate_statuses endpoint
             match-request: {
                 path: "/puppet-ca/v1/certificate_statuses"
                 type: path
@@ -77,6 +86,13 @@ authorization: {
             allow: [
 <%- @server_ca_client_whitelist.each do |client| -%>
                 "<%= client %>",
+<%- end -%>
+<%- if scope.function_versioncmp([@server_puppetserver_version, '5.3.6']) >= 0 -%>
+                {
+                    extensions: {
+                        pp_cli_auth: "true"
+                    }
+                }
 <%- end -%>
             ]
 <%- end -%>
@@ -95,6 +111,18 @@ authorization: {
             sort-order: 500
             name: "puppetlabs status service - full"
         },
+<%- if scope.function_versioncmp([@server_puppetserver_version, '5.3.6']) >= 0 -%>
+        {
+            match-request: {
+                path: "/status/v1/simple"
+                type: path
+                method: get
+            }
+            allow-unauthenticated: true
+            sort-order: 500
+            name: "puppetlabs status service - simple"
+        },
+<%- end -%>
         {
             match-request: {
                 path: "/puppet-admin-api/v1/environment-cache"

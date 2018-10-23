@@ -563,6 +563,11 @@
 #                                           requested. For example, if a value of 3 is specified for the ssl-selector-threads setting,
 #                                           Jetty will actually use 6 selector threads.
 #
+# $server_ca_allow_sans::                   Allow CA to sign certificate requests that have Subject Alternative Names
+#                                           Defaults to false
+#
+# $server_ca_allow_auth_extensions::        Allow CA to sign certificate requests that have authorization extensions
+#
 # === Usage:
 #
 # * Simple usage:
@@ -766,6 +771,8 @@ class puppet (
   Optional[Integer[1]] $server_ssl_acceptor_threads = undef,
   Optional[Integer[1]] $server_ssl_selector_threads = undef,
   Optional[Integer[1]] $server_max_threads = undef,
+  Boolean $server_ca_allow_sans = $puppet::params::server_ca_allow_sans,
+  Boolean $server_ca_allow_auth_extensions = $puppet::params::server_ca_allow_auth_extensions,
 ) inherits puppet::params {
   contain puppet::config
 

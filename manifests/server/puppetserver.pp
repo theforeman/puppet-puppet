@@ -128,6 +128,8 @@ class puppet::server::puppetserver (
   $ssl_acceptor_threads                   = $::puppet::server::ssl_acceptor_threads,
   $ssl_selector_threads                   = $::puppet::server::ssl_selector_threads,
   $max_threads                            = $::puppet::server::max_threads,
+  $ca_allow_sans                          = $::puppet::server::ca_allow_sans,
+  $ca_allow_auth_extensions               = $::puppet::server::ca_allow_auth_extensions,
 ) {
   include ::puppet::server
 
@@ -272,8 +274,15 @@ class puppet::server::puppetserver (
     }
   }
 
+  if versioncmp($server_puppetserver_version, '5.3.6') >= 0 {
+    $ca_conf_ensure = present
+  } else {
+    $ca_conf_ensure = absent
+  }
+
   file { "${server_puppetserver_dir}/conf.d/ca.conf":
-    ensure => absent,
+    ensure  => $ca_conf_ensure,
+    content => template('puppet/server/puppetserver/conf.d/ca.conf.erb'),
   }
 
   file { "${server_puppetserver_dir}/conf.d/puppetserver.conf":
