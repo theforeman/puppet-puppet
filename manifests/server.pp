@@ -333,6 +333,13 @@
 #
 # $puppetserver_trusted_agents::       Certificate names of agents that are allowed to fetch *all* catalogs. Defaults to empty array
 #
+#
+# $ca_allow_sans::                     Allow CA to sign certificate requests that have Subject Alternative Names
+#                                      Defaults to false
+#
+# $ca_allow_auth_extensions::          Allow CA to sign certificate requests that have authorization extensions
+#                                      Defaults to false
+#
 class puppet::server(
   Variant[Boolean, Stdlib::Absolutepath] $autosign = $::puppet::autosign,
   Array[String] $autosign_entries = $::puppet::autosign_entries,
@@ -459,6 +466,8 @@ class puppet::server(
   Optional[Integer[1]] $ssl_selector_threads = $::puppet::server_ssl_selector_threads,
   Optional[Integer[1]] $ssl_acceptor_threads = $::puppet::server_ssl_acceptor_threads,
   Optional[Integer[1]] $max_threads = $::puppet::server_max_threads,
+  Boolean $ca_allow_sans = $::puppet::server_ca_allow_sans,
+  Boolean $ca_allow_auth_extensions = $::puppet::server_ca_allow_auth_extensions,
 ) {
   if $implementation == 'master' and $ip != $puppet::params::ip {
     notify {

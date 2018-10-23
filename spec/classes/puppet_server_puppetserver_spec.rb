@@ -587,6 +587,41 @@ describe 'puppet' do
         end
       end
 
+      describe 'Puppet Server CA related settings' do
+        context 'when server_puppetserver_version < 5.3.6' do
+          let(:params) { super().merge(server_puppetserver_version: '5.3.5') }
+          context 'with default parameters' do
+            it { should contain_file('/etc/custom/puppetserver/conf.d/ca.conf').with_ensure('absent') }
+            it { should contain_file(auth_conf).without_content(/^( *)pp_cli_auth: "true"$/) }
+          end
+        end
+
+        context 'when server_puppetserver_version >= 5.3.6' do
+          let(:params) { super().merge(server_puppetserver_version: '5.3.6') }
+          context 'with default parameters' do
+            it { should contain_file('/etc/custom/puppetserver/conf.d/ca.conf')
+                          .with_ensure('present')
+                          .with_content(/^( *)allow-subject-alt-names: false$/)
+                          .with_content(/^( *)allow-authorization-extensions: false$/)
+            }
+            it { should contain_file(auth_conf).with_content(/^( *)pp_cli_auth: "true"$/) }
+          end
+
+          context 'with ca parameters set' do
+            let(:params) { super().merge(
+              server_ca_allow_sans: true,
+              server_ca_allow_auth_extensions: true,
+              )
+            }
+            it { should contain_file('/etc/custom/puppetserver/conf.d/ca.conf')
+                          .with_ensure('present')
+                          .with_content(/^( *)allow-subject-alt-names: true$/)
+                          .with_content(/^( *)allow-authorization-extensions: true$/)
+            }
+          end
+        end
+      end
+
       describe 'when server_puppetserver_version < 2.2' do
         let(:params) { super().merge(server_puppetserver_version: '2.1.0') }
         it { should raise_error(Puppet::Error, /puppetserver <2.2 is not supported by this module version/) }

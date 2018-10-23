@@ -1,0 +1,7 @@
+certificate-authority: {
+    # allow CA to sign certificate requests that have subject alternative names.
+    allow-subject-alt-names: <%= @ca_allow_sans %>
+
+    # allow CA to sign certificate requests that have authorization extensions.
+    allow-authorization-extensions: <%= @ca_allow_auth_extensions %>
+}
