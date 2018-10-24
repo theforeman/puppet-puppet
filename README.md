@@ -1,10 +1,10 @@
-[![Puppet Forge](http://img.shields.io/puppetforge/v/theforeman/puppet.svg)](https://forge.puppetlabs.com/theforeman/puppet)
+[![Puppet Forge](https://img.shields.io/puppetforge/v/theforeman/puppet.svg)](https://forge.puppetlabs.com/theforeman/puppet)
 [![Build Status](https://travis-ci.org/theforeman/puppet-puppet.svg?branch=master)](https://travis-ci.org/theforeman/puppet-puppet)
 
 # Puppet module for installing the Puppet agent and master
 
 Installs and configures the Puppet agent and optionally a Puppet master (when
-`server` is true).  Part of the [Foreman installer](http://github.com/theforeman/foreman-installer)
+`server` is true).  Part of the [Foreman installer](https://github.com/theforeman/foreman-installer)
 or to be used as a Puppet module.
 
 The Puppet master is configured under Apache and Passenger by default, unless
@@ -189,7 +189,7 @@ Currently supported values and configuration behaviours are:
 
 # More info
 
-See http://theforeman.org or at #theforeman irc channel on freenode
+See https://theforeman.org or at #theforeman irc channel on freenode
 
 Copyright (c) 2010-2012 Ohad Levy
 
@@ -203,4 +203,4 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
