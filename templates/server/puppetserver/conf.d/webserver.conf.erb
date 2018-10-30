@@ -27,4 +27,19 @@ webserver: {
         <%= cipher_suite %>,
     <%- end -%>
     ]
+<%- if @acceptor_threads -%>
+    acceptor-threads: <%= @acceptor_threads %>
+<%- end -%>
+<%- if @selector_threads -%>
+    selector-threads: <%= @selector_threads %>
+<%- end -%>
+<%- if @ssl_acceptor_threads -%>
+    ssl-acceptor-threads: <%= @ssl_acceptor_threads %>
+<%- end -%>
+<%- if @ssl_selector_threads -%>
+    ssl-selector-threads: <%= @ssl_selector_threads %>
+<%- end -%>
+<%- if @max_threads -%>
+    max-threads: <%= @max_threads %>
+<%- end -%>
 }

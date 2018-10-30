@@ -123,6 +123,11 @@ class puppet::server::puppetserver (
   $server_trusted_agents                  = $::puppet::server::puppetserver_trusted_agents,
   $allow_header_cert_info                 = $::puppet::server::allow_header_cert_info,
   $compile_mode                           = $::puppet::server::compile_mode,
+  $acceptor_threads                       = $::puppet::server::acceptor_threads,
+  $selector_threads                       = $::puppet::server::selector_threads,
+  $ssl_acceptor_threads                   = $::puppet::server::ssl_acceptor_threads,
+  $ssl_selector_threads                   = $::puppet::server::ssl_selector_threads,
+  $max_threads                            = $::puppet::server::max_threads,
 ) {
   include ::puppet::server
 
