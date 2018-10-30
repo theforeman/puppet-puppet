@@ -537,6 +537,32 @@
 # $server_parser::                          Sets the parser to use. Valid options are 'current' or 'future'.
 #                                           Defaults to 'current'.
 #
+# $server_acceptor_threads::                This sets the number of threads that the webserver will dedicate to accepting
+#                                           socket connections for unencrypted HTTP traffic. If not provided, the webserver
+#                                           defaults to the number of virtual cores on the host divided by 8, with a minimum
+#                                           of 1 and maximum of 4.
+#
+# $server_selector_threads::                This sets the number of selectors that the webserver will dedicate to processing
+#                                           events on connected sockets for unencrypted HTTPS traffic. If not provided,
+#                                           the webserver defaults to the minimum of: virtual cores on the host divided by 2
+#                                           or max-threads divided by 16, with a minimum of 1.
+#
+# $server_max_threads::                     This sets the maximum number of threads assigned to responding to HTTP and/or
+#                                           HTTPS requests for a single webserver, effectively changing how many
+#                                           concurrent requests can be made at one time. If not provided, the
+#                                           webserver defaults to 200.
+#
+# $server_ssl_acceptor_threads::            This sets the number of threads that the webserver will dedicate to accepting
+#                                           socket connections for encrypted HTTPS traffic. If not provided, defaults to
+#                                           the number of virtual cores on the host divided by 8, with a minimum of 1 and maximum of 4.
+#
+# $server_ssl_selector_threads::            This sets the number of selectors that the webserver will dedicate to processing
+#                                           events on connected sockets for encrypted HTTPS traffic. Defaults to the number of
+#                                           virtual cores on the host divided by 2, with a minimum of 1 and maximum of 4.
+#                                           The number of selector threads actually used by Jetty is twice the number of selectors
+#                                           requested. For example, if a value of 3 is specified for the ssl-selector-threads setting,
+#                                           Jetty will actually use 6 selector threads.
+#
 # === Usage:
 #
 # * Simple usage:
@@ -735,6 +761,11 @@ class puppet (
   Boolean $server_puppetserver_experimental = $puppet::params::server_puppetserver_experimental,
   Array[String] $server_puppetserver_trusted_agents = $puppet::params::server_puppetserver_trusted_agents,
   Optional[Enum['off', 'jit', 'force']] $server_compile_mode = $puppet::params::server_compile_mode,
+  Optional[Integer[1]] $server_acceptor_threads = undef,
+  Optional[Integer[1]] $server_selector_threads = undef,
+  Optional[Integer[1]] $server_ssl_acceptor_threads = undef,
+  Optional[Integer[1]] $server_ssl_selector_threads = undef,
+  Optional[Integer[1]] $server_max_threads = undef,
 ) inherits puppet::params {
   contain puppet::config
 

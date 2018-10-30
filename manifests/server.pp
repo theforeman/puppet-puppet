@@ -454,6 +454,11 @@ class puppet::server(
   Boolean $puppetserver_experimental = $::puppet::server_puppetserver_experimental,
   Array[String] $puppetserver_trusted_agents = $::puppet::server_puppetserver_trusted_agents,
   Optional[Enum['off', 'jit', 'force']] $compile_mode = $::puppet::server_compile_mode,
+  Optional[Integer[1]] $selector_threads = $::puppet::server_selector_threads,
+  Optional[Integer[1]] $acceptor_threads = $::puppet::server_acceptor_threads,
+  Optional[Integer[1]] $ssl_selector_threads = $::puppet::server_ssl_selector_threads,
+  Optional[Integer[1]] $ssl_acceptor_threads = $::puppet::server_ssl_acceptor_threads,
+  Optional[Integer[1]] $max_threads = $::puppet::server_max_threads,
 ) {
   if $implementation == 'master' and $ip != $puppet::params::ip {
     notify {

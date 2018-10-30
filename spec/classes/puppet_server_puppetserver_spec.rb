@@ -75,6 +75,11 @@ describe 'puppet' do
             .with_content(/ssl-port:\s8140/)
             .without_content(/ host:\s/)
             .without_content(/ port:\s8139/)
+            .without_content(/selector-threads:/)
+            .without_content(/acceptor-threads:/)
+            .without_content(/ssl-selector-threads:/)
+            .without_content(/ssl-acceptor-threads:/)
+            .without_content(/max-threads:/)
         }
         it {
           should contain_file(auth_conf)
@@ -585,6 +590,29 @@ describe 'puppet' do
       describe 'when server_puppetserver_version < 2.2' do
         let(:params) { super().merge(server_puppetserver_version: '2.1.0') }
         it { should raise_error(Puppet::Error, /puppetserver <2.2 is not supported by this module version/) }
+      end
+
+      describe 'allow jetty specific server threads' do
+        context 'with thread config' do
+          let(:params) do
+            super().merge(
+              server_selector_threads:     1,
+              server_acceptor_threads:     2,
+              server_ssl_selector_threads: 3,
+              server_ssl_acceptor_threads: 4,
+              server_max_threads:          5
+            )
+          end
+
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to contain_file('/etc/custom/puppetserver/conf.d/webserver.conf').
+               with_content(/selector-threads: 1/).
+               with_content(/acceptor-threads: 2/).
+               with_content(/ssl-selector-threads: 3/).
+               with_content(/ssl-acceptor-threads: 4/).
+               with_content(/max-threads: 5/)
+          }
+        end
       end
     end
   end
