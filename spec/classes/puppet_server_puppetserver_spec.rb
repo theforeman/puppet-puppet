@@ -21,14 +21,11 @@ describe 'puppet' do
           server_jvm_extra_args: '',
           server_max_active_instances: 2,
           server_puppetserver_dir: '/etc/custom/puppetserver',
-          server_puppetserver_version: '2.4.99',
+          server_puppetserver_version: '2.7.0',
         }
       end
 
       describe 'with default parameters' do
-        it { should contain_file('/etc/custom/puppetserver/bootstrap.cfg') }
-        it { should contain_file_line('ca_enabled').with_ensure('present') }
-        it { should contain_file_line('ca_disabled').with_ensure('absent') }
         it { should contain_file('/etc/custom/puppetserver/services.d').with_ensure('directory') }
         it {
           should contain_file('/etc/custom/puppetserver/services.d/ca.cfg')
@@ -47,7 +44,7 @@ describe 'puppet' do
           it { should contain_file('/opt/puppetlabs/server/apps/puppetserver/config/services.d').with_ensure('directory') }
           it {
             should contain_augeas('puppet::server::puppetserver::bootstrap')
-              .with_changes('set BOOTSTRAP_CONFIG \'"/etc/custom/puppetserver/bootstrap.cfg,/etc/custom/puppetserver/services.d/,/opt/puppetlabs/server/apps/puppetserver/config/services.d/"\'')
+              .with_changes('set BOOTSTRAP_CONFIG \'"/etc/custom/puppetserver/services.d/,/opt/puppetlabs/server/apps/puppetserver/config/services.d/"\'')
 
           }
           it {
@@ -125,11 +122,6 @@ describe 'puppet' do
           let(:params) { super().merge(server_environment_class_cache_enabled: true) }
           it { should contain_file(puppetserver_conf).with_content(/^    environment-class-cache-enabled: true$/) }
         end
-
-        context 'when server_puppetserver_version < 2.4' do
-          let(:params) { super().merge(server_puppetserver_version: '2.2.2') }
-          it { should contain_file(puppetserver_conf).without_content('environment-class-cache-enabled') }
-        end
       end
 
       describe 'server_max_requests_per_instance' do
@@ -158,7 +150,6 @@ describe 'puppet' do
         end
 
         context 'when server_puppetserver_version < 5.0 with default parameters' do
-          let(:params) { super().merge(server_puppetserver_version: '2.7.0') }
           it { should contain_file(puppetserver_conf).without_content('max-queued-requests') }
         end
       end
@@ -178,119 +169,36 @@ describe 'puppet' do
         end
 
         context 'when server_puppetserver_version < 5.0 with default parameters' do
-          let(:params) { super().merge(server_puppetserver_version: '2.7.0') }
           it { should contain_file(puppetserver_conf).without_content('max-retry-delay') }
         end
       end
 
-      describe 'versioned-code-service' do
-        context 'when server_puppetserver_version >= 2.5' do
-          let(:params) { super().merge(server_puppetserver_version: '2.5.0') }
-          it { should_not contain_file_line('versioned_code_service') }
-        end
-
-        context 'when server_puppetserver_version >= 2.3 and < 2.5' do
-          let(:params) { super().merge(server_puppetserver_version: '2.3.1') }
-          it 'should have versioned-code-service in bootstrap.cfg' do
-            should contain_file_line('versioned_code_service')
-              .with_ensure('present')
-              .with_path('/etc/custom/puppetserver/bootstrap.cfg')
-              .with_line('puppetlabs.services.versioned-code-service.versioned-code-service/versioned-code-service')
-              .that_requires('File[/etc/custom/puppetserver/bootstrap.cfg]')
-          end
-        end
-
-        context 'when server_puppetserver_version < 2.3' do
-          let(:params) { super().merge(server_puppetserver_version: '2.2.2') }
-          it 'should not have versioned-code-service in bootstrap.cfg' do
-            should contain_file_line('versioned_code_service')
-              .with_ensure('absent')
-              .with_path('/etc/custom/puppetserver/bootstrap.cfg')
-              .with_line('puppetlabs.services.versioned-code-service.versioned-code-service/versioned-code-service')
-              .that_requires('File[/etc/custom/puppetserver/bootstrap.cfg]')
-          end
-        end
-      end
-
-      describe 'bootstrap.cfg' do
-        context 'when server_puppetserver_version >= 2.5' do
-          let(:params) { super().merge(server_puppetserver_version: '2.5.0') }
-          it { should_not contain_file('/etc/custom/puppetserver/bootstrap.cfg') }
-          it { should_not contain_file_line('ca_enabled') }
-          it { should_not contain_file_line('ca_disabled') }
-        end
-
-        context 'when server_puppetserver_version < 2.4.99' do
-          let(:params) { super().merge(server_puppetserver_version: '2.4.98') }
-          it { should contain_file('/etc/custom/puppetserver/bootstrap.cfg') }
-          it {
-            should contain_file_line('ca_enabled')
-              .with_ensure('present')
-              .with_path('/etc/custom/puppetserver/bootstrap.cfg')
-              .with_line('puppetlabs.services.ca.certificate-authority-service/certificate-authority-service')
-              .that_requires('File[/etc/custom/puppetserver/bootstrap.cfg]')
-          }
-          it {
-            should contain_file_line('ca_disabled')
-              .with_ensure('absent')
-              .with_path('/etc/custom/puppetserver/bootstrap.cfg')
-              .with_line('puppetlabs.services.ca.certificate-authority-disabled-service/certificate-authority-disabled-service')
-              .that_requires('File[/etc/custom/puppetserver/bootstrap.cfg]')
-          }
-          unless facts[:osfamily] == 'FreeBSD'
-            it {
-              should contain_augeas('puppet::server::puppetserver::bootstrap')
-                .with_changes('set BOOTSTRAP_CONFIG \'"/etc/custom/puppetserver/bootstrap.cfg"\'')
-                .with_context('/files/etc/default/puppetserver')
-                .with_incl('/etc/default/puppetserver')
-                .with_lens('Shellvars.lns')
-            }
-          end
-        end
-      end
-
       describe 'ca.cfg' do
-        context 'when server_puppetserver_version >= 2.5' do
-          let(:params) { super().merge(server_puppetserver_version: '2.5.0') }
-          it { should contain_file('/etc/custom/puppetserver/services.d').with_ensure('directory') }
+        it { should contain_file('/etc/custom/puppetserver/services.d').with_ensure('directory') }
+        it {
+          should contain_file('/etc/custom/puppetserver/services.d/ca.cfg')
+            .with_content(%r{^puppetlabs.services.ca.certificate-authority-service/certificate-authority-service})
+            .with_content(%r{^#puppetlabs.services.ca.certificate-authority-disabled-service/certificate-authority-disabled-service})
+        }
+        unless facts[:osfamily] == 'FreeBSD'
+          it { should contain_file('/opt/puppetlabs/server/apps/puppetserver/config').with_ensure('directory') }
+          it { should contain_file('/opt/puppetlabs/server/apps/puppetserver/config/services.d').with_ensure('directory') }
           it {
-            should contain_file('/etc/custom/puppetserver/services.d/ca.cfg')
-              .with_content(%r{^puppetlabs.services.ca.certificate-authority-service/certificate-authority-service})
-              .with_content(%r{^#puppetlabs.services.ca.certificate-authority-disabled-service/certificate-authority-disabled-service})
+            should contain_augeas('puppet::server::puppetserver::bootstrap')
+              .with_changes('set BOOTSTRAP_CONFIG \'"/etc/custom/puppetserver/services.d/,/opt/puppetlabs/server/apps/puppetserver/config/services.d/"\'')
+              .with_context('/files/etc/default/puppetserver')
+              .with_incl('/etc/default/puppetserver')
+              .with_lens('Shellvars.lns')
           }
-          unless facts[:osfamily] == 'FreeBSD'
-            it { should contain_file('/opt/puppetlabs/server/apps/puppetserver/config').with_ensure('directory') }
-            it { should contain_file('/opt/puppetlabs/server/apps/puppetserver/config/services.d').with_ensure('directory') }
-            it {
-              should contain_augeas('puppet::server::puppetserver::bootstrap')
-                .with_changes('set BOOTSTRAP_CONFIG \'"/etc/custom/puppetserver/services.d/,/opt/puppetlabs/server/apps/puppetserver/config/services.d/"\'')
-                .with_context('/files/etc/default/puppetserver')
-                .with_incl('/etc/default/puppetserver')
-                .with_lens('Shellvars.lns')
-            }
-          end
         end
 
-        context 'when server_puppetserver_version >= 2.5 and server_ca => false' do
-          let(:params) do
-            super().merge(
-              server_puppetserver_version: '2.5.0',
-              server_ca: false
-            )
-          end
+        context 'when server_ca => false' do
+          let(:params) { super().merge(server_ca: false) }
           it {
             should contain_file('/etc/custom/puppetserver/services.d/ca.cfg')
               .with_content(%r{^#puppetlabs.services.ca.certificate-authority-service/certificate-authority-service})
               .with_content(%r{^puppetlabs.services.ca.certificate-authority-disabled-service/certificate-authority-disabled-service})
           }
-        end
-
-        context 'when server_puppetserver_version < 2.4.99' do
-          let(:params) { super().merge(server_puppetserver_version: '2.4.98') }
-          it { should_not contain_file('/etc/custom/puppetserver/services.d') }
-          it { should_not contain_file('/etc/custom/puppetserver/services.d/ca.cfg') }
-          it { should_not contain_file('/opt/puppetlabs/server/apps/puppetserver/config') }
-          it { should_not contain_file('/opt/puppetlabs/server/apps/puppetserver/config/services.d') }
         end
 
         context 'when server_puppetserver_version >= 5.1' do
@@ -305,35 +213,24 @@ describe 'puppet' do
       end
 
       describe 'product.conf' do
-        context 'when server_puppetserver_version >= 2.7' do
-          let(:params) { super().merge(server_puppetserver_version: '2.7.0') }
-
-          context 'with default parameters' do
-            it {
-              should contain_file('/etc/custom/puppetserver/conf.d/product.conf')
-                .with_content(/^\s+check-for-updates: true/)
-            }
-          end
-
-          context 'with server_check_for_updates => false' do
-            let(:params) { super().merge(server_check_for_updates: false) }
-            it {
-              should contain_file('/etc/custom/puppetserver/conf.d/product.conf')
-                .with_content(/^\s+check-for-updates: false/)
-            }
-          end
+        context 'with default parameters' do
+          it {
+            should contain_file('/etc/custom/puppetserver/conf.d/product.conf')
+              .with_content(/^\s+check-for-updates: true/)
+          }
         end
 
-        context 'when server_puppetserver_version < 2.7' do
-          let(:params) { super().merge(server_puppetserver_version: '2.6.0') }
-          it { should contain_file('/etc/custom/puppetserver/conf.d/product.conf').with_ensure('absent') }
+        context 'with server_check_for_updates => false' do
+          let(:params) { super().merge(server_check_for_updates: false) }
+          it {
+            should contain_file('/etc/custom/puppetserver/conf.d/product.conf')
+              .with_content(/^\s+check-for-updates: false/)
+          }
         end
       end
 
       describe 'server_metrics' do
         context 'when server_puppetserver_version < 5.0' do
-          let(:params) { super().merge(server_puppetserver_version: '2.7.0') }
-
           context 'when server_metrics => true' do
             let(:params) { super().merge(server_puppetserver_metrics: true) }
             it {
@@ -402,8 +299,6 @@ describe 'puppet' do
 
       describe 'server_experimental' do
         context 'when server_puppetserver_version < 5.0' do
-          let(:params) { super().merge(server_puppetserver_version: '2.7.0') }
-
           context 'when server_experimental => true' do
             let(:params) { super().merge(server_puppetserver_experimental: true) }
             it { should contain_file(auth_conf).without_content(%r{^(\ *)path: "/puppet/experimental"$}) }
@@ -432,7 +327,6 @@ describe 'puppet' do
 
       describe 'puppet tasks information' do
         context 'when server_puppetserver_version < 5.1' do
-          let(:params) { super().merge(server_puppetserver_version: '5.0.0') }
           it { should contain_file(auth_conf).without_content(%r{^(\ *)path: "/puppet/v3/tasks"$}) }
         end
 
@@ -456,19 +350,13 @@ describe 'puppet' do
 
       describe 'server_trusted_agents' do
         context 'when set' do
-          let(:params) do
-            super().merge(
-              server_puppetserver_version: '2.7.0',
-              server_puppetserver_trusted_agents: ['jenkins', 'octocatalog-diff']
-            )
-          end
+          let(:params) { super().merge(server_puppetserver_trusted_agents: ['jenkins', 'octocatalog-diff']) }
           it { should contain_file(auth_conf).with_content(/^            allow: \["jenkins", "octocatalog-diff", "\$1"\]$/) }
         end
       end
 
       describe 'server_jruby9k', unless: facts[:osfamily] == 'FreeBSD' do
         context 'when server_puppetserver_version < 5.0' do
-          let(:params) { super().merge(server_puppetserver_version: '2.7.0') }
 
           context 'when server_jruby9k => true' do
             let(:params) { super().merge(server_puppetserver_jruby9k: true) }
@@ -560,9 +448,7 @@ describe 'puppet' do
       end
 
       describe 'gem-path' do
-        context 'when server_puppetserver_version > 2.7 but < 5.3' do
-          let(:params) { super().merge(server_puppetserver_version: '5.0.0') }
-
+        context 'when server_puppetserver_version < 5.3' do
           it do
             should contain_file(puppetserver_conf)
               .with_content(%r{^    gem-path: \[\$\{jruby-puppet.gem-home\}, "/opt/puppetlabs/server/data/puppetserver/vendored-jruby-gems"\]$})
@@ -621,9 +507,9 @@ describe 'puppet' do
         end
       end
 
-      describe 'when server_puppetserver_version < 2.2' do
-        let(:params) { super().merge(server_puppetserver_version: '2.1.0') }
-        it { should raise_error(Puppet::Error, /puppetserver <2.2 is not supported by this module version/) }
+      describe 'when server_puppetserver_version < 2.7' do
+        let(:params) { super().merge(server_puppetserver_version: '2.6.0') }
+        it { should raise_error(Puppet::Error, /puppetserver <2.7 is not supported by this module version/) }
       end
 
       describe 'allow jetty specific server threads' do

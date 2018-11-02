@@ -132,8 +132,8 @@ class puppet::server::puppetserver (
 ) {
   include ::puppet::server
 
-  if versioncmp($server_puppetserver_version, '2.2') < 0 {
-    fail('puppetserver <2.2 is not supported by this module version')
+  if versioncmp($server_puppetserver_version, '2.7') < 0 {
+    fail('puppetserver <2.7 is not supported by this module version')
   }
 
   $puppetserver_package = pick($::puppet::server::package, 'puppetserver')
@@ -167,13 +167,7 @@ class puppet::server::puppetserver (
       changes => $changes,
     }
 
-    if versioncmp($server_puppetserver_version, '2.4.99') == 0 {
-      $bootstrap_paths = "${server_puppetserver_dir}/bootstrap.cfg,${server_puppetserver_dir}/services.d/,/opt/puppetlabs/server/apps/puppetserver/config/services.d/"
-    } elsif versioncmp($server_puppetserver_version, '2.5') >= 0 {
-      $bootstrap_paths = "${server_puppetserver_dir}/services.d/,/opt/puppetlabs/server/apps/puppetserver/config/services.d/"
-    } else { # 2.4
-      $bootstrap_paths = "${server_puppetserver_dir}/bootstrap.cfg"
-    }
+    $bootstrap_paths = "${server_puppetserver_dir}/services.d/,/opt/puppetlabs/server/apps/puppetserver/config/services.d/"
 
     if versioncmp($server_puppetserver_version, '5.3') >= 0 {
       $server_gem_paths = [ '${jruby-puppet.gem-home}', "\"${server_puppetserver_vardir}/vendored-jruby-gems\"", "\"/opt/puppetlabs/puppet/lib/ruby/vendor_gems\""] # lint:ignore:single_quote_string_with_variables
@@ -203,69 +197,21 @@ class puppet::server::puppetserver (
     }
   }
 
-  # 2.4.99 configures for both 2.4 and 2.5 making upgrades and new installations easier when the
-  # precise version available isn't known
-  if versioncmp($server_puppetserver_version, '2.4.99') >= 0 {
-    $servicesd = "${server_puppetserver_dir}/services.d"
-    file { $servicesd:
-      ensure => directory,
-    }
-    file { "${servicesd}/ca.cfg":
-      ensure  => file,
-      content => template('puppet/server/puppetserver/services.d/ca.cfg.erb'),
-    }
-
-    unless $::osfamily == 'FreeBSD' {
-      file { '/opt/puppetlabs/server/apps/puppetserver/config':
-        ensure => directory,
-      }
-      file { '/opt/puppetlabs/server/apps/puppetserver/config/services.d':
-        ensure => directory,
-      }
-    }
+  $servicesd = "${server_puppetserver_dir}/services.d"
+  file { $servicesd:
+    ensure => directory,
+  }
+  file { "${servicesd}/ca.cfg":
+    ensure  => file,
+    content => template('puppet/server/puppetserver/services.d/ca.cfg.erb'),
   }
 
-  if versioncmp($server_puppetserver_version, '2.5') < 0 {
-    $bootstrapcfg = "${server_puppetserver_dir}/bootstrap.cfg"
-    file { $bootstrapcfg:
-      ensure => file,
+  unless $::osfamily == 'FreeBSD' {
+    file { '/opt/puppetlabs/server/apps/puppetserver/config':
+      ensure => directory,
     }
-
-    $ca_enabled_ensure = $server_ca ? {
-      true    => present,
-      default => absent,
-    }
-
-    $ca_disabled_ensure = $server_ca ? {
-      false   => present,
-      default => absent,
-    }
-
-    file_line { 'ca_enabled':
-      ensure  => $ca_enabled_ensure,
-      path    => $bootstrapcfg,
-      line    => 'puppetlabs.services.ca.certificate-authority-service/certificate-authority-service',
-      require => File[$bootstrapcfg],
-    }
-
-    file_line { 'ca_disabled':
-      ensure  => $ca_disabled_ensure,
-      path    => $bootstrapcfg,
-      line    => 'puppetlabs.services.ca.certificate-authority-disabled-service/certificate-authority-disabled-service',
-      require => File[$bootstrapcfg],
-    }
-
-    if versioncmp($server_puppetserver_version, '2.3') >= 0 {
-      $versioned_code_service_ensure = present
-    } else {
-      $versioned_code_service_ensure = absent
-    }
-
-    file_line { 'versioned_code_service':
-      ensure  => $versioned_code_service_ensure,
-      path    => $bootstrapcfg,
-      line    => 'puppetlabs.services.versioned-code-service.versioned-code-service/versioned-code-service',
-      require => File[$bootstrapcfg],
+    file { '/opt/puppetlabs/server/apps/puppetserver/config/services.d':
+      ensure => directory,
     }
   }
 
@@ -295,14 +241,8 @@ class puppet::server::puppetserver (
     content => template('puppet/server/puppetserver/conf.d/webserver.conf.erb'),
   }
 
-  if versioncmp($server_puppetserver_version, '2.7') >= 0 {
-    $product_conf_ensure = file
-  } else {
-    $product_conf_ensure = absent
-  }
-
   file { "${server_puppetserver_dir}/conf.d/product.conf":
-    ensure  => $product_conf_ensure,
+    ensure  => file,
     content => template('puppet/server/puppetserver/conf.d/product.conf.erb'),
   }
 
