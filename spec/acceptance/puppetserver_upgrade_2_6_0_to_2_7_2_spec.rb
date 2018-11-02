@@ -15,14 +15,14 @@ describe 'Scenario: 2.6.0 to 2.7.2 upgrade:', if: ENV['BEAKER_PUPPET_COLLECTION'
 
   case fact('osfamily')
   when 'Debian'
-    from_version = '2.6.0-1puppetlabs1'
+    from_version = '2.7.0-1puppetlabs1'
     to_version = '2.7.2-1puppetlabs1'
   else
-    from_version = '2.6.0'
+    from_version = '2.7.0'
     to_version = '2.7.2'
   end
 
-  context 'install 2.6.0' do
+  context 'install 2.7.0' do
     let(:pp) do
       <<-EOS
       class { '::puppet':
@@ -42,7 +42,7 @@ describe 'Scenario: 2.6.0 to 2.7.2 upgrade:', if: ENV['BEAKER_PUPPET_COLLECTION'
     it_behaves_like 'a idempotent resource'
 
     describe command('puppetserver --version') do
-      its(:stdout) { is_expected.to match("puppetserver version: 2.6.0\n") }
+      its(:stdout) { is_expected.to match("puppetserver version: 2.7.0\n") }
     end
 
     describe service('puppetserver') do

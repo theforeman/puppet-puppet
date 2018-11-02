@@ -12,13 +12,11 @@ jruby-puppet: {
     # and also by the `puppetserver gem` command line tool.
     gem-home: <%= @server_jruby_gem_home %>
 
-<%- if scope.function_versioncmp([@server_puppetserver_version, '2.7']) >= 0 -%>
     # This setting defines the complete "GEM_PATH" for jruby.  If set, it should include
     # the gem-home directory as well as any other directories that gems can be loaded
     # from (including the vendored gems directory for gems that ship with puppetserver)
     gem-path: [<%= @server_gem_paths.join(', ') %>]
 
-<%- end -%>
     # PLEASE NOTE: Use caution when modifying the below settings. Modifying
     # these settings will change the value of the corresponding Puppet settings
     # for Puppet Server, but not for the Puppet CLI tools. This likely will not
@@ -69,11 +67,9 @@ jruby-puppet: {
     # specified in the Puppet Server HOCON-formatted auth.conf (if false or not
     # specified).
     use-legacy-auth-conf: <%= @server_use_legacy_auth_conf %>
-<%- if scope.function_versioncmp([@server_puppetserver_version, '2.3']) >= 0 -%>
 
     # (optional) enable or disable environment class cache
     environment-class-cache-enabled: <%= @server_environment_class_cache_enabled %>
-<%- end -%>
 <%- if @compile_mode %>
 
     compile-mode: <%= @compile_mode %>
