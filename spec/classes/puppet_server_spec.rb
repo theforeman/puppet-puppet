@@ -62,10 +62,10 @@ describe 'puppet' do
         it { should contain_class('puppet::server::config') }
         it { should contain_puppet__config__main('reports').with_value('foreman') }
         it { should contain_puppet__config__main('hiera_config').with_value('$confdir/hiera.yaml') }
-        it { should contain_puppet__config__main('environmentpath').with_value("#{codedir}/environments") }
+        it { should contain_puppet__config__main('environmentpath').with_value(environments_dir) }
         it do
           should contain_puppet__config__main('basemodulepath')
-            .with_value(["#{codedir}/environments/common", "#{codedir}/modules", "#{sharedir}/modules", '/usr/share/puppet/modules'])
+            .with_value(["#{environments_dir}/common", "#{codedir}/modules", "#{sharedir}/modules", '/usr/share/puppet/modules'])
             .with_joiner(':')
         end
         it { should_not contain_puppet__config__main('default_manifest') }
@@ -109,7 +109,6 @@ describe 'puppet' do
             .that_requires(["Concat[#{conf_file}]", 'Exec[puppet_server_config-create_ssl_dir]'])
         end
 
-        it { should contain_puppet__config__main('environmentpath').with_value(environments_dir) }
         it { should contain_exec('puppet_server_config-generate_ca_cert').that_notifies('Service[puppetserver]') }
 
         it 'should set up the environments' do
@@ -132,9 +131,6 @@ describe 'puppet' do
             .with_owner('puppet')
             .with_group(nil)
             .with_mode('0755')
-
-          should contain_puppet__server__env('development')
-          should contain_puppet__server__env('production')
         end
 
         it { should contain_concat(conf_file) }
@@ -390,9 +386,6 @@ describe 'puppet' do
             .with_content(/BRANCH_MAP = \{[^a-zA-Z=>]\}/)
         end
 
-        it { should_not contain_puppet__server__env('development') }
-        it { should_not contain_puppet__server__env('production') }
-
         describe 'with a puppet git branch map' do
           let(:params) do
             super().merge(server_git_branch_map: { 'a' => 'b', 'c' => 'd' })
@@ -403,94 +396,16 @@ describe 'puppet' do
               .with_content(/BRANCH_MAP = \{\n  "a" => "b",\n  "c" => "d",\n\}/)
           end
         end
-
-        context 'with directory environments' do
-          let(:params) do
-            super().merge(server_directory_environments: true)
-          end
-
-          it 'should configure puppet.conf' do
-            should_not contain_puppet__config__master('config_version')
-
-            should contain_puppet__config__main('environmentpath').with_value(environments_dir)
-          end
-        end
-
-        context 'with config environments' do
-          let(:params) do
-            super().merge(server_directory_environments: false)
-          end
-
-          it 'should configure puppet.conf' do
-            should contain_puppet__config__master('manifest').with_value("#{environments_dir}/\$environment/manifests/site.pp")
-            should contain_puppet__config__master('modulepath').with_value("#{environments_dir}/\$environment/modules")
-            should contain_puppet__config__master('config_version').with_value("git --git-dir #{environments_dir}/\$environment/.git describe --all --long")
-          end
-        end
       end
 
-      describe 'with dynamic environments' do
-        let(:params) do
-          super().merge(server_dynamic_environments: true)
-        end
+      context 'with directory environments owner' do
+        let(:params) { super().merge(server_environments_owner: 'apache') }
+        it { should contain_file(environments_dir).with_owner('apache') }
+      end
 
-        context 'with directory environments' do
-          let(:params) do
-            super().merge(
-              server_directory_environments: true,
-              server_environments_owner: 'apache'
-            )
-          end
-
-          it 'should set up the environments directory' do
-            should contain_file(environments_dir) \
-              .with_ensure('directory') \
-              .with_owner('apache')
-          end
-
-          it 'should configure puppet.conf' do
-            should contain_puppet__config__main('environmentpath').with_value(environments_dir)
-            should contain_puppet__config__main('basemodulepath').with_value(["#{environments_dir}/common", "#{codedir}/modules", "#{sharedir}/modules", '/usr/share/puppet/modules'])
-          end
-
-          it { should_not contain_puppet__server__env('development') }
-          it { should_not contain_puppet__server__env('production') }
-        end
-
-        context 'with no common modules directory' do
-          let(:params) do
-            super().merge(
-              server_directory_environments: true,
-              server_environments_owner: 'apache',
-              server_common_modules_path: ''
-            )
-          end
-
-          it { should_not contain_puppet__config__main('basemodulepath') }
-        end
-
-        context 'with config environments' do
-          let(:params) do
-            super().merge(
-              server_directory_environments: false,
-              server_environments_owner: 'apache'
-            )
-          end
-
-          it 'should set up the environments directory' do
-            should contain_file(environments_dir) \
-              .with_ensure('directory') \
-              .with_owner('apache')
-          end
-
-          it 'should configure puppet.conf' do
-            should contain_puppet__config__master('manifest').with_value("#{environments_dir}/\$environment/manifests/site.pp")
-            should contain_puppet__config__master('modulepath').with_value("#{environments_dir}/\$environment/modules")
-          end
-
-          it { should_not contain_puppet__server__env('development') }
-          it { should_not contain_puppet__server__env('production') }
-        end
+      context 'with no common modules directory' do
+        let(:params) { super().merge(server_common_modules_path: '') }
+        it { should_not contain_puppet__config__main('basemodulepath') }
       end
 
       describe 'with SSL path overrides' do

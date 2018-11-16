@@ -231,26 +231,13 @@
 #
 # $server_git_repo::                        Use git repository as a source of modules
 #
-# $server_dynamic_environments::            Use $environment in the modulepath
-#                                           Deprecated when $server_directory_environments is true,
-#                                           set $server_environments to [] instead.
-#
-# $server_directory_environments::          Enable directory environments, defaulting to true
-#                                           with Puppet 3.6.0 or higher
-#
-# $server_environments::                    Environments to setup (creates directories).
-#                                           Applies only when $server_dynamic_environments
-#                                           is false
-#
 # $server_environments_owner::              The owner of the environments directory
 #
 # $server_environments_group::              The group owning the environments directory
 #
 # $server_environments_mode::               Environments directory mode.
 #
-# $server_common_modules_path::             Common modules paths (only when
-#                                           $server_git_repo_path and $server_dynamic_environments
-#                                           are false)
+# $server_common_modules_path::             Common modules paths
 #
 # $server_git_repo_path::                   Git repository path
 #
@@ -637,12 +624,9 @@ class puppet (
   Optional[String] $server_config_version = $puppet::params::server_config_version,
   Integer[0] $server_connect_timeout = $puppet::params::server_connect_timeout,
   Boolean $server_git_repo = $puppet::params::server_git_repo,
-  Boolean $server_dynamic_environments = $puppet::params::server_dynamic_environments,
-  Boolean $server_directory_environments = $puppet::params::server_directory_environments,
   Boolean $server_default_manifest = $puppet::params::server_default_manifest,
   Stdlib::Absolutepath $server_default_manifest_path = $puppet::params::server_default_manifest_path,
   String $server_default_manifest_content = $puppet::params::server_default_manifest_content,
-  Array[String] $server_environments = $puppet::params::server_environments,
   String $server_environments_owner = $puppet::params::server_environments_owner,
   Optional[String] $server_environments_group = $puppet::params::server_environments_group,
   Pattern[/^[0-9]{3,4}$/] $server_environments_mode = $puppet::params::server_environments_mode,
