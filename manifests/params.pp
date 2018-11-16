@@ -237,13 +237,6 @@ class puppet::params {
   # Git branch to puppet env mapping for the post receive hook
   $server_git_branch_map       = {}
 
-  # Static environments config, ignore if the git_repo or dynamic_environments is 'true'
-  # What environments do we have
-  $server_environments         = ['development', 'production']
-  # Dynamic environments config (deprecated when directory_environments is true)
-  $server_dynamic_environments = false
-  # Directory environments config
-  $server_directory_environments = true
   # Owner of the environments dir: for cases external service needs write
   # access to manage it.
   $server_environments_owner   = $user

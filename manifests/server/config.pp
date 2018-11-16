@@ -49,15 +49,11 @@ class puppet::server::config inherits puppet::config {
 
   puppet::config::main {
     'reports':            value => $::puppet::server::reports;
+    'environmentpath':    value => $puppet::server::envs_dir;
   }
   if $::puppet::server::hiera_config and !empty($::puppet::server::hiera_config){
     puppet::config::main {
       'hiera_config':       value => $::puppet::server::hiera_config;
-    }
-  }
-  if $puppet::server::directory_environments {
-    puppet::config::main {
-      'environmentpath':  value => $puppet::server::envs_dir;
     }
   }
   if $puppet::server::common_modules_path and !empty($puppet::server::common_modules_path) {
@@ -93,17 +89,6 @@ class puppet::server::config inherits puppet::config {
     puppet::config::master {
       'storeconfigs':         value => true;
       'storeconfigs_backend': value => $server_storeconfigs_backend;
-    }
-  }
-  if !$::puppet::server::directory_environments and ($::puppet::server::git_repo or $::puppet::server::dynamic_environments) {
-    puppet::config::master {
-      'manifest':   value => "${::puppet::server::envs_dir}/\$environment/manifests/site.pp";
-      'modulepath': value => "${::puppet::server::envs_dir}/\$environment/modules";
-    }
-    if $::puppet::server::config_version_cmd {
-      puppet::config::master {
-        'config_version': value => $::puppet::server::config_version_cmd;
-      }
     }
   }
 
@@ -269,24 +254,19 @@ class puppet::server::config inherits puppet::config {
       mode    => $::puppet::server::git_repo_mode,
       require => Git::Repo['puppet_repo'],
     }
-
   }
-  elsif ! $::puppet::server::dynamic_environments {
-    file { $puppet::sharedir:
+
+  file { $puppet::sharedir:
+    ensure => directory,
+  }
+
+  if $::puppet::server::common_modules_path and !empty($::puppet::server::common_modules_path) {
+    file { $::puppet::server::common_modules_path:
       ensure => directory,
+      owner  => $::puppet::server_environments_owner,
+      group  => $::puppet::server_environments_group,
+      mode   => $::puppet::server_environments_mode,
     }
-
-    if $::puppet::server::common_modules_path and $::puppet::server::common_modules_path != '' {
-      file { $::puppet::server::common_modules_path:
-        ensure => directory,
-        owner  => $::puppet::server_environments_owner,
-        group  => $::puppet::server_environments_group,
-        mode   => $::puppet::server_environments_mode,
-      }
-    }
-
-    # setup empty directories for our environments
-    puppet::server::env {$::puppet::server::environments: }
   }
 
   ## Foreman

@@ -62,17 +62,6 @@
 #
 # $git_repo::                          Use git repository as a source of modules
 #
-# $dynamic_environments::              Use $environment in the modulepath
-#                                      Deprecated when $directory_environments is true,
-#                                      set $environments to [] instead.
-#
-# $directory_environments::            Enable directory environments, defaulting to true
-#                                      with Puppet 3.6.0 or higher
-#
-# $environments::                      Environments to setup (creates directories).
-#                                      Applies only when $dynamic_environments
-#                                      is false
-#
 # $environments_owner::                The owner of the environments directory
 #
 # $environments_group::                The group owning the environments directory
@@ -84,9 +73,7 @@
 # $envs_target::                       Indicates that $envs_dir should be
 #                                      a symbolic link to this target
 #
-# $common_modules_path::               Common modules paths (only when
-#                                      $git_repo_path and $dynamic_environments
-#                                      are false)
+# $common_modules_path::               Common modules paths
 #
 # $git_repo_path::                     Git repository path
 #
@@ -334,12 +321,9 @@ class puppet::server(
   Integer[0] $connect_timeout = $::puppet::server_connect_timeout,
   Integer[0] $web_idle_timeout = $puppet::server_web_idle_timeout,
   Boolean $git_repo = $::puppet::server_git_repo,
-  Boolean $dynamic_environments = $::puppet::server_dynamic_environments,
-  Boolean $directory_environments = $::puppet::server_directory_environments,
   Boolean $default_manifest = $::puppet::server_default_manifest,
   Stdlib::Absolutepath $default_manifest_path = $::puppet::server_default_manifest_path,
   String $default_manifest_content = $::puppet::server_default_manifest_content,
-  Array[String] $environments = $::puppet::server_environments,
   String $environments_owner = $::puppet::server_environments_owner,
   Optional[String] $environments_group = $::puppet::server_environments_group,
   Pattern[/^[0-9]{3,4}$/] $environments_mode = $::puppet::server_environments_mode,

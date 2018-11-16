@@ -20,13 +20,8 @@ any options that are not explicitly supported.
 
 ## Environments support
 
-The module helps configure Puppet environments using directory environments on
-Puppet 3.6+ and config environments on older versions.  These are set up under
-/etc/puppet/environments/ - change `server_environments` to define the list to
-create, or use `puppet::server::env` for more control. When using directory
-environments with R10K you need to set the `server_environments` parameter to an
-empty array ie. `[]` to prevent `r10k deploy environments` from reporting an
-error caused by the creation of top level environment directory(s).
+The module helps configure Puppet environments using directory environments.
+These are set up under /etc/puppetlabs/code/environments.
 
 ## Git repo support
 
@@ -97,15 +92,6 @@ wrapper classes or even your ENC (if it supports param classes). For example:
       server_foreman        => false,
       server_reports        => 'store',
       server_external_nodes => '',
-    }
-
-    # The same example as above but overriding `server_environments` for R10K
-    class { '::puppet':
-      server                => true,
-      server_foreman        => false,
-      server_reports        => 'store',
-      server_external_nodes => '',
-      server_environments   => [],
     }
 
     # Want to integrate with an existing PuppetDB?
