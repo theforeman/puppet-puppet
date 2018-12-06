@@ -3,8 +3,6 @@ require 'spec_helper'
 describe 'puppet' do
   on_os_under_test.each do |os, facts|
     context "on #{os}" do
-      newline = facts[:osfamily] == 'windows' ? "\r\n" : "\n"
-
       case facts[:osfamily]
       when 'FreeBSD'
         dir_owner = 'puppet'
@@ -43,7 +41,7 @@ describe 'puppet' do
       describe 'with default parameters' do
         it { is_expected.to contain_file(confdir).with_owner(dir_owner).with_group(dir_group) }
         it { is_expected.to contain_file("#{confdir}/auth.conf").with_content(%r{/puppet/v3/}) }
-        it { is_expected.not_to contain_file("#{confdir}/auth.conf").with_content(%r{^path /certificate_revocation_list/ca#{newline}method find#{newline}}) }
+        it { is_expected.not_to contain_file("#{confdir}/auth.conf").with_content(%r{^path /certificate_revocation_list/ca\nmethod find$}) }
         it { is_expected.not_to contain_puppet__config__main('default_manifest') }
         it { is_expected.not_to contain_file('/etc/puppet/manifests/default_manifest.pp') }
         it { is_expected.not_to contain_puppet__config__main('reports') }
@@ -62,7 +60,7 @@ describe 'puppet' do
           super().merge(allow_any_crl_auth: true)
         end
 
-        it { is_expected.to contain_file("#{confdir}/auth.conf").with_content(%r{^path /puppet-ca/v1/certificate_revocation_list/ca#{newline}auth any#{newline}}) }
+        it { is_expected.to contain_file("#{confdir}/auth.conf").with_content(%r{^path /puppet-ca/v1/certificate_revocation_list/ca\nauth any$}) }
       end
 
       describe 'with auth_allowed' do
@@ -70,7 +68,7 @@ describe 'puppet' do
           super().merge(auth_allowed: ['$1', 'puppetproxy'])
         end
 
-        it { is_expected.to contain_file("#{confdir}/auth.conf").with_content(/^allow \$1, puppetproxy#{newline}/) }
+        it { is_expected.to contain_file("#{confdir}/auth.conf").with_content(/^allow \$1, puppetproxy$/) }
       end
 
       describe "when dns_alt_names => ['foo','bar']" do
@@ -161,7 +159,7 @@ describe 'puppet' do
           end
 
           describe 'puppetmaster default value is used' do
-            it { is_expected.to contain_file("#{confdir}/auth.conf").with_content(%r{^path /run#{newline}auth any#{newline}method save#{newline}allow #{facts[:fqdn]}#{newline}}) }
+            it { is_expected.to contain_file("#{confdir}/auth.conf").with_content(%r{^path /run\nauth any\nmethod save\nallow #{facts[:fqdn]}$}) }
           end
 
           describe 'puppetmaster has value' do
@@ -169,7 +167,7 @@ describe 'puppet' do
               super().merge(puppetmaster: 'mymaster.example.com')
             end
 
-            it { is_expected.to contain_file("#{confdir}/auth.conf").with_content(%r{^path /run#{newline}auth any#{newline}method save#{newline}allow mymaster.example.com#{newline}}) }
+            it { is_expected.to contain_file("#{confdir}/auth.conf").with_content(%r{^path /run\nauth any\nmethod save\nallow mymaster.example.com$}) }
           end
 
           describe 'listen_to has values' do
@@ -177,7 +175,7 @@ describe 'puppet' do
               super().merge(listen_to: ['node1.example.com', 'node2.example.com'])
             end
 
-            it { is_expected.to contain_file("#{confdir}/auth.conf").with_content(%r{^path /run#{newline}auth any#{newline}method save#{newline}allow node1\.example\.com,node2\.example\.com#{newline}}) }
+            it { is_expected.to contain_file("#{confdir}/auth.conf").with_content(%r{^path /run\nauth any\nmethod save\nallow node1\.example\.com,node2\.example\.com$}) }
           end
         end
       end
