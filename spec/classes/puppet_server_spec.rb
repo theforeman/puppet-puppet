@@ -21,6 +21,7 @@ describe 'puppet' do
         sharedir            = '/usr/local/share/puppet'
         ssldir              = '/var/puppet/ssl'
         vardir              = '/var/puppet'
+        rubydir             = %r{^/usr/local/lib/ruby/site_ruby/\d+\.\d+/puppet$}
       else
         codedir             = '/etc/puppetlabs/code'
         conf_d_dir          = '/etc/puppetlabs/puppetserver/conf.d'
@@ -39,6 +40,7 @@ describe 'puppet' do
         sharedir            = '/opt/puppetlabs/puppet'
         ssldir              = '/etc/puppetlabs/puppet/ssl'
         vardir              = '/opt/puppetlabs/puppet/cache'
+        rubydir             = '/opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet'
       end
 
       let(:facts) { facts }
@@ -151,7 +153,7 @@ describe 'puppet' do
             .with_puppet_home(puppetserver_vardir)
             .with_puppet_etcdir(etcdir)
             .with_timeout(60)
-            .with_puppet_basedir('/opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet')
+            .with_puppet_basedir(rubydir)
         end
 
         # service
