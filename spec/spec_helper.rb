@@ -1,6 +1,10 @@
 # This file is managed centrally by modulesync
 #   https://github.com/theforeman/foreman-installer-modulesync
 
+RSpec.configure do |c|
+  c.mock_with :rspec
+end
+
 require 'puppetlabs_spec_helper/module_spec_helper'
 
 require 'rspec-puppet-facts'
@@ -35,7 +39,7 @@ end
 
 # Use the above environment variables to limit the platforms under test
 def on_os_under_test
-  on_supported_os(facterversion: '3.0.0').reject do |os, facts|
+  on_supported_os.reject do |os, facts|
     (only_test_os() && !only_test_os.include?(os)) ||
       (exclude_test_os() && exclude_test_os.include?(os))
   end
@@ -63,12 +67,4 @@ def verify_concat_fragment_exact_contents(subject, title, expected_lines)
   expect(content.split(/\n/).reject { |line| line =~ /(^#|^$|^\s+#)/ }).to match_array(expected_lines)
 end
 
-aio = on_os_under_test.reject do |os, facts|
-  ['Archlinux', 'FreeBSD', 'DragonFly', 'Windows'].include?(facts[:operatingsystem])
-end.keys
-
-add_custom_fact :rubysitedir, '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0', :confine => aio
-
-def unsupported_puppetmaster_osfamily(osfamily)
-  ['Archlinux', 'windows', 'Suse'].include?(osfamily)
-end
+Dir["./spec/support/**/*.rb"].sort.each { |f| require f }
