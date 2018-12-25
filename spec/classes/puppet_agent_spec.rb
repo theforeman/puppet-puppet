@@ -301,6 +301,23 @@ describe 'puppet' do
             it { is_expected.not_to contain_service('puppet-run.timer') }
           end
         end
+
+        describe 'when runmode => unmanaged' do
+          let :params do
+            super().merge(runmode: 'unmanaged')
+          end
+
+          # For windows we specify a package provider which doesn't compile
+          if facts[:osfamily] != 'windows'
+            it { is_expected.to compile.with_all_deps }
+          end
+          it { is_expected.to contain_class('puppet::agent::service::daemon').with_enabled(false) }
+          it { is_expected.to contain_class('puppet::agent::service::cron').with_enabled(false) }
+          it { is_expected.to contain_class('puppet::agent::service::systemd').with_enabled(false) }
+          it { is_expected.not_to contain_cron('puppet') }
+          it { is_expected.not_to contain_service('puppet') }
+          it { is_expected.not_to contain_service('puppet-run.timer') }
+        end
       end
 
       describe 'when unavailable_runmodes => ["cron"]' do

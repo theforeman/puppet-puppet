@@ -1,7 +1,7 @@
 class puppet::agent::service::systemd (
   Boolean $enabled = false,
 ) {
-  unless 'systemd.timer' in $::puppet::unavailable_runmodes {
+  unless 'unmanaged' in $::puppet::runmode or 'systemd.timer' in $::puppet::unavailable_runmodes {
     exec { 'systemctl-daemon-reload-puppet':
       refreshonly => true,
       path        => $::path,
