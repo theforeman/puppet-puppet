@@ -20,6 +20,14 @@ describe 'puppet' do
         rundir    = 'C:/ProgramData/PuppetLabs/puppet/var/run'
         ssldir    = 'C:/ProgramData/PuppetLabs/puppet/etc/ssl'
         vardir    = 'C:/ProgramData/PuppetLabs/puppet/var'
+      when 'Archlinux'
+        dir_owner = 'puppet'
+        dir_group = 'puppet'
+        confdir   = '/etc/puppetlabs/puppet'
+        logdir    = '/var/log/puppetlabs/puppet'
+        rundir    = '/var/run/puppetlabs'
+        ssldir    = '/etc/puppetlabs/puppet/ssl'
+        vardir    = '/opt/puppetlabs/puppet/cache'
       else
         dir_owner = 'root'
         dir_group = nil

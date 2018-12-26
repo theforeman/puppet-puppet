@@ -25,6 +25,14 @@ describe 'puppet' do
         }
       end
 
+      let(:server_vardir) do
+        if ['FreeBSD', 'DragonFly'].include?(facts[:operatingsystem])
+          '/var/puppet/server/data/puppetserver'
+        else
+          '/opt/puppetlabs/server/data/puppetserver'
+        end
+      end
+
       describe 'with default parameters' do
         it { should contain_file('/etc/custom/puppetserver/services.d').with_ensure('directory') }
         it {
@@ -93,7 +101,7 @@ describe 'puppet' do
 
       describe 'server_puppetserver_vardir' do
         context 'with default parameters' do
-          it { should contain_file(puppetserver_conf).with_content(%r{^    master-var-dir: /opt/puppetlabs/server/data/puppetserver$}) }
+          it { should contain_file(puppetserver_conf).with_content(%r{^    master-var-dir: #{server_vardir}$}) }
         end
 
         context 'with custom server_puppetserver_vardir' do
@@ -451,22 +459,22 @@ describe 'puppet' do
         context 'when server_puppetserver_version < 5.3' do
           it do
             should contain_file(puppetserver_conf)
-              .with_content(%r{^    gem-path: \[\$\{jruby-puppet.gem-home\}, "/opt/puppetlabs/server/data/puppetserver/vendored-jruby-gems"\]$})
+              .with_content(%r{^    gem-path: \[\$\{jruby-puppet.gem-home\}, "#{server_vardir}/vendored-jruby-gems"\]$})
           end
         end
 
         context 'when server_puppetserver_version >= 5.3' do
           let(:params) { super().merge(server_puppetserver_version: '5.3.0') }
 
-          if facts[:osfamily] == 'FreeBSD'
+          if ['FreeBSD', 'DragonFly'].include?(facts[:osfamily])
             it do
               should contain_file(puppetserver_conf)
-                .with_content(%r{^    gem-path: \[\$\{jruby-puppet.gem-home\}, "/var/puppet/server/data/puppetserver/vendored-jruby-gems"\]$})
+                .with_content(%r{^    gem-path: \[\$\{jruby-puppet.gem-home\}, "#{server_vardir}/vendored-jruby-gems"\]$})
             end
           else
             it do
               should contain_file(puppetserver_conf)
-                .with_content(%r{^    gem-path: \[\$\{jruby-puppet.gem-home\}, "/opt/puppetlabs/server/data/puppetserver/vendored-jruby-gems", "/opt/puppetlabs/puppet/lib/ruby/vendor_gems"\]$})
+                .with_content(%r{^    gem-path: \[\$\{jruby-puppet.gem-home\}, "#{server_vardir}/vendored-jruby-gems", "/opt/puppetlabs/puppet/lib/ruby/vendor_gems"\]$})
             end
           end
         end

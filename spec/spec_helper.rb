@@ -64,7 +64,7 @@ def verify_concat_fragment_exact_contents(subject, title, expected_lines)
 end
 
 aio = on_os_under_test.reject do |os, facts|
-  ['FreeBSD', 'DragonFly', 'Windows'].include?(facts[:operatingsystem])
+  ['Archlinux', 'FreeBSD', 'DragonFly', 'Windows'].include?(facts[:operatingsystem])
 end.keys
 
 add_custom_fact :rubysitedir, '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0', :confine => aio
