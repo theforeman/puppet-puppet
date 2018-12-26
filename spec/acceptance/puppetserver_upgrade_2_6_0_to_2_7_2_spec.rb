@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'Scenario: 2.6.0 to 2.7.2 upgrade:', if: ENV['BEAKER_PUPPET_COLLECTION'] == 'pc1' do
+describe 'Scenario: 2.6.0 to 2.7.2 upgrade:', if: ENV['BEAKER_PUPPET_COLLECTION'] == 'pc1' && fact('lsbdistcodename') != 'stretch' do
   before(:context) do
     if check_for_package(default, 'puppetserver')
       on default, puppet('resource package puppetserver ensure=purged')
