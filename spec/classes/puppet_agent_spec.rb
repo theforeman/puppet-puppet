@@ -15,6 +15,11 @@ describe 'puppet' do
         client_package = 'puppet-agent'
         confdir = 'C:/ProgramData/PuppetLabs/puppet/etc'
         package_provider = 'chocolatey'
+      when 'Archlinux'
+        bindir = '/usr/bin'
+        client_package = 'puppet'
+        confdir = '/etc/puppetlabs/puppet'
+        package_provider = nil
       else
         bindir = '/opt/puppetlabs/bin'
         client_package = 'puppet-agent'
@@ -158,7 +163,7 @@ describe 'puppet' do
             super().merge(manage_packages: false)
           end
 
-          it { is_expected.not_to contain_package('puppet-agent') }
+          it { is_expected.not_to contain_package(client_package) }
         end
 
         describe "when manage_packages => 'agent'" do
@@ -166,7 +171,7 @@ describe 'puppet' do
             super().merge(manage_packages: 'agent')
           end
 
-          it { is_expected.to contain_package('puppet-agent') }
+          it { is_expected.to contain_package(client_package) }
         end
 
         describe "when manage_packages => 'server'" do
@@ -174,7 +179,7 @@ describe 'puppet' do
             super().merge(manage_packages: 'server')
           end
 
-          it { is_expected.not_to contain_package('puppet-agent') }
+          it { is_expected.not_to contain_package(client_package) }
         end
       end
 
@@ -260,7 +265,7 @@ describe 'puppet' do
 
             it do
               is_expected.to contain_file('/etc/systemd/system/puppet-run.service')
-                .with_content(%r{.*ExecStart=#{bindir}/puppet agent --config #{confdir}/puppet.conf --onetime --no-daemonize.*})
+                .with_content(%r{^ExecStart=#{bindir}/puppet agent --config #{confdir}/puppet.conf --onetime --no-daemonize --detailed-exitcode --no-usecacheonfailure$})
             end
 
             it do
