@@ -1,7 +1,7 @@
 define puppet::config::master (
-  $value,
-  $key    = $name,
-  $joiner = ','
+  Variant[Array[String], Boolean, String, Integer] $value,
+  String $key    = $name,
+  String $joiner = ','
 ) {
   puppet::config::entry{"master_${name}":
     key          => $key,

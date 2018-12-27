@@ -1,7 +1,7 @@
 define puppet::config::main (
-  $value,
-  $key    = $name,
-  $joiner = ','
+  Variant[Array[String], Boolean, String, Integer] $value,
+  String $key    = $name,
+  String $joiner = ','
 ) {
   puppet::config::entry{"main${name}":
     key          => $key,

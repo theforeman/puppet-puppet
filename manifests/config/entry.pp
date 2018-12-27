@@ -1,9 +1,9 @@
 define puppet::config::entry (
-  $key,
-  $value,
-  $section,
-  $sectionorder = 5,
-  $joiner       = ',',
+  String $key,
+  Variant[Array[String], Boolean, String, Integer] $value,
+  String $section,
+  Variant[Integer[0], String] $sectionorder = 5,
+  String $joiner       = ',',
 ) {
   if ($value =~ Array) {
     $_value = join(flatten($value), $joiner)
