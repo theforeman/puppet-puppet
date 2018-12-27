@@ -1,4 +1,5 @@
 # Default parameters
+# @api private
 class puppet::params {
 
   # Basic config

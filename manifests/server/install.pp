@@ -1,4 +1,5 @@
 # Install the puppet server
+# @api private
 class puppet::server::install {
 
   # Mirror the relationship, as defined() is parse-order dependent

@@ -1,3 +1,5 @@
+# Set up running the agent via cron
+# @api private
 class puppet::agent::service::cron (
   Boolean $enabled = false,
 ) {

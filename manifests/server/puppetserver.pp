@@ -1,62 +1,58 @@
-# == Class: puppet::server::puppetserver
-#
 # Configures the puppetserver jvm configuration file using augeas.
 #
-# === Parameters:
+# @api private
 #
-# * `java_bin`
-# Path to the java executable to use
+# @param java_bin
+#   Path to the java executable to use
 #
-# * `config`
-# Path to the jvm configuration file.
-# This file is usually either /etc/default/puppetserver or
-# /etc/sysconfig/puppetserver depending on your *nix flavor.
+# @param config
+#   Path to the jvm configuration file.
+#   This file is usually either /etc/default/puppetserver or
+#   /etc/sysconfig/puppetserver depending on your *nix flavor.
 #
-# * `jvm_min_heap_size`
-# Translates into the -Xms option and is added to the JAVA_ARGS
+# @param jvm_min_heap_size
+#   Translates into the -Xms option and is added to the JAVA_ARGS
 #
-# * `jvm_max_heap_size`
-# Translates into the -Xmx option and is added to the JAVA_ARGS
+# @param jvm_max_heap_size
+#   Translates into the -Xmx option and is added to the JAVA_ARGS
 #
-# * `jvm_extra_args`
-# Custom options to pass through to the java binary. These get added to
-# the end of the JAVA_ARGS variable
+# @param jvm_extra_args
+#   Custom options to pass through to the java binary. These get added to
+#   the end of the JAVA_ARGS variable
 #
-# * `jvm_cli_args`
-# Custom options to pass through to the java binary when using a
-# puppetserver subcommand, (eg puppetserver gem). These get used
-# in the JAVA_ARGS_CLI variable.
+# @param jvm_cli_args
+#   Custom options to pass through to the java binary when using a
+#   puppetserver subcommand, (eg puppetserver gem). These get used
+#   in the JAVA_ARGS_CLI variable.
 #
-# * `server_puppetserver_dir`
-# Puppetserver config directory
+# @param server_puppetserver_dir
+#   Puppetserver config directory
 #
-# * `server_puppetserver_vardir`
-# Puppetserver var directory
+# @param server_puppetserver_vardir
+#   Puppetserver var directory
 #
-# * `server_jruby_gem_home`
-# Puppetserver jruby gemhome
+# @param server_jruby_gem_home
+#   Puppetserver jruby gemhome
 #
-# * `server_cipher_suites`
-# Puppetserver array of acceptable ciphers
+# @param server_cipher_suites
+#   Puppetserver array of acceptable ciphers
 #
-# * `server_ssl_protocols`
-# Puppetserver array of acceptable ssl protocols
+# @param server_ssl_protocols
+#   Puppetserver array of acceptable ssl protocols
 #
-# * `server_max_active_instances`
-# Puppetserver number of max jruby instances
+# @param server_max_active_instances
+#   Puppetserver number of max jruby instances
 #
-# * `server_max_requests_per_instance`
-# Puppetserver number of max requests per jruby instance
+# @param server_max_requests_per_instance
+#   Puppetserver number of max requests per jruby instance
 #
-# * `server_max_queued_requests`
-# The maximum number of requests that may be queued waiting
-# to borrow a JRuby from the pool.
+# @param server_max_queued_requests
+#   The maximum number of requests that may be queued waiting
+#   to borrow a JRuby from the pool.
 #
-# * `server_max_retry_delay`
-# Sets the upper limit for the random sleep set as a Retry-After
-# header on 503 responses returned when max-queued-requests is enabled.
-#
-# === Example
+# @param server_max_retry_delay
+#   Sets the upper limit for the random sleep set as a Retry-After
+#   header on 503 responses returned when max-queued-requests is enabled.
 #
 # @example
 #

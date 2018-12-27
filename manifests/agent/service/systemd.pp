@@ -1,3 +1,5 @@
+# Set up running the agent via a systemd timer
+# @api private
 class puppet::agent::service::systemd (
   Boolean $enabled = false,
 ) {

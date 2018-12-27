@@ -3,6 +3,7 @@
 # @param $enable Whether to enable the service or not
 # @param $service_name The service name to manage
 #
+# @api private
 class puppet::server::service(
   Boolean $enable = true,
   String $service_name = 'puppetserver',

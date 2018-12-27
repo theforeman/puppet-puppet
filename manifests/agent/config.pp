@@ -1,4 +1,5 @@
 # Puppet agent configuration
+# @api private
 class puppet::agent::config inherits puppet::config {
   puppet::config::agent{
     'classfile':         value => $::puppet::classfile;

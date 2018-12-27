@@ -1,4 +1,5 @@
 # Set up the puppet server config
+# @api private
 class puppet::server::config inherits puppet::config {
   contain 'puppet::server::puppetserver'
   unless empty($::puppet::server::puppetserver_vardir) {

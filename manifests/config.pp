@@ -1,4 +1,5 @@
 # Set up the puppet config
+# @api private
 class puppet::config(
   $allow_any_crl_auth  = $::puppet::allow_any_crl_auth,
   $auth_allowed        = $::puppet::auth_allowed,

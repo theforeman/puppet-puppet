@@ -119,6 +119,8 @@
 #
 # === Advanced server parameters:
 #
+# $codedir::                           Override the puppet code directory.
+#
 # $config_version::                    How to determine the configuration version. When
 #                                      using git_repo, by default a git describe
 #                                      approach will be installed.
@@ -137,13 +139,12 @@
 #
 # $puppet_basedir::                    Where is the puppet code base located
 #
-# $enc_api::                           What version of enc script to deploy. Valid
-#                                      values are 'v2' for latest, and 'v1'
-#                                      for Foreman =< 1.2
+# $enc_api::                           What version of enc script to deploy.
 #
 # $report_api::                        What version of report processor to deploy.
-#                                      Valid values are 'v2' for latest, and 'v1'
-#                                      for Foreman =< 1.2
+#
+# $compile_mode::                      Used to control JRuby's "CompileMode", which may improve performance.
+#
 #
 # $request_timeout::                   Timeout in node.rb script for fetching
 #                                      catalog from Foreman (in seconds).
@@ -194,6 +195,10 @@
 #
 # $puppetserver_vardir::               The path of the puppetserver var dir
 #
+# $puppetserver_rundir::               The path of the puppetserver run dir
+#
+# $puppetserver_logdir::               The path of the puppetserver log dir
+#
 # $puppetserver_dir::                  The path of the puppetserver config dir
 #
 # $puppetserver_version::              The version of puppetserver 2 installed (or being installed)
@@ -205,6 +210,14 @@
 #                                      processor count
 #
 # $max_requests_per_instance::         Max number of requests per jruby instance. Defaults to 0 (disabled)
+#
+# $max_queued_requests::               The maximum number of requests that may be queued waiting to borrow a
+#                                      JRuby from the pool. (Puppetserver 5.x only)
+#                                      Defaults to 0 (disabled) for Puppetserver >= 5.0
+#
+# $max_retry_delay::                   Sets the upper limit for the random sleep set as a Retry-After header on
+#                                      503 responses returned when max-queued-requests is enabled. (Puppetserver 5.x only)
+#                                      Defaults to 1800 for Puppetserver >= 5.0
 #
 # $idle_timeout::                      How long the server will wait for a response on an existing connection
 #
@@ -230,7 +243,7 @@
 #                                      can query the certificate-status endpoint
 #                                      Defaults to [ '127.0.0.1', '::1', $::ipaddress ]
 
-# $server_custom_trusted_oid_mapping:: A hash of custom trusted oid mappings. Defaults to undef
+# $custom_trusted_oid_mapping::        A hash of custom trusted oid mappings.
 #                                      Example: { 1.3.6.1.4.1.34380.1.2.1.1 => { shortname => 'myshortname' } }
 #
 # $admin_api_whitelist::               The whitelist of clients that
@@ -242,6 +255,12 @@
 #
 # $use_legacy_auth_conf::              Should the puppetserver use the legacy puppet auth.conf?
 #                                      Defaults to false (the puppetserver will use its own conf.d/auth.conf)
+#
+# $check_for_updates::                 Should the puppetserver phone home to check for available updates?
+#
+# $environment_class_cache_enabled::   Enable environment class cache in conjunction with the use of the
+#                                      environment_classes API.
+#
 #
 # $allow_header_cert_info::            Allow client authentication over HTTP Headers
 #                                      Defaults to false, is also activated by the $http setting
@@ -283,6 +302,31 @@
 # $ca_enable_infra_crl::               Enable the separate CRL for Puppet infrastructure nodes
 #                                      Defaults to false
 #
+# $acceptor_threads::                  This sets the number of threads that the webserver will dedicate to accepting
+#                                      socket connections for unencrypted HTTP traffic. If not provided, the webserver
+#                                      defaults to the number of virtual cores on the host divided by 8, with a minimum
+#                                      of 1 and maximum of 4.
+#
+# $selector_threads::                  This sets the number of selectors that the webserver will dedicate to processing
+#                                      events on connected sockets for unencrypted HTTPS traffic. If not provided,
+#                                      the webserver defaults to the minimum of: virtual cores on the host divided by 2
+#                                      or max-threads divided by 16, with a minimum of 1.
+#
+# $max_threads::                       This sets the maximum number of threads assigned to responding to HTTP and/or
+#                                      HTTPS requests for a single webserver, effectively changing how many
+#                                      concurrent requests can be made at one time. If not provided, the
+#                                      webserver defaults to 200.
+#
+# $ssl_acceptor_threads::              This sets the number of threads that the webserver will dedicate to accepting
+#                                      socket connections for encrypted HTTPS traffic. If not provided, defaults to
+#                                      the number of virtual cores on the host divided by 8, with a minimum of 1 and maximum of 4.
+#
+# $ssl_selector_threads::              This sets the number of selectors that the webserver will dedicate to processing
+#                                      events on connected sockets for encrypted HTTPS traffic. Defaults to the number of
+#                                      virtual cores on the host divided by 2, with a minimum of 1 and maximum of 4.
+#                                      The number of selector threads actually used by Jetty is twice the number of selectors
+#                                      requested. For example, if a value of 3 is specified for the ssl-selector-threads setting,
+#                                      Jetty will actually use 6 selector threads.
 class puppet::server(
   Variant[Boolean, Stdlib::Absolutepath] $autosign = $::puppet::autosign,
   Array[String] $autosign_entries = $::puppet::autosign_entries,

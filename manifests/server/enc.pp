@@ -1,3 +1,5 @@
+# Set up the ENC config
+# @api private
 class puppet::server::enc(
   $enc_path = $::puppet::server::external_nodes
 ) {

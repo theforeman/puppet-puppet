@@ -1,3 +1,16 @@
+# Set a config entry
+#
+# @param key
+#   The key of the config entry
+# @param value
+#   The value for the config entry
+# @param section
+#   The section for the config entry
+# @param sectionorder
+#   How to order the section. This is only used on the first definition of the
+#   section via ensure_resource.
+# @param joiner
+#   How to join an array value into a string
 define puppet::config::entry (
   String $key,
   Variant[Array[String], Boolean, String, Integer] $value,
