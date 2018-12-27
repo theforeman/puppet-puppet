@@ -217,7 +217,6 @@ class puppet::params {
   $server_enc_api             = 'v2'
   $server_report_api          = 'v2'
   $server_request_timeout     = 60
-  $server_ca_proxy            = undef
   $server_certname            = $::clientcert
   $server_strict_variables    = false
   $server_http                = false

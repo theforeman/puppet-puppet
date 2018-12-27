@@ -150,11 +150,6 @@
 #
 # $environment_timeout::               Timeout for cached compiled catalogs (10s, 5m, ...)
 #
-# $ca_proxy::                          The actual server that handles puppet CA.
-#                                      Setting this to anything non-empty causes
-#                                      the apache vhost to set up a proxy for all
-#                                      certificates pointing to the value.
-#
 # $jvm_java_bin::                      Set the default java to use.
 #
 # $jvm_config::                        Specify the puppetserver jvm configuration file.
@@ -351,7 +346,6 @@ class puppet::server(
   Enum['v2', 'v1'] $enc_api = $::puppet::server_enc_api,
   Enum['v2', 'v1'] $report_api = $::puppet::server_report_api,
   Integer[0] $request_timeout = $::puppet::server_request_timeout,
-  Optional[String] $ca_proxy = $::puppet::server_ca_proxy,
   Boolean $strict_variables = $::puppet::server_strict_variables,
   Hash[String, Data] $additional_settings = $::puppet::server_additional_settings,
   Boolean $foreman = $::puppet::server_foreman,
