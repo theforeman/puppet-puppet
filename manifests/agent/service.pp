@@ -1,4 +1,5 @@
-# Set up the puppet client as a service
+# Set up the puppet agent as a service
+# @api private
 class puppet::agent::service {
 
   case $::puppet::runmode {

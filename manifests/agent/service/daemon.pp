@@ -1,3 +1,5 @@
+# Set up running the agent as a daemon
+# @api private
 class puppet::agent::service::daemon (
   Boolean $enabled = false,
 ) {
