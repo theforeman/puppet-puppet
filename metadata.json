@@ -16,10 +16,6 @@
   ],
   "dependencies": [
     {
-      "name": "puppetlabs/apache",
-      "version_requirement": ">= 1.2.0 < 4.0.0"
-    },
-    {
       "name": "puppetlabs/concat",
       "version_requirement": ">= 1.0.0 < 6.0.0"
     },

@@ -315,11 +315,6 @@
 # $server_envs_target::                     Indicates that $envs_dir should be
 #                                           a symbolic link to this target
 #
-# $server_ca_proxy::                        The actual server that handles puppet CA.
-#                                           Setting this to anything non-empty causes
-#                                           the apache vhost to set up a proxy for all
-#                                           certificates pointing to the value.
-#
 # $server_jvm_java_bin::                    Set the default java to use.
 #
 # $server_jvm_config::                      Specify the puppetserver jvm configuration file.
@@ -654,7 +649,6 @@ class puppet (
   Enum['v2'] $server_enc_api = $puppet::params::server_enc_api,
   Enum['v2'] $server_report_api = $puppet::params::server_report_api,
   Integer[0] $server_request_timeout = $puppet::params::server_request_timeout,
-  Optional[String] $server_ca_proxy = $puppet::params::server_ca_proxy,
   Boolean $server_strict_variables = $puppet::params::server_strict_variables,
   Hash[String, Data] $server_additional_settings = $puppet::params::server_additional_settings,
   Boolean $server_foreman = $puppet::params::server_foreman,
