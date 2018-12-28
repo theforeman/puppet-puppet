@@ -413,12 +413,15 @@ class puppet::params {
   $server_allow_header_cert_info          = false
   $server_ca_allow_sans                   = false
   $server_ca_allow_auth_extensions        = false
+  $server_ca_enable_infra_crl             = false
 
   # Puppetserver >= 2.2 Which auth.conf shall we use?
   $server_use_legacy_auth_conf      = false
 
   # For Puppetserver, certain configuration parameters are version specific. We assume a particular version here.
-  if versioncmp($::puppetversion, '5.5.7') >= 0 {
+  if versioncmp($::puppetversion, '6.0.0') >= 0 {
+    $server_puppetserver_version = '6.0.0'
+  } elsif versioncmp($::puppetversion, '5.5.7') >= 0 {
     $server_puppetserver_version = '5.3.6'
   } elsif versioncmp($::puppetversion, '5.5.0') >= 0 {
     $server_puppetserver_version = '5.3.0'

@@ -506,6 +506,10 @@
 #                                           Defaults to false
 #
 # $server_ca_allow_auth_extensions::        Allow CA to sign certificate requests that have authorization extensions
+#                                           Defaults to false
+#
+# $server_ca_enable_infra_crl::             Enable the separate CRL for Puppet infrastructure nodes
+#                                           Defaults to false
 #
 # === Usage:
 #
@@ -698,6 +702,7 @@ class puppet (
   Optional[Integer[1]] $server_max_threads = undef,
   Boolean $server_ca_allow_sans = $puppet::params::server_ca_allow_sans,
   Boolean $server_ca_allow_auth_extensions = $puppet::params::server_ca_allow_auth_extensions,
+  Boolean $server_ca_enable_infra_crl = $puppet::params::server_ca_enable_infra_crl,
 ) inherits puppet::params {
   contain puppet::config
 

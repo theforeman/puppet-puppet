@@ -129,6 +129,7 @@ class puppet::server::puppetserver (
   $max_threads                            = $::puppet::server::max_threads,
   $ca_allow_sans                          = $::puppet::server::ca_allow_sans,
   $ca_allow_auth_extensions               = $::puppet::server::ca_allow_auth_extensions,
+  $ca_enable_infra_crl                    = $::puppet::server::ca_enable_infra_crl,
 ) {
   include ::puppet::server
 
