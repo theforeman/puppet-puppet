@@ -489,13 +489,14 @@ describe 'puppet' do
           end
         end
 
-        context 'when server_puppetserver_version >= 5.3.6' do
+        context 'when server_puppetserver_version >= 5.3.6 and < 6.0.0' do
           let(:params) { super().merge(server_puppetserver_version: '5.3.6') }
           context 'with default parameters' do
             it { should contain_file('/etc/custom/puppetserver/conf.d/ca.conf')
                           .with_ensure('present')
                           .with_content(/^( *)allow-subject-alt-names: false$/)
                           .with_content(/^( *)allow-authorization-extensions: false$/)
+                          .without_content(/^( *)enable-infra-crl: false$/)
             }
             it { should contain_file(auth_conf).with_content(/^( *)pp_cli_auth: "true"$/) }
           end
@@ -510,6 +511,34 @@ describe 'puppet' do
                           .with_ensure('present')
                           .with_content(/^( *)allow-subject-alt-names: true$/)
                           .with_content(/^( *)allow-authorization-extensions: true$/)
+            }
+          end
+        end
+
+        context 'when server_puppetserver_version >= 6.0.0' do
+          let(:params) { super().merge(server_puppetserver_version: '6.0.0') }
+          context 'with default parameters' do
+            it { should contain_file('/etc/custom/puppetserver/conf.d/ca.conf')
+                          .with_ensure('present')
+                          .with_content(/^( *)allow-subject-alt-names: false$/)
+                          .with_content(/^( *)allow-authorization-extensions: false$/)
+                          .with_content(/^( *)enable-infra-crl: false$/)
+            }
+            it { should contain_file(auth_conf).with_content(/^( *)pp_cli_auth: "true"$/) }
+          end
+
+          context 'with ca parameters set' do
+            let(:params) { super().merge(
+              server_ca_allow_sans: true,
+              server_ca_allow_auth_extensions: true,
+              server_ca_enable_infra_crl: true,
+              )
+            }
+            it { should contain_file('/etc/custom/puppetserver/conf.d/ca.conf')
+                          .with_ensure('present')
+                          .with_content(/^( *)allow-subject-alt-names: true$/)
+                          .with_content(/^( *)allow-authorization-extensions: true$/)
+                          .with_content(/^( *)enable-infra-crl: true$/)
             }
           end
         end

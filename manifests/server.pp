@@ -280,6 +280,9 @@
 # $ca_allow_auth_extensions::          Allow CA to sign certificate requests that have authorization extensions
 #                                      Defaults to false
 #
+# $ca_enable_infra_crl::               Enable the separate CRL for Puppet infrastructure nodes
+#                                      Defaults to false
+#
 class puppet::server(
   Variant[Boolean, Stdlib::Absolutepath] $autosign = $::puppet::autosign,
   Array[String] $autosign_entries = $::puppet::autosign_entries,
@@ -394,6 +397,7 @@ class puppet::server(
   Optional[Integer[1]] $max_threads = $::puppet::server_max_threads,
   Boolean $ca_allow_sans = $::puppet::server_ca_allow_sans,
   Boolean $ca_allow_auth_extensions = $::puppet::server_ca_allow_auth_extensions,
+  Boolean $ca_enable_infra_crl = $::puppet::server_ca_enable_infra_crl,
 ) {
   if $ca {
     $ssl_ca_cert     = "${ssl_dir}/ca/ca_crt.pem"

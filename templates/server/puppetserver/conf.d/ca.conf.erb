@@ -4,4 +4,9 @@ certificate-authority: {
 
     # allow CA to sign certificate requests that have authorization extensions.
     allow-authorization-extensions: <%= @ca_allow_auth_extensions %>
+<%- if scope.function_versioncmp([@server_puppetserver_version, '6.0.0']) >= 0 -%>
+
+    # enable the separate CRL for Puppet infrastructure nodes
+    enable-infra-crl: <%= @ca_enable_infra_crl %>
+<%- end -%>
 }
