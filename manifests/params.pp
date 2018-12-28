@@ -51,7 +51,6 @@ class puppet::params {
   $environment         = $::environment
 
   $aio_package      = ($::osfamily == 'Windows' or $::rubysitedir =~ /\/opt\/puppetlabs\/puppet/)
-  $deb_naio_package = ($::osfamily == 'Debian')
 
   $systemd_randomizeddelaysec = 0
 
@@ -131,9 +130,9 @@ class puppet::params {
         $server_jruby_gem_home      = '/opt/puppetlabs/server/data/puppetserver/jruby-gems'
       } else {
         $dir                        = '/etc/puppet'
-        $codedir                    =  $deb_naio_package ? {
-          true  => '/etc/puppet/code',
-          false => '/etc/puppet',
+        $codedir                    =  $::osfamily ? {
+          'Debian' => '/etc/puppet/code',
+          default  => '/etc/puppet',
         }
         $logdir                     = '/var/log/puppet'
         $rundir                     = '/var/run/puppet'
