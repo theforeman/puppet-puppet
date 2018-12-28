@@ -6,8 +6,10 @@ describe 'puppet' do
     context "on #{os}" do
       case facts[:osfamily]
       when 'FreeBSD'
+        puppet_major = facts[:puppetversion].to_i
+
         bindir = '/usr/local/bin'
-        client_package = Puppet.version < '5.0' ? 'puppet4' : 'puppet5'
+        client_package = "puppet#{puppet_major}"
         confdir = '/usr/local/etc/puppet'
         package_provider = nil
       when 'windows'

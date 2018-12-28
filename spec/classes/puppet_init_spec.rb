@@ -5,9 +5,11 @@ describe 'puppet' do
     context "on #{os}" do
       case facts[:osfamily]
       when 'FreeBSD'
+        puppet_major = facts[:puppetversion].to_i
+
         puppet_concat    = '/usr/local/etc/puppet/puppet.conf'
         puppet_directory = '/usr/local/etc/puppet'
-        puppet_package   = Puppet.version < '5.0' ? 'puppet4' : 'puppet5'
+        puppet_package   = "puppet#{puppet_major}"
       when 'windows'
         puppet_concat    = 'C:/ProgramData/PuppetLabs/puppet/etc/puppet.conf'
         puppet_directory = 'C:/ProgramData/PuppetLabs/puppet/etc'

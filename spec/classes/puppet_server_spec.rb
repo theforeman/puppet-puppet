@@ -4,6 +4,8 @@ describe 'puppet' do
   on_os_under_test.each do |os, facts|
     context "on #{os}", unless: unsupported_puppetmaster_osfamily(facts[:osfamily]) do
       if facts[:osfamily] == 'FreeBSD'
+        puppet_major = facts[:puppetversion].to_i
+
         codedir             = '/usr/local/etc/puppet'
         conf_d_dir          = '/usr/local/etc/puppetserver/conf.d'
         conf_file           = '/usr/local/etc/puppet/puppet.conf'
@@ -22,6 +24,7 @@ describe 'puppet' do
         ssldir              = '/var/puppet/ssl'
         vardir              = '/var/puppet'
         rubydir             = %r{^/usr/local/lib/ruby/site_ruby/\d+\.\d+/puppet$}
+        puppetserver_pkg    = puppet_major > 4 ? "puppetserver#{puppet_major}" : 'puppetserver'
       else
         codedir             = '/etc/puppetlabs/code'
         conf_d_dir          = '/etc/puppetlabs/puppetserver/conf.d'
@@ -41,6 +44,7 @@ describe 'puppet' do
         ssldir              = '/etc/puppetlabs/puppet/ssl'
         vardir              = '/opt/puppetlabs/puppet/cache'
         rubydir             = '/opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet'
+        puppetserver_pkg    = 'puppetserver'
       end
 
       let(:facts) { facts }
@@ -58,7 +62,7 @@ describe 'puppet' do
         # install
         it { should contain_class('puppet::server::install') }
         it { should contain_user('puppet') }
-        it { should contain_package('puppetserver') }
+        it { should contain_package(puppetserver_pkg) }
 
         # config
         it { should contain_class('puppet::server::config') }
@@ -205,9 +209,9 @@ describe 'puppet' do
 
             it { should compile.with_all_deps }
             if expected
-              it { should contain_package('puppetserver') }
+              it { should contain_package(puppetserver_pkg) }
             else
-              it { should_not contain_package('puppetserver') }
+              it { should_not contain_package(puppetserver_pkg) }
             end
           end
         end

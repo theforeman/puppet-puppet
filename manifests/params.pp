@@ -272,9 +272,16 @@ class puppet::params {
   # - puppetdb for puppetdb
   $server_storeconfigs_backend = undef
 
-  $server_ssl_dir  = $ssldir
-  $server_package     = undef
-  $server_version     = undef
+  $puppet_major = regsubst($::puppetversion, '^(\d+)\..*$', '\1')
+
+  if ($::osfamily =~ /(FreeBSD|DragonFly)/ and versioncmp($puppet_major, '5') >= 0) {
+    $server_package = "puppetserver${puppet_major}"
+  } else {
+    $server_package = undef
+  }
+
+  $server_ssl_dir = $ssldir
+  $server_version = undef
 
   if $aio_package {
     $client_package = ['puppet-agent']
@@ -284,11 +291,7 @@ class puppet::params {
       default => ['puppet-common', 'puppet']
     }
   } elsif ($::osfamily =~ /(FreeBSD|DragonFly)/) {
-    if (versioncmp($::puppetversion, '5.0') > 0) {
-      $client_package = ['puppet5']
-    } else {
-      $client_package = ['puppet4']
-    }
+    $client_package = ["puppet${puppet_major}"]
   } else {
     $client_package = ['puppet']
   }
