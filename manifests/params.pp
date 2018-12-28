@@ -278,11 +278,6 @@ class puppet::params {
 
   if $aio_package {
     $client_package = ['puppet-agent']
-  } elsif $::osfamily == 'Debian' {
-    $client_package = $deb_naio_package ? {
-      true    => ['puppet'],
-      default => ['puppet-common', 'puppet']
-    }
   } elsif ($::osfamily =~ /(FreeBSD|DragonFly)/) {
     if (versioncmp($::puppetversion, '5.0') > 0) {
       $client_package = ['puppet5']
