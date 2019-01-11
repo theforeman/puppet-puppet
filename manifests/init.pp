@@ -559,7 +559,7 @@ class puppet (
   Optional[String] $autosign_source = $puppet::params::autosign_source,
   Variant[Integer[0],Pattern[/^\d+[smhdy]?$/]] $runinterval = $puppet::params::runinterval,
   Boolean $usecacheonfailure = $puppet::params::usecacheonfailure,
-  Enum['cron', 'service', 'systemd.timer', 'none'] $runmode = $puppet::params::runmode,
+  Enum['cron', 'service', 'systemd.timer', 'none', 'unmanaged'] $runmode = $puppet::params::runmode,
   Array[Enum['cron', 'service', 'systemd.timer', 'none']] $unavailable_runmodes = $puppet::params::unavailable_runmodes,
   Optional[String] $cron_cmd = $puppet::params::cron_cmd,
   Optional[String] $systemd_cmd = $puppet::params::systemd_cmd,

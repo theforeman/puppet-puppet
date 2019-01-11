@@ -18,7 +18,7 @@ class puppet::agent::service {
       $cron_enabled = false
       $systemd_enabled = true
     }
-    'none': {
+    'none', 'unmanaged': {
       $service_enabled = false
       $cron_enabled = false
       $systemd_enabled = false

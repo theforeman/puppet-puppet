@@ -3,7 +3,7 @@
 class puppet::agent::service::daemon (
   Boolean $enabled = false,
 ) {
-  unless 'service' in $::puppet::unavailable_runmodes {
+  unless $::puppet::runmode == 'unmanaged' or 'service' in $::puppet::unavailable_runmodes {
     if $enabled {
       service {'puppet':
         ensure     => running,

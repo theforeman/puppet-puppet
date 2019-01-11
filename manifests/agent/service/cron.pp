@@ -3,7 +3,7 @@
 class puppet::agent::service::cron (
   Boolean $enabled = false,
 ) {
-  unless 'cron' in $::puppet::unavailable_runmodes {
+  unless $::puppet::runmode == 'unmanaged' or 'cron' in $::puppet::unavailable_runmodes {
     if $enabled {
       $command = pick($::puppet::cron_cmd, "${::puppet::puppet_cmd} agent --config ${::puppet::dir}/puppet.conf --onetime --no-daemonize")
       $times = extlib::ip_to_cron($::puppet::runinterval)
