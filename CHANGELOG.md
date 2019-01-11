@@ -1,5 +1,30 @@
 # Changelog
 
+## [11.0.0](https://github.com/theforeman/puppet-puppet/tree/11.0.0) (2019-01-14)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/10.1.0...11.0.0)
+
+**Breaking changes:**
+
+- Remove left over environment entry [\#662](https://github.com/theforeman/puppet-puppet/pull/662) ([ekohl](https://github.com/ekohl))
+- remove apache dependency and leftovers [\#661](https://github.com/theforeman/puppet-puppet/pull/661) ([mmoll](https://github.com/mmoll))
+- Remove dynamic and config environments [\#653](https://github.com/theforeman/puppet-puppet/pull/653) ([ekohl](https://github.com/ekohl))
+- Remove passenger support [\#650](https://github.com/theforeman/puppet-puppet/pull/650) ([ekohl](https://github.com/ekohl))
+- Drop support for puppetserver \< 2.7 [\#649](https://github.com/theforeman/puppet-puppet/pull/649) ([ekohl](https://github.com/ekohl))
+
+**Implemented enhancements:**
+
+- Fixes [\#25839](https://projects.theforeman.org/issues/25839) - Determine puppetserver version in server.pp [\#668](https://github.com/theforeman/puppet-puppet/pull/668) ([ekohl](https://github.com/ekohl))
+- Remove $deb\_naio\_package & puppet-common install [\#665](https://github.com/theforeman/puppet-puppet/pull/665) ([ekohl](https://github.com/ekohl))
+- Config file updates and FreeBSD refactorings [\#664](https://github.com/theforeman/puppet-puppet/pull/664) ([mmoll](https://github.com/mmoll))
+- Set more data types and document classes & defines [\#663](https://github.com/theforeman/puppet-puppet/pull/663) ([ekohl](https://github.com/ekohl))
+- Add unmanaged Puppet Agent runmode [\#659](https://github.com/theforeman/puppet-puppet/pull/659) ([Rathios](https://github.com/Rathios))
+- namespace extlib functions [\#639](https://github.com/theforeman/puppet-puppet/pull/639) ([mmoll](https://github.com/mmoll))
+
+**Merged pull requests:**
+
+- add Puppetserver 5.x upgrade test [\#667](https://github.com/theforeman/puppet-puppet/pull/667) ([mmoll](https://github.com/mmoll))
+
 ## [10.1.0](https://github.com/theforeman/puppet-puppet/tree/10.1.0) (2018-12-06)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/10.0.0...10.1.0)
