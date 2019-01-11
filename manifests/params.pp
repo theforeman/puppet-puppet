@@ -363,15 +363,9 @@ class puppet::params {
     default  => '/etc/default/puppetserver',
   }
 
-  $server_jvm_java_bin      = '/usr/bin/java'
-
-  if versioncmp($::puppetversion, '5.0.0') < 0 {
-    $server_jvm_extra_args = '-XX:MaxPermSize=256m'
-  } else {
-    $server_jvm_extra_args = '-Djruby.logger.class=com.puppetlabs.jruby_utils.jruby.Slf4jLogger'
-  }
-
-  $server_jvm_cli_args = undef
+  $server_jvm_java_bin   = '/usr/bin/java'
+  $server_jvm_extra_args = undef
+  $server_jvm_cli_args   = undef
 
   # This is some very trivial "tuning". See the puppet reference:
   # https://docs.puppet.com/puppetserver/latest/tuning_guide.html
@@ -419,29 +413,16 @@ class puppet::params {
   $server_ca_allow_auth_extensions        = false
   $server_ca_enable_infra_crl             = false
 
+  $server_puppetserver_version      = undef
+
   # Puppetserver >= 2.2 Which auth.conf shall we use?
   $server_use_legacy_auth_conf      = false
-
-  # For Puppetserver, certain configuration parameters are version specific. We assume a particular version here.
-  if versioncmp($::puppetversion, '6.0.0') >= 0 {
-    $server_puppetserver_version = '6.0.0'
-  } elsif versioncmp($::puppetversion, '5.5.7') >= 0 {
-    $server_puppetserver_version = '5.3.6'
-  } elsif versioncmp($::puppetversion, '5.5.0') >= 0 {
-    $server_puppetserver_version = '5.3.0'
-  } elsif versioncmp($::puppetversion, '5.1.0') >= 0 {
-    $server_puppetserver_version = '5.1.0'
-  } elsif versioncmp($::puppetversion, '5.0.0') >= 0 {
-    $server_puppetserver_version = '5.0.0'
-  } else {
-    $server_puppetserver_version = '2.7.0'
-  }
 
   # For Puppetserver 5, use JRuby 9k?
   $server_puppetserver_jruby9k      = false
 
   # this switch also controls Ruby profiling, by default disabled for Puppetserver 2.x, enabled for 5.x
-  $server_puppetserver_metrics = versioncmp($::puppetversion, '5.0.0') >= 0
+  $server_puppetserver_metrics = undef
 
   # Puppetserver metrics shipping
   $server_metrics_jmx_enable        = true

@@ -201,10 +201,10 @@
 #
 # $puppetserver_dir::                  The path of the puppetserver config dir
 #
-# $puppetserver_version::              The version of puppetserver 2 installed (or being installed)
-#                                      Unfortunately, different versions of puppetserver need configuring differently,
-#                                      and there's no easy way of determining which version is being installed.
-#                                      Defaults to '2.3.1' but can be overriden if you're installing an older version.
+# $puppetserver_version::              The version of puppetserver installed (or being installed)
+#                                      Unfortunately, different versions of puppetserver need configuring differently.
+#                                      By default we attempt to derive the version from the puppet version itself but
+#                                      can be overriden if you're installing an older version.
 #
 # $max_active_instances::              Max number of active jruby instances. Defaults to
 #                                      processor count
@@ -356,7 +356,7 @@ class puppet::server(
   Optional[Stdlib::Absolutepath] $puppetserver_rundir = $::puppet::server_puppetserver_rundir,
   Optional[Stdlib::Absolutepath] $puppetserver_logdir = $::puppet::server_puppetserver_logdir,
   Stdlib::Absolutepath $puppetserver_dir = $::puppet::server_puppetserver_dir,
-  Pattern[/^[\d]\.[\d]+\.[\d]+$/] $puppetserver_version = $::puppet::server_puppetserver_version,
+  Optional[Pattern[/^[\d]\.[\d]+\.[\d]+$/]] $puppetserver_version = $::puppet::server_puppetserver_version,
   Variant[Undef, String[0], Stdlib::Absolutepath] $external_nodes = $::puppet::server_external_nodes,
   Array[String] $cipher_suites = $::puppet::server_cipher_suites,
   Optional[String] $config_version = $::puppet::server_config_version,
@@ -411,7 +411,7 @@ class puppet::server(
   String $jvm_config = $::puppet::server_jvm_config,
   Pattern[/^[0-9]+[kKmMgG]$/] $jvm_min_heap_size = $::puppet::server_jvm_min_heap_size,
   Pattern[/^[0-9]+[kKmMgG]$/] $jvm_max_heap_size = $::puppet::server_jvm_max_heap_size,
-  Variant[String,Array[String]] $jvm_extra_args = $::puppet::server_jvm_extra_args,
+  Optional[Variant[String,Array[String]]] $jvm_extra_args = $::puppet::server_jvm_extra_args,
   Optional[String] $jvm_cli_args = $::puppet::server_jvm_cli_args,
   Optional[Stdlib::Absolutepath] $jruby_gem_home = $::puppet::server_jruby_gem_home,
   Integer[1] $max_active_instances = $::puppet::server_max_active_instances,
@@ -423,7 +423,7 @@ class puppet::server(
   Boolean $environment_class_cache_enabled = $::puppet::server_environment_class_cache_enabled,
   Boolean $allow_header_cert_info = $::puppet::server_allow_header_cert_info,
   Boolean $puppetserver_jruby9k = $::puppet::server_puppetserver_jruby9k,
-  Boolean $puppetserver_metrics = $::puppet::server_puppetserver_metrics,
+  Optional[Boolean] $puppetserver_metrics = $::puppet::server_puppetserver_metrics,
   Boolean $metrics_jmx_enable = $::puppet::server_metrics_jmx_enable,
   Boolean $metrics_graphite_enable = $::puppet::server_metrics_graphite_enable,
   String $metrics_graphite_host = $::puppet::server_metrics_graphite_host,
@@ -466,6 +466,35 @@ class puppet::server(
     }
   } else {
     $config_version_cmd = $config_version
+  }
+
+  # For Puppetserver, certain configuration parameters are version specific. We
+  # assume a particular version here.
+  if $puppetserver_version {
+    $real_puppetserver_version = $puppetserver_version
+  } elsif versioncmp($::puppetversion, '6.0.0') >= 0 {
+    $real_puppetserver_version = '6.0.0'
+  } elsif versioncmp($::puppetversion, '5.5.7') >= 0 {
+    $real_puppetserver_version = '5.3.6'
+  } elsif versioncmp($::puppetversion, '5.5.0') >= 0 {
+    $real_puppetserver_version = '5.3.0'
+  } elsif versioncmp($::puppetversion, '5.1.0') >= 0 {
+    $real_puppetserver_version = '5.1.0'
+  } elsif versioncmp($::puppetversion, '5.0.0') >= 0 {
+    $real_puppetserver_version = '5.0.0'
+  } else {
+    $real_puppetserver_version = '2.7.0'
+  }
+
+  # Prefer the user setting,otherwise disable for Puppetserver 2.x, enabled for 5.x
+  $real_puppetserver_metrics = pick($puppetserver_metrics, versioncmp($real_puppetserver_version, '5.0.0') >= 0)
+
+  if $jvm_extra_args {
+    $real_jvm_extra_args = $jvm_extra_args
+  } elsif versioncmp($real_puppetserver_version, '5.0.0') < 0 {
+    $real_jvm_extra_args = '-XX:MaxPermSize=256m'
+  } else {
+    $real_jvm_extra_args = '-Djruby.logger.class=com.puppetlabs.jruby_utils.jruby.Slf4jLogger'
   }
 
   contain puppet::server::install

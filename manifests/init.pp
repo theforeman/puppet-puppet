@@ -371,7 +371,7 @@
 #
 # $server_puppetserver_dir::                The path of the puppetserver config dir
 #
-# $server_puppetserver_version::            The version of puppetserver 2 installed (or being installed)
+# $server_puppetserver_version::            The version of puppetserver installed (or being installed)
 #                                           Unfortunately, different versions of puppetserver need
 #                                           configuring differently. The default is derived from the
 #                                           installed puppet version. Generally it's not needed to
@@ -617,7 +617,7 @@ class puppet (
   Optional[Stdlib::Absolutepath] $server_puppetserver_vardir = $puppet::params::server_puppetserver_vardir,
   Optional[Stdlib::Absolutepath] $server_puppetserver_rundir = $puppet::params::server_puppetserver_rundir,
   Optional[Stdlib::Absolutepath] $server_puppetserver_logdir = $puppet::params::server_puppetserver_logdir,
-  Pattern[/^[\d]\.[\d]+\.[\d]+$/] $server_puppetserver_version = $puppet::params::server_puppetserver_version,
+  Optional[Pattern[/^[\d]\.[\d]+\.[\d]+$/]] $server_puppetserver_version = $puppet::params::server_puppetserver_version,
   Variant[Undef, String[0], Stdlib::Absolutepath] $server_external_nodes = $puppet::params::server_external_nodes,
   Array[String] $server_cipher_suites = $puppet::params::server_cipher_suites,
   Optional[String] $server_config_version = $puppet::params::server_config_version,
@@ -671,7 +671,7 @@ class puppet (
   String $server_jvm_config = $puppet::params::server_jvm_config,
   Pattern[/^[0-9]+[kKmMgG]$/] $server_jvm_min_heap_size = $puppet::params::server_jvm_min_heap_size,
   Pattern[/^[0-9]+[kKmMgG]$/] $server_jvm_max_heap_size = $puppet::params::server_jvm_max_heap_size,
-  Variant[String,Array[String]] $server_jvm_extra_args = $puppet::params::server_jvm_extra_args,
+  Optional[Variant[String,Array[String]]] $server_jvm_extra_args = $puppet::params::server_jvm_extra_args,
   Optional[String] $server_jvm_cli_args = $puppet::params::server_jvm_cli_args,
   Optional[Stdlib::Absolutepath] $server_jruby_gem_home = $puppet::params::server_jruby_gem_home,
   Integer[1] $server_max_active_instances = $puppet::params::server_max_active_instances,
@@ -684,7 +684,7 @@ class puppet (
   Boolean $server_allow_header_cert_info = $puppet::params::server_allow_header_cert_info,
   Integer[0] $server_web_idle_timeout = $puppet::params::server_web_idle_timeout,
   Boolean $server_puppetserver_jruby9k = $puppet::params::server_puppetserver_jruby9k,
-  Boolean $server_puppetserver_metrics = $puppet::params::server_puppetserver_metrics,
+  Optional[Boolean] $server_puppetserver_metrics = $puppet::params::server_puppetserver_metrics,
   Boolean $server_metrics_jmx_enable = $::puppet::params::server_metrics_jmx_enable,
   Boolean $server_metrics_graphite_enable = $::puppet::params::server_metrics_graphite_enable,
   String $server_metrics_graphite_host = $::puppet::params::server_metrics_graphite_host,
