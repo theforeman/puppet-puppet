@@ -442,6 +442,7 @@ class puppet::server(
   Boolean $ca_allow_sans = $::puppet::server_ca_allow_sans,
   Boolean $ca_allow_auth_extensions = $::puppet::server_ca_allow_auth_extensions,
   Boolean $ca_enable_infra_crl = $::puppet::server_ca_enable_infra_crl,
+  Optional[Integer[1]] $max_open_files = $::puppet::server_max_open_files,
 ) {
   if $ca {
     $ssl_ca_cert     = "${ssl_dir}/ca/ca_crt.pem"

@@ -412,6 +412,7 @@ class puppet::params {
   $server_ca_allow_sans                   = false
   $server_ca_allow_auth_extensions        = false
   $server_ca_enable_infra_crl             = false
+  $server_max_open_files                  = undef
 
   $server_puppetserver_version      = undef
 

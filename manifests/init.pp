@@ -511,6 +511,9 @@
 # $server_ca_enable_infra_crl::             Enable the separate CRL for Puppet infrastructure nodes
 #                                           Defaults to false
 #
+# $server_max_open_files::                  Increase the max open files limit for Puppetserver.
+#                                           Defaults to undef
+#
 # === Usage:
 #
 # * Simple usage:
@@ -703,6 +706,7 @@ class puppet (
   Boolean $server_ca_allow_sans = $puppet::params::server_ca_allow_sans,
   Boolean $server_ca_allow_auth_extensions = $puppet::params::server_ca_allow_auth_extensions,
   Boolean $server_ca_enable_infra_crl = $puppet::params::server_ca_enable_infra_crl,
+  Optional[Integer[1]] $server_max_open_files = $puppet::params::server_max_open_files,
 ) inherits puppet::params {
   contain puppet::config
 

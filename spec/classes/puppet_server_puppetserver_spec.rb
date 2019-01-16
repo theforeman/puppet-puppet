@@ -404,6 +404,40 @@ describe 'puppet' do
         end
       end
 
+      describe 'server_max_open_files', unless: facts[:osfamily] == 'FreeBSD' do
+        context 'when server_max_open_files => undef' do
+          it do
+            if facts['service_provider'] == 'systemd'
+              should contain_systemd__dropin_file('puppetserver.service-limits.conf')
+                .with_ensure('absent')
+            else
+              should contain_file_line('puppet::server::puppetserver::max_open_files')
+                .with_ensure('absent')
+            end
+          end
+        end
+
+        context 'when server_max_open_files => 32143' do
+          let(:params) { super().merge(server_max_open_files: 32143) }
+
+          it do
+            if facts['service_provider'] == 'systemd'
+                should contain_systemd__dropin_file('puppetserver.service-limits.conf')
+                  .with_ensure('present')
+                  .with_filename('limits.conf')
+                  .with_unit('puppetserver.service')
+                  .with_content("[Service]\nLimitNOFILE=32143\n")
+            else
+                should contain_file_line('puppet::server::puppetserver::max_open_files')
+                  .with_ensure('present')
+                  .with_path('/etc/default/puppetserver')
+                  .with_line('ulimit -n 32143')
+                  .with_match('^ulimit\ -n')
+            end
+          end
+        end
+      end
+
       describe 'with extra_args parameter' do
         let(:params) { super().merge(server_jvm_extra_args: ['-XX:foo=bar', '-XX:bar=foo']) }
         if facts[:osfamily] == 'FreeBSD'
