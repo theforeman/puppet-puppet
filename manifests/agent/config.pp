@@ -70,4 +70,4 @@ class puppet::agent::config inherits puppet::config {
       }
     }
   }
-},
+}
