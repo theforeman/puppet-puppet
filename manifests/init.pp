@@ -92,10 +92,6 @@
 #
 # $module_repository::                      Use a different puppet module repository
 #
-# $configtimeout::                          How long the client should wait for the
-#                                           configuration to be retrieved before
-#                                           considering it a failure.
-#
 # $ca_server::                              Use a different ca server. Should be either
 #                                           a string with the location of the ca_server
 #                                           or 'false'.
@@ -118,6 +114,14 @@
 # $srv_domain::                             Search domain for SRV records
 #
 # $additional_settings::                    A hash of additional main settings.
+#
+# $http_connect_timeout::                   The maximum amount of time an agent waits
+#                                           when establishing an HTTP connection.
+#
+# $http_read_timeout::                      The time an agent waits for one block to be
+#                                           read from an HTTP connection. If nothing is
+#                                           read after the elapsed interval then the
+#                                           connection will be closed.
 #
 # == Advanced puppet parameters
 #
@@ -578,7 +582,8 @@ class puppet (
   Boolean $agent_noop = $puppet::params::agent_noop,
   Boolean $show_diff = $puppet::params::show_diff,
   Optional[Stdlib::HTTPUrl] $module_repository = $puppet::params::module_repository,
-  Optional[Integer[0]] $configtimeout = $puppet::params::configtimeout,
+  Optional[Integer[0]] $http_connect_timeout = $puppet::params::http_connect_timeout,
+  Optional[Integer[0]] $http_read_timeout = $puppet::params::http_read_timeout,
   Optional[Variant[String, Boolean]] $ca_server = $puppet::params::ca_server,
   Optional[Integer[0, 65535]] $ca_port = $puppet::params::ca_port,
   Optional[String] $ca_crl_filepath = $puppet::params::ca_crl_filepath,
