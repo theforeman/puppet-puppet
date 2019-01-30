@@ -21,6 +21,16 @@ class puppet::agent::config inherits puppet::config {
       'configtimeout':   value => $::puppet::configtimeout;
     }
   }
+  if $::puppet::http_connect_timeout != undef {
+    puppet::config::agent {
+      'http_connect_timeout':   value => $::puppet::http_connect_timeout;
+    }
+  }
+  if $::puppet::http_read_timeout != undef {
+    puppet::config::agent {
+      'http_read_timeout':   value => $::puppet::http_read_timeout;
+    }
+  }
   if $::puppet::prerun_command {
     puppet::config::agent {
       'prerun_command':  value => $::puppet::prerun_command;

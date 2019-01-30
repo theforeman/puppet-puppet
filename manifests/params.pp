@@ -153,6 +153,8 @@ class puppet::params {
   }
 
   $configtimeout = undef
+  $http_connect_timeout = undef
+  $http_read_timeout = undef
 
   $autosign         = "${dir}/autosign.conf"
   $autosign_entries = []

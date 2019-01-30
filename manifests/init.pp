@@ -113,6 +113,18 @@
 #
 # $additional_settings::                    A hash of additional main settings.
 #
+# $http_connect_timeout::                   The maximum amount of time to wait (agent)
+#                                           when establishing an HTTP connection.
+#                                           Replaces 'configtimeout' along with
+#                                           'http_read_timeout' (Puppet 4+).
+#
+# $http_read_timeout::                      The time to wait (agent) for one block to be
+#                                           read from an HTTP connection. If nothing is
+#                                           read after the elapsed interval then the
+#                                           connection will be closed.
+#                                           Replaces 'configtimeout' along with
+#                                           'http_connect_timeout' (Puppet 4+).
+#
 # == Advanced puppet parameters
 #
 # $user::                                   Override the name of the puppet user.
@@ -568,6 +580,8 @@ class puppet (
   Boolean $show_diff = $puppet::params::show_diff,
   Optional[Stdlib::HTTPUrl] $module_repository = $puppet::params::module_repository,
   Optional[Integer[0]] $configtimeout = $puppet::params::configtimeout,
+  Optional[Integer[0]] $http_connect_timeout = $puppet::params::http_connect_timeout,
+  Optional[Integer[0]] $http_read_timeout = $puppet::params::http_read_timeout,
   Optional[Variant[String, Boolean]] $ca_server = $puppet::params::ca_server,
   Optional[Integer[0, 65535]] $ca_port = $puppet::params::ca_port,
   Optional[String] $ca_crl_filepath = $puppet::params::ca_crl_filepath,
