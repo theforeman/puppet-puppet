@@ -141,7 +141,8 @@ describe 'puppet' do
 
         it { should contain_concat(conf_file) }
 
-        it { should_not contain_puppet__config__agent('configtimeout') }
+        it { should_not contain_puppet__config__agent('http_connect_timeout') }
+        it { should_not contain_puppet__config__agent('http_read_timeout') }
         it { should_not contain_class('puppetdb') }
         it { should_not contain_class('puppetdb::master::config') }
         it { should_not contain_file("#{confdir}/custom_trusted_oid_mapping.yaml") }

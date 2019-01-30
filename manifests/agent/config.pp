@@ -15,9 +15,14 @@ class puppet::agent::config inherits puppet::config {
     'noop':              value => $::puppet::agent_noop;
     'usecacheonfailure': value => $::puppet::usecacheonfailure;
   }
-  if $::puppet::configtimeout != undef {
+  if $::puppet::http_connect_timeout != undef {
     puppet::config::agent {
-      'configtimeout':   value => $::puppet::configtimeout;
+      'http_connect_timeout': value => $::puppet::http_connect_timeout;
+    }
+  }
+  if $::puppet::http_read_timeout != undef {
+    puppet::config::agent {
+      'http_read_timeout': value => $::puppet::http_read_timeout;
     }
   }
   if $::puppet::prerun_command {
