@@ -17,6 +17,7 @@ class puppet::config(
   $srv_domain          = $::puppet::srv_domain,
   $use_srv_records     = $::puppet::use_srv_records,
   $additional_settings = $::puppet::additional_settings,
+  $client_certname     = $::puppet::client_certname,
 ) {
   puppet::config::main{
     'vardir': value => $::puppet::vardir;
@@ -62,6 +63,11 @@ class puppet::config(
   }
   if $syslogfacility and !empty($syslogfacility) {
     puppet::config::main{'syslogfacility': value => $syslogfacility; }
+  }
+  if $client_certname {
+    puppet::config::main {
+      'certname': value => $client_certname;
+    }
   }
 
   $additional_settings.each |$key,$value| {
