@@ -75,7 +75,9 @@ class puppet::config(
   }
   -> case $::osfamily {
     'Windows': {
-      concat { "${puppet_dir}/puppet.conf": }
+      concat { "${puppet_dir}/puppet.conf": 
+        mode  => '0674',
+      }
     }
 
     default: {
