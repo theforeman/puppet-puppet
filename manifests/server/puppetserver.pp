@@ -126,6 +126,7 @@ class puppet::server::puppetserver (
   $ca_allow_sans                          = $::puppet::server::ca_allow_sans,
   $ca_allow_auth_extensions               = $::puppet::server::ca_allow_auth_extensions,
   $ca_enable_infra_crl                    = $::puppet::server::ca_enable_infra_crl,
+  $max_open_files                         = $::puppet::server::max_open_files,
 ) {
   include ::puppet::server
 
@@ -190,6 +191,26 @@ class puppet::server::puppetserver (
         incl    => $config,
         context => "/files${config}",
         changes => $jruby_jar_changes,
+      }
+    }
+
+    $ensure_max_open_files = $max_open_files ? {
+      undef   => 'absent',
+      default => 'present',
+    }
+    if $facts['service_provider'] == 'systemd' {
+      systemd::dropin_file { 'puppetserver.service-limits.conf':
+        ensure   => $ensure_max_open_files,
+        filename => 'limits.conf',
+        unit     => 'puppetserver.service',
+        content  => "[Service]\nLimitNOFILE=${max_open_files}\n",
+      }
+    } else {
+      file_line { 'puppet::server::puppetserver::max_open_files':
+        ensure => $ensure_max_open_files,
+        path   => $config,
+        line   => "ulimit -n ${max_open_files}",
+        match  => '^ulimit\ -n',
       }
     }
   }
