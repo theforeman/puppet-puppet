@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'deep_merge'
 
 describe 'puppet' do
   on_os_under_test.each do |os, facts|
@@ -129,6 +130,36 @@ describe 'puppet' do
 
           it { is_expected.to contain_puppet__config__main('use_srv_records').with_value(true) }
           it { is_expected.to contain_puppet__config__main('srv_domain').with_value('special.example.com') }
+        end
+      end
+
+      describe 'client_certname' do
+        context 'with client_certname => $::clientcert' do
+          let :facts do
+            # rspec-puppet(-facts) doesn't mock this
+            facts.deep_merge(clientcert: 'client.example.com')
+          end
+          let :params do
+            super().merge(client_certname: facts[:clientcert])
+          end
+
+          it { is_expected.to contain_puppet__config__main('certname').with_value(facts[:clientcert]) }
+        end
+
+        context 'with client_certname => "foobar"' do
+          let :params do
+            super().merge(client_certname: 'foobar')
+          end
+
+          it { is_expected.to contain_puppet__config__main('certname').with_value('foobar') }
+        end
+
+        context 'with client_certname => false' do
+          let :params do
+            super().merge(client_certname: false)
+          end
+
+          it { is_expected.not_to contain_puppet__config__main('certname') }
         end
       end
 

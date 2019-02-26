@@ -31,11 +31,6 @@ class puppet::agent::config inherits puppet::config {
       'postrun_command': value => $::puppet::postrun_command;
     }
   }
-  if $::puppet::client_certname {
-    puppet::config::agent {
-      'certname':        value => $::puppet::client_certname;
-    }
-  }
 
   $::puppet::agent_additional_settings.each |$key,$value| {
     puppet::config::agent { $key: value => $value }

@@ -31,8 +31,6 @@ describe 'puppet' do
 
       let :facts do
         facts.deep_merge(
-          # rspec-puppet(-facts) doesn't mock this
-          clientcert: 'client.example.com',
           # Cron/systemd timers are based on the IP - make it consistent
           networking: { ip: '192.0.2.100' }
         )
@@ -73,7 +71,6 @@ describe 'puppet' do
         it { is_expected.to contain_file(confdir).with_ensure('directory') }
         it { is_expected.to contain_concat("#{confdir}/puppet.conf") }
         it { is_expected.to contain_concat__fragment('puppet.conf_agent').with_content(/^\[agent\]/) }
-        it { is_expected.to contain_puppet__config__agent('certname').with_value(facts[:clientcert]) }
         it { is_expected.to contain_puppet__config__agent('report').with_value('true') }
         it { is_expected.not_to contain_puppet__config__agent('prerun_command') }
         it { is_expected.not_to contain_puppet__config__agent('postrun_command') }
@@ -349,14 +346,6 @@ describe 'puppet' do
         end
 
         it { should_not contain_file('/var/lib/puppet/state/agent_disabled.lock') }
-      end
-
-      context 'with client_certname => false' do
-        let :params do
-          super().merge(client_certname: false)
-        end
-
-        it { is_expected.not_to contain_puppet__config__agent('certname') }
       end
 
       context 'with report => false' do
