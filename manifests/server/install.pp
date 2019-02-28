@@ -37,14 +37,4 @@ class puppet::server::install {
       Package[$server_package] -> User[$::puppet::server::user]
     }
   }
-
-  if $::puppet::server::git_repo {
-    Class['git'] -> User[$::puppet::server::user]
-
-    file { $puppet::vardir:
-      ensure => directory,
-      owner  => $::puppet::server::user,
-      group  => $::puppet::server::group,
-    }
-  }
 }
