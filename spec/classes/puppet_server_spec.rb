@@ -345,6 +345,8 @@ describe 'puppet' do
           super().merge(server_git_repo: true)
         end
 
+        it { is_expected.to compile.with_all_deps }
+
         it do
           should contain_class('puppet::server')
             .with_git_repo(true)
@@ -373,7 +375,7 @@ describe 'puppet' do
         it do
           should contain_file(vardir)
             .with_ensure('directory')
-            .with_owner('puppet')
+            .with_owner('root')
         end
 
         it do

@@ -232,10 +232,17 @@ class puppet::server::config inherits puppet::config {
   }
 
   if $::puppet::server::git_repo {
-    # need to chown the $vardir before puppet does it, or else
-    # we can't write puppet.git/ on the first run
-
     include ::git
+
+    if $::puppet::server::manage_user {
+      Class['git'] -> User[$::puppet::server::user]
+    }
+
+    file { $::puppet::vardir:
+      ensure => directory,
+      owner  => 'root',
+      group  => 'root',
+    }
 
     git::repo { 'puppet_repo':
       bare    => true,
@@ -243,7 +250,7 @@ class puppet::server::config inherits puppet::config {
       mode    => $::puppet::server::git_repo_mode,
       user    => $::puppet::server::git_repo_user,
       group   => $::puppet::server::git_repo_group,
-      require => File[$::puppet::server::envs_dir],
+      require => File[$::puppet::vardir, $::puppet::server::envs_dir],
     }
 
     $git_branch_map = $::puppet::server::git_branch_map
