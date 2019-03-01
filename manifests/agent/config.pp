@@ -6,7 +6,6 @@ class puppet::agent::config inherits puppet::config {
     'localconfig':       value => '$vardir/localconfig';
     'default_schedules': value => false;
     'report':            value => $::puppet::report;
-    'pluginsync':        value => $::puppet::pluginsync;
     'masterport':        value => $::puppet::port;
     'environment':       value => $::puppet::environment;
     'listen':            value => $::puppet::listen;
@@ -29,6 +28,16 @@ class puppet::agent::config inherits puppet::config {
   if $::puppet::postrun_command {
     puppet::config::agent {
       'postrun_command': value => $::puppet::postrun_command;
+    }
+  }
+
+  unless $::puppet::pluginsync {
+    if versioncmp($facts['puppetserver'], '6.0.0') >= 0 {
+      fail('pluginsync is no longer a setting in Puppet 6')
+    } else {
+      puppet::config::agent { 'pluginsync':
+        value => $::puppet::pluginsync,
+      }
     }
   }
 
