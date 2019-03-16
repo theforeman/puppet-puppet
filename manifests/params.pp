@@ -301,11 +301,7 @@ class puppet::params {
   case $::osfamily {
     'Debian' : {
       $agent_restart_command = "/usr/sbin/service ${service_name} reload"
-      if ($::operatingsystem == 'Debian' or $::operatingsystem == 'Ubuntu' and versioncmp($::operatingsystemrelease, '15.04') >= 0) {
-        $unavailable_runmodes = []
-      } else {
-        $unavailable_runmodes = ['systemd.timer']
-      }
+      $unavailable_runmodes = []
     }
     'Redhat' : {
       # PSBM is a CentOS 6 based distribution
