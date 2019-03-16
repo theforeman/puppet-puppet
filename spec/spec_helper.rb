@@ -22,13 +22,7 @@ add_custom_fact :service_provider, ->(os, facts) do
   when 'darwin'
     'launchd'
   when 'debian'
-    if facts[:operatingsystem] == 'Ubuntu'
-      facts[:operatingsystemmajrelease].to_i >= 15 ? 'systemd' : 'upstart'
-    elsif facts[:operatingsystem] == 'Debian' && facts[:operatingsystemmajrelease].to_i >= 8
-      'systemd'
-    else
-      'debian'
-    end
+    'systemd'
   when 'freebsd'
     'freebsd'
   when 'gentoo'
