@@ -7,7 +7,7 @@ Installs and configures the Puppet agent and optionally a Puppet master (when
 `server` is true).  Part of the [Foreman installer](https://github.com/theforeman/foreman-installer)
 or to be used as a Puppet module.
 
-When using Puppet Server (version 2.2.x is the lowest version, this module supports),
+When using Puppet Server (version 5.3.6 is the lowest version, this module supports),
 the module supports and assumes you will be installing the latest version.
 If you know you'll be installing an earlier or specific version, you will
 need to override `server_puppetserver_version`. More information in the Puppet
@@ -143,18 +143,6 @@ versions, which this module supports. It's recommended that you set the
 `server_puppetserver_version` parameter to the MAJOR.MINOR.PATCH version
 you have installed. By default the module will configure for the latest
 version available.
-
-Currently supported values and configuration behaviours are:
-
-* `5.1.0` (default for Puppet >= 5.1) - configures CRL reload service and `/puppet/v3/tasks` route
-* `5.0.0` (default for Puppet 5.0.x) - configures metrics service and `/puppet/experimental` route
-* `2.7.x` (default for Puppet < 5) - creates `product.conf`
-* `2.5.x`, `2.6.x` - configures the certificate authority in `ca.cfg`
-* `2.4.99` - configures for both 2.4 and 2.5, with `bootstrap.cfg`
-  and `ca.cfg`
-* `2.3.x`, `2.4.x` - configures the certificate authority and
-  versioned-code-service in `bootstrap.cfg`
-* `2.2.x` - configures the certificate authority in `bootstrap.cfg`
 
 # Contributing
 

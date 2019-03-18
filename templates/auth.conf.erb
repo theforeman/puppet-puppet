@@ -87,12 +87,6 @@
 path /puppet/v3/environments
 method find
 allow *
-<% if @puppetversion.to_f < 5.0 -%>
-
-path /puppet/v3/resource_type
-method search
-allow *
-<% end -%>
 
 # allow nodes to retrieve their own catalog
 path ~ ^/puppet/v3/catalog/([^/]+)$
@@ -108,13 +102,11 @@ allow <%= @auth_allowed.join(', ') %>
 path ~ ^/puppet/v3/report/([^/]+)$
 method save
 allow <%= @auth_allowed.join(', ') %>
-<% if @puppetversion.to_f >= 5.5 -%>
 
 # allow all nodes to update their own facts
 path ~ ^/puppet/v3/facts/([^/]+)$
 method save
 allow <%= @auth_allowed.join(', ') %>
-<% end -%>
 
 # Allow all nodes to access all file services; this is necessary for
 # pluginsync, file serving from modules, and file serving from custom

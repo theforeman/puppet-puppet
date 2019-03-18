@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'Scenario: install puppetserver (latest):', unless: ENV['BEAKER_PUPPET_COLLECTION'] == 'pc1' && fact('lsbdistcodename') == 'stretch' do
+describe 'Scenario: install puppetserver (latest):' do
   before(:context) do
     if check_for_package(default, 'puppetserver')
       on default, puppet('resource package puppetserver ensure=purged')
