@@ -412,7 +412,7 @@ class puppet::params {
 
   $server_puppetserver_version      = undef
 
-  # Puppetserver >= 2.2 Which auth.conf shall we use?
+  # Puppetserver 5.x Which auth.conf shall we use?
   $server_use_legacy_auth_conf      = false
 
   # For Puppetserver 5, use JRuby 9k?

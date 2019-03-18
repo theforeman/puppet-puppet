@@ -130,8 +130,8 @@ class puppet::server::puppetserver (
 ) {
   include ::puppet::server
 
-  if versioncmp($server_puppetserver_version, '2.7') < 0 {
-    fail('puppetserver <2.7 is not supported by this module version')
+  if versioncmp($server_puppetserver_version, '5.3.6') < 0 {
+    fail('puppetserver <5.3.6 is not supported by this module version')
   }
 
   $puppetserver_package = pick($::puppet::server::package, 'puppetserver')
@@ -167,11 +167,7 @@ class puppet::server::puppetserver (
 
     $bootstrap_paths = "${server_puppetserver_dir}/services.d/,/opt/puppetlabs/server/apps/puppetserver/config/services.d/"
 
-    if versioncmp($server_puppetserver_version, '5.3') >= 0 {
-      $server_gem_paths = [ '${jruby-puppet.gem-home}', "\"${server_puppetserver_vardir}/vendored-jruby-gems\"", "\"/opt/puppetlabs/puppet/lib/ruby/vendor_gems\""] # lint:ignore:single_quote_string_with_variables
-    } else {
-      $server_gem_paths = [ '${jruby-puppet.gem-home}', "\"${server_puppetserver_vardir}/vendored-jruby-gems\"", ] # lint:ignore:single_quote_string_with_variables
-    }
+    $server_gem_paths = [ '${jruby-puppet.gem-home}', "\"${server_puppetserver_vardir}/vendored-jruby-gems\"", "\"/opt/puppetlabs/puppet/lib/ruby/vendor_gems\""] # lint:ignore:single_quote_string_with_variables
 
     augeas { 'puppet::server::puppetserver::bootstrap':
       lens    => 'Shellvars.lns',
@@ -180,18 +176,16 @@ class puppet::server::puppetserver (
       changes => "set BOOTSTRAP_CONFIG '\"${bootstrap_paths}\"'",
     }
 
-    if versioncmp($server_puppetserver_version, '5.0') >= 0 {
-      $jruby_jar_changes = $server_jruby9k ? {
-        true    => "set JRUBY_JAR '\"/opt/puppetlabs/server/apps/puppetserver/jruby-9k.jar\"'",
-        default => 'rm JRUBY_JAR'
-      }
+    $jruby_jar_changes = $server_jruby9k ? {
+      true    => "set JRUBY_JAR '\"/opt/puppetlabs/server/apps/puppetserver/jruby-9k.jar\"'",
+      default => 'rm JRUBY_JAR'
+    }
 
-      augeas { 'puppet::server::puppetserver::jruby_jar':
-        lens    => 'Shellvars.lns',
-        incl    => $config,
-        context => "/files${config}",
-        changes => $jruby_jar_changes,
-      }
+    augeas { 'puppet::server::puppetserver::jruby_jar':
+      lens    => 'Shellvars.lns',
+      incl    => $config,
+      context => "/files${config}",
+      changes => $jruby_jar_changes,
     }
 
     $ensure_max_open_files = $max_open_files ? {
@@ -233,14 +227,8 @@ class puppet::server::puppetserver (
     }
   }
 
-  if versioncmp($server_puppetserver_version, '5.3.6') >= 0 {
-    $ca_conf_ensure = present
-  } else {
-    $ca_conf_ensure = absent
-  }
-
   file { "${server_puppetserver_dir}/conf.d/ca.conf":
-    ensure  => $ca_conf_ensure,
+    ensure  => file,
     content => template('puppet/server/puppetserver/conf.d/ca.conf.erb'),
   }
 
@@ -264,17 +252,13 @@ class puppet::server::puppetserver (
     content => template('puppet/server/puppetserver/conf.d/product.conf.erb'),
   }
 
-  if versioncmp($server_puppetserver_version, '5.0') >= 0 {
-    $metrics_conf = "${server_puppetserver_dir}/conf.d/metrics.conf"
+  $metrics_conf_ensure = $server_metrics ? {
+    true    => file,
+    default => absent
+  }
 
-    $metrics_conf_ensure = $server_metrics ? {
-      true    => file,
-      default => absent
-    }
-
-    file { $metrics_conf:
-      ensure  => $metrics_conf_ensure,
-      content => template('puppet/server/puppetserver/conf.d/metrics.conf.erb'),
-    }
+  file { "${server_puppetserver_dir}/conf.d/metrics.conf":
+    ensure  => $metrics_conf_ensure,
+    content => template('puppet/server/puppetserver/conf.d/metrics.conf.erb'),
   }
 }
