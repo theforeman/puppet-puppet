@@ -310,12 +310,12 @@ class puppet::params {
       # Amazon Linux is like RHEL6 but reports its osreleasemajor as 2017.
       $osreleasemajor = regsubst($::operatingsystemrelease, '^(\d+)\..*$', '\1') # workaround for the possibly missing operatingsystemmajrelease
       $agent_restart_command = $osreleasemajor ? {
-        /^(2|5|6|2017)$/ => "/sbin/service ${service_name} reload",
+        /^(2|5|6|2017|2018)$/ => "/sbin/service ${service_name} reload",
         '7'       => "/usr/bin/systemctl reload-or-restart ${service_name}",
         default   => undef,
       }
       $unavailable_runmodes = $osreleasemajor ? {
-        /^(2|5|6|2017)$/ => ['systemd.timer'],
+        /^(2|5|6|2017|2018)$/ => ['systemd.timer'],
         default   => [],
       }
     }
