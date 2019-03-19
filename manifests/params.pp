@@ -307,7 +307,7 @@ class puppet::params {
       # PSBM is a CentOS 6 based distribution
       # it reports its $osreleasemajor as 2, not 6.
       # thats why we're matching for '2' in both parts
-      # Amazon Linux is like RHEL6 but reports its osreleasemajor as 2017.
+      # Amazon Linux is like RHEL6 but reports its osreleasemajor as 2017 or 2018.
       $osreleasemajor = regsubst($::operatingsystemrelease, '^(\d+)\..*$', '\1') # workaround for the possibly missing operatingsystemmajrelease
       $agent_restart_command = $osreleasemajor ? {
         /^(2|5|6|2017|2018)$/ => "/sbin/service ${service_name} reload",
