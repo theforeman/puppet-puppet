@@ -2,11 +2,6 @@ require 'spec_helper_acceptance'
 
 describe 'Puppetserver config options', unless: ENV['BEAKER_PUPPET_COLLECTION'] == 'pc1' && fact('lsbdistcodename') == 'stretch' do
   before(:context) do
-    if fact('lsbdistcodename') == 'jessie' && ENV['BEAKER_PUPPET_COLLECTION'] != 'pc1'
-      on default, "echo 'deb http://deb.debian.org/debian jessie-backports main' >/etc/apt/sources.list.d/backports.list"
-      on default, 'apt update'
-      on default, 'apt -y -t jessie-backports install openjdk-8-jdk-headless'
-    end
     if check_for_package(default, 'puppetserver')
       on default, puppet('resource package puppetserver ensure=purged')
       on default, 'rm -rf /etc/sysconfig/puppetserver /etc/puppetlabs/puppetserver'
