@@ -14,8 +14,21 @@ authorization: {
             }
             allow: <%= @server_trusted_agents << '$1' %>
             sort-order: 500
-            name: "puppetlabs catalog"
+            name: "puppetlabs v3 catalog from agents"
         },
+<%- if scope.function_versioncmp([@server_puppetserver_version, '6.3.0']) >= 0 -%>
+        {
+            # Allow services to retrieve catalogs on behalf of others
+            match-request: {
+                path: "^/puppet/v4/catalog/?$"
+                type: regex
+                method: post
+            }
+            deny: "*"
+            sort-order: 500
+            name: "puppetlabs v4 catalog for services"
+        },
+<%- end -%>
         {
             # Allow nodes to retrieve the certificate they requested earlier
             match-request: {

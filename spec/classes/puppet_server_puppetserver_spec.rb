@@ -426,6 +426,18 @@ describe 'puppet' do
         end
       end
 
+      describe 'puppetlabs v4 catalog for services' do
+        context 'when server_puppetserver_version >= 6.3' do
+          let(:params) { super().merge(server_puppetserver_version: '6.3.0') }
+          it { should contain_file(auth_conf).with_content(%r{^(\ *)path: "\^/puppet/v4/catalog/\?\$"$}) }
+        end
+
+        context 'when server_puppetserver_version < 6.3' do
+          let(:params) { super().merge(server_puppetserver_version: '6.2.0') }
+          it { should contain_file(auth_conf).without_content(%r{^(\ *)path: "\^/puppet/v4/catalog/\?\$"$}) }
+        end
+      end
+
       describe 'when server_puppetserver_version < 5.3.6' do
         let(:params) { super().merge(server_puppetserver_version: '5.3.5') }
         it { should raise_error(Puppet::Error, /puppetserver <5.3.6 is not supported by this module version/) }
