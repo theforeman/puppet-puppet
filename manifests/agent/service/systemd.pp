@@ -1,7 +1,9 @@
 # Set up running the agent via a systemd timer
 # @api private
 class puppet::agent::service::systemd (
-  Boolean $enabled = false,
+  Boolean                 $enabled = false,
+  Optional[Integer[0,23]] $hour    = undef,
+  Optional[Integer[0,59]] $minute  = undef,
 ) {
   unless $::puppet::runmode == 'unmanaged' or 'systemd.timer' in $::puppet::unavailable_runmodes {
     exec { 'systemctl-daemon-reload-puppet':
@@ -13,6 +15,10 @@ class puppet::agent::service::systemd (
     if $enabled {
       # Use the same times as for cron
       $times = extlib::ip_to_cron($::puppet::runinterval)
+
+      # But only if they are not explicitly specified
+      $_hour = pick($hour, $times[0])
+      $_minute = pick($minute, $times[1])
 
       $command = $::puppet::systemd_cmd ? {
         undef   => "${::puppet::puppet_cmd} agent --config ${::puppet::dir}/puppet.conf --onetime --no-daemonize --detailed-exitcode --no-usecacheonfailure",

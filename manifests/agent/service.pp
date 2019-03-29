@@ -39,11 +39,15 @@ class puppet::agent::service {
 
   class { 'puppet::agent::service::systemd':
     enabled => $systemd_enabled,
+    hour    => $::puppet::run_hour,
+    minute  => $::puppet::run_minute,
   }
   contain puppet::agent::service::systemd
 
   class { 'puppet::agent::service::cron':
     enabled => $cron_enabled,
+    hour    => $::puppet::run_hour,
+    minute  => $::puppet::run_minute,
   }
   contain puppet::agent::service::cron
 }
