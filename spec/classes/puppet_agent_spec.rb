@@ -239,6 +239,52 @@ describe 'puppet' do
           end
         end
 
+        describe 'when runmode => cron with specified time' do
+          let :params do
+            super().merge(runmode: 'cron',
+                          run_hour: 22,
+                          run_minute: 01
+                         )
+          end
+
+          case os
+          when /\A(windows|archlinux)/
+            it { is_expected.to raise_error(Puppet::Error, /Runmode of cron not supported on #{facts[:kernel]} operating systems!/) }
+          when /\Adebian-/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-(16|18)/
+            it { is_expected.to contain_class('puppet::agent::service::cron').with_enabled(true) }
+            it { is_expected.to contain_class('puppet::agent::service::daemon').with_enabled(false) }
+            it do
+              is_expected.to contain_service('puppet')
+                .with_ensure('stopped')
+                .with_name('puppet')
+                .with_hasstatus('true')
+                .with_enable('false')
+            end
+            it { is_expected.to contain_class('puppet::agent::service::systemd').with_enabled(false) }
+            it { is_expected.to contain_service('puppet-run.timer').with_ensure(:stopped) }
+            it do
+              is_expected.to contain_cron('puppet')
+                .with_command("#{bindir}/puppet agent --config #{confdir}/puppet.conf --onetime --no-daemonize")
+                .with_user('root')
+                .with_minute('1')
+                .with_hour('22')
+            end
+          else
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to contain_class('puppet::agent::service::cron').with_enabled(true) }
+            it { is_expected.to contain_class('puppet::agent::service::daemon').with_enabled(false) }
+            it { is_expected.to contain_class('puppet::agent::service::systemd').with_enabled(false) }
+            it { is_expected.not_to contain_service('puppet-run.timer') }
+            it do
+              is_expected.to contain_cron('puppet')
+                .with_command("#{bindir}/puppet agent --config #{confdir}/puppet.conf --onetime --no-daemonize")
+                .with_user('root')
+                .with_minute('1')
+                .with_hour('22')
+            end
+          end
+        end
+
         describe 'when runmode => systemd.timer' do
           let :params do
             super().merge(runmode: 'systemd.timer')
@@ -255,6 +301,55 @@ describe 'puppet' do
             it do
               is_expected.to contain_file('/etc/systemd/system/puppet-run.timer')
                 .with_content(/.*OnCalendar\=\*-\*-\* \*\:10,40:00.*/)
+            end
+
+            it do
+              is_expected.to contain_file('/etc/systemd/system/puppet-run.timer')
+                .with_content(/^RandomizedDelaySec\=0$/)
+            end
+
+            it do
+              is_expected.to contain_file('/etc/systemd/system/puppet-run.service')
+                .with_content(%r{^ExecStart=#{bindir}/puppet agent --config #{confdir}/puppet.conf --onetime --no-daemonize --detailed-exitcode --no-usecacheonfailure$})
+            end
+
+            it do
+              is_expected.to contain_exec('systemctl-daemon-reload-puppet')
+                .with_refreshonly(true)
+                .with_command('systemctl daemon-reload')
+            end
+
+            it do
+              is_expected.to contain_service('puppet-run.timer')
+                .with_provider('systemd')
+                .with_ensure('running')
+                .with_name('puppet-run.timer')
+                .with_enable('true')
+            end
+          else
+            it { is_expected.to raise_error(Puppet::Error, /Runmode of systemd.timer not supported on #{facts[:kernel]} operating systems!/) }
+          end
+        end
+
+        describe 'when runmode => systemd.timer with configured time' do
+          let :params do
+            super().merge(runmode: 'systemd.timer',
+                          run_hour: 22,
+                          run_minute: 01
+                         )
+          end
+
+          case os
+          when /\Adebian-/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-(16|18)/, /\Aarchlinux-/
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to contain_class('puppet::agent::service::daemon').with_enabled(false) }
+            it { is_expected.to contain_class('puppet::agent::service::cron').with_enabled(false) }
+            it { is_expected.to contain_class('puppet::agent::service::systemd').with_enabled(true) }
+            it { is_expected.to contain_service('puppet-run.timer').with_ensure(:running) }
+
+            it do
+              is_expected.to contain_file('/etc/systemd/system/puppet-run.timer')
+                .with_content(/.*OnCalendar\=\*-\*-\* 22:1:00.*/)
             end
 
             it do

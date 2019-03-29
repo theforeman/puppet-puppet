@@ -5,7 +5,7 @@
 Description=Systemd Timer for Puppet Agent
 
 [Timer]
-OnCalendar=*-*-* <%= Array(@times[0]).join(',') %>:<%= Array(@times[1]).join(',') %>:00
+OnCalendar=*-*-* <%= Array(@_hour).join(',') %>:<%= Array(@_minute).join(',') %>:00
 Persistent=true
 RandomizedDelaySec=<%= @randomizeddelaysec %>
 

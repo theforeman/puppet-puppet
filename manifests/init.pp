@@ -72,6 +72,12 @@
 #
 # $runmode::                                Select the mode to setup the puppet agent.
 #
+# $run_hour::                               The hour at which to run the puppet agent
+#                                           when runmode is cron or systemd.timer.
+#
+# $run_minute::                             The minute at which to run the puppet agent
+#                                           when runmode is cron or systemd.timer.
+#
 # $cron_cmd::                               Specify command to launch when runmode is
 #                                           set 'cron'.
 #
@@ -563,6 +569,8 @@ class puppet (
   Variant[Integer[0],Pattern[/^\d+[smhdy]?$/]] $runinterval = $puppet::params::runinterval,
   Boolean $usecacheonfailure = $puppet::params::usecacheonfailure,
   Enum['cron', 'service', 'systemd.timer', 'none', 'unmanaged'] $runmode = $puppet::params::runmode,
+  Optional[Integer[0,23]] $run_hour = undef,
+  Optional[Integer[0,59]] $run_minute = undef,
   Array[Enum['cron', 'service', 'systemd.timer', 'none']] $unavailable_runmodes = $puppet::params::unavailable_runmodes,
   Optional[String] $cron_cmd = $puppet::params::cron_cmd,
   Optional[String] $systemd_cmd = $puppet::params::systemd_cmd,
