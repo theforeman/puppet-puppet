@@ -375,6 +375,9 @@
 #
 # $server_puppetserver_logdir::             The path of the puppetserver log dir
 #
+# $server_puppetserver_logformat::          Format for puppetserver log files, either plain text or json.  Defaults
+#                                           to plain text.
+#
 # $server_puppetserver_dir::                The path of the puppetserver config dir
 #
 # $server_puppetserver_version::            The version of puppetserver installed (or being installed)

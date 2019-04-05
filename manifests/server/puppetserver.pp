@@ -74,6 +74,7 @@ class puppet::server::puppetserver (
   $server_puppetserver_vardir             = $::puppet::server::puppetserver_vardir,
   $server_puppetserver_rundir             = $::puppet::server::puppetserver_rundir,
   $server_puppetserver_logdir             = $::puppet::server::puppetserver_logdir,
+  $server_puppetserver_logformat          = $::puppet::server::server_puppetserver_logformat,
   $server_jruby_gem_home                  = $::puppet::server::jruby_gem_home,
   $server_ruby_load_paths                 = $::puppet::server::ruby_load_paths,
   $server_cipher_suites                   = $::puppet::server::cipher_suites,
@@ -230,6 +231,13 @@ class puppet::server::puppetserver (
     }
     file { '/opt/puppetlabs/server/apps/puppetserver/config/services.d':
       ensure => directory,
+    }
+  }
+
+  unless $::osfamily == 'Windows' {
+    file { "${server_puppetserver_dir}/logback.xml":
+      ensure  => file,
+      content => template('puppet/server/puppetserver/logback.xml.erb'),
     }
   }
 

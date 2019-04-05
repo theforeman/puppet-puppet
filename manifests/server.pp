@@ -199,6 +199,8 @@
 #
 # $puppetserver_logdir::               The path of the puppetserver log dir
 #
+# $server_puppetserver_logformat::     The format for puppetserver log files
+#
 # $puppetserver_dir::                  The path of the puppetserver config dir
 #
 # $puppetserver_version::              The version of puppetserver installed (or being installed)
@@ -355,6 +357,7 @@ class puppet::server(
   Stdlib::Absolutepath $puppetserver_vardir = $::puppet::server_puppetserver_vardir,
   Optional[Stdlib::Absolutepath] $puppetserver_rundir = $::puppet::server_puppetserver_rundir,
   Optional[Stdlib::Absolutepath] $puppetserver_logdir = $::puppet::server_puppetserver_logdir,
+  Optional[String] $server_puppetserver_logformat = $puppet::server_puppetserver_logformat,
   Stdlib::Absolutepath $puppetserver_dir = $::puppet::server_puppetserver_dir,
   Optional[Pattern[/^[\d]\.[\d]+\.[\d]+$/]] $puppetserver_version = $::puppet::server_puppetserver_version,
   Variant[Undef, String[0], Stdlib::Absolutepath] $external_nodes = $::puppet::server_external_nodes,
