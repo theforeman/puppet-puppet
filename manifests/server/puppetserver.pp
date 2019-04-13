@@ -234,11 +234,9 @@ class puppet::server::puppetserver (
     }
   }
 
-  unless $::osfamily == 'Windows' {
-    file { "${server_puppetserver_dir}/logback.xml":
-      ensure  => file,
-      content => template('puppet/server/puppetserver/logback.xml.erb'),
-    }
+  file { "${server_puppetserver_dir}/logback.xml":
+    ensure  => file,
+    content => template('puppet/server/puppetserver/logback.xml.erb'),
   }
 
   if versioncmp($server_puppetserver_version, '5.3.6') >= 0 {

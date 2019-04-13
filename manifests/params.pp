@@ -3,39 +3,40 @@
 class puppet::params {
 
   # Basic config
-  $version             = 'present'
-  $manage_user         = true
-  $user                = 'puppet'
-  $group               = 'puppet'
-  $ip                  = '0.0.0.0'
-  $port                = 8140
-  $listen              = false
-  $listen_to           = []
-  $pluginsync          = true
-  $splay               = false
-  $splaylimit          = 1800
-  $runinterval         = 1800
-  $runmode             = 'service'
-  $report              = true
+  $version                       = 'present'
+  $manage_user                   = true
+  $user                          = 'puppet'
+  $group                         = 'puppet'
+  $ip                            = '0.0.0.0'
+  $port                          = 8140
+  $listen                        = false
+  $listen_to                     = []
+  $pluginsync                    = true
+  $splay                         = false
+  $splaylimit                    = 1800
+  $runinterval                   = 1800
+  $runmode                       = 'service'
+  $report                        = true
 
   # Not defined here as the commands depend on module parameter "dir"
-  $cron_cmd            = undef
-  $systemd_cmd         = undef
+  $cron_cmd                      = undef
+  $systemd_cmd                   = undef
 
-  $agent_noop          = false
-  $show_diff           = false
-  $module_repository   = undef
-  $hiera_config        = '$confdir/hiera.yaml'
-  $usecacheonfailure   = true
-  $ca_server           = undef
-  $ca_port             = undef
-  $ca_crl_filepath     = undef
-  $server_crl_enable   = undef
-  $prerun_command      = undef
-  $postrun_command     = undef
-  $server_compile_mode = undef
-  $dns_alt_names       = []
-  $use_srv_records     = false
+  $agent_noop                    = false
+  $show_diff                     = false
+  $module_repository             = undef
+  $hiera_config                  = '$confdir/hiera.yaml'
+  $usecacheonfailure             = true
+  $ca_server                     = undef
+  $ca_port                       = undef
+  $ca_crl_filepath               = undef
+  $server_crl_enable             = undef
+  $server_puppetserver_logformat = 'plain'
+  $prerun_command                = undef
+  $postrun_command               = undef
+  $server_compile_mode           = undef
+  $dns_alt_names                 = []
+  $use_srv_records               = false
 
   if defined('$::domain') {
     $srv_domain = $::domain
@@ -72,7 +73,6 @@ class puppet::params {
       $server_puppetserver_vardir    = undef
       $server_puppetserver_rundir    = undef
       $server_puppetserver_logdir    = undef
-      $server_puppetserver_logformat = undef
       $server_ruby_load_paths        = []
       $server_jruby_gem_home         = undef
     }
@@ -91,7 +91,6 @@ class puppet::params {
       $server_puppetserver_vardir    = '/var/puppet/server/data/puppetserver'
       $server_puppetserver_rundir    = '/var/run/puppetserver'
       $server_puppetserver_logdir    = '/var/log/puppetserver'
-      $server_puppetserver_logformat = 'plain'
       $ruby_gem_dir                  = regsubst($::rubyversion, '^(\d+\.\d+).*$', '/usr/local/lib/ruby/gems/\1/gems')
       $server_ruby_load_paths        = [$::rubysitedir, "${ruby_gem_dir}/facter-${::facterversion}/lib"]
       $server_jruby_gem_home         = '/var/puppet/server/data/puppetserver/jruby-gems'
@@ -111,7 +110,6 @@ class puppet::params {
       $server_puppetserver_vardir    = undef
       $server_puppetserver_rundir    = undef
       $server_puppetserver_logdir    = undef
-      $server_puppetserver_logformat = 'plain'
       $server_ruby_load_paths        = []
       $server_jruby_gem_home         = undef
     }
@@ -130,7 +128,6 @@ class puppet::params {
         $server_puppetserver_vardir    = '/opt/puppetlabs/server/data/puppetserver'
         $server_puppetserver_rundir    = '/var/run/puppetlabs/puppetserver'
         $server_puppetserver_logdir    = '/var/log/puppetlabs/puppetserver'
-        $server_puppetserver_logformat = 'plain'
         $server_ruby_load_paths        = ['/opt/puppetlabs/puppet/lib/ruby/vendor_ruby']
         $server_jruby_gem_home         = '/opt/puppetlabs/server/data/puppetserver/jruby-gems'
       } else {
@@ -149,7 +146,6 @@ class puppet::params {
         $server_puppetserver_vardir    = $vardir
         $server_puppetserver_rundir    = undef
         $server_puppetserver_logdir    = undef
-        $server_puppetserver_logformat = 'plain'
         $server_ruby_load_paths        = []
         $server_jruby_gem_home         = '/var/lib/puppet/jruby-gems'
       }
