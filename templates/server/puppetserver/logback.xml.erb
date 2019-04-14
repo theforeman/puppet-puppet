@@ -7,12 +7,11 @@
 
 <% if @server_puppetserver_logformat == 'plain' -%>
     <appender name="F1" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <!-- TODO: this path should not be hard-coded -->
-        <file>/var/log/puppetlabs/puppetserver/puppetserver.log</file>
+        <file><%= @server_puppetserver_logdir %>/puppetserver.log</file>
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- rollover daily -->
-            <fileNamePattern>/var/log/puppetlabs/puppetserver/puppetserver-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <fileNamePattern><%= @server_puppetserver_logdir %>/puppetserver-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
             <!-- each file should be at most 200MB, keep 90 days worth of history, but at most 1GB total-->
             <maxFileSize>200MB</maxFileSize>
             <maxHistory>90</maxHistory>
@@ -22,14 +21,11 @@
             <pattern>%d %-5p [%t] [%c{2}] %m%n</pattern>
         </encoder>
     </appender>
-<% end -%>
-
-<% if @server_puppetserver_logformat == 'json' -%>
+<% elsif @server_puppetserver_logformat == 'json' -%>
     <appender name="JSON" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <!-- TODO: this path should not be hard-coded -->
-        <file>/var/log/puppetlabs/puppetserver/puppetserver.log.json</file>
+        <file><%= @server_puppetserver_logdir %>/puppetserver.log.json</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/var/log/puppetlabs/puppetserver/puppetserver.log.json.%d{yyyy-MM-dd}</fileNamePattern>
+            <fileNamePattern><%= @server_puppetserver_logdir %>/puppetserver.log.json.%d{yyyy-MM-dd}</fileNamePattern>
             <maxHistory>5</maxHistory>
         </rollingPolicy>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
@@ -37,11 +33,11 @@
 <% end -%>
 
     <appender name="STATUS" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>/var/log/puppetlabs/puppetserver/puppetserver-status.log</file>
+        <file><%= @server_puppetserver_logdir %>/puppetserver-status.log</file>
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- rollover daily -->
-            <fileNamePattern>/var/log/puppetlabs/puppetserver/puppetserver-status-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <fileNamePattern><%= @server_puppetserver_logdir %>/puppetserver-status-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
             <!-- each file should be at most 200MB, keep 90 days worth of history, but at most 1GB total-->
             <maxFileSize>200MB</maxFileSize>
             <maxHistory>90</maxHistory>
@@ -68,8 +64,7 @@
         <appender-ref ref="${logappender}"/>
 <% if @server_puppetserver_logformat == 'plain' -%>
         <appender-ref ref="F1"/>
-<% end -%>
-<% if @server_puppetserver_logformat == 'json' -%>
+<% elsif @server_puppetserver_logformat == 'json' -%>
         <appender-ref ref="JSON"/>
 <% end -%>
     </root>
