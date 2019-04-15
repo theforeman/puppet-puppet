@@ -1,5 +1,34 @@
 # Changelog
 
+## [12.0.0](https://github.com/theforeman/puppet-puppet/tree/12.0.0) (2019-04-17)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/11.0.1...12.0.0)
+
+**Breaking changes:**
+
+- Use current timeout management variables [\#693](https://github.com/theforeman/puppet-puppet/pull/693) ([ekohl](https://github.com/ekohl))
+- remove Debian 8 support [\#688](https://github.com/theforeman/puppet-puppet/pull/688) ([mmoll](https://github.com/mmoll))
+- drop Puppet 4 [\#685](https://github.com/theforeman/puppet-puppet/pull/685) ([mmoll](https://github.com/mmoll))
+- drop EOL OSes [\#684](https://github.com/theforeman/puppet-puppet/pull/684) ([mmoll](https://github.com/mmoll))
+
+**Implemented enhancements:**
+
+- Configurable minute and hour for cronjob and systemd.timer [\#690](https://github.com/theforeman/puppet-puppet/pull/690) ([mauricemeyer](https://github.com/mauricemeyer))
+- add Puppetserver 6.3 auth.conf update [\#689](https://github.com/theforeman/puppet-puppet/pull/689) ([mmoll](https://github.com/mmoll))
+- add 2018 to osreleasemajor for agent\_restart\_command  [\#686](https://github.com/theforeman/puppet-puppet/pull/686) ([cabrinha](https://github.com/cabrinha))
+- Handle the pluginsync setting deprecation [\#683](https://github.com/theforeman/puppet-puppet/pull/683) ([ekohl](https://github.com/ekohl))
+- Move client\_certname to \[main\] [\#681](https://github.com/theforeman/puppet-puppet/pull/681) ([baurmatt](https://github.com/baurmatt))
+- Implement $server\_max\_open\_files [\#671](https://github.com/theforeman/puppet-puppet/pull/671) ([baurmatt](https://github.com/baurmatt))
+
+## [11.0.1](https://github.com/theforeman/puppet-puppet/tree/11.0.1) (2019-04-02)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/11.0.0...11.0.1)
+
+**Fixed bugs:**
+
+- Fixes [\#26199](https://projects.theforeman.org/issues/26199) - Fix dependency cycle when using git\_repo [\#682](https://github.com/theforeman/puppet-puppet/pull/682) ([ekohl](https://github.com/ekohl))
+- Quick fix for Windows agent restart loop \#678 [\#679](https://github.com/theforeman/puppet-puppet/pull/679) ([anthonysomerset](https://github.com/anthonysomerset))
+
 ## [11.0.0](https://github.com/theforeman/puppet-puppet/tree/11.0.0) (2019-01-14)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/10.1.0...11.0.0)
@@ -11,6 +40,7 @@
 - Remove dynamic and config environments [\#653](https://github.com/theforeman/puppet-puppet/pull/653) ([ekohl](https://github.com/ekohl))
 - Remove passenger support [\#650](https://github.com/theforeman/puppet-puppet/pull/650) ([ekohl](https://github.com/ekohl))
 - Drop support for puppetserver \< 2.7 [\#649](https://github.com/theforeman/puppet-puppet/pull/649) ([ekohl](https://github.com/ekohl))
+- namespace extlib functions [\#639](https://github.com/theforeman/puppet-puppet/pull/639) ([mmoll](https://github.com/mmoll))
 
 **Implemented enhancements:**
 
@@ -19,7 +49,6 @@
 - Config file updates and FreeBSD refactorings [\#664](https://github.com/theforeman/puppet-puppet/pull/664) ([mmoll](https://github.com/mmoll))
 - Set more data types and document classes & defines [\#663](https://github.com/theforeman/puppet-puppet/pull/663) ([ekohl](https://github.com/ekohl))
 - Add unmanaged Puppet Agent runmode [\#659](https://github.com/theforeman/puppet-puppet/pull/659) ([Rathios](https://github.com/Rathios))
-- namespace extlib functions [\#639](https://github.com/theforeman/puppet-puppet/pull/639) ([mmoll](https://github.com/mmoll))
 
 **Merged pull requests:**
 
