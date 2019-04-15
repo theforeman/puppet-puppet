@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'Scenario: 5.1.3 to 5.3.6 upgrade:', if: ENV['BEAKER_PUPPET_COLLECTION'] == 'puppet5' && fact('lsbdistcodename') != 'bionic' do
+describe 'Scenario: 5.3.6 to 5.3.7 upgrade:', if: ENV['BEAKER_PUPPET_COLLECTION'] == 'puppet5' && fact('lsbdistcodename') != 'bionic' do
   before(:context) do
     if check_for_package(default, 'puppetserver')
       on default, puppet('resource package puppetserver ensure=purged')
@@ -15,14 +15,14 @@ describe 'Scenario: 5.1.3 to 5.3.6 upgrade:', if: ENV['BEAKER_PUPPET_COLLECTION'
 
   case fact('osfamily')
   when 'Debian'
-    from_version = "5.1.3-1#{fact('lsbdistcodename')}"
-    to_version = "5.3.6-1#{fact('lsbdistcodename')}"
+    from_version = "5.3.6-1#{fact('lsbdistcodename')}"
+    to_version = "5.3.7-1#{fact('lsbdistcodename')}"
   else
-    from_version = '5.1.3'
-    to_version = '5.3.6'
+    from_version = '5.3.6'
+    to_version = '5.3.7'
   end
 
-  context 'install 5.1.3' do
+  context 'install 5.3.6' do
     let(:pp) do
       <<-EOS
       class { '::puppet':
@@ -42,7 +42,7 @@ describe 'Scenario: 5.1.3 to 5.3.6 upgrade:', if: ENV['BEAKER_PUPPET_COLLECTION'
     it_behaves_like 'a idempotent resource'
 
     describe command('puppetserver --version') do
-      its(:stdout) { is_expected.to match("puppetserver version: 5.1.3\n") }
+      its(:stdout) { is_expected.to match("puppetserver version: 5.3.6\n") }
     end
 
     describe service('puppetserver') do
@@ -55,7 +55,7 @@ describe 'Scenario: 5.1.3 to 5.3.6 upgrade:', if: ENV['BEAKER_PUPPET_COLLECTION'
     end
   end
 
-  context 'upgrade to 5.3.6' do
+  context 'upgrade to 5.3.7' do
     let(:pp) do
       <<-EOS
       class { '::puppet':
@@ -75,7 +75,7 @@ describe 'Scenario: 5.1.3 to 5.3.6 upgrade:', if: ENV['BEAKER_PUPPET_COLLECTION'
     it_behaves_like 'a idempotent resource'
 
     describe command('puppetserver --version') do
-      its(:stdout) { is_expected.to match("puppetserver version: 5.3.6\n") }
+      its(:stdout) { is_expected.to match("puppetserver version: 5.3.7\n") }
     end
 
     describe service('puppetserver') do

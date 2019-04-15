@@ -3,13 +3,11 @@
   beaker_sets:
     - centos7-64
     - centos6-64
-    - debian8-64
     - debian9-64
   env:
     global:
       - PARALLEL_TEST_PROCESSORS=8
   beaker_puppet_collections:
-    - pc1
     - puppet5
     - puppet6
 Rakefile:

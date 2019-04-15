@@ -14,8 +14,21 @@ authorization: {
             }
             allow: <%= @server_trusted_agents << '$1' %>
             sort-order: 500
-            name: "puppetlabs catalog"
+            name: "puppetlabs v3 catalog from agents"
         },
+<%- if scope.function_versioncmp([@server_puppetserver_version, '6.3.0']) >= 0 -%>
+        {
+            # Allow services to retrieve catalogs on behalf of others
+            match-request: {
+                path: "^/puppet/v4/catalog/?$"
+                type: regex
+                method: post
+            }
+            deny: "*"
+            sort-order: 500
+            name: "puppetlabs v4 catalog for services"
+        },
+<%- end -%>
         {
             # Allow nodes to retrieve the certificate they requested earlier
             match-request: {
@@ -64,13 +77,11 @@ authorization: {
 <%- @server_ca_client_whitelist.each do |client| -%>
                 "<%= client %>",
 <%- end -%>
-<%- if scope.function_versioncmp([@server_puppetserver_version, '5.3.6']) >= 0 -%>
                 {
                     extensions: {
                         pp_cli_auth: "true"
                     }
                 }
-<%- end -%>
             ]
 <%- end -%>
             sort-order: 500
@@ -90,13 +101,11 @@ authorization: {
 <%- @server_ca_client_whitelist.each do |client| -%>
                 "<%= client %>",
 <%- end -%>
-<%- if scope.function_versioncmp([@server_puppetserver_version, '5.3.6']) >= 0 -%>
                 {
                     extensions: {
                         pp_cli_auth: "true"
                     }
                 }
-<%- end -%>
             ]
 <%- end -%>
             sort-order: 500
@@ -114,7 +123,6 @@ authorization: {
             sort-order: 500
             name: "puppetlabs status service - full"
         },
-<%- if scope.function_versioncmp([@server_puppetserver_version, '5.3.6']) >= 0 -%>
         {
             match-request: {
                 path: "/status/v1/simple"
@@ -125,7 +133,6 @@ authorization: {
             sort-order: 500
             name: "puppetlabs status service - simple"
         },
-<%- end -%>
         {
             match-request: {
                 path: "/puppet-admin-api/v1/environment-cache"
@@ -174,32 +181,6 @@ authorization: {
             sort-order: 500
             name: "puppetlabs environment classes"
         },
-<%- if scope.function_versioncmp([@server_puppetserver_version, '5.0']) < 0 -%>
-        {
-            match-request: {
-                path: "/puppet/v3/resource_type"
-                type: path
-                method: [get, post]
-            }
-            allow: "*"
-            sort-order: 500
-            name: "puppetlabs resource type"
-        },
-        {
-            # Allow nodes to access all file services; this is necessary for
-            # pluginsync, file serving from modules, and file serving from
-            # custom mount points (see fileserver.conf). Note that the `/file`
-            # prefix matches requests to file_metadata, file_content, and
-            # file_bucket_file paths.
-            match-request: {
-                path: "/puppet/v3/file"
-                type: path
-            }
-            allow: "*"
-            sort-order: 500
-            name: "puppetlabs file"
-        },
-<%- else -%>
         {
             # Allow nodes to access all file_bucket_files.  Note that access for
             # the 'delete' method is forbidden by Puppet regardless of the
@@ -239,7 +220,6 @@ authorization: {
             sort-order: 500
             name: "puppetlabs file metadata"
         },
-<%- end -%>
         {
             # Allow nodes to retrieve only their own node definition
             match-request: {
@@ -262,7 +242,6 @@ authorization: {
             sort-order: 500
             name: "puppetlabs report"
         },
-<%- if scope.function_versioncmp([@server_puppetserver_version, '5.3']) >= 0 -%>
         {
             # Allow nodes to update their own facts
             match-request: {
@@ -274,7 +253,6 @@ authorization: {
             sort-order: 500
             name: "puppetlabs facts"
         },
-<%- end -%>
         {
             match-request: {
                 path: "/puppet/v3/status"
@@ -295,7 +273,6 @@ authorization: {
             sort-order: 500
             name: "puppetlabs static file content"
         },
-<%- if scope.function_versioncmp([@server_puppetserver_version, '5.1']) >= 0 -%>
         {
             match-request: {
                 path: "/puppet/v3/tasks"
@@ -305,8 +282,7 @@ authorization: {
             sort-order: 500
             name: "puppet tasks information"
         },
-<%- end -%>
-<%- if scope.function_versioncmp([@server_puppetserver_version, '5.0']) >= 0 && @server_experimental -%>
+<%- if @server_experimental -%>
         {
             # Allow all users access to the experimental endpoint
             # which currently only provides a dashboard web ui.

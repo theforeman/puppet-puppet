@@ -478,25 +478,15 @@ class puppet::server(
     $real_puppetserver_version = $puppetserver_version
   } elsif versioncmp($::puppetversion, '6.0.0') >= 0 {
     $real_puppetserver_version = '6.0.0'
-  } elsif versioncmp($::puppetversion, '5.5.7') >= 0 {
+  } else  {
     $real_puppetserver_version = '5.3.6'
-  } elsif versioncmp($::puppetversion, '5.5.0') >= 0 {
-    $real_puppetserver_version = '5.3.0'
-  } elsif versioncmp($::puppetversion, '5.1.0') >= 0 {
-    $real_puppetserver_version = '5.1.0'
-  } elsif versioncmp($::puppetversion, '5.0.0') >= 0 {
-    $real_puppetserver_version = '5.0.0'
-  } else {
-    $real_puppetserver_version = '2.7.0'
   }
 
   # Prefer the user setting,otherwise disable for Puppetserver 2.x, enabled for 5.x
-  $real_puppetserver_metrics = pick($puppetserver_metrics, versioncmp($real_puppetserver_version, '5.0.0') >= 0)
+  $real_puppetserver_metrics = pick($puppetserver_metrics, true)
 
   if $jvm_extra_args {
     $real_jvm_extra_args = $jvm_extra_args
-  } elsif versioncmp($real_puppetserver_version, '5.0.0') < 0 {
-    $real_jvm_extra_args = '-XX:MaxPermSize=256m'
   } else {
     $real_jvm_extra_args = '-Djruby.logger.class=com.puppetlabs.jruby_utils.jruby.Slf4jLogger'
   }
