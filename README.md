@@ -144,6 +144,11 @@ versions, which this module supports. It's recommended that you set the
 you have installed. By default the module will configure for the latest
 version available.
 
+# Soft Dependencies
+
+If you use a OS which uses systemd you may consider to download `camptocamp/systemd` module for compatibility. 
+It is **only** needed if you use the **puppetserver** feature. 
+
 # Contributing
 
 * Fork the project
