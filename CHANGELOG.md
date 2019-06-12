@@ -1,5 +1,14 @@
 # Changelog
 
+## [12.0.1](https://github.com/theforeman/puppet-puppet/tree/12.0.1) (2019-06-13)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/12.0.0...12.0.1)
+
+**Merged pull requests:**
+
+- Allow puppetlabs/concat 6.x and puppet/extlib 4.x [\#700](https://github.com/theforeman/puppet-puppet/pull/700) ([alexjfisher](https://github.com/alexjfisher))
+- Allow `puppetlabs/stdlib` 6.x [\#698](https://github.com/theforeman/puppet-puppet/pull/698) ([alexjfisher](https://github.com/alexjfisher))
+
 ## [12.0.0](https://github.com/theforeman/puppet-puppet/tree/12.0.0) (2019-04-17)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/11.0.1...12.0.0)
