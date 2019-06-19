@@ -524,9 +524,9 @@
 # $server_max_open_files::                  Increase the max open files limit for Puppetserver.
 #                                           Defaults to undef
 #
-# $versioned_code_id                        The path to an executable script that Puppet Server invokes to generate a code_id
+# $server_versioned_code_id                 The path to an executable script that Puppet Server invokes to generate a code_id
 #                                           Defaults to undef
-# $versioned_code_content                   Contains the path to an executable script that Puppet Server
+# $server_versioned_code_content            Contains the path to an executable script that Puppet Server
 #                                           invokes when on static_file_content requests.
 #                                           Defaults to undef
 #
