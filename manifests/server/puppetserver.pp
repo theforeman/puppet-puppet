@@ -193,11 +193,27 @@ class puppet::server::puppetserver (
       default => 'present',
     }
     if $facts['service_provider'] == 'systemd' {
-      systemd::dropin_file { 'puppetserver.service-limits.conf':
-        ensure   => $ensure_max_open_files,
-        filename => 'limits.conf',
-        unit     => 'puppetserver.service',
-        content  => "[Service]\nLimitNOFILE=${max_open_files}\n",
+      ## XXX - do NOT rely on a specific 'systemd' module;
+      ##       the namespace may not be available at all sites!
+      #systemd::dropin_file { 'puppetserver.service-limits.conf':
+      #  ensure   => $ensure_max_open_files,
+      #  filename => 'limits.conf',
+      #  unit     => 'puppetserver.service',
+      #  content  => "[Service]\nLimitNOFILE=${max_open_files}\n",
+      #}
+      $_dir = '/etc/systemd/system/puppetserver.d'
+
+      ensure_resource('file', $_dir, {
+        ensure => 'directory',
+      })
+
+      file { "${_dir}/limits.conf":
+        ensure  => $ensure_max_open_files,
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0444',
+        content => "[Service]\nLimitNOFILE=${max_open_files}\n",
+        require => File[$_dir],
       }
     } else {
       file_line { 'puppet::server::puppetserver::max_open_files':
