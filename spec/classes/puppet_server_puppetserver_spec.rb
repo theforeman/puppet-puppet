@@ -78,6 +78,8 @@ describe 'puppet' do
             .without_content(/^\s+client-whitelist: \[$/)
             .without_content(/^\s+"localhost"\,$/)
             .without_content(/^\s+"puppetserver123.example.com"\,$/)
+            .without_content(/^\s+"code-id-command"\,$/)
+            .without_content(/^\s+"code-content-command"\,$/)
             .with_content(/^    max-queued-requests: 0\n/)
             .with_content(/^    max-retry-delay: 1800\n/)
         }
@@ -484,6 +486,22 @@ describe 'puppet' do
                with_content(/ssl-selector-threads: 3/).
                with_content(/ssl-acceptor-threads: 4/).
                with_content(/max-threads: 5/)
+          }
+        end
+      end
+
+      describe 'versioned code' do
+        context 'when versioned code parameters are set' do
+          let(:params) do
+            super().merge(
+              server_versioned_code_id: '/some/code/id/bin',
+              server_versioned_code_content: '/some/code/content/bin',
+            )
+          end
+    
+          it {
+            should contain_file(puppetserver_conf)
+               .with_content(%r{^    code-id-command: /some/code/id/bin\n    code-content-command: /some/code/content/bin$})
           }
         end
       end

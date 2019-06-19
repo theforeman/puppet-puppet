@@ -131,6 +131,8 @@ class puppet::server::puppetserver (
   $ca_allow_auth_extensions               = $::puppet::server::ca_allow_auth_extensions,
   $ca_enable_infra_crl                    = $::puppet::server::ca_enable_infra_crl,
   $max_open_files                         = $::puppet::server::max_open_files,
+  $versioned_code_id                      = $::puppet::server::versioned_code_id,
+  $versioned_code_content                 = $::puppet::server::versioned_code_content,
 ) {
   include ::puppet::server
 
