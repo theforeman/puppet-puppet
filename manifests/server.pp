@@ -327,10 +327,6 @@
 #                                      The number of selector threads actually used by Jetty is twice the number of selectors
 #                                      requested. For example, if a value of 3 is specified for the ssl-selector-threads setting,
 #                                      Jetty will actually use 6 selector threads.
-# versioned_code_id                    The path to an executable script that Puppet Server invokes to generate a code_id
-# versioned_code_content               Contains the path to an executable script that Puppet Server invokes when an agent makes
-#                                      a static_file_content API request for the contents of a file resource that
-#                                      has a source attribute with a puppet:/// URI value.
 class puppet::server(
   Variant[Boolean, Stdlib::Absolutepath] $autosign = $::puppet::autosign,
   Array[String] $autosign_entries = $::puppet::autosign_entries,
@@ -447,8 +443,6 @@ class puppet::server(
   Boolean $ca_allow_auth_extensions = $::puppet::server_ca_allow_auth_extensions,
   Boolean $ca_enable_infra_crl = $::puppet::server_ca_enable_infra_crl,
   Optional[Integer[1]] $max_open_files = $::puppet::server_max_open_files,
-  Optional[String] $versioned_code_id = $::puppet::server_versioned_code_id,
-  Optional[String] $versioned_code_content = $::puppet::server_versioned_code_content,
 ) {
   if $ca {
     $ssl_ca_cert     = "${ssl_dir}/ca/ca_crt.pem"

@@ -77,13 +77,6 @@ jruby-puppet: {
 <%- end -%>
 }
 
-<%- unless @versioned_code_id.empty? or @versioned_code_content.empty? %>
-versioned-code {
-    code-id-command: <%= @versioned_code_id %>
-    code-content-command: <%= @versioned_code_content %>
-}
-<%- end -%>
-
 # settings related to HTTPS client requests made by Puppet Server
 http-client: {
     # A list of acceptable protocols for making HTTPS requests

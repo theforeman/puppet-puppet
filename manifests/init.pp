@@ -524,12 +524,6 @@
 # $server_max_open_files::                  Increase the max open files limit for Puppetserver.
 #                                           Defaults to undef
 #
-# $versioned_code_id                        The path to an executable script that Puppet Server invokes to generate a code_id
-#                                           Defaults to undef
-# $versioned_code_content                   Contains the path to an executable script that Puppet Server
-#                                           invokes when on static_file_content requests.
-#                                           Defaults to undef
-#
 # === Usage:
 #
 # * Simple usage:
@@ -726,9 +720,6 @@ class puppet (
   Boolean $server_ca_allow_auth_extensions = $puppet::params::server_ca_allow_auth_extensions,
   Boolean $server_ca_enable_infra_crl = $puppet::params::server_ca_enable_infra_crl,
   Optional[Integer[1]] $server_max_open_files = $puppet::params::server_max_open_files,
-  Optional[String] $server_versioned_code_id = undef,
-  Optional[String] $server_versioned_code_content = undef,
-
 ) inherits puppet::params {
   contain puppet::config
 
