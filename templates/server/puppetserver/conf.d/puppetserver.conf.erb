@@ -77,7 +77,7 @@ jruby-puppet: {
 <%- end -%>
 }
 
-<%- unless @versioned_code_id.empty? or @versioned_code_content.empty? %>
+<%- if @versioned_code_id and @versioned_code_content %>
 versioned-code {
     code-id-command: <%= @versioned_code_id %>
     code-content-command: <%= @versioned_code_content %>
