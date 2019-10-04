@@ -82,15 +82,17 @@ class puppet::config(
   -> case $::osfamily {
     'Windows': {
       concat { "${puppet_dir}/puppet.conf":
-        mode  => '0674',
+        mode           => '0674',
+        ensure_newline => true,
       }
     }
 
     default: {
       concat { "${puppet_dir}/puppet.conf":
-        owner => 'root',
-        group => $::puppet::params::root_group,
-        mode  => '0644',
+        owner          => 'root',
+        group          => $::puppet::params::root_group,
+        mode           => '0644',
+        ensure_newline => true,
       }
     }
   }
