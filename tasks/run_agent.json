@@ -1,0 +1,20 @@
+{
+  "description": "Runs the puppet agent",
+  "supports_noop": true,
+  "files": ["ruby_task_helper/files/task_helper.rb"],
+  "input_method": "stdin",
+  "parameters": {
+    "puppet_bin": {
+      "description": "The full path to the puppet binary.  Defaults to `'/opt/puppetlabs/bin/puppet'`.",
+      "type": "Optional[Stdlib::Absolutepath]"
+    },
+    "wait_time": {
+      "description": "How many seconds should the task wait for an existing puppet run to finish.  Defaults to `300` (5 minutes).",
+      "type": "Optional[Integer[0]]"
+    },
+    "puppet_settings": {
+      "description": "An optional hash of puppet configuration settings.  These can be used to override puppet's defaults, settings in puppet.conf and default settings included with `--test`.",
+      "type": "Optional[Hash]"
+    }
+  }
+}

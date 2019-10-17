@@ -1,0 +1,63 @@
+---
+version:
+  config: puppet6server1-production-f2b1bf4a994
+  puppet: 6.9.0
+resources:
+  changed: 0
+  corrective_change: 0
+  failed: 0
+  failed_to_restart: 0
+  out_of_sync: 0
+  restarted: 0
+  scheduled: 0
+  skipped: 0
+  total: 3902
+time:
+  alternatives: 0.148090409
+  anchor: 0.007545186
+  archive: 0.002333299
+  augeas: 0.5816905290000001
+  catalog_application: 61.01259471802041
+  concat_file: 0.00382828
+  concat_fragment: 0.015766492
+  config_retrieval: 14.155975302215666
+  convert_catalog: 2.1152733135968447
+  cron: 0.02888307
+  exec: 1.223957106
+  fact_generation: 4.117020649369806
+  file: 8.819708986000013
+  file_line: 0.027194031
+  filebucket: 0.000287035
+  firewalld_direct_purge: 0.000981873
+  firewalld_direct_rule: 0.57764554
+  firewalld_service: 1.9242555670000001
+  firewalld_zone: 1.274301765
+  group: 0.004098342
+  host: 0.001780653
+  mailalias: 0.000318397
+  node_retrieval: 0.8955133240669966
+  package: 9.660382613000001
+  plugin_sync: 4.877481509000063
+  proxy_mysql_galera_hostgroup: 0.001988538
+  proxy_mysql_query_rule: 0.003255971
+  proxy_mysql_server: 0.005674009999999999
+  proxy_mysql_user: 0.010748484
+  proxy_scheduler: 0.002541261
+  pulp_register: 0.254169852
+  pulp_rpmbind: 0.011293752
+  selboolean: 0.045746527
+  service: 1.4152696620000003
+  ssh_authorized_key: 0.001582177
+  sysctl: 1.360353065
+  total: 87.194980791
+  transaction_evaluation: 59.95798896579072
+  user: 0.069402451
+  xml_fragment: 0.31662629200000003
+  yumrepo: 0.0013444239999999999
+  last_run: 1571832278
+changes:
+  total: 0
+events:
+  failure: 0
+  success: 0
+  total: 0

@@ -16,7 +16,7 @@ matrix:
       env:
         - BEAKER_PUPPET_COLLECTION=puppet5
         - BEAKER_setfile=centos6-64{hostname=centos6-64.example.com}
-      script: bundle exec rake beaker
+      script: bundle exec rake spec_prep beaker
       services: docker
       bundler_args: --without development
       before_install:
@@ -27,7 +27,7 @@ matrix:
       env:
         - BEAKER_PUPPET_COLLECTION=puppet6
         - BEAKER_setfile=centos6-64{hostname=centos6-64.example.com}
-      script: bundle exec rake beaker
+      script: bundle exec rake spec_prep beaker
       services: docker
       bundler_args: --without development
       before_install:
@@ -38,7 +38,7 @@ matrix:
       env:
         - BEAKER_PUPPET_COLLECTION=puppet5
         - BEAKER_setfile=debian9-64{hostname=debian9-64.example.com}
-      script: bundle exec rake beaker
+      script: bundle exec rake spec_prep beaker
       services: docker
       bundler_args: --without development
       before_install:
@@ -49,7 +49,7 @@ matrix:
       env:
         - BEAKER_PUPPET_COLLECTION=puppet6
         - BEAKER_setfile=debian9-64{hostname=debian9-64.example.com}
-      script: bundle exec rake beaker
+      script: bundle exec rake spec_prep beaker
       services: docker
       bundler_args: --without development
       before_install:
@@ -60,7 +60,7 @@ matrix:
       env:
         - BEAKER_PUPPET_COLLECTION=puppet6
         - BEAKER_setfile=debian10-64{hostname=debian10-64.example.com}
-      script: bundle exec rake beaker
+      script: bundle exec rake spec_prep beaker
       services: docker
       bundler_args: --without development
       before_install:
