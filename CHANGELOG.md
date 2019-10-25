@@ -1,5 +1,17 @@
 # Changelog
 
+## [12.1.0](https://github.com/theforeman/puppet-puppet/tree/12.1.0) (2019-10-25)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/12.0.1...12.1.0)
+
+**Implemented enhancements:**
+
+- Ensure config file ends with a new line [\#707](https://github.com/theforeman/puppet-puppet/pull/707) ([baurmatt](https://github.com/baurmatt))
+
+**Merged pull requests:**
+
+- Document campotocamp/systemd soft dependency [\#696](https://github.com/theforeman/puppet-puppet/pull/696) ([dogjarek](https://github.com/dogjarek))
+
 ## [12.0.1](https://github.com/theforeman/puppet-puppet/tree/12.0.1) (2019-06-13)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/12.0.0...12.0.1)
