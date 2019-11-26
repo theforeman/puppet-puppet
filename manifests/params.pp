@@ -3,39 +3,40 @@
 class puppet::params {
 
   # Basic config
-  $version             = 'present'
-  $manage_user         = true
-  $user                = 'puppet'
-  $group               = 'puppet'
-  $ip                  = '0.0.0.0'
-  $port                = 8140
-  $listen              = false
-  $listen_to           = []
-  $pluginsync          = true
-  $splay               = false
-  $splaylimit          = 1800
-  $runinterval         = 1800
-  $runmode             = 'service'
-  $report              = true
+  $version                       = 'present'
+  $manage_user                   = true
+  $user                          = 'puppet'
+  $group                         = 'puppet'
+  $ip                            = '0.0.0.0'
+  $port                          = 8140
+  $listen                        = false
+  $listen_to                     = []
+  $pluginsync                    = true
+  $splay                         = false
+  $splaylimit                    = 1800
+  $runinterval                   = 1800
+  $runmode                       = 'service'
+  $report                        = true
 
   # Not defined here as the commands depend on module parameter "dir"
-  $cron_cmd            = undef
-  $systemd_cmd         = undef
+  $cron_cmd                      = undef
+  $systemd_cmd                   = undef
 
-  $agent_noop          = false
-  $show_diff           = false
-  $module_repository   = undef
-  $hiera_config        = '$confdir/hiera.yaml'
-  $usecacheonfailure   = true
-  $ca_server           = undef
-  $ca_port             = undef
-  $ca_crl_filepath     = undef
-  $server_crl_enable   = undef
-  $prerun_command      = undef
-  $postrun_command     = undef
-  $server_compile_mode = undef
-  $dns_alt_names       = []
-  $use_srv_records     = false
+  $agent_noop                    = false
+  $show_diff                     = false
+  $module_repository             = undef
+  $hiera_config                  = '$confdir/hiera.yaml'
+  $usecacheonfailure             = true
+  $ca_server                     = undef
+  $ca_port                       = undef
+  $ca_crl_filepath               = undef
+  $server_crl_enable             = undef
+  $server_puppetserver_logformat = 'plain'
+  $prerun_command                = undef
+  $postrun_command               = undef
+  $server_compile_mode           = undef
+  $dns_alt_names                 = []
+  $use_srv_records               = false
 
   if defined('$::domain') {
     $srv_domain = $::domain
