@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'Scenario: 5.3.6 to 5.3.7 upgrade:', if: ENV['BEAKER_PUPPET_COLLECTION'] == 'puppet5' do
+describe 'Scenario: 6.7.0 to 6.7.2 upgrade:', if: ENV['BEAKER_PUPPET_COLLECTION'] == 'puppet6' do
   before(:context) do
     if check_for_package(default, 'puppetserver')
       on default, puppet('resource package puppetserver ensure=purged')
@@ -15,14 +15,14 @@ describe 'Scenario: 5.3.6 to 5.3.7 upgrade:', if: ENV['BEAKER_PUPPET_COLLECTION'
 
   case fact('osfamily')
   when 'Debian'
-    from_version = "5.3.6-1#{fact('lsbdistcodename')}"
-    to_version = "5.3.7-1#{fact('lsbdistcodename')}"
+    from_version = "6.7.0-1#{fact('lsbdistcodename')}"
+    to_version = "6.7.2-1#{fact('lsbdistcodename')}"
   else
-    from_version = '5.3.6'
-    to_version = '5.3.7'
+    from_version = '6.7.0'
+    to_version = '6.7.2'
   end
 
-  context 'install 5.3.6' do
+  context 'install 6.7.0' do
     let(:pp) do
       <<-EOS
       class { '::puppet':
@@ -42,7 +42,7 @@ describe 'Scenario: 5.3.6 to 5.3.7 upgrade:', if: ENV['BEAKER_PUPPET_COLLECTION'
     it_behaves_like 'a idempotent resource'
 
     describe command('puppetserver --version') do
-      its(:stdout) { is_expected.to match("puppetserver version: 5.3.6\n") }
+      its(:stdout) { is_expected.to match("puppetserver version: 6.7.0\n") }
     end
 
     describe service('puppetserver') do
@@ -55,7 +55,7 @@ describe 'Scenario: 5.3.6 to 5.3.7 upgrade:', if: ENV['BEAKER_PUPPET_COLLECTION'
     end
   end
 
-  context 'upgrade to 5.3.7' do
+  context 'upgrade to 6.7.2' do
     let(:pp) do
       <<-EOS
       class { '::puppet':
@@ -75,7 +75,7 @@ describe 'Scenario: 5.3.6 to 5.3.7 upgrade:', if: ENV['BEAKER_PUPPET_COLLECTION'
     it_behaves_like 'a idempotent resource'
 
     describe command('puppetserver --version') do
-      its(:stdout) { is_expected.to match("puppetserver version: 5.3.7\n") }
+      its(:stdout) { is_expected.to match("puppetserver version: 6.7.2\n") }
     end
 
     describe service('puppetserver') do

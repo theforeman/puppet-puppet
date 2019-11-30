@@ -3,6 +3,7 @@
   beaker_sets:
     - centos6-64
     - debian9-64
+    - debian10-64
   env:
     global:
       - PARALLEL_TEST_PROCESSORS=8
