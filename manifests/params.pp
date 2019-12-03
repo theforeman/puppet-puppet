@@ -399,7 +399,14 @@ class puppet::params {
   $server_ca_auth_required                = true
   $server_admin_api_whitelist             = [ 'localhost', $lower_fqdn ]
   $server_ca_client_whitelist             = [ 'localhost', $lower_fqdn ]
-  $server_cipher_suites                   = [ 'TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA', 'TLS_RSA_WITH_AES_128_CBC_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA' ]
+  $server_cipher_suites                   = [
+    'TLS_DHE_RSA_WITH_AES_128_GCM_SHA256',
+    'TLS_DHE_RSA_WITH_AES_256_GCM_SHA384',
+    'TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256',
+    'TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384',
+    'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256',
+    'TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384',
+  ]
   $server_ssl_protocols                   = [ 'TLSv1.2' ]
   $server_ssl_chain_filepath              = "${server_ssl_dir}/ca/ca_crt.pem"
   $server_check_for_updates               = true

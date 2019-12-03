@@ -54,6 +54,12 @@ Please see the notes about using puppetlabs/puppetdb 5.x with older versions of 
 newer releases of the module and set the values via hiera or an extra include of `puppetdb::globals` with
 `puppetdb_version` defined.
 
+Please also make sure your puppetdb ciphers are compatible with your puppet server ciphers, ie that the two following parameters match:
+```
+puppet::server::cipher_suites
+puppetdb::server::cipher_suites
+```
+
 # Installation
 
 Available from GitHub (via cloning or tarball), [Puppet Forge](https://forge.puppetlabs.com/theforeman/puppet)
