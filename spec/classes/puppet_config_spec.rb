@@ -191,32 +191,6 @@ describe 'puppet' do
 
           it { is_expected.to contain_puppet__config__main('server').with_value('global.example.com') }
         end
-
-        context 'when listen' do
-          let :params do
-            super().merge(listen: true)
-          end
-
-          describe 'puppetmaster default value is used' do
-            it { is_expected.to contain_file("#{confdir}/auth.conf").with_content(%r{^path /run\nauth any\nmethod save\nallow #{facts[:fqdn]}$}) }
-          end
-
-          describe 'puppetmaster has value' do
-            let :params do
-              super().merge(puppetmaster: 'mymaster.example.com')
-            end
-
-            it { is_expected.to contain_file("#{confdir}/auth.conf").with_content(%r{^path /run\nauth any\nmethod save\nallow mymaster.example.com$}) }
-          end
-
-          describe 'listen_to has values' do
-            let :params do
-              super().merge(listen_to: ['node1.example.com', 'node2.example.com'])
-            end
-
-            it { is_expected.to contain_file("#{confdir}/auth.conf").with_content(%r{^path /run\nauth any\nmethod save\nallow node1\.example\.com,node2\.example\.com$}) }
-          end
-        end
       end
 
       describe 'with additional settings' do

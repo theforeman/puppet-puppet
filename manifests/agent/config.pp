@@ -8,7 +8,6 @@ class puppet::agent::config inherits puppet::config {
     'report':            value => $::puppet::report;
     'masterport':        value => $::puppet::port;
     'environment':       value => $::puppet::environment;
-    'listen':            value => $::puppet::listen;
     'splay':             value => $::puppet::splay;
     'splaylimit':        value => $::puppet::splaylimit;
     'runinterval':       value => $::puppet::runinterval;
