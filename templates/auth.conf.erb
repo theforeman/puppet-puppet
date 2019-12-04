@@ -149,13 +149,6 @@ path /puppet-ca/v1/certificate_request
 auth any
 method find, save
 allow *
-<% if scope.lookupvar('::puppet::listen') -%>
-
-path /run
-auth any
-method save
-allow <%= if (!@listen_to.empty?) then @listen_to.join(",") elsif ( @puppetmaster and !@puppetmaster.empty? ) then @puppetmaster else @fqdn end %>
-<% end -%>
 
 # deny everything else; this ACL is not strictly necessary, but
 # illustrates the default policy.

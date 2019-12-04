@@ -18,18 +18,6 @@
 #
 # $port::                                   Override the port of the master we connect to.
 #
-# $listen::                                 Should the puppet agent listen for connections.
-#
-# $listen_to::                              An array of servers allowed to initiate a puppet run.
-#                                           If $listen = true one of three things will happen:
-#                                           1) if $listen_to is not empty then this array
-#                                           will be used.
-#                                           2) if $listen_to is empty and $puppetmaster is
-#                                           defined then only $puppetmaster will be
-#                                           allowed.
-#                                           3) if $puppetmaster is not defined or empty,
-#                                           $fqdn will be used.
-#
 # $pluginsync::                             Enable pluginsync.
 #
 # $splay::                                  Switch to enable a random amount of time
@@ -560,8 +548,6 @@ class puppet (
   Optional[String] $package_provider = $puppet::params::package_provider,
   Optional[Variant[Stdlib::Absolutepath, Stdlib::HTTPUrl]] $package_source = $puppet::params::package_source,
   Integer[0, 65535] $port = $puppet::params::port,
-  Boolean $listen = $puppet::params::listen,
-  Array[String] $listen_to = $puppet::params::listen_to,
   Boolean $pluginsync = $puppet::params::pluginsync,
   Boolean $splay = $puppet::params::splay,
   Variant[Integer[0],Pattern[/^\d+[smhdy]?$/]] $splaylimit = $puppet::params::splaylimit,
