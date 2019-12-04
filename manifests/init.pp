@@ -4,6 +4,14 @@
 #
 # === Parameters:
 #
+# $show_diff::                              Show and report changed files with diff output
+#
+# $ca_server::                              Use a different ca server. Should be either
+#                                           a string with the location of the ca_server
+#                                           or 'false'.
+#
+# == Advanced puppet parameters
+#
 # $version::                                Specify a specific version of a package to
 #                                           install. The version should be the exact
 #                                           match for your distro.
@@ -76,13 +84,7 @@
 #                                           (in seconds) to the timer. Only relevant when
 #                                           runmode is 'systemd.timer'.
 #
-# $show_diff::                              Show and report changed files with diff output
-#
 # $module_repository::                      Use a different puppet module repository
-#
-# $ca_server::                              Use a different ca server. Should be either
-#                                           a string with the location of the ca_server
-#                                           or 'false'.
 #
 # $ca_port::                                Puppet CA port
 #
@@ -110,8 +112,6 @@
 #                                           read from an HTTP connection. If nothing is
 #                                           read after the elapsed interval then the
 #                                           connection will be closed.
-#
-# == Advanced puppet parameters
 #
 # $user::                                   Override the name of the puppet user.
 #
@@ -248,17 +248,10 @@
 # $server_git_branch_map::                  Git branch to puppet env mapping for the
 #                                           default post receive hook
 #
-# $server_storeconfigs_backend::            Do you use storeconfigs? (note: not required)
-#                                           false if you don't, "active_record" for 2.X
-#                                           style db, "puppetdb" for puppetdb
+# $server_storeconfigs_backend::            Do you use storeconfigs?
+#                                           false if you don't, "puppetdb" for puppetdb
 #
 # $server_certname::                        The name to use when handling certificates.
-#
-# $server_strict_variables::                if set to true, it will throw parse errors
-#                                           when accessing undeclared variables.
-#
-# $server_additional_settings::             A hash of additional settings.
-#                                           Example: {trusted_node_data => true, ordering => 'manifest'}
 #
 # $server_puppetdb_host::                   PuppetDB host
 #
@@ -267,6 +260,12 @@
 # $server_puppetdb_swf::                    PuppetDB soft_write_failure
 #
 # === Advanced server parameters:
+#
+# $server_strict_variables::                if set to true, it will throw parse errors
+#                                           when accessing undeclared variables.
+#
+# $server_additional_settings::             A hash of additional settings.
+#                                           Example: {trusted_node_data => true, ordering => 'manifest'}
 #
 # $server_manage_user::                     Whether to manage the server user resource
 #
@@ -528,7 +527,7 @@
 #
 #   class {'puppet':
 #     agent_noop => true,
-#     version    => '2.7.20-1',
+#     version    => '6.11.0-1',
 #   }
 #
 class puppet (
