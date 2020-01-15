@@ -392,6 +392,7 @@ class puppet::params {
   $server_max_requests_per_instance       = 0
   $server_max_queued_requests             = 0
   $server_max_retry_delay                 = 1800
+  $server_multithreaded                   = false
   $server_idle_timeout                    = 1200000
   $server_web_idle_timeout                = 30000
   $server_connect_timeout                 = 120000

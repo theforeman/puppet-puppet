@@ -168,6 +168,28 @@ describe 'puppet' do
           end
       end
 
+      describe 'server_multithreaded' do
+        context 'with default parameters' do
+          context 'when server_puppetserver_version >= 5.3.6 and < 6.8.0' do
+            it { should contain_file(puppetserver_conf).without_content(/multithreaded/) }
+          end
+          context 'when server_puppetserver_version == 6.8.0' do
+            let(:params) { super().merge(server_puppetserver_version: '6.8.0') }
+            it { should contain_file(puppetserver_conf).with_content(/^    multithreaded: false\n/) }
+          end
+        end
+        context 'with custom server_multithreaded' do
+          let(:params) { super().merge(server_multithreaded: true) }
+          context 'when server_puppetserver_version >= 5.3.6 and < 6.8.0' do
+            it { should contain_file(puppetserver_conf).without_content(/multithreaded/) }
+          end
+          context 'when server_puppetserver_version == 6.8.0' do
+            let(:params) { super().merge(server_puppetserver_version: '6.8.0') }
+            it { should contain_file(puppetserver_conf).with_content(/^    multithreaded: true\n/) }
+          end
+        end
+      end
+
       describe 'ca.cfg' do
         context 'when server_ca => false' do
           let(:params) { super().merge(server_ca: false) }

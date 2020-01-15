@@ -75,6 +75,9 @@ jruby-puppet: {
 
     compile-mode: <%= @compile_mode %>
 <%- end -%>
+<%- if scope.function_versioncmp([@server_puppetserver_version, '6.8']) >= 0 -%>
+    multithreaded: <%= @server_multithreaded %>
+<%- end -%>
 }
 
 # settings related to HTTPS client requests made by Puppet Server

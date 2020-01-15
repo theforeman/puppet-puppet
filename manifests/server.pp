@@ -219,6 +219,8 @@
 #                                      503 responses returned when max-queued-requests is enabled. (Puppetserver 5.x only)
 #                                      Defaults to 1800 for Puppetserver >= 5.0
 #
+# $multithreaded::                     Use multithreaded jruby. (Puppetserver >= 6.8 only).  Defaults to false.
+#
 # $idle_timeout::                      How long the server will wait for a response on an existing connection
 #
 # $connect_timeout::                   How long the server will wait for a response to a connection attempt
@@ -418,6 +420,7 @@ class puppet::server(
   Integer[0] $max_requests_per_instance = $::puppet::server_max_requests_per_instance,
   Integer[0] $max_queued_requests = $puppet::server_max_queued_requests,
   Integer[0] $max_retry_delay = $puppet::server_max_retry_delay,
+  Boolean $multithreaded = $puppet::server_multithreaded,
   Boolean $use_legacy_auth_conf = $::puppet::server_use_legacy_auth_conf,
   Boolean $check_for_updates = $::puppet::server_check_for_updates,
   Boolean $environment_class_cache_enabled = $::puppet::server_environment_class_cache_enabled,
