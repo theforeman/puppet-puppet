@@ -12,6 +12,7 @@ fixtures:
     git:      'https://github.com/theforeman/puppet-git.git'
     inifile:  'https://github.com/puppetlabs/puppetlabs-inifile.git'
     puppetdb: 'https://github.com/puppetlabs/puppetlabs-puppetdb.git'
+    redis:    'https://github.com/voxpupuli/puppet-redis.git'
     stdlib:   'https://github.com/puppetlabs/puppetlabs-stdlib.git'
     systemd:  'https://github.com/camptocamp/puppet-systemd.git'
     yumrepo_core:
