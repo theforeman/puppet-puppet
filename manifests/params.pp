@@ -397,6 +397,7 @@ class puppet::params {
   $server_web_idle_timeout                = 30000
   $server_connect_timeout                 = 120000
   $server_ca_auth_required                = true
+  $server_ca_client_self_delete           = false
   $server_admin_api_whitelist             = [ 'localhost', $lower_fqdn ]
   $server_ca_client_whitelist             = [ 'localhost', $lower_fqdn ]
   $server_cipher_suites                   = [

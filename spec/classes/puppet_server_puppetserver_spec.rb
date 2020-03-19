@@ -280,6 +280,14 @@ describe 'puppet' do
         end
       end
 
+      describe 'ca_client_self_delete' do
+        context 'when set' do
+          let(:params) { super().merge(server_ca_client_self_delete: true)}
+          it { should contain_file(auth_conf)
+            .with_content(%r{^(\ *)name: "Allow nodes to delete their own certificates",$}) }
+        end
+      end
+
       describe 'server_jruby9k', unless: facts[:osfamily] == 'FreeBSD' do
         context 'when server_jruby9k => true' do
           let(:params) { super().merge(server_puppetserver_jruby9k: true) }
