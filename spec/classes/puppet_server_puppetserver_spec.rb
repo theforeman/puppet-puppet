@@ -109,6 +109,7 @@ describe 'puppet' do
             .with_content(%r{^(\ *)path: "/puppet/v3/tasks"$})
             .with_content(%r{^(\ *)path: "\^/puppet/v3/facts/(.*)$})
             .with_content(/^( *)pp_cli_auth: "true"$/)
+            .without_content(%r{^(\ *)name: "Allow nodes to delete their own certificates",$})
         }
       end
 
@@ -279,6 +280,14 @@ describe 'puppet' do
         context 'when set' do
           let(:params) { super().merge(server_puppetserver_trusted_agents: ['jenkins', 'octocatalog-diff']) }
           it { should contain_file(auth_conf).with_content(/^            allow: \["jenkins", "octocatalog-diff", "\$1"\]$/) }
+        end
+      end
+
+      describe 'ca_client_self_delete' do
+        context 'when set' do
+          let(:params) { super().merge(server_ca_client_self_delete: true)}
+          it { should contain_file(auth_conf)
+            .with_content(%r{^(\ *)name: "Allow nodes to delete their own certificates",$}) }
         end
       end
 

@@ -111,6 +111,18 @@ authorization: {
             sort-order: 500
             name: "puppetlabs cert statuses"
         },
+<%- if @server_ca_client_self_delete -%>
+        {
+            name: "Allow nodes to delete their own certificates",
+            match-request: {
+                path: "^/puppet-ca/v1/certificate(_status|_request)?/([^/]+)$"
+                type: regex
+                method: [delete]
+            },
+            allow: "$2"
+            sort-order: 500
+        },
+<%- end -%>
 <%- end -%>
         {
             # Allow unauthenticated access to the status service endpoint

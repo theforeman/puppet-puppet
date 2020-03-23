@@ -103,6 +103,7 @@ class puppet::server::puppetserver (
   $server_web_idle_timeout                = $::puppet::server::web_idle_timeout,
   $server_connect_timeout                 = $::puppet::server::connect_timeout,
   $server_ca_auth_required                = $::puppet::server::ca_auth_required,
+  $server_ca_client_self_delete           = $::puppet::server::ca_client_self_delete,
   $server_ca_client_whitelist             = $::puppet::server::ca_client_whitelist,
   $server_admin_api_whitelist             = $::puppet::server::admin_api_whitelist,
   $server_puppetserver_version            = $::puppet::server::real_puppetserver_version,

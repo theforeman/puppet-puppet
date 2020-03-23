@@ -421,6 +421,9 @@
 # $server_ca_auth_required::                Whether client certificates are needed to access the puppet-admin api
 #                                           Defaults to true
 #
+# $server_ca_client_self_delete::           Adds a rule to auth.conf, that allows a client to delete its own certificate
+#                                           Defaults to false
+#
 # $server_use_legacy_auth_conf::            Should the puppetserver use the legacy puppet auth.conf?
 #                                           Defaults to false (the puppetserver will use its own conf.d/auth.conf)
 #
@@ -618,6 +621,7 @@ class puppet (
   Boolean $server_ca_crl_sync = $puppet::params::server_ca_crl_sync,
   Optional[Boolean] $server_crl_enable = $puppet::params::server_crl_enable,
   Boolean $server_ca_auth_required = $puppet::params::server_ca_auth_required,
+  Boolean $server_ca_client_self_delete = $puppet::params::server_ca_client_self_delete,
   Array[String] $server_ca_client_whitelist = $puppet::params::server_ca_client_whitelist,
   Optional[Puppet::Custom_trusted_oid_mapping] $server_custom_trusted_oid_mapping = $puppet::params::server_custom_trusted_oid_mapping,
   Boolean $server_http = $puppet::params::server_http,
