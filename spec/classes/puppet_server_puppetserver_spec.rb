@@ -107,6 +107,7 @@ describe 'puppet' do
             .with_content(%r{^(\ *)path: "/puppet/v3/tasks"$})
             .with_content(%r{^(\ *)path: "\^/puppet/v3/facts/(.*)$})
             .with_content(/^( *)pp_cli_auth: "true"$/)
+            .without_content(%r{^(\ *)name: "Allow nodes to delete their own certificates",$})
         }
       end
 
