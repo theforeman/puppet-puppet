@@ -30,6 +30,9 @@ RSpec.configure do |c|
         # refresh check if cache needs refresh on next yum command
         on host, 'yum clean expire-cache'
       end
+      if fact_on(host, 'operatingsystem') == 'Ubuntu'
+        on host, 'apt-get -qq -y install cron'
+      end
     end
   end
 end
