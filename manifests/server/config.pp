@@ -36,10 +36,20 @@ class puppet::server::config inherits puppet::config {
   $server_storeconfigs_backend = $::puppet::server::storeconfigs_backend
   $server_external_nodes       = $::puppet::server::external_nodes
   $server_environment_timeout  = $::puppet::server::environment_timeout
+  $trusted_external_command    = $::puppet::server::trusted_external_command
 
   if $server_external_nodes and $server_external_nodes != '' {
     class{ '::puppet::server::enc':
       enc_path => $server_external_nodes,
+    }
+  }
+
+  if $trusted_external_command {
+    if versioncmp($::puppetversion, '6.11') < 0 {
+      fail('$server_trusted_external_command is only available for Puppet > 6.11')
+    }
+    puppet::config::master {
+      'trusted_external_command': value => $trusted_external_command,
     }
   }
 

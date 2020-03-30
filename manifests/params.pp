@@ -208,18 +208,19 @@ class puppet::params {
   $server_additional_settings = {}
 
   # Will this host be a puppetmaster?
-  $server                     = false
-  $server_ca                  = true
-  $server_ca_crl_sync         = false
-  $server_reports             = 'foreman'
-  $server_external_nodes      = "${dir}/node.rb"
-  $server_enc_api             = 'v2'
-  $server_report_api          = 'v2'
-  $server_request_timeout     = 60
-  $server_certname            = $::clientcert
-  $server_strict_variables    = false
-  $server_http                = false
-  $server_http_port           = 8139
+  $server                          = false
+  $server_ca                       = true
+  $server_ca_crl_sync              = false
+  $server_reports                  = 'foreman'
+  $server_external_nodes           = "${dir}/node.rb"
+  $server_trusted_external_command = undef
+  $server_enc_api                  = 'v2'
+  $server_report_api               = 'v2'
+  $server_request_timeout          = 60
+  $server_certname                 = $::clientcert
+  $server_strict_variables         = false
+  $server_http                     = false
+  $server_http_port                = 8139
 
   # Need a new master template for the server?
   $server_template      = 'puppet/server/puppet.conf.erb'
