@@ -87,6 +87,7 @@ describe 'puppet' do
         it { should_not contain_puppet__config__master('manifest') }
         it { should_not contain_puppet__config__master('modulepath') }
         it { should_not contain_puppet__config__master('config_version') }
+        it { should_not contain_puppet__config__master('trusted_external_command') }
 
         it { should contain_puppet__config__master('external_nodes').with_value("#{etcdir}\/node.rb") }
         it { should contain_puppet__config__master('node_terminus').with_value('exec') }
@@ -678,6 +679,42 @@ describe 'puppet' do
         end
 
         it { should contain_file("#{conf_d_dir}/auth.conf").with_content(/allow-header-cert-info: true/) }
+      end
+
+      describe 'server_trusted_external_command' do
+        context 'with default parameters' do
+          it { should_not contain_puppet__config__master('trusted_external_command') }
+        end
+
+        context 'with puppetversion >= 6.11' do
+          describe 'when server_trusted_external_command => /usr/local/sbin/trusted_external_command' do
+            let(:facts) do
+              super().merge(
+                puppetversion: '6.11.0'
+              )
+            end
+            let(:params) do
+              super().merge(server_trusted_external_command: '/usr/local/sbin/trusted_external_command' )
+            end
+
+            it { should contain_puppet__config__master('trusted_external_command').with_value('/usr/local/sbin/trusted_external_command') }
+          end
+        end
+
+        context 'with puppetversion < 6.11' do
+          describe 'when server_trusted_external_command => /usr/local/sbin/trusted_external_command' do
+            let(:facts) do
+              super().merge(
+                puppetversion: '6.5.0'
+              )
+            end
+            let(:params) do
+              super().merge(server_trusted_external_command: '/usr/local/sbin/trusted_external_command' )
+            end
+
+            it { is_expected.to raise_error(Puppet::Error, /\$server_trusted_external_command is only available for Puppet > 6\.11/) }
+          end
+        end
       end
     end
   end

@@ -60,6 +60,9 @@
 #
 # $external_nodes::                    External nodes classifier executable
 #
+# $server_trusted_external_command::   The external trusted facts script to use.
+#                                      (Puppet >= 6.11 only).
+#
 # $git_repo::                          Use git repository as a source of modules
 #
 # $environments_owner::                The owner of the environments directory
@@ -370,6 +373,7 @@ class puppet::server(
   Stdlib::Absolutepath $puppetserver_dir = $::puppet::server_puppetserver_dir,
   Optional[Pattern[/^[\d]\.[\d]+\.[\d]+$/]] $puppetserver_version = $::puppet::server_puppetserver_version,
   Variant[Undef, String[0], Stdlib::Absolutepath] $external_nodes = $::puppet::server_external_nodes,
+  Optional[Stdlib::Absolutepath] $trusted_external_command = $::puppet::server_trusted_external_command,
   Array[String] $cipher_suites = $::puppet::server_cipher_suites,
   Optional[String] $config_version = $::puppet::server_config_version,
   Integer[0] $connect_timeout = $::puppet::server_connect_timeout,
