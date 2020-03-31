@@ -93,9 +93,7 @@
 #
 # $post_hook_name::                    Name of a git hook
 #
-# $storeconfigs_backend::              Do you use storeconfigs? (note: not required)
-#                                      false if you don't, "active_record" for 2.X
-#                                      style db, "puppetdb" for puppetdb
+# $storeconfigs::                      Whether to enable storeconfigs
 #
 # $ssl_dir::                           SSL directory
 #
@@ -395,7 +393,7 @@ class puppet::server(
   Integer[0] $idle_timeout = $puppet::server_idle_timeout,
   String $post_hook_content = $puppet::server_post_hook_content,
   String $post_hook_name = $puppet::server_post_hook_name,
-  Variant[Undef, Boolean, Enum['active_record', 'puppetdb']] $storeconfigs_backend = $puppet::server_storeconfigs_backend,
+  Boolean $storeconfigs = $puppet::params::server_storeconfigs,
   Array[Stdlib::Absolutepath] $ruby_load_paths = $puppet::server_ruby_load_paths,
   Stdlib::Absolutepath $ssl_dir = $puppet::server_ssl_dir,
   Boolean $ssl_dir_manage = $puppet::server_ssl_dir_manage,

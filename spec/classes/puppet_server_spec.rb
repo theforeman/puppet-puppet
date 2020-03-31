@@ -81,9 +81,8 @@ describe 'puppet' do
         it { should contain_puppet__config__master('parser').with_value('current') }
         it { should contain_puppet__config__master('strict_variables').with_value('false') }
         it { should contain_puppet__config__master('ssldir').with_value(ssldir) }
+        it { should contain_puppet__config__master('storeconfigs').with_value(false) }
         it { should_not contain_puppet__config__master('environment_timeout') }
-        it { should_not contain_puppet__config__master('storeconfigs') }
-        it { should_not contain_puppet__config__master('storeconfigs_backend') }
         it { should_not contain_puppet__config__master('manifest') }
         it { should_not contain_puppet__config__master('modulepath') }
         it { should_not contain_puppet__config__master('config_version') }
@@ -439,9 +438,11 @@ describe 'puppet' do
         let(:params) do
           super().merge(
             server_puppetdb_host: 'mypuppetdb.example.com',
-            server_storeconfigs_backend: 'puppetdb'
+            server_storeconfigs: true,
           )
         end
+
+        it { should contain_puppet__config__master('storeconfigs').with_value(true) }
 
         it 'should configure PuppetDB' do
           should compile.with_all_deps

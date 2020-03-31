@@ -251,8 +251,7 @@
 # $server_git_branch_map::                  Git branch to puppet env mapping for the
 #                                           default post receive hook
 #
-# $server_storeconfigs_backend::            Do you use storeconfigs?
-#                                           false if you don't, "puppetdb" for puppetdb
+# $server_storeconfigs::                    Whether to enable storeconfigs
 #
 # $server_certname::                        The name to use when handling certificates.
 #
@@ -654,7 +653,7 @@ class puppet (
   Integer[0] $server_idle_timeout = $puppet::params::server_idle_timeout,
   String $server_post_hook_content = $puppet::params::server_post_hook_content,
   String $server_post_hook_name = $puppet::params::server_post_hook_name,
-  Variant[Undef, Boolean, Enum['active_record', 'puppetdb']] $server_storeconfigs_backend = $puppet::params::server_storeconfigs_backend,
+  Boolean $server_storeconfigs = $puppet::params::server_storeconfigs,
   Array[Stdlib::Absolutepath] $server_ruby_load_paths = $puppet::params::server_ruby_load_paths,
   Stdlib::Absolutepath $server_ssl_dir = $puppet::params::server_ssl_dir,
   Boolean $server_ssl_dir_manage = $puppet::params::server_ssl_dir_manage,

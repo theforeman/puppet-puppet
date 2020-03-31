@@ -273,11 +273,7 @@ class puppet::params {
   $server_puppetdb_port = 8081
   $server_puppetdb_swf  = false
 
-  # Do you use storeconfigs? (note: not required)
-  # - undef if you don't
-  # - active_record for 2.X style db
-  # - puppetdb for puppetdb
-  $server_storeconfigs_backend = undef
+  $server_storeconfigs = false
 
   $puppet_major = regsubst($::puppetversion, '^(\d+)\..*$', '\1')
 

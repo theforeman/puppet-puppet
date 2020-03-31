@@ -33,7 +33,6 @@ class puppet::server::config inherits puppet::config {
   ## General configuration
   $ca_server                   = $puppet::ca_server
   $ca_port                     = $puppet::ca_port
-  $server_storeconfigs_backend = $puppet::server::storeconfigs_backend
   $server_external_nodes       = $puppet::server::external_nodes
   $server_environment_timeout  = $puppet::server::environment_timeout
   $trusted_external_command    = $puppet::server::trusted_external_command
@@ -84,6 +83,7 @@ class puppet::server::config inherits puppet::config {
     'certname':           value => $puppet::server::certname;
     'parser':             value => $puppet::server::parser;
     'strict_variables':   value => $puppet::server::strict_variables;
+    'storeconfigs':       value => $puppet::server::storeconfigs;
   }
 
   if $puppet::server::ssl_dir_manage {
@@ -94,12 +94,6 @@ class puppet::server::config inherits puppet::config {
   if $server_environment_timeout {
     puppet::config::master {
       'environment_timeout':  value => $server_environment_timeout;
-    }
-  }
-  if $server_storeconfigs_backend {
-    puppet::config::master {
-      'storeconfigs':         value => true;
-      'storeconfigs_backend': value => $server_storeconfigs_backend;
     }
   }
 
