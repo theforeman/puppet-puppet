@@ -109,12 +109,6 @@
 # $additional_settings::               A hash of additional settings.
 #                                      Example: {trusted_node_data => true, ordering => 'manifest'}
 #
-# $puppetdb_host::                     PuppetDB host
-#
-# $puppetdb_port::                     PuppetDB port
-#
-# $puppetdb_swf::                      PuppetDB soft_write_failure
-#
 # $parser::                            Sets the parser to use. Valid options are 'current' or 'future'.
 #                                      Defaults to 'current'.
 #
@@ -393,7 +387,7 @@ class puppet::server(
   Integer[0] $idle_timeout = $puppet::server_idle_timeout,
   String $post_hook_content = $puppet::server_post_hook_content,
   String $post_hook_name = $puppet::server_post_hook_name,
-  Boolean $storeconfigs = $puppet::params::server_storeconfigs,
+  Boolean $storeconfigs = $puppet::server_storeconfigs,
   Array[Stdlib::Absolutepath] $ruby_load_paths = $puppet::server_ruby_load_paths,
   Stdlib::Absolutepath $ssl_dir = $puppet::server_ssl_dir,
   Boolean $ssl_dir_manage = $puppet::server_ssl_dir_manage,
@@ -413,9 +407,6 @@ class puppet::server(
   Optional[Stdlib::Absolutepath] $foreman_ssl_key = $puppet::server_foreman_ssl_key,
   Boolean $server_foreman_facts = $puppet::server_foreman_facts,
   Optional[Stdlib::Absolutepath] $puppet_basedir = $puppet::server_puppet_basedir,
-  Optional[String] $puppetdb_host = $puppet::server_puppetdb_host,
-  Integer[0, 65535] $puppetdb_port = $puppet::server_puppetdb_port,
-  Boolean $puppetdb_swf = $puppet::server_puppetdb_swf,
   Enum['current', 'future'] $parser = $puppet::server_parser,
   Variant[Undef, Enum['unlimited'], Pattern[/^\d+[smhdy]?$/]] $environment_timeout = $puppet::server_environment_timeout,
   String $jvm_java_bin = $puppet::server_jvm_java_bin,

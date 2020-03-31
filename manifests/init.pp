@@ -255,12 +255,6 @@
 #
 # $server_certname::                        The name to use when handling certificates.
 #
-# $server_puppetdb_host::                   PuppetDB host
-#
-# $server_puppetdb_port::                   PuppetDB port
-#
-# $server_puppetdb_swf::                    PuppetDB soft_write_failure
-#
 # === Advanced server parameters:
 #
 # $server_strict_variables::                if set to true, it will throw parse errors
@@ -673,9 +667,6 @@ class puppet (
   Optional[Stdlib::Absolutepath] $server_foreman_ssl_key = $puppet::params::server_foreman_ssl_key,
   Boolean $server_foreman_facts = $puppet::params::server_foreman_facts,
   Optional[Stdlib::Absolutepath] $server_puppet_basedir = $puppet::params::server_puppet_basedir,
-  Optional[String] $server_puppetdb_host = $puppet::params::server_puppetdb_host,
-  Integer[0, 65535] $server_puppetdb_port = $puppet::params::server_puppetdb_port,
-  Boolean $server_puppetdb_swf = $puppet::params::server_puppetdb_swf,
   Enum['current', 'future'] $server_parser = $puppet::params::server_parser,
   Variant[Undef, Enum['unlimited'], Pattern[/^\d+[smhdy]?$/]] $server_environment_timeout = $puppet::params::server_environment_timeout,
   String $server_jvm_java_bin = $puppet::params::server_jvm_java_bin,

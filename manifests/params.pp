@@ -268,11 +268,6 @@ class puppet::params {
   $server_post_hook_name      = 'post-receive'
   $server_custom_trusted_oid_mapping = undef
 
-  # PuppetDB config
-  $server_puppetdb_host = undef
-  $server_puppetdb_port = 8081
-  $server_puppetdb_swf  = false
-
   $server_storeconfigs = false
 
   $puppet_major = regsubst($::puppetversion, '^(\d+)\..*$', '\1')

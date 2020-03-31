@@ -298,16 +298,4 @@ class puppet::server::config inherits puppet::config {
     }
     contain foreman::puppetmaster
   }
-
-  ## PuppetDB
-  if $puppet::server::puppetdb_host {
-    class { 'puppetdb::master::config':
-      puppetdb_server             => $puppet::server::puppetdb_host,
-      puppetdb_port               => $puppet::server::puppetdb_port,
-      puppetdb_soft_write_failure => $puppet::server::puppetdb_swf,
-      manage_storeconfigs         => false,
-      restart_puppet              => false,
-    }
-    Class['puppetdb::master::puppetdb_conf'] ~> Class['puppet::server::service']
-  }
 }
