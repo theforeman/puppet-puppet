@@ -143,8 +143,6 @@ describe 'puppet' do
 
         it { should_not contain_puppet__config__agent('http_connect_timeout') }
         it { should_not contain_puppet__config__agent('http_read_timeout') }
-        it { should_not contain_class('puppetdb') }
-        it { should_not contain_class('puppetdb::master::config') }
         it { should_not contain_file("#{confdir}/custom_trusted_oid_mapping.yaml") }
 
         it { should contain_file("#{confdir}/autosign.conf") }
@@ -431,27 +429,6 @@ describe 'puppet' do
             .with_ssl_ca('/etc/example/ca.pem')
             .with_ssl_cert('/etc/example/cert.pem')
             .with_ssl_key('/etc/example/key.pem')
-        end
-      end
-
-      describe 'with a PuppetDB host set' do
-        let(:params) do
-          super().merge(
-            server_puppetdb_host: 'mypuppetdb.example.com',
-            server_storeconfigs: true,
-          )
-        end
-
-        it { should contain_puppet__config__master('storeconfigs').with_value(true) }
-
-        it 'should configure PuppetDB' do
-          should compile.with_all_deps
-          should contain_class('puppetdb::master::config')
-            .with_puppetdb_server('mypuppetdb.example.com')
-            .with_puppetdb_port(8081)
-            .with_puppetdb_soft_write_failure(false)
-            .with_manage_storeconfigs(false)
-            .with_restart_puppet(false)
         end
       end
 

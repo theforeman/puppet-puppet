@@ -50,9 +50,16 @@ configure the Puppet master to connect to PuppetDB.
 
 Requires [puppetlabs/puppetdb](https://forge.puppetlabs.com/puppetlabs/puppetdb)
 
-Please see the notes about using puppetlabs/puppetdb 5.x with older versions of Puppet (< 4.x) and PuppetDB (< 3.x) with
-newer releases of the module and set the values via hiera or an extra include of `puppetdb::globals` with
-`puppetdb_version` defined.
+```puppet
+class { 'puppet':
+  server              => true,
+  server_reports      => 'puppetdb,foreman',
+  server_storeconfigs => true,
+}
+class { 'puppet::server::puppetdb':
+  server => 'mypuppetdb.example.com',
+}
+```
 
 Please also make sure your puppetdb ciphers are compatible with your puppet server ciphers, ie that the two following parameters match:
 ```
@@ -102,10 +109,12 @@ wrapper classes or even your ENC (if it supports param classes). For example:
 
     # Want to integrate with an existing PuppetDB?
     class { '::puppet':
-      server               => true,
-      server_puppetdb_host => 'mypuppetdb.example.com',
-      server_reports       => 'puppetdb,foreman',
-      server_storeconfigs  => true,
+      server              => true,
+      server_reports      => 'puppetdb,foreman',
+      server_storeconfigs => true,
+    }
+    class { 'puppet::server::puppetdb':
+      server => 'mypuppetdb.example.com',
     }
 
 Look in _init.pp_ for what can be configured this way, see Contributing if anything
