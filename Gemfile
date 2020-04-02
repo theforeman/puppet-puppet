@@ -36,5 +36,7 @@ gem 'beaker-puppet_install_helper', {"groups"=>["system_tests"]}
 gem 'metadata-json-lint'
 gem 'kafo_module_lint'
 gem 'parallel_tests'
+gem 'bolt', '~> 1.15', {"groups"=>["system_tests"]} unless ENV['PUPPET_VERSION'] =~ /^5/
+gem 'beaker-task_helper', '~> 1.7', {"groups"=>["system_tests"]}
 
 # vim:ft=ruby

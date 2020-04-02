@@ -14,3 +14,16 @@
 Rakefile:
   param_docs_pattern:
     - manifests/init.pp
+Gemfile:
+  extra:
+    - gem: bolt
+      version: '~> 1.15'
+      # TODO: Add something to foreman-installer-modulesync to support `unless ENV['PUPPET_VERSION'] =~ /^5/`
+      options:
+        groups:
+        - 'system_tests'
+    - gem: beaker-task_helper
+      version: '~> 1.7'
+      options:
+        groups:
+        - 'system_tests'

@@ -5,6 +5,9 @@ ENV['BEAKER_debug'] ||= 'true'
 ENV['BEAKER_setfile'] ||= 'centos7-64{hostname=centos7-64.example.com}'
 ENV['BEAKER_HYPERVISOR'] ||= 'docker'
 
+require 'bolt/pal'
+Bolt::PAL.load_puppet
+
 require 'beaker-puppet'
 require 'beaker-rspec'
 require 'beaker/puppet_install_helper'
