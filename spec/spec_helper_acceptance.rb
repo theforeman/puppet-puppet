@@ -1,38 +1,23 @@
-ENV['PUPPET_INSTALL_TYPE'] ||= 'agent'
-ENV['BEAKER_IS_PE'] ||= 'no'
-ENV['BEAKER_PUPPET_COLLECTION'] ||= 'puppet6'
-ENV['BEAKER_debug'] ||= 'true'
+require 'voxpupuli/acceptance/spec_helper_acceptance'
+
 ENV['BEAKER_setfile'] ||= 'centos7-64{hostname=centos7-64.example.com}'
-ENV['BEAKER_HYPERVISOR'] ||= 'docker'
 
-require 'beaker-puppet'
-require 'beaker-rspec'
-require 'beaker/puppet_install_helper'
-require 'beaker/module_install_helper'
-
-run_puppet_install_helper unless ENV['BEAKER_provision'] == 'no'
-install_module_on(hosts)
-install_module_dependencies_on(hosts)
-
-RSpec.configure do |c|
-  # Readable test descriptions
-  c.formatter = :documentation
-
-  # Configure all nodes in nodeset
-  c.before :suite do
-    # Install module and dependencies
-    hosts.each do |host|
-      if fact_on(host, 'osfamily') == 'RedHat'
-        # don't delete downloaded rpm for use with BEAKER_provision=no +
-        # BEAKER_destroy=no
-        on host, 'sed -i "s/keepcache=.*/keepcache=1/" /etc/yum.conf'
-        # refresh check if cache needs refresh on next yum command
-        on host, 'yum clean expire-cache'
-      end
-      if fact_on(host, 'operatingsystem') == 'Ubuntu'
-        on host, 'apt-get -qq -y install cron'
-      end
+configure_beaker do |host|
+  if fact_on(host, 'os.family') == 'RedHat'
+    unless fact_on(host, 'os.name') == 'Fedora'
+      # don't delete downloaded rpm for use with BEAKER_provision=no +
+      # BEAKER_destroy=no
+      on host, 'sed -i "s/keepcache=.*/keepcache=1/" /etc/yum.conf'
     end
+    # refresh check if cache needs refresh on next yum command
+    on host, 'yum clean expire-cache'
+
+    # this is absent in the el8 container images used for testing
+    if fact_on(host, 'os.release.major') == '8'
+      on host, puppet('resource', 'package', 'glibc-langpack-en', 'ensure=installed')
+    end
+  elsif fact_on(host, 'os.name') == 'Ubuntu'
+    on host, 'apt-get -qq -y install cron'
   end
 end
 
@@ -48,7 +33,7 @@ end
 
 shared_examples 'the example' do |name|
   let(:pp) do
-    path = File.join(File.dirname(File.dirname(__FILE__)), 'examples', name)
+    path = File.join(File.dirname(__dir__), 'examples', name)
     File.read(path)
   end
 
