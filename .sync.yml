@@ -11,6 +11,3 @@
   beaker_puppet_collections:
     - puppet5
     - puppet6
-Rakefile:
-  param_docs_pattern:
-    - manifests/init.pp
