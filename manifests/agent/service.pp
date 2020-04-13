@@ -2,7 +2,7 @@
 # @api private
 class puppet::agent::service {
 
-  case $::puppet::runmode {
+  case $puppet::runmode {
     'service': {
       $service_enabled = true
       $cron_enabled = false
@@ -28,7 +28,7 @@ class puppet::agent::service {
     }
   }
 
-  if $::puppet::runmode in $::puppet::unavailable_runmodes {
+  if $puppet::runmode in $puppet::unavailable_runmodes {
     fail("Runmode of ${puppet::runmode} not supported on ${::kernel} operating systems!")
   }
 
@@ -39,15 +39,15 @@ class puppet::agent::service {
 
   class { 'puppet::agent::service::systemd':
     enabled => $systemd_enabled,
-    hour    => $::puppet::run_hour,
-    minute  => $::puppet::run_minute,
+    hour    => $puppet::run_hour,
+    minute  => $puppet::run_minute,
   }
   contain puppet::agent::service::systemd
 
   class { 'puppet::agent::service::cron':
     enabled => $cron_enabled,
-    hour    => $::puppet::run_hour,
-    minute  => $::puppet::run_minute,
+    hour    => $puppet::run_hour,
+    minute  => $puppet::run_minute,
   }
   contain puppet::agent::service::cron
 }
