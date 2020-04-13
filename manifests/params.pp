@@ -36,7 +36,7 @@ class puppet::params {
   $use_srv_records     = false
 
   if defined('$::domain') {
-    $srv_domain = $::domain
+    $srv_domain = $facts['networking']['domain']
   } else {
     $srv_domain = undef
   }
@@ -49,11 +49,11 @@ class puppet::params {
   $syslogfacility      = undef
   $environment         = $::environment
 
-  $aio_package      = ($::osfamily == 'Windows' or $::rubysitedir =~ /\/opt\/puppetlabs\/puppet/)
+  $aio_package      = ($facts['os']['family'] == 'Windows' or $facts['ruby']['sitedir'] =~ /\/opt\/puppetlabs\/puppet/)
 
   $systemd_randomizeddelaysec = 0
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Windows' : {
       # Windows prefixes normal paths with the Data Directory's path and leaves 'puppet' off the end
       $dir_prefix                 = 'C:/ProgramData/PuppetLabs/puppet'
@@ -88,8 +88,8 @@ class puppet::params {
       $server_puppetserver_vardir = '/var/puppet/server/data/puppetserver'
       $server_puppetserver_rundir = '/var/run/puppetserver'
       $server_puppetserver_logdir = '/var/log/puppetserver'
-      $ruby_gem_dir               = regsubst($::rubyversion, '^(\d+\.\d+).*$', '/usr/local/lib/ruby/gems/\1/gems')
-      $server_ruby_load_paths     = [$::rubysitedir, "${ruby_gem_dir}/facter-${::facterversion}/lib"]
+      $ruby_gem_dir               = regsubst($facts['ruby']['version'], '^(\d+\.\d+).*$', '/usr/local/lib/ruby/gems/\1/gems')
+      $server_ruby_load_paths     = [$facts['ruby']['sitedir'], "${ruby_gem_dir}/facter-${::facterversion}/lib"]
       $server_jruby_gem_home      = '/var/puppet/server/data/puppetserver/jruby-gems'
     }
 
@@ -129,7 +129,7 @@ class puppet::params {
         $server_jruby_gem_home      = '/opt/puppetlabs/server/data/puppetserver/jruby-gems'
       } else {
         $dir                        = '/etc/puppet'
-        $codedir                    =  $::osfamily ? {
+        $codedir                    =  $facts['os']['family'] ? {
           'Debian' => '/etc/puppet/code',
           default  => '/etc/puppet',
         }
@@ -164,10 +164,10 @@ class puppet::params {
 
   $manage_packages = true
 
-  if $::osfamily == 'Windows' {
+  if $facts['os']['family'] == 'Windows' {
     $dir_owner = undef
     $dir_group = undef
-  } elsif $aio_package or $::osfamily == 'Suse' {
+  } elsif $aio_package or $facts['os']['family'] == 'Suse' {
     $dir_owner = 'root'
     $dir_group = $root_group
   } else {
@@ -175,7 +175,7 @@ class puppet::params {
     $dir_group = $group
   }
 
-  $package_provider = $::osfamily ? {
+  $package_provider = $facts['os']['family'] ? {
     'windows' => 'chocolatey',
     default   => undef,
   }
@@ -274,7 +274,7 @@ class puppet::params {
 
   $puppet_major = regsubst($::puppetversion, '^(\d+)\..*$', '\1')
 
-  if ($::osfamily =~ /(FreeBSD|DragonFly)/ and versioncmp($puppet_major, '5') >= 0) {
+  if ($facts['os']['family'] =~ /(FreeBSD|DragonFly)/ and versioncmp($puppet_major, '5') >= 0) {
     $server_package = "puppetserver${puppet_major}"
   } else {
     $server_package = undef
@@ -285,7 +285,7 @@ class puppet::params {
 
   if $aio_package {
     $client_package = ['puppet-agent']
-  } elsif ($::osfamily =~ /(FreeBSD|DragonFly)/) {
+  } elsif ($facts['os']['family'] =~ /(FreeBSD|DragonFly)/) {
     $client_package = ["puppet${puppet_major}"]
   } else {
     $client_package = ['puppet']
@@ -298,7 +298,7 @@ class puppet::params {
   $systemd_unit_name = 'puppet-run'
   # Mechanisms to manage and reload/restart the agent
   # If supported on the OS, reloading is prefered since it does not kill a currently active puppet run
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Debian' : {
       $agent_restart_command = "/usr/sbin/service ${service_name} reload"
       $unavailable_runmodes = []
@@ -308,13 +308,12 @@ class puppet::params {
       # it reports its $osreleasemajor as 2, not 6.
       # thats why we're matching for '2' in both parts
       # Amazon Linux is like RHEL6 but reports its osreleasemajor as 2017 or 2018.
-      $osreleasemajor = regsubst($::operatingsystemrelease, '^(\d+)\..*$', '\1') # workaround for the possibly missing operatingsystemmajrelease
-      $agent_restart_command = $osreleasemajor ? {
+      $agent_restart_command = $facts['os']['release']['major'] ? {
         /^(2|5|6|2017|2018)$/ => "/sbin/service ${service_name} reload",
         '7'       => "/usr/bin/systemctl reload-or-restart ${service_name}",
         default   => undef,
       }
-      $unavailable_runmodes = $osreleasemajor ? {
+      $unavailable_runmodes = $facts['os']['release']['major'] ? {
         /^(2|5|6|2017|2018)$/ => ['systemd.timer'],
         default   => [],
       }
@@ -334,7 +333,7 @@ class puppet::params {
   }
 
   # Foreman parameters
-  $lower_fqdn              = downcase($::fqdn)
+  $lower_fqdn              = downcase($facts['networking']['fqdn'])
   $server_foreman          = true
   $server_foreman_facts    = true
   $server_puppet_basedir   = $aio_package ? {
@@ -353,7 +352,7 @@ class puppet::params {
   $server_environment_timeout = undef
 
   # puppet server configuration file
-  $server_jvm_config = $::osfamily ? {
+  $server_jvm_config = $facts['os']['family'] ? {
     'RedHat' => '/etc/sysconfig/puppetserver',
     'Debian' => '/etc/default/puppetserver',
     default  => '/etc/default/puppetserver',
@@ -365,15 +364,11 @@ class puppet::params {
 
   # This is some very trivial "tuning". See the puppet reference:
   # https://docs.puppet.com/puppetserver/latest/tuning_guide.html
-  if ($::memorysize_mb =~ String) {
-    $mem_in_mb = scanf($::memorysize_mb, '%i')[0]
-  } else {
-    $mem_in_mb = 0 + $::memorysize_mb
-  }
+  $mem_in_mb = $facts['memory']['system']['total_bytes'] / 1024 / 1024
   if $mem_in_mb >= 3072 {
     $server_jvm_min_heap_size = '2G'
     $server_jvm_max_heap_size = '2G'
-    $server_max_active_instances = min(abs($::processorcount), 4)
+    $server_max_active_instances = min(abs($facts['processors']['count']), 4)
   } elsif $mem_in_mb >= 1024 {
     $server_max_active_instances = 1
     $server_jvm_min_heap_size = '1G'
