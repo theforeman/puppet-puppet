@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'puppet' do
-  on_os_under_test.each do |os, facts|
+  on_supported_os.each do |os, facts|
     context "on #{os}", unless: unsupported_puppetmaster_osfamily(facts[:osfamily]) do
       if facts[:osfamily] == 'FreeBSD'
         puppet_major = facts[:puppetversion].to_i

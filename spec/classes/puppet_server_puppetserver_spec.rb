@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'puppet' do
-  on_os_under_test.each do |os, facts|
+  on_supported_os.each do |os, facts|
     next if unsupported_puppetmaster_osfamily(facts[:osfamily])
     context "on #{os}" do
       let(:facts) do
