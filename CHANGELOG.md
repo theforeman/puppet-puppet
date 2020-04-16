@@ -280,7 +280,7 @@
       `$server_http` parameter.
 * Other features:
     * Support native puppetserver package on FreeBSD
-    * Allow disabling crl when `server_ca => true` 
+    * Allow disabling crl when `server_ca => true`
     * Add SLES AIO agent support
     * Add support for Parallels PSBM
 * Other changes and fixes:
