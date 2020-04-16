@@ -178,11 +178,33 @@ With all dependencies in place and up-to-date we can now run the tests:
 rake spec
 ```
 
-This will execute all the [rspec tests](http://rspec-puppet.com/) tests
-under [spec/defines](./spec/defines), [spec/classes](./spec/classes),
-and so on. rspec tests may have the same kind of dependencies as the
-module they are testing. While the module defines in its [Modulefile](./Modulefile),
+This will execute all the [rspec tests](http://rspec-puppet.com/) tests under
+[spec/defines](./spec/defines), [spec/classes](./spec/classes), and so on.
+rspec tests may have the same kind of dependencies as the module they are
+testing. While the module defines in its [metadata.json](./metadata.json),
 rspec tests define them in [.fixtures.yml](./fixtures.yml).
+
+To run specific tests, use the spec test file name and a filter like:
+
+```shell
+bundle exec rspec spec/classes/foreman_spec.rb -e 'should restart passenger'
+```
+More filter info available [here](https://relishapp.com/rspec/rspec-core/v/3-9/docs/command-line/example-option)
+
+To run OS specific tests:
+
+```shell
+SPEC_FACTS_OS=redhat-7-x86_64 bundle exec rspec spec/classes/foreman_spec.rb
+```
+
+If you have more than one version of `redhat` OS specified in metadata.json,
+you can run them all like:
+
+```shell
+SPEC_FACTS_OS=redhat bundle exec rspec spec/classes/foreman_spec.rb
+```
+For more information on running the tests, see [rspec-puppet-facts](https://github.com/mcanevet/rspec-puppet-facts)
+and specifically the [section for running tests](https://github.com/mcanevet/rspec-puppet-facts#running-your-tests).
 
 Writing Tests
 -------------

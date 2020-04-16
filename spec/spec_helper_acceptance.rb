@@ -2,7 +2,7 @@ require 'voxpupuli/acceptance/spec_helper_acceptance'
 
 ENV['BEAKER_setfile'] ||= 'centos7-64{hostname=centos7-64.example.com}'
 
-configure_beaker do |host|
+configure_beaker(modules: :fixtures) do |host|
   if fact_on(host, 'os.family') == 'RedHat'
     unless fact_on(host, 'os.name') == 'Fedora'
       # don't delete downloaded rpm for use with BEAKER_provision=no +
@@ -11,13 +11,12 @@ configure_beaker do |host|
     end
     # refresh check if cache needs refresh on next yum command
     on host, 'yum clean expire-cache'
+  end
 
-    # this is absent in the el8 container images used for testing
-    if fact_on(host, 'os.release.major') == '8'
-      on host, puppet('resource', 'package', 'glibc-langpack-en', 'ensure=installed')
-    end
-  elsif fact_on(host, 'os.name') == 'Ubuntu'
-    on host, 'apt-get -qq -y install cron'
+  local_setup = File.join(__dir__, 'setup_acceptance_node.pp')
+  if File.exist?(local_setup)
+    puts "Configuring #{host} by applying #{local_setup}"
+    apply_manifest_on(host, File.read(local_setup), catch_failures: true)
   end
 end
 
