@@ -145,10 +145,6 @@
 #
 # $puppet_basedir::                    Where is the puppet code base located
 #
-# $enc_api::                           What version of enc script to deploy.
-#
-# $report_api::                        What version of report processor to deploy.
-#
 # $compile_mode::                      Used to control JRuby's "CompileMode", which may improve performance.
 #
 #
@@ -409,8 +405,6 @@ class puppet::server(
   Optional[Variant[String, Array[String]]] $package = $puppet::server_package,
   Optional[String] $version = $puppet::server_version,
   String $certname = $puppet::server_certname,
-  Enum['v2'] $enc_api = $puppet::server_enc_api,
-  Enum['v2'] $report_api = $puppet::server_report_api,
   Integer[0] $request_timeout = $puppet::server_request_timeout,
   Boolean $strict_variables = $puppet::server_strict_variables,
   Hash[String, Data] $additional_settings = $puppet::server_additional_settings,
