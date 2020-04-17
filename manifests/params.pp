@@ -214,8 +214,6 @@ class puppet::params {
   $server_reports                  = 'foreman'
   $server_external_nodes           = "${dir}/node.rb"
   $server_trusted_external_command = undef
-  $server_enc_api                  = 'v2'
-  $server_report_api               = 'v2'
   $server_request_timeout          = 60
   $server_certname                 = $::clientcert
   $server_strict_variables         = false
