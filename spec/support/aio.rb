@@ -1,8 +1,6 @@
-aio = on_supported_os.reject do |os, facts|
-  ['Archlinux', 'FreeBSD', 'DragonFly', 'Windows'].include?(facts[:operatingsystem])
-end.keys
-
-add_custom_fact :rubysitedir, '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0', :confine => aio
+add_custom_fact :aio_agent_version, ->(os, facts) do
+  return facts[:puppetversion] unless ['Archlinux', 'FreeBSD', 'DragonFly', 'Windows'].include?(facts[:os]['family'])
+end
 
 def unsupported_puppetmaster_osfamily(osfamily)
   ['Archlinux', 'windows', 'Suse'].include?(osfamily)

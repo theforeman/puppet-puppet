@@ -49,7 +49,8 @@ class puppet::params {
   $syslogfacility      = undef
   $environment         = $::environment
 
-  $aio_package      = ($facts['os']['family'] == 'Windows' or $facts['ruby']['sitedir'] =~ /\/opt\/puppetlabs\/puppet/)
+  # aio_agent_version is a core fact that's empty on non-AIO
+  $aio_package      = fact('aio_agent_version') =~ String[1]
 
   $systemd_randomizeddelaysec = 0
 
