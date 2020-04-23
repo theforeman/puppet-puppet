@@ -169,8 +169,8 @@ describe 'puppet' do
 
       describe 'with uppercase hostname' do
         let(:facts) do
-          super().merge(
-            fqdn: 'PUPPETMASTER.example.com',
+          override_facts(super(),
+            networking: {fqdn: 'PUPPETMASTER.example.com'},
             # clientcert is always lowercase by Puppet design
             clientcert: 'puppetmaster.example.com'
           )

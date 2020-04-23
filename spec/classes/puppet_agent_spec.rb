@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'deep_merge'
 
 describe 'puppet' do
   on_supported_os.each do |os, facts|
@@ -29,11 +28,9 @@ describe 'puppet' do
         package_provider = nil
       end
 
-      let :facts do
-        facts.deep_merge(
-          # Cron/systemd timers are based on the IP - make it consistent
-          networking: { ip: '192.0.2.100' }
-        )
+      let(:facts) do
+        # Cron/systemd timers are based on the IP - make it consistent
+        override_facts(facts, networking: {ip: '192.0.2.100'})
       end
 
       let :params do

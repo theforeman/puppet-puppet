@@ -1,10 +1,9 @@
 require 'spec_helper'
-require 'deep_merge'
 
 describe 'puppet' do
-  on_supported_os.each do |os, facts|
+  on_supported_os.each do |os, os_facts|
     context "on #{os}" do
-      case facts[:osfamily]
+      case os_facts[:osfamily]
       when 'FreeBSD'
         dir_owner = 'puppet'
         dir_group = 'puppet'
@@ -40,7 +39,7 @@ describe 'puppet' do
       end
 
       let :facts do
-        facts.merge(domain: 'example.org')
+        override_facts(os_facts, networking: {domain: 'example.org'})
       end
 
       let :params do
@@ -61,7 +60,7 @@ describe 'puppet' do
         it { is_expected.to contain_puppet__config__main('privatekeydir').with_value('$ssldir/private_keys { group = service }') }
         it { is_expected.to contain_puppet__config__main('hostprivkey').with_value('$privatekeydir/$certname.pem { mode = 640 }') }
         it { is_expected.to contain_puppet__config__main('show_diff').with_value('false') }
-        it { is_expected.to contain_puppet__config__main('server').with_value(facts[:fqdn]) }
+        it { is_expected.to contain_puppet__config__main('server').with_value(facts[:networking]['fqdn']) }
       end
 
       describe 'with allow_any_crl_auth' do
@@ -118,7 +117,7 @@ describe 'puppet' do
         end
 
         context 'domain fact is unset' do
-          let(:facts) { facts.merge(domain: nil) }
+          let(:facts) { override_facts(super(), networking: {domain: nil}) }
 
           it { is_expected.to raise_error(Puppet::Error, /\$::domain fact found to be undefined and \$srv_domain is undefined/) }
         end
@@ -137,13 +136,10 @@ describe 'puppet' do
         context 'with client_certname => $::clientcert' do
           let :facts do
             # rspec-puppet(-facts) doesn't mock this
-            facts.deep_merge(clientcert: 'client.example.com')
-          end
-          let :params do
-            super().merge(client_certname: facts[:clientcert])
+            super().merge(clientcert: 'client.example.com')
           end
 
-          it { is_expected.to contain_puppet__config__main('certname').with_value(facts[:clientcert]) }
+          it { is_expected.to contain_puppet__config__main('certname').with_value('client.example.com') }
         end
 
         context 'with client_certname => "foobar"' do
@@ -172,24 +168,18 @@ describe 'puppet' do
           it { is_expected.to contain_puppet__config__main('server').with_value('mymaster.example.com') }
         end
 
-        describe 'puppetmaster parameter overrides global puppetmaster' do
-          let :params do
-            super().merge(puppetmaster: 'mymaster.example.com')
+        context 'with global puppetmaster' do
+          let(:facts) { super().merge(puppetmaster: 'global.example.com') }
+
+          describe 'it overrides fqdn' do
+            it { is_expected.to contain_puppet__config__main('server').with_value('global.example.com') }
           end
 
-          let :facts do
-            facts.merge(puppetmaster: 'global.example.com')
+          describe 'the puppetmaster parameter overrides global puppetmaster' do
+            let(:params) { super().merge(puppetmaster: 'mymaster.example.com') }
+
+            it { is_expected.to contain_puppet__config__main('server').with_value('mymaster.example.com') }
           end
-
-          it { is_expected.to contain_puppet__config__main('server').with_value('mymaster.example.com') }
-        end
-
-        describe 'global puppetmaster overrides fqdn' do
-          let :facts do
-            facts.merge(puppetmaster: 'global.example.com')
-          end
-
-          it { is_expected.to contain_puppet__config__main('server').with_value('global.example.com') }
         end
       end
 
