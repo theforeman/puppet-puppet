@@ -104,7 +104,7 @@ describe 'puppet' do
 
         it { is_expected.to contain_class('puppet::agent::service::systemd').with_enabled(false) }
         case os
-        when /\Adebian-/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-(16|18)/, /\Aarchlinux-/
+        when /\Adebian-/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-(16|18|20)/, /\Aarchlinux-/
           it do
             is_expected.to contain_service('puppet-run.timer')
               .with_ensure(false)
@@ -181,7 +181,7 @@ describe 'puppet' do
           case os
           when /\A(windows|archlinux)/
             it { is_expected.to raise_error(Puppet::Error, /Runmode of cron not supported on #{facts[:kernel]} operating systems!/) }
-          when /\Adebian-/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-(16|18)/
+          when /\Adebian-/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-(16|18|20)/
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_concat__fragment('puppet.conf_agent') }
             if facts[:osfamily] == 'Debian'
@@ -240,7 +240,7 @@ describe 'puppet' do
           case os
           when /\A(windows|archlinux)/
             it { is_expected.to raise_error(Puppet::Error, /Runmode of cron not supported on #{facts[:kernel]} operating systems!/) }
-          when /\Adebian-/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-(16|18)/
+          when /\Adebian-/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-(16|18|20)/
             it { is_expected.to contain_class('puppet::agent::service::cron').with_enabled(true) }
             it { is_expected.to contain_class('puppet::agent::service::daemon').with_enabled(false) }
             it do
@@ -281,7 +281,7 @@ describe 'puppet' do
           end
 
           case os
-          when /\Adebian-/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-(16|18)/, /\Aarchlinux-/
+          when /\Adebian-/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-(16|18|20)/, /\Aarchlinux-/
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_class('puppet::agent::service::daemon').with_enabled(false) }
             it { is_expected.to contain_class('puppet::agent::service::cron').with_enabled(false) }
@@ -324,7 +324,7 @@ describe 'puppet' do
           end
 
           case os
-          when /\Adebian-/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-(16|18)/, /\Aarchlinux-/
+          when /\Adebian-/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-(16|18|20)/, /\Aarchlinux-/
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_class('puppet::agent::service::daemon').with_enabled(false) }
             it { is_expected.to contain_class('puppet::agent::service::cron').with_enabled(false) }
@@ -372,7 +372,7 @@ describe 'puppet' do
           it { is_expected.to contain_class('puppet::agent::service::systemd').with_enabled(false) }
 
           case os
-          when /\Adebian-/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-(16|18)/, /\Aarchlinux-/
+          when /\Adebian-/, /\A(redhat|centos|scientific)-7/, /\Afedora-/, /\Aubuntu-(16|18|20)/, /\Aarchlinux-/
             it { is_expected.to contain_service('puppet-run.timer').with_ensure(false) }
           else
             it { is_expected.not_to contain_service('puppet-run.timer') }

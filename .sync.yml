@@ -5,6 +5,7 @@
     - debian9-64
     - debian10-64
     - ubuntu1804-64
+    - ubuntu2004-64
   env:
     global:
       - PARALLEL_TEST_PROCESSORS=8
