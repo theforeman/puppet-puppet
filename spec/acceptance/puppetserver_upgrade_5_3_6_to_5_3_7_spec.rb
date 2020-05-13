@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'Scenario: 5.3.6 to 5.3.7 upgrade:', if: ENV['BEAKER_PUPPET_COLLECTION'] == 'puppet5' do
+describe 'Scenario: 5.3.6 to 5.3.7 upgrade:', if: ENV['BEAKER_PUPPET_COLLECTION'] == 'puppet5', unless: unsupported_puppetserver do
   before(:context) do
     if check_for_package(default, 'puppetserver')
       on default, puppet('resource package puppetserver ensure=purged')

@@ -1,5 +1,9 @@
-if $facts['os']['name'] == 'Ubuntu' {
-  package { 'cron':
-    ensure => installed,
-  }
+$packages = $facts['os']['name'] ? {
+  'Fedora' => ['cronie'],
+  'Ubuntu' => ['cron'],
+  default  => [],
+}
+
+package { $packages:
+  ensure => installed,
 }

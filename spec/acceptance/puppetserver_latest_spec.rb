@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'Scenario: install puppetserver (latest):' do
+describe 'Scenario: install puppetserver (latest):', unless: unsupported_puppetserver do
   before(:context) do
     if check_for_package(default, 'puppetserver')
       on default, puppet('resource package puppetserver ensure=purged')
