@@ -1,5 +1,34 @@
 # Changelog
 
+## [14.0.0](https://github.com/theforeman/puppet-puppet/tree/14.0.0) (2020-05-13)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/13.0.0...14.0.0)
+
+**Breaking changes:**
+
+- Use modern facts [\#743](https://github.com/theforeman/puppet-puppet/issues/743)
+- Drop EOL Windows 7, 2008 R2 [\#739](https://github.com/theforeman/puppet-puppet/pull/739) ([ekohl](https://github.com/ekohl))
+- Drop Foreman API version parameters [\#736](https://github.com/theforeman/puppet-puppet/pull/736) ([ekohl](https://github.com/ekohl))
+- Refactor PuppetDB integration [\#732](https://github.com/theforeman/puppet-puppet/pull/732) ([ekohl](https://github.com/ekohl))
+
+**Implemented enhancements:**
+
+- Support Ubuntu Focal \(20.04\) [\#746](https://github.com/theforeman/puppet-puppet/pull/746) ([mmoll](https://github.com/mmoll))
+- Fixes [\#29735](https://projects.theforeman.org/issues/29735) - support el8 [\#742](https://github.com/theforeman/puppet-puppet/pull/742) ([wbclark](https://github.com/wbclark))
+- Switch AIO detection to use aio\_agent\_version fact [\#737](https://github.com/theforeman/puppet-puppet/pull/737) ([ekohl](https://github.com/ekohl))
+- Allow extlib 5.x [\#733](https://github.com/theforeman/puppet-puppet/pull/733) ([mmoll](https://github.com/mmoll))
+- Add server\_trusted\_external\_command parameter [\#731](https://github.com/theforeman/puppet-puppet/pull/731) ([baurmatt](https://github.com/baurmatt))
+- Add server\_ca\_client\_self\_delete to CA Servers [\#728](https://github.com/theforeman/puppet-puppet/pull/728) ([neilfromit](https://github.com/neilfromit))
+- implement 'versioned code' for puppetserver [\#726](https://github.com/theforeman/puppet-puppet/pull/726) ([mmoll](https://github.com/mmoll))
+
+**Closed issues:**
+
+- Systemd dependency missing [\#704](https://github.com/theforeman/puppet-puppet/issues/704)
+
+**Merged pull requests:**
+
+- Add Fedora 31, drop Fedora 26 [\#745](https://github.com/theforeman/puppet-puppet/pull/745) ([ekohl](https://github.com/ekohl))
+
 ## [13.0.0](https://github.com/theforeman/puppet-puppet/tree/13.0.0) (2020-02-12)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/12.1.0...13.0.0)
