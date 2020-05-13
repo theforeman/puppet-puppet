@@ -4,6 +4,7 @@
     - centos6-64
     - debian9-64
     - debian10-64
+    - fedora31-64
     - ubuntu1804-64
   env:
     global:

@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'Puppetserver config options' do
+describe 'Puppetserver config options', unless: unsupported_puppetserver do
   before(:context) do
     if check_for_package(default, 'puppetserver')
       on default, puppet('resource package puppetserver ensure=purged')
