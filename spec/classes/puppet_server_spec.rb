@@ -22,7 +22,7 @@ describe 'puppet' do
         puppetserver_pkg    = puppet_major > 4 ? "puppetserver#{puppet_major}" : 'puppetserver'
         if facts[:puppetversion] >= '6.0'
           puppetcacmd         = '/usr/local/bin/puppetserver ca setup'
-          cert_to_create      = "#{ssldir}/certs/ca.pem"
+          cert_to_create      = "#{ssldir}/ca/ca_crt.pem"
         else
           puppetcacmd         = '/usr/local/bin/puppet cert --generate puppetmaster.example.com --allow-dns-alt-names'
           cert_to_create      = "#{ssldir}/certs/puppetmaster.example.com.pem"
@@ -44,7 +44,7 @@ describe 'puppet' do
         puppetserver_pkg    = 'puppetserver'
         if facts[:puppetversion] >= '6.0'
           puppetcacmd         = '/opt/puppetlabs/bin/puppetserver ca setup'
-          cert_to_create      = "#{ssldir}/certs/ca.pem"
+          cert_to_create      = "#{ssldir}/ca/ca_crt.pem"
         else
           puppetcacmd         = '/opt/puppetlabs/bin/puppet cert --generate puppetmaster.example.com --allow-dns-alt-names'
           cert_to_create      = "#{ssldir}/certs/puppetmaster.example.com.pem"
