@@ -119,7 +119,17 @@ authorization: {
                 type: regex
                 method: [delete]
             },
-            allow: "$2"
+            allow: [
+                "$2",
+<%- @server_admin_api_whitelist.each do |client| -%>
+                "<%= client %>",
+<%- end -%>
+                {
+                    extensions: {
+                        pp_cli_auth: "true"
+                    }
+                }
+            ]
             sort-order: 500
         },
 <%- end -%>
