@@ -34,12 +34,14 @@ Requires [theforeman/git](https://forge.puppetlabs.com/theforeman/git).
 
 ## Foreman integration
 
-With the 3.0.0 release the Foreman integration became optional.  It will still
-by default install the Foreman integration when `server` is true,
-so if you wish to run a Puppet master without Foreman, it can be disabled by
-setting `server_foreman` to false.
+The Foreman integration is optional, but on by default when `server` is true.
+It can be disabled by setting `server_foreman` to false.
 
-Requires [theforeman/foreman](https://forge.puppetlabs.com/theforeman/foreman).
+Requires [theforeman/puppetserver_foreman](https://forge.puppetlabs.com/theforeman/puppetserver_foreman).
+
+Since version 15.0.0 the integration bits depend on the standalone module where
+previously it depended on
+[theforeman/foreman](https://forge.puppetlabs.com/theforeman/foreman)
 
 ## PuppetDB integration
 

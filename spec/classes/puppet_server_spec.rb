@@ -154,12 +154,12 @@ describe 'puppet' do
         it { should_not contain_file("#{confdir}/autosign.conf").with_content(/foo.bar/) }
 
         it 'should set up the ENC' do
-          should contain_class('foreman::puppetmaster')
+          should contain_class('puppetserver_foreman')
             .with_foreman_url('https://foo.example.com')
-            .with_receive_facts(true)
+            .with_enc_upload_facts(true)
+            .with_enc_timeout(60)
             .with_puppet_home(puppetserver_vardir)
             .with_puppet_etcdir(etcdir)
-            .with_timeout(60)
             .with_puppet_basedir(rubydir)
         end
 
@@ -317,7 +317,7 @@ describe 'puppet' do
           )
         end
 
-        it { should_not contain_class('foreman::puppetmaster') }
+        it { should_not contain_class('puppetserver_foreman') }
         it { should_not contain_puppet__config__master('node_terminus') }
         it { should_not contain_puppet__config__master('external_nodes') }
       end
@@ -429,7 +429,7 @@ describe 'puppet' do
         end
 
         it 'should pass SSL parameters to the ENC' do
-          should contain_class('foreman::puppetmaster')
+          should contain_class('puppetserver_foreman')
             .with_ssl_ca('/etc/example/ca.pem')
             .with_ssl_cert('/etc/example/cert.pem')
             .with_ssl_key('/etc/example/key.pem')
