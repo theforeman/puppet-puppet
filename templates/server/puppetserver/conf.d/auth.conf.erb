@@ -19,12 +19,17 @@ authorization: {
 <%- if scope.function_versioncmp([@server_puppetserver_version, '6.3.0']) >= 0 -%>
         {
             # Allow services to retrieve catalogs on behalf of others
+            allow: [
+<%- @server_admin_api_whitelist.each do |client| -%>
+                "<%= client %>",
+<%- end -%>
+            ]
             match-request: {
                 path: "^/puppet/v4/catalog/?$"
+                query-params: {}
                 type: regex
                 method: post
             }
-            deny: "*"
             sort-order: 500
             name: "puppetlabs v4 catalog for services"
         },
