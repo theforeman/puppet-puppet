@@ -299,7 +299,7 @@ class puppet::server::config inherits puppet::config {
       timeout        => $puppet::server::request_timeout,
       ssl_ca         => $pick_foreman_ssl_ca,
       ssl_cert       => $pick_foreman_ssl_cert,
-      ssl_key        => $pick_foreman_ssl_key
+      ssl_key        => $pick_foreman_ssl_key,
     }
     contain foreman::puppetmaster
   }
