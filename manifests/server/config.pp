@@ -294,9 +294,9 @@ class puppet::server::config inherits puppet::config {
       puppet_basedir => $puppet::server::puppet_basedir,
       puppet_etcdir  => $puppet::dir,
       timeout        => $puppet::server::request_timeout,
-      ssl_ca         => pick($puppet::server::foreman_ssl_ca, $puppet::server::ssl_ca_cert),
-      ssl_cert       => pick($puppet::server::foreman_ssl_cert, $puppet::server::ssl_cert),
-      ssl_key        => pick($puppet::server::foreman_ssl_key, $puppet::server::ssl_cert_key),
+      ssl_ca         => pick_default($puppet::server::foreman_ssl_ca, $puppet::server::ssl_ca_cert),
+      ssl_cert       => pick_default($puppet::server::foreman_ssl_cert, $puppet::server::ssl_cert),
+      ssl_key        => pick_default($puppet::server::foreman_ssl_key, $puppet::server::ssl_cert_key),
     }
     contain foreman::puppetmaster
   }
