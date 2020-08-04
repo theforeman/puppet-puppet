@@ -1,6 +1,19 @@
 # Changelog
 
-## [14.0.0](https://github.com/theforeman/puppet-puppet/tree/14.0.0) (2020-05-13)
+## [14.1.0](https://github.com/theforeman/puppet-puppet/tree/14.1.0) (2020-08-05)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/14.0.0...14.1.0)
+
+**Implemented enhancements:**
+
+- Use server\_trusted\_agents in v4 catalog endpoint [\#756](https://github.com/theforeman/puppet-puppet/pull/756) ([alexjfisher](https://github.com/alexjfisher))
+- also allow whitelisted admin clients to clean certs [\#748](https://github.com/theforeman/puppet-puppet/pull/748) ([foxxx0](https://github.com/foxxx0))
+
+**Fixed bugs:**
+
+- Don't re-create existing CA certs [\#747](https://github.com/theforeman/puppet-puppet/pull/747) ([zipkid](https://github.com/zipkid))
+
+## [14.0.0](https://github.com/theforeman/puppet-puppet/tree/14.0.0) (2020-05-14)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/13.0.0...14.0.0)
 

@@ -1,3 +1,76 @@
+## [14.0.0](https://github.com/theforeman/puppet-puppet/tree/14.0.0) (2020-05-14)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/13.0.0...14.0.0)
+
+**Breaking changes:**
+
+- Use modern facts [\#743](https://github.com/theforeman/puppet-puppet/issues/743)
+- Drop EOL Windows 7, 2008 R2 [\#739](https://github.com/theforeman/puppet-puppet/pull/739) ([ekohl](https://github.com/ekohl))
+- Drop Foreman API version parameters [\#736](https://github.com/theforeman/puppet-puppet/pull/736) ([ekohl](https://github.com/ekohl))
+- Refactor PuppetDB integration [\#732](https://github.com/theforeman/puppet-puppet/pull/732) ([ekohl](https://github.com/ekohl))
+
+**Implemented enhancements:**
+
+- Support Ubuntu Focal \(20.04\) [\#746](https://github.com/theforeman/puppet-puppet/pull/746) ([mmoll](https://github.com/mmoll))
+- Fixes [\#29735](https://projects.theforeman.org/issues/29735) - support el8 [\#742](https://github.com/theforeman/puppet-puppet/pull/742) ([wbclark](https://github.com/wbclark))
+- Switch AIO detection to use aio\_agent\_version fact [\#737](https://github.com/theforeman/puppet-puppet/pull/737) ([ekohl](https://github.com/ekohl))
+- Allow extlib 5.x [\#733](https://github.com/theforeman/puppet-puppet/pull/733) ([mmoll](https://github.com/mmoll))
+- Add server\_trusted\_external\_command parameter [\#731](https://github.com/theforeman/puppet-puppet/pull/731) ([baurmatt](https://github.com/baurmatt))
+- Add server\_ca\_client\_self\_delete to CA Servers [\#728](https://github.com/theforeman/puppet-puppet/pull/728) ([neilfromit](https://github.com/neilfromit))
+- implement 'versioned code' for puppetserver [\#726](https://github.com/theforeman/puppet-puppet/pull/726) ([mmoll](https://github.com/mmoll))
+
+**Closed issues:**
+
+- Systemd dependency missing [\#704](https://github.com/theforeman/puppet-puppet/issues/704)
+
+**Merged pull requests:**
+
+- Add Fedora 31, drop Fedora 26 [\#745](https://github.com/theforeman/puppet-puppet/pull/745) ([ekohl](https://github.com/ekohl))
+
+## [13.0.0](https://github.com/theforeman/puppet-puppet/tree/13.0.0) (2020-02-12)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/12.1.0...13.0.0)
+
+**Breaking changes:**
+
+- Update cipher suites [\#721](https://github.com/theforeman/puppet-puppet/pull/721) ([mmoll](https://github.com/mmoll))
+- Drop listen parameter [\#718](https://github.com/theforeman/puppet-puppet/pull/718) ([ekohl](https://github.com/ekohl))
+
+**Implemented enhancements:**
+
+- Add server\_multithreaded parameter [\#720](https://github.com/theforeman/puppet-puppet/pull/720) ([alexjfisher](https://github.com/alexjfisher))
+- Add Debian 10 [\#716](https://github.com/theforeman/puppet-puppet/pull/716) ([mmoll](https://github.com/mmoll))
+
+**Fixed bugs:**
+
+- Restart Puppet Agent service after updating the package [\#712](https://github.com/theforeman/puppet-puppet/pull/712) ([fraenki](https://github.com/fraenki))
+
+**Merged pull requests:**
+
+- Move parameters to advanced [\#719](https://github.com/theforeman/puppet-puppet/pull/719) ([ekohl](https://github.com/ekohl))
+- Stop acceptance tests on EL7 [\#715](https://github.com/theforeman/puppet-puppet/pull/715) ([ekohl](https://github.com/ekohl))
+
+## [12.1.0](https://github.com/theforeman/puppet-puppet/tree/12.1.0) (2019-10-25)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/12.0.1...12.1.0)
+
+**Implemented enhancements:**
+
+- Ensure config file ends with a new line [\#707](https://github.com/theforeman/puppet-puppet/pull/707) ([baurmatt](https://github.com/baurmatt))
+
+**Merged pull requests:**
+
+- Document campotocamp/systemd soft dependency [\#696](https://github.com/theforeman/puppet-puppet/pull/696) ([dogjarek](https://github.com/dogjarek))
+
+## [12.0.1](https://github.com/theforeman/puppet-puppet/tree/12.0.1) (2019-06-13)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/12.0.0...12.0.1)
+
+**Merged pull requests:**
+
+- Allow puppetlabs/concat 6.x and puppet/extlib 4.x [\#700](https://github.com/theforeman/puppet-puppet/pull/700) ([alexjfisher](https://github.com/alexjfisher))
+- Allow `puppetlabs/stdlib` 6.x [\#698](https://github.com/theforeman/puppet-puppet/pull/698) ([alexjfisher](https://github.com/alexjfisher))
+
 ## [12.0.0](https://github.com/theforeman/puppet-puppet/tree/12.0.0) (2019-04-17)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/11.0.1...12.0.0)
