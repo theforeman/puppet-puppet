@@ -72,7 +72,7 @@ authorization: {
             match-request: {
                 path: "/puppet-ca/v1/certificate_status"
                 type: path
-                method: [get, put, delete]
+                method: [get, put]
             }
 <%- if @server_ca_auth_required == false -%>
             allow-unauthenticated: true
@@ -115,17 +115,21 @@ authorization: {
             sort-order: 500
             name: "puppetlabs cert statuses"
         },
-<%- if @server_ca_client_self_delete -%>
         {
-            name: "Allow nodes to delete their own certificates",
+            name: "Allow deletion of certificates and requests",
             match-request: {
                 path: "^/puppet-ca/v1/certificate(_status|_request)?/([^/]+)$"
                 type: regex
                 method: [delete]
             },
+<%- if @server_ca_auth_required == false -%>
+            allow-unauthenticated: true
+<%- else -%>
             allow: [
+<%- if @server_ca_client_self_delete -%>
                 "$2",
-<%- @server_admin_api_whitelist.each do |client| -%>
+<%- end -%>
+<%- @server_ca_client_whitelist.each do |client| -%>
                 "<%= client %>",
 <%- end -%>
                 {
@@ -134,9 +138,9 @@ authorization: {
                     }
                 }
             ]
+<%- end -%>
             sort-order: 500
         },
-<%- end -%>
 <%- end -%>
         {
             # Allow unauthenticated access to the status service endpoint
