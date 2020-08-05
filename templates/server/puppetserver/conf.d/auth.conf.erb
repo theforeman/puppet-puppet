@@ -12,7 +12,7 @@ authorization: {
                 type: regex
                 method: [get, post]
             }
-            allow: <%= @server_trusted_agents << '$1' %>
+            allow: <%= @server_trusted_agents + ['$1'] %>
             sort-order: 500
             name: "puppetlabs v3 catalog from agents"
         },
@@ -24,7 +24,11 @@ authorization: {
                 type: regex
                 method: post
             }
+<%- if @server_trusted_agents.empty? -%>
             deny: "*"
+<%- else -%>
+            allow: <%= @server_trusted_agents %>
+<%- end -%>
             sort-order: 500
             name: "puppetlabs v4 catalog for services"
         },

@@ -463,6 +463,13 @@ describe 'puppet' do
         context 'when server_puppetserver_version >= 6.3' do
           let(:params) { super().merge(server_puppetserver_version: '6.3.0') }
           it { should contain_file(auth_conf).with_content(%r{^(\ *)path: "\^/puppet/v4/catalog/\?\$"$}) }
+          context 'by default' do
+            it { should contain_file(auth_conf).with_content(%r{^(\ *)deny: "\*"\n(\ *)sort-order: 500\n(\ *)name: "puppetlabs v4 catalog for services"}) }
+          end
+          context 'with server_trusted_agents' do
+            let(:params) { super().merge(server_puppetserver_trusted_agents: ['jenkins', 'octocatalog-diff']) }
+            it { should contain_file(auth_conf).with_content(%r{^(\ *)allow: \["jenkins", "octocatalog-diff"\]\n(\ *)sort-order: 500\n(\ *)name: "puppetlabs v4 catalog for services"}) }
+          end
         end
 
         context 'when server_puppetserver_version < 6.3' do
