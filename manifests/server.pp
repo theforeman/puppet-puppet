@@ -285,6 +285,8 @@
 #
 # $puppetserver_trusted_agents::       Certificate names of agents that are allowed to fetch *all* catalogs. Defaults to empty array
 #
+# $puppetserver_trusted_certificate_extensions:: An array of hashes of certificate extensions and values.
+#                                      Example: [{ 'pp_authorization' => 'catalog' }]
 #
 # $ca_allow_sans::                     Allow CA to sign certificate requests that have Subject Alternative Names
 #                                      Defaults to false
@@ -431,6 +433,7 @@ class puppet::server(
   Boolean $puppetserver_experimental = $puppet::server_puppetserver_experimental,
   Optional[String[1]] $puppetserver_auth_template = $puppet::server_puppetserver_auth_template,
   Array[String] $puppetserver_trusted_agents = $puppet::server_puppetserver_trusted_agents,
+  Array[Hash] $puppetserver_trusted_certificate_extensions = $puppet::server_puppetserver_trusted_certificate_extensions,
   Optional[Enum['off', 'jit', 'force']] $compile_mode = $puppet::server_compile_mode,
   Optional[Integer[1]] $selector_threads = $puppet::server_selector_threads,
   Optional[Integer[1]] $acceptor_threads = $puppet::server_acceptor_threads,

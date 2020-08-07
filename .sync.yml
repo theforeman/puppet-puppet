@@ -13,3 +13,6 @@
   beaker_puppet_collections:
     - puppet5
     - puppet6
+Gemfile:
+  extra:
+    - gem: hocon

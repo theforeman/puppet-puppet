@@ -12,7 +12,13 @@ authorization: {
                 type: regex
                 method: [get, post]
             }
-            allow: <%= @server_trusted_agents + ['$1'] %>
+<%= scope.call_function(
+  'to_json_pretty',
+  [
+    {'allow' => @server_trusted_agents + ['$1'] + @server_trusted_certificate_extensions.map { |extension| { 'extensions' => extension } } }
+  ]
+).lines.to_a[1..-2].map{ |line| "          #{line}"}.join
+-%>
             sort-order: 500
             name: "puppetlabs v3 catalog from agents"
         },
@@ -24,10 +30,16 @@ authorization: {
                 type: regex
                 method: post
             }
-<%- if @server_trusted_agents.empty? -%>
+<%- if @server_trusted_agents.empty? && @server_trusted_certificate_extensions.empty? -%>
             deny: "*"
 <%- else -%>
-            allow: <%= @server_trusted_agents %>
+<%= scope.call_function(
+  'to_json_pretty',
+  [
+    {'allow' => @server_trusted_agents + @server_trusted_certificate_extensions.map { |extension| { 'extensions' => extension } } }
+  ]
+).lines.to_a[1..-2].map{ |line| "          #{line}"}.join
+-%>
 <%- end -%>
             sort-order: 500
             name: "puppetlabs v4 catalog for services"

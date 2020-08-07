@@ -122,6 +122,7 @@ class puppet::server::puppetserver (
   $server_experimental                    = $puppet::server::puppetserver_experimental,
   $server_auth_template                   = $puppet::server::puppetserver_auth_template,
   $server_trusted_agents                  = $puppet::server::puppetserver_trusted_agents,
+  $server_trusted_certificate_extensions  = $puppet::server::puppetserver_trusted_certificate_extensions,
   $allow_header_cert_info                 = $puppet::server::allow_header_cert_info,
   $compile_mode                           = $puppet::server::compile_mode,
   $acceptor_threads                       = $puppet::server::acceptor_threads,

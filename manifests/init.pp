@@ -460,6 +460,24 @@
 # $server_puppetserver_trusted_agents::     Certificate names of puppet agents that are allowed to fetch *all* catalogs
 #                                           Defaults to [] and all agents are only allowed to fetch their own catalogs.
 #
+# $server_puppetserver_trusted_certificate_extensions:: An array of hashes of certificate extensions and values to be used in auth.conf
+#                                           A puppet client certificate containing valid extension(s) will be allowed to fetch
+#                                           *any* catalog.
+#                                           Defaults to [] and no certificate extensions are recognised as being allowed
+#                                           to fetch *any* catalog.
+#                                           Example: [{ 'pp_authorization' => 'catalog' }]
+#                                           Any client certificate containing the `pp_authorization` extension with value `catalog`
+#                                           will be permitted to fetch any catalog.
+#                                           Complicated example: [
+#                                             { '1.3.6.1.4.1.34380.1.3.1'  => 'catalog' },
+#                                             { '1.3.6.1.4.1.34380.1.1.13' => 'jenkins_server', '1.3.6.1.4.1.34380.1.1.24' => 'prod' }
+#                                           ]
+#                                           Clients presenting a certificate with `pp_authorization = catalog` *or* with `pp_role`
+#                                           *and* `pp_apptier` extensions set
+#                                           correctly will be authorized to fetch any catalog.
+#                                           NB. If server_ca == false, use oids instead of extension shortnames.
+#                                           See https://tickets.puppetlabs.com/browse/SERVER-1689
+#
 # $server_compile_mode::                    Used to control JRuby's "CompileMode", which may improve performance.
 #                                           Defaults to undef (off).
 #
@@ -694,6 +712,7 @@ class puppet (
   Boolean $server_puppetserver_experimental = $puppet::params::server_puppetserver_experimental,
   Optional[String[1]] $server_puppetserver_auth_template = $puppet::params::server_puppetserver_auth_template,
   Array[String] $server_puppetserver_trusted_agents = $puppet::params::server_puppetserver_trusted_agents,
+  Array[Hash] $server_puppetserver_trusted_certificate_extensions = $puppet::params::server_puppetserver_trusted_certificate_extensions,
   Optional[Enum['off', 'jit', 'force']] $server_compile_mode = $puppet::params::server_compile_mode,
   Optional[Integer[1]] $server_acceptor_threads = undef,
   Optional[Integer[1]] $server_selector_threads = undef,
