@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'hocon'
 
 describe 'puppet' do
   on_supported_os.each do |os, facts|
@@ -276,10 +277,27 @@ describe 'puppet' do
         end
       end
 
-      describe 'server_trusted_agents' do
-        context 'when set' do
+      describe 'puppetlabs v3 catalog from agents rule' do
+        let(:content) { catalogue.resource('file', auth_conf).send(:parameters)[:content] }
+        let(:rules) { Hocon.parse(content)['authorization']['rules'] }
+        let(:rule) { rules.find {|rule| rule['name'] == 'puppetlabs v3 catalog from agents' } }
+
+        context 'when server_trusted_agents set' do
           let(:params) { super().merge(server_puppetserver_trusted_agents: ['jenkins', 'octocatalog-diff']) }
-          it { should contain_file(auth_conf).with_content(/^            allow: \["jenkins", "octocatalog-diff", "\$1"\]$/) }
+
+          it { expect(rule['allow']).to eq(['jenkins', 'octocatalog-diff', '$1']) }
+        end
+
+        context 'with server_trusted_certificate_extensions' do
+          let(:params) { super().merge(server_puppetserver_trusted_certificate_extensions: [{'pp_authorization' => 'catalog'}]) }
+
+          it { expect(rule['allow']).to eq(['$1',{'extensions'=>{'pp_authorization'=>'catalog'}}]) }
+        end
+
+        context 'with server_trusted_agents and server_trusted_certificate_extensions' do
+          let(:params) { super().merge(server_puppetserver_trusted_agents: ['catalog-diff'], server_puppetserver_trusted_certificate_extensions: [{'pp_authorization' => 'catalog'}]) }
+
+          it { expect(rule['allow']).to eq(['catalog-diff','$1',{'extensions'=>{'pp_authorization'=>'catalog'}}]) }
         end
       end
 
@@ -462,13 +480,32 @@ describe 'puppet' do
       describe 'puppetlabs v4 catalog for services' do
         context 'when server_puppetserver_version >= 6.3' do
           let(:params) { super().merge(server_puppetserver_version: '6.3.0') }
+          let(:content) { catalogue.resource('file', auth_conf).send(:parameters)[:content] }
+          let(:rules) { Hocon.parse(content)['authorization']['rules'] }
+          let(:rule) { rules.find {|rule| rule['name'] == 'puppetlabs v4 catalog for services' } }
+
           it { should contain_file(auth_conf).with_content(%r{^(\ *)path: "\^/puppet/v4/catalog/\?\$"$}) }
+
           context 'by default' do
             it { should contain_file(auth_conf).with_content(%r{^(\ *)deny: "\*"\n(\ *)sort-order: 500\n(\ *)name: "puppetlabs v4 catalog for services"}) }
           end
+
           context 'with server_trusted_agents' do
             let(:params) { super().merge(server_puppetserver_trusted_agents: ['jenkins', 'octocatalog-diff']) }
-            it { should contain_file(auth_conf).with_content(%r{^(\ *)allow: \["jenkins", "octocatalog-diff"\]\n(\ *)sort-order: 500\n(\ *)name: "puppetlabs v4 catalog for services"}) }
+
+            it { expect(rule['allow']).to eq(['jenkins', 'octocatalog-diff']) }
+          end
+
+          context 'with server_trusted_certificate_extensions' do
+            let(:params) { super().merge(server_puppetserver_trusted_certificate_extensions: [{'pp_authorization' => 'catalog'}]) }
+
+            it { expect(rule['allow']).to eq([{'extensions'=>{'pp_authorization'=>'catalog'}}]) }
+          end
+
+          context 'with server_trusted_agents and server_trusted_certificate_extensions' do
+            let(:params) { super().merge(server_puppetserver_trusted_agents: ['catalog-diff'], server_puppetserver_trusted_certificate_extensions: [{'pp_authorization' => 'catalog'}]) }
+
+            it { expect(rule['allow']).to eq(['catalog-diff',{'extensions'=>{'pp_authorization'=>'catalog'}}]) }
           end
         end
 

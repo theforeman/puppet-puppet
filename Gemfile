@@ -16,5 +16,6 @@ gem 'voxpupuli-test', '~> 1.4'
 gem 'github_changelog_generator', '>= 1.15.0', {"groups"=>["development"]}
 gem 'puppet-blacksmith', '>= 6.0.0', {"groups"=>["development"]}
 gem 'voxpupuli-acceptance', '~> 0.2', {"groups"=>["system_tests"]}
+gem 'hocon'
 
 # vim:ft=ruby
