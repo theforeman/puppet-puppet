@@ -73,6 +73,17 @@ class puppet::config(
     puppet::config::main { $key: value => $value }
   }
 
+  # Ensure there is a newline at the end of puppet.conf
+  $newline = $facts['os']['family'] ? {
+    'Windows' => "\r\n",
+    default   => "\n",
+  }
+  concat::fragment{'puppet.conf_eof_newline':
+    target  => "${puppet::dir}/puppet.conf",
+    content => $newline,
+    order   => '999_eof_newline',
+  }
+
   file { $puppet_dir:
     ensure => directory,
     owner  => $puppet::dir_owner,
