@@ -20,7 +20,7 @@ describe 'puppet::config::entry' do
           }
         end
         it 'should contain the section header' do
-          should contain_concat__fragment('puppet.conf_main').with_content("\n[main]")
+          should contain_concat__fragment('puppet.conf_main').with_content("\n\n[main]")
           should contain_concat__fragment('puppet.conf_main').with_order("1_main ")
         end
         it 'should contain the keyvalue pair' do
@@ -41,7 +41,7 @@ describe 'puppet::config::entry' do
           }
         end
         it 'should contain the section header' do
-          should contain_concat__fragment('puppet.conf_main').with_content("\n[main]")
+          should contain_concat__fragment('puppet.conf_main').with_content("\n\n[main]")
           should contain_concat__fragment('puppet.conf_main').with_order("1_main ")
         end
         it 'should contain the keyvalue pair' do
@@ -63,7 +63,7 @@ describe 'puppet::config::entry' do
           }
         end
         it 'should contain the section header' do
-          should contain_concat__fragment('puppet.conf_main').with_content("\n[main]")
+          should contain_concat__fragment('puppet.conf_main').with_content("\n\n[main]")
           should contain_concat__fragment('puppet.conf_main').with_order("1_main ")
         end
         it 'should contain the keyvalue pair' do
