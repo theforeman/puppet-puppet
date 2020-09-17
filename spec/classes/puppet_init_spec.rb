@@ -49,6 +49,30 @@ describe 'puppet' do
         it { is_expected.to compile.with_all_deps }
         it { should contain_class('puppet::server') }
         it { should contain_class('puppet::agent::service').that_requires('Class[puppet::server]') }
+
+        context 'with custom server_ssl_dir' do
+          let :params do {
+            :server => true,
+            :server_ssl_dir => '/etc/custom/ssl/dir',
+          } end
+
+          let :puppetserver_directory do
+            case facts[:osfamily]
+            when 'FreeBSD'
+              '/usr/local/etc/puppetserver'
+            else
+              '/etc/puppetlabs/puppetserver'
+            end
+          end
+
+          it {
+            should contain_file("#{puppetserver_directory}/conf.d/webserver.conf")
+              .with_content(/ssl-cert:\s\/etc\/custom\/ssl\/dir/)
+              .with_content(/ssl-key:\s\/etc\/custom\/ssl\/dir/)
+              .with_content(/ssl-crl-path:\s\/etc\/custom\/ssl\/dir/)
+              .with_content(/ssl-cert-chain:\s\/etc\/custom\/ssl\/dir/)
+          }
+        end
       end
 
       describe 'with empty ca_server' do
