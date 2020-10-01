@@ -151,11 +151,6 @@
 # $auth_template::                          Use a custom template for the auth
 #                                           configuration.
 #
-# $use_srv_records::                        Whether DNS SRV records will be used to resolve
-#                                           the Puppet master
-#
-# $srv_domain::                             Search domain for SRV records
-#
 # $pluginsource::                           URL to retrieve Puppet plugins from during pluginsync
 #
 # $pluginfactsource::                       URL to retrieve Puppet facts from during pluginsync
