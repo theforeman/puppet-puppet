@@ -163,14 +163,6 @@
 #
 # $jruby_gem_home::                    Where jruby gems are located for puppetserver
 #
-# $allow_any_crl_auth::                Allow any authentication for the CRL. This
-#                                      is needed on the puppet CA to accept clients
-#                                      from a the puppet CA proxy.
-#
-# $auth_allowed::                      An array of authenticated nodes allowed to
-#                                      access all catalog and node endpoints.
-#                                      default to ['$1']
-#
 # $default_manifest::                  Toggle if default_manifest setting should
 #                                      be added to the [main] section
 #
@@ -238,7 +230,7 @@
 # $ca_client_whitelist::               The whitelist of client certificates that
 #                                      can query the certificate-status endpoint
 #                                      Defaults to [ '127.0.0.1', '::1', $::ipaddress ]
-
+#
 # $custom_trusted_oid_mapping::        A hash of custom trusted oid mappings.
 #                                      Example: { 1.3.6.1.4.1.34380.1.2.1.1 => { shortname => 'myshortname' } }
 #
