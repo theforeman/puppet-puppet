@@ -13,7 +13,7 @@ class puppet::agent::service {
       $cron_enabled = true
       $systemd_enabled = false
     }
-    'systemd.timer', 'systemd': {
+    'systemd.timer': {
       $service_enabled = false
       $cron_enabled = false
       $systemd_enabled = true
