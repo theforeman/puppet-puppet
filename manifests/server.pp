@@ -281,6 +281,8 @@
 #
 # $puppetserver_experimental::         For Puppetserver 5, enable the /puppet/experimental route? Defaults to true
 #
+# $puppetserver_auth_template::        Template for generating /etc/puppetlabs/puppetserver/conf.d/auth.conf 
+#
 # $puppetserver_trusted_agents::       Certificate names of agents that are allowed to fetch *all* catalogs. Defaults to empty array
 #
 #
@@ -427,6 +429,7 @@ class puppet::server(
   Integer $metrics_graphite_interval = $puppet::server_metrics_graphite_interval,
   Variant[Undef, Array] $metrics_allowed = $puppet::server_metrics_allowed,
   Boolean $puppetserver_experimental = $puppet::server_puppetserver_experimental,
+  Optional[String[1]] $puppetserver_auth_template = $puppet::server_puppetserver_auth_template,
   Array[String] $puppetserver_trusted_agents = $puppet::server_puppetserver_trusted_agents,
   Optional[Enum['off', 'jit', 'force']] $compile_mode = $puppet::server_compile_mode,
   Optional[Integer[1]] $selector_threads = $puppet::server_selector_threads,

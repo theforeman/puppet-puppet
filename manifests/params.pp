@@ -435,6 +435,9 @@ class puppet::params {
   # For Puppetserver 5, should the /puppet/experimental route be enabled?
   $server_puppetserver_experimental = true
 
+  # For custom auth.conf settings allow passing in a template
+  $server_puppetserver_auth_template = undef
+
   # Normally agents can only fetch their own catalogs.  If you want some nodes to be able to fetch *any* catalog, add them here.
   $server_puppetserver_trusted_agents = []
 }
