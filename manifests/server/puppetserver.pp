@@ -120,6 +120,7 @@ class puppet::server::puppetserver (
   $metrics_graphite_interval              = $puppet::server::metrics_graphite_interval,
   $metrics_allowed                        = $puppet::server::metrics_allowed,
   $server_experimental                    = $puppet::server::puppetserver_experimental,
+  $server_auth_template                   = $puppet::server::puppetserver_auth_template,
   $server_trusted_agents                  = $puppet::server::puppetserver_trusted_agents,
   $allow_header_cert_info                 = $puppet::server::allow_header_cert_info,
   $compile_mode                           = $puppet::server::compile_mode,
@@ -244,9 +245,10 @@ class puppet::server::puppetserver (
     content => template('puppet/server/puppetserver/conf.d/puppetserver.conf.erb'),
   }
 
+  $auth_template = pick($server_auth_template, 'puppet/server/puppetserver/conf.d/auth.conf.erb')
   file { "${server_puppetserver_dir}/conf.d/auth.conf":
     ensure  => file,
-    content => template('puppet/server/puppetserver/conf.d/auth.conf.erb'),
+    content => template($auth_template),
   }
 
   file { "${server_puppetserver_dir}/conf.d/webserver.conf":

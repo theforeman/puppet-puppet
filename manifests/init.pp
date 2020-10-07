@@ -148,8 +148,7 @@
 #                                           Windows and ['systemd.timer'] on other
 #                                           systems.
 #
-# $auth_template::                          Use a custom template for the auth
-#                                           configuration.
+# $auth_template::                          Use a custom template for /etc/puppetlabs/puppet/auth.conf
 #
 # $pluginsource::                           URL to retrieve Puppet plugins from during pluginsync
 #
@@ -456,6 +455,8 @@
 #
 # $server_puppetserver_experimental::       For Puppetserver 5, enable the /puppet/experimental route? Defaults to true
 #
+# $server_puppetserver_auth_template::      Template for generating /etc/puppetlabs/puppetserver/conf.d/auth.conf 
+#
 # $server_puppetserver_trusted_agents::     Certificate names of puppet agents that are allowed to fetch *all* catalogs
 #                                           Defaults to [] and all agents are only allowed to fetch their own catalogs.
 #
@@ -691,6 +692,7 @@ class puppet (
   Integer $server_metrics_graphite_interval = $puppet::params::server_metrics_graphite_interval,
   Optional[Array] $server_metrics_allowed = $puppet::params::server_metrics_allowed,
   Boolean $server_puppetserver_experimental = $puppet::params::server_puppetserver_experimental,
+  Optional[String[1]] $server_puppetserver_auth_template = $puppet::params::server_puppetserver_auth_template,
   Array[String] $server_puppetserver_trusted_agents = $puppet::params::server_puppetserver_trusted_agents,
   Optional[Enum['off', 'jit', 'force']] $server_compile_mode = $puppet::params::server_compile_mode,
   Optional[Integer[1]] $server_acceptor_threads = undef,
