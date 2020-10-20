@@ -19,7 +19,7 @@ class puppet::server::config inherits puppet::config {
   }
 
   # Mirror the relationship, as defined() is parse-order dependent
-  # Ensures puppetmasters certs are generated before the proxy is needed
+  # Ensures puppetservers certs are generated before the proxy is needed
   if defined(Class['foreman_proxy::config']) and $foreman_proxy::ssl {
     Class['puppet::server::config'] ~> Class['foreman_proxy::config']
     Class['puppet::server::config'] ~> Class['foreman_proxy::service']
@@ -175,7 +175,7 @@ class puppet::server::config inherits puppet::config {
       ],
     }
   } elsif $puppet::server::ca_crl_sync {
-    # If not a ca AND sync the crl from the ca master
+    # If not a ca AND sync the crl from the ca server
     if defined('$::servername') {
       file { $puppet::server::ssl_ca_crl:
         ensure  => file,
@@ -285,7 +285,7 @@ class puppet::server::config inherits puppet::config {
 
   ## Foreman
   if $puppet::server::foreman {
-    # Include foreman components for the puppetmaster
+    # Include foreman components for the puppetserver
     # ENC script, reporting script etc.
     class { 'foreman::puppetmaster':
       foreman_url    => $puppet::server::foreman_url,

@@ -216,7 +216,7 @@ class puppet::params {
   $agent_additional_settings  = {}
   $server_additional_settings = {}
 
-  # Will this host be a puppetmaster?
+  # Will this host be a puppetserver?
   $server                          = false
   $server_ca                       = true
   $server_ca_crl_sync              = false
@@ -229,7 +229,7 @@ class puppet::params {
   $server_http                     = false
   $server_http_port                = 8139
 
-  # Need a new master template for the server?
+  # Need a new server template for the server?
   $server_template      = 'puppet/server/puppet.conf.erb'
   # Template for server settings in [main]
   $server_main_template = 'puppet/server/puppet.conf.main.erb'

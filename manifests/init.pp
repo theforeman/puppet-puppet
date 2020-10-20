@@ -24,7 +24,7 @@
 #                                           Can also install only server packages with value
 #                                           of 'server' or only agent packages with 'agent'.
 #
-# $port::                                   Override the port of the master we connect to.
+# $port::                                   Override the port of the server we connect to.
 #
 # $pluginsync::                             Enable pluginsync.
 #
@@ -99,7 +99,7 @@
 # $syslogfacility::                         Facility name to use when logging to syslog
 #
 # $use_srv_records::                        Whether DNS SRV records will be used to resolve
-#                                           the Puppet master
+#                                           the Puppet server
 #
 # $srv_domain::                             Search domain for SRV records
 #
@@ -164,7 +164,7 @@
 #
 # $agent_noop::                             Run the agent in noop mode.
 #
-# $puppetmaster::                           Hostname of your puppetmaster (server
+# $puppetmaster::                           Hostname of your puppetserver (server
 #                                           directive in puppet.conf)
 #
 # $prerun_command::                         A command which gets excuted before each Puppet run
@@ -179,7 +179,7 @@
 # $client_certname::                        The node's certificate name, and the unique
 #                                           identifier it uses when requesting catalogs.
 #
-# $report::                                 Send reports to the Puppet Master
+# $report::                                 Send reports to the Puppet server
 #
 # == advanced agent parameters
 #
@@ -202,22 +202,22 @@
 #
 # == puppet::server parameters
 #
-# $server::                                 Should a puppet master be installed as well as the client
+# $server::                                 Should a puppet server be installed as well as the client
 #
-# $server_ip::                              Bind ip address of the puppetmaster
+# $server_ip::                              Bind ip address of the puppetserver
 #
-# $server_port::                            Puppet master port
+# $server_port::                            Puppet server port
 #
 # $server_ca::                              Provide puppet CA
 #
-# $server_ca_crl_sync::                     Sync puppet CA crl file to compile masters, Puppet CA Must be the Puppetserver
-#                                           for the compile masters. Defaults to false.
+# $server_ca_crl_sync::                     Sync puppet CA crl file to compilers, Puppet CA Must be the Puppetserver
+#                                           for the compilers. Defaults to false.
 #
 # $server_crl_enable::                      Turn on crl checking. Defaults to true when server_ca is true. Otherwise
 #                                           Defaults to false. Note unless you are using an external CA. It is recommended
-#                                           to set this to true. See $server_ca_crl_sync to enable syncing from CA Puppet Master
+#                                           to set this to true. See $server_ca_crl_sync to enable syncing from CA Puppet server
 #
-# $server_reports::                         List of report types to include on the puppetmaster
+# $server_reports::                         List of report types to include on the puppetserver
 #
 # $server_external_nodes::                  External nodes classifier executable
 #
@@ -259,16 +259,16 @@
 #
 # $server_manage_user::                     Whether to manage the server user resource
 #
-# $server_user::                            Name of the puppetmaster user.
+# $server_user::                            Name of the puppetserver user.
 #
-# $server_group::                           Name of the puppetmaster group.
+# $server_group::                           Name of the puppetserver group.
 #
 # $server_dir::                             Puppet configuration directory
 #
-# $server_http::                            Should the puppet master listen on HTTP as well as HTTPS.
+# $server_http::                            Should the puppet server listen on HTTP as well as HTTPS.
 #                                           Useful for load balancer or reverse proxy scenarios.
 #
-# $server_http_port::                       Puppet master HTTP port; defaults to 8139.
+# $server_http_port::                       Puppet server HTTP port; defaults to 8139.
 #
 # $server_config_version::                  How to determine the configuration version. When
 #                                           using git_repo, by default a git describe
@@ -332,9 +332,9 @@
 # $server_default_manifest_content::        A string to set the content of the default_manifest
 #                                           If set to '' it will not manage the file
 #
-# $server_package::                         Custom package name for puppet master
+# $server_package::                         Custom package name for puppet server
 #
-# $server_version::                         Custom package version for puppet master
+# $server_version::                         Custom package version for puppet server
 #
 # $server_ssl_dir::                         SSL directory
 #
@@ -455,7 +455,7 @@
 #
 # $server_puppetserver_experimental::       For Puppetserver 5, enable the /puppet/experimental route? Defaults to true
 #
-# $server_puppetserver_auth_template::      Template for generating /etc/puppetlabs/puppetserver/conf.d/auth.conf 
+# $server_puppetserver_auth_template::      Template for generating /etc/puppetlabs/puppetserver/conf.d/auth.conf
 #
 # $server_puppetserver_trusted_agents::     Certificate names of puppet agents that are allowed to fetch *all* catalogs
 #                                           Defaults to [] and all agents are only allowed to fetch their own catalogs.
@@ -535,7 +535,7 @@
 #
 #     include puppet
 #
-# * Installing a puppetmaster
+# * Installing a puppetserver
 #
 #   class {'puppet':
 #     server => true,
