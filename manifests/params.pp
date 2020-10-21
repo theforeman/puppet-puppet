@@ -21,6 +21,7 @@ class puppet::params {
   $systemd_cmd         = undef
 
   $agent_noop          = false
+  $resubmit_facts      = false
   $show_diff           = false
   $module_repository   = undef
   $hiera_config        = '$confdir/hiera.yaml'

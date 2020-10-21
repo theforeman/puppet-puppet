@@ -71,6 +71,7 @@ describe 'puppet' do
         it { is_expected.to contain_puppet__config__agent('report').with_value('true') }
         it { is_expected.not_to contain_puppet__config__agent('prerun_command') }
         it { is_expected.not_to contain_puppet__config__agent('postrun_command') }
+        it { is_expected.not_to contain_puppet__config__agent('resubmit_facts') }
 
         if facts[:osfamily] == 'Debian'
           it do
@@ -143,6 +144,14 @@ describe 'puppet' do
         end
 
         it { is_expected.to contain_puppet__config__agent('postrun_command').with_value('/my/postrun') }
+      end
+
+      describe 'set resubmit_facts will be included in config' do
+        let :params do
+          super().merge(resubmit_facts: true)
+        end
+
+        it { is_expected.to contain_puppet__config__agent('resubmit_facts').with_value('true') }
       end
 
       describe 'with additional settings' do

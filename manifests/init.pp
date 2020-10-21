@@ -187,6 +187,8 @@
 #
 # $agent_restart_command::                  The command which gets excuted on puppet service restart
 #
+# $resubmit_facts::                         Rerun the facts at the end of the puppet run.
+#
 # $client_package::                         Install a custom package to provide
 #                                           the puppet client
 #
@@ -455,7 +457,7 @@
 #
 # $server_puppetserver_experimental::       For Puppetserver 5, enable the /puppet/experimental route? Defaults to true
 #
-# $server_puppetserver_auth_template::      Template for generating /etc/puppetlabs/puppetserver/conf.d/auth.conf 
+# $server_puppetserver_auth_template::      Template for generating /etc/puppetlabs/puppetserver/conf.d/auth.conf
 #
 # $server_puppetserver_trusted_agents::     Certificate names of puppet agents that are allowed to fetch *all* catalogs
 #                                           Defaults to [] and all agents are only allowed to fetch their own catalogs.
@@ -600,6 +602,7 @@ class puppet (
   Hash[String, Data] $additional_settings = $puppet::params::additional_settings,
   Hash[String, Data] $agent_additional_settings = $puppet::params::agent_additional_settings,
   Optional[String] $agent_restart_command = $puppet::params::agent_restart_command,
+  Boolean $resubmit_facts = $puppet::params::resubmit_facts,
   String $classfile = $puppet::params::classfile,
   String $hiera_config = $puppet::params::hiera_config,
   String $auth_template = $puppet::params::auth_template,

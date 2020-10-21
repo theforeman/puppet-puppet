@@ -34,6 +34,11 @@ class puppet::agent::config inherits puppet::config {
       'postrun_command': value => $puppet::postrun_command;
     }
   }
+  if $puppet::resubmit_facts {
+    puppet::config::agent { 'resubmit_facts':
+      value => String($puppet::resubmit_facts),
+    }
+  }
 
   unless $puppet::pluginsync {
     if versioncmp($facts['puppetserver'], '6.0.0') >= 0 {
