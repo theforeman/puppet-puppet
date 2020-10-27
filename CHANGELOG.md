@@ -1,5 +1,23 @@
 # Changelog
 
+## [14.2.0](https://github.com/theforeman/puppet-puppet/tree/14.2.0) (2020-10-29)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/14.1.0...14.2.0)
+
+**Implemented enhancements:**
+
+- adds param for user-provided puppetserver auth.conf [\#769](https://github.com/theforeman/puppet-puppet/pull/769) ([chadh](https://github.com/chadh))
+- Add `server\_puppetserver\_trusted\_certificate\_extensions` [\#758](https://github.com/theforeman/puppet-puppet/pull/758) ([alexjfisher](https://github.com/alexjfisher))
+
+**Fixed bugs:**
+
+- Remove `systemd` from puppet::agent::service case [\#768](https://github.com/theforeman/puppet-puppet/pull/768) ([alexjfisher](https://github.com/alexjfisher))
+
+**Merged pull requests:**
+
+- Remove unused parameter docs [\#767](https://github.com/theforeman/puppet-puppet/pull/767) ([alexjfisher](https://github.com/alexjfisher))
+- Remove duplicate docs [\#766](https://github.com/theforeman/puppet-puppet/pull/766) ([alexjfisher](https://github.com/alexjfisher))
+
 ## [14.1.0](https://github.com/theforeman/puppet-puppet/tree/14.1.0) (2020-08-05)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/14.0.0...14.1.0)
