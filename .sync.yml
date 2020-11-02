@@ -1,18 +1,8 @@
 ---
-.travis.yml:
-  beaker_sets:
-    - centos6-64
-    - debian9-64
-    - debian10-64
-    - fedora31-64
-    - ubuntu1804-64
-    - ubuntu2004-64
-  env:
-    global:
-      - PARALLEL_TEST_PROCESSORS=8
-  beaker_puppet_collections:
-    - puppet5
-    - puppet6
+.github/workflows/acceptance.yml:
+  pidfile_workaround: true
+.github/workflows/cron.yml:
+  pidfile_workaround: true
 Gemfile:
   extra:
     - gem: hocon
