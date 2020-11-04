@@ -1,5 +1,6 @@
 $packages = $facts['os']['name'] ? {
-  'Fedora' => ['cronie'],
+  # iproute is needed for the ss command in testing and not included in the base container
+  'Fedora' => ['cronie', 'iproute'],
   'Ubuntu' => ['cron'],
   default  => [],
 }

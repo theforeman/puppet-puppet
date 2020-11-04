@@ -43,9 +43,9 @@ jobs:
           - "6"
           - "5"
         exclude:
-          - setfile: debian10-64{hostname=debian10-64.example.com}
+          - setfile: "debian10-64{hostname=debian10-64.example.com}"
             puppet: "5"
-          - setfile: ubuntu2004-64{hostname=ubuntu2004-64.example.com}
+          - setfile: "ubuntu2004-64{hostname=ubuntu2004-64.example.com}"
             puppet: "5"
     name: Puppet ${{ matrix.puppet }} - ${{ matrix.setfile }}
     steps:
