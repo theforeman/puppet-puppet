@@ -1,5 +1,13 @@
 # Changelog
 
+## [14.2.1](https://github.com/theforeman/puppet-puppet/tree/14.2.1) (2021-01-26)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/14.2.0...14.2.1)
+
+**Fixed bugs:**
+
+- run Puppet agent from systemd only after network is brought up [\#765](https://github.com/theforeman/puppet-puppet/pull/765) ([anarcat](https://github.com/anarcat))
+
 ## [14.2.0](https://github.com/theforeman/puppet-puppet/tree/14.2.0) (2020-10-29)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/14.1.0...14.2.0)
