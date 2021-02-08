@@ -190,6 +190,7 @@ class puppet::params {
   }
 
   $package_source = undef
+  $package_install_options = undef
 
   # Need your own config templates? Specify here:
   $auth_template   = 'puppet/auth.conf.erb'

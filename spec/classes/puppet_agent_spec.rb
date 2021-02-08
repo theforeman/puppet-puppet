@@ -61,6 +61,7 @@ describe 'puppet' do
             .with_ensure('present')
             .with_provider(package_provider)
             .with_source(nil)
+            .with_install_options(nil)
         end
 
         # config
