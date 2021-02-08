@@ -30,7 +30,8 @@ class puppet::server::install {
     $server_version = pick($puppet::server::version, $puppet::version)
 
     package { $server_package:
-      ensure => $server_version,
+      ensure          => $server_version,
+      install_options => $puppet::package_install_options,
     }
 
     if $puppet::server::manage_user {

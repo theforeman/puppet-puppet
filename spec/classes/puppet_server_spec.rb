@@ -66,7 +66,7 @@ describe 'puppet' do
         # install
         it { should contain_class('puppet::server::install') }
         it { should contain_user('puppet') }
-        it { should contain_package(puppetserver_pkg) }
+        it { should contain_package(puppetserver_pkg).with_install_options(nil) }
 
         # config
         it { should contain_class('puppet::server::config') }
