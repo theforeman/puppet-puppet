@@ -35,7 +35,9 @@ describe 'Scenario: install puppetserver (latest):', unless: unsupported_puppets
         }
 
         # Puppet 5 + puppet/systemd 3 workaround
-        if $puppet::server_max_open_files and versioncmp($facts['puppetversion'], '6.1') < 0 {
+        # Also a possible systemd bug on Ubuntu 20.04
+        # https://github.com/theforeman/puppet-puppet/pull/779#issuecomment-886847275
+        if $puppet::server_max_open_files and (versioncmp($facts['puppetversion'], '6.1') < 0 or $facts['os']['name'] == 'Ubuntu' and $facts['os']['release']['major'] == '20.04') {
           exec { 'puppetserver-systemctl-daemon-reload':
             command     => 'systemctl daemon-reload',
             refreshonly => true,
