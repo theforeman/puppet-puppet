@@ -65,6 +65,13 @@ describe 'puppet' do
               .with_incl('/etc/default/puppetserver')
               .with_lens('Shellvars.lns')
           }
+          it do
+            should contain_augeas('puppet::server::puppetserver::jruby_jar')
+              .with_changes(['rm JRUBY_JAR'])
+              .with_context('/files/etc/default/puppetserver')
+              .with_incl('/etc/default/puppetserver')
+              .with_lens('Shellvars.lns')
+          end
         end
         it { should contain_file('/etc/custom/puppetserver/conf.d/ca.conf')
                       .with_ensure('file')
@@ -323,30 +330,6 @@ describe 'puppet' do
           let(:params) { super().merge(server_ca_client_self_delete: true)}
           it { should contain_file(auth_conf)
             .with_content(%r{^(\ *)name: "Allow nodes to delete their own certificates",$}) }
-        end
-      end
-
-      describe 'server_jruby9k', unless: facts[:osfamily] == 'FreeBSD' do
-        context 'when server_jruby9k => true' do
-          let(:params) { super().merge(server_puppetserver_jruby9k: true) }
-          it do
-            should contain_augeas('puppet::server::puppetserver::jruby_jar')
-              .with_changes(['set JRUBY_JAR \'"/opt/puppetlabs/server/apps/puppetserver/jruby-9k.jar"\''])
-              .with_context('/files/etc/default/puppetserver')
-              .with_incl('/etc/default/puppetserver')
-              .with_lens('Shellvars.lns')
-          end
-        end
-
-        context 'when server_jruby9k => false' do
-          let(:params) { super().merge(server_puppetserver_jruby9k: false) }
-          it do
-            should contain_augeas('puppet::server::puppetserver::jruby_jar')
-              .with_changes(['rm JRUBY_JAR'])
-              .with_context('/files/etc/default/puppetserver')
-              .with_incl('/etc/default/puppetserver')
-              .with_lens('Shellvars.lns')
-          end
         end
       end
 

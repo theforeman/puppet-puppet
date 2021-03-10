@@ -253,8 +253,6 @@
 # $allow_header_cert_info::            Allow client authentication over HTTP Headers
 #                                      Defaults to false, is also activated by the $http setting
 #
-# $puppetserver_jruby9k::              For Puppetserver 5, use JRuby 9k? Defaults to false
-#
 # $puppetserver_metrics::              Enable puppetserver http-client metrics
 #                                      Defaults to false because that's the Puppet Inc. default behaviour.
 #
@@ -419,7 +417,6 @@ class puppet::server(
   Boolean $check_for_updates = $puppet::server_check_for_updates,
   Boolean $environment_class_cache_enabled = $puppet::server_environment_class_cache_enabled,
   Boolean $allow_header_cert_info = $puppet::server_allow_header_cert_info,
-  Boolean $puppetserver_jruby9k = $puppet::server_puppetserver_jruby9k,
   Optional[Boolean] $puppetserver_metrics = $puppet::server_puppetserver_metrics,
   Boolean $puppetserver_profiler = $puppet::server_puppetserver_profiler,
   Boolean $metrics_jmx_enable = $puppet::server_metrics_jmx_enable,

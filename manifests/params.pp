@@ -410,9 +410,6 @@ class puppet::params {
   # Puppetserver 5.x Which auth.conf shall we use?
   $server_use_legacy_auth_conf      = false
 
-  # For Puppetserver 5, use JRuby 9k?
-  $server_puppetserver_jruby9k      = false
-
   # Puppetserver metrics shipping
   $server_metrics_jmx_enable        = true
   $server_metrics_graphite_enable   = false

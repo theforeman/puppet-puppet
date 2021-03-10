@@ -110,7 +110,6 @@ class puppet::server::puppetserver (
   $server_use_legacy_auth_conf            = $puppet::server::use_legacy_auth_conf,
   $server_check_for_updates               = $puppet::server::check_for_updates,
   $server_environment_class_cache_enabled = $puppet::server::environment_class_cache_enabled,
-  $server_jruby9k                         = $puppet::server::puppetserver_jruby9k,
   $server_metrics                         = $puppet::server::puppetserver_metrics,
   $server_profiler                        = $puppet::server::puppetserver_profiler,
   $metrics_jmx_enable                     = $puppet::server::metrics_jmx_enable,
@@ -186,16 +185,11 @@ class puppet::server::puppetserver (
       changes => "set BOOTSTRAP_CONFIG '\"${bootstrap_paths}\"'",
     }
 
-    $jruby_jar_changes = $server_jruby9k ? {
-      true    => "set JRUBY_JAR '\"/opt/puppetlabs/server/apps/puppetserver/jruby-9k.jar\"'",
-      default => 'rm JRUBY_JAR'
-    }
-
     augeas { 'puppet::server::puppetserver::jruby_jar':
       lens    => 'Shellvars.lns',
       incl    => $config,
       context => "/files${config}",
-      changes => $jruby_jar_changes,
+      changes => 'rm JRUBY_JAR',
     }
 
     $ensure_max_open_files = $max_open_files ? {
