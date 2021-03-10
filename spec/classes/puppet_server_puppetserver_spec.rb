@@ -126,13 +126,30 @@ describe 'puppet' do
       end
 
       describe 'use-legacy-auth-conf' do
-        context 'with default parameters' do
-          it { should contain_file(puppetserver_conf).with_content(/^    use-legacy-auth-conf: false$/) }
+        context 'when server_puppetserver_version >= 5.3.6 and < 7.0.0' do
+          context 'with default parameters' do
+            it { should contain_file(puppetserver_conf).with_content(/^    use-legacy-auth-conf: false$/) }
+          end
+
+          context 'when use-legacy-auth-conf = true' do
+            let(:params) { super().merge(server_use_legacy_auth_conf: true) }
+
+            it { should contain_file(puppetserver_conf).with_content(/^    use-legacy-auth-conf: true$/) }
+          end
         end
 
-        context 'when use-legacy-auth-conf = true' do
-          let(:params) { super().merge(server_use_legacy_auth_conf: true) }
-          it { should contain_file(puppetserver_conf).with_content(/^    use-legacy-auth-conf: true$/) }
+        context 'when server_puppetserver_version == 7.0.0' do
+          let(:params) { super().merge(server_puppetserver_version: '7.0.0') }
+
+          context 'with default parameters' do
+            it { should contain_file(puppetserver_conf).without_content(/use-legacy-auth-conf/) }
+          end
+
+          context 'when use-legacy-auth-conf = true' do
+            let(:params) { super().merge(server_use_legacy_auth_conf: true) }
+
+            it { should compile.and_raise_error(/jruby-puppet.use-legacy-auth-conf setting is removed/) }
+          end
         end
       end
 

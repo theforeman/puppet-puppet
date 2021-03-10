@@ -246,6 +246,7 @@
 #
 # $use_legacy_auth_conf::              Should the puppetserver use the legacy puppet auth.conf?
 #                                      Defaults to false (the puppetserver will use its own conf.d/auth.conf)
+#                                      Note that Puppetserver 7 has dropped support for this.
 #
 # $check_for_updates::                 Should the puppetserver phone home to check for available updates?
 #
@@ -479,10 +480,18 @@ class puppet::server(
   # assume a particular version here.
   if $puppetserver_version {
     $real_puppetserver_version = $puppetserver_version
-  } elsif versioncmp($::puppetversion, '6.0.0') >= 0 {
+  } elsif versioncmp($facts['puppetversion'], '7.0.0') >= 0 {
+    $real_puppetserver_version = '7.0.0'
+  } elsif versioncmp($facts['puppetversion'], '6.0.0') >= 0 {
     $real_puppetserver_version = '6.0.0'
-  } else  {
+  } else {
     $real_puppetserver_version = '5.3.6'
+  }
+
+  if versioncmp($real_puppetserver_version, '7.0.0') >= 0 {
+    if $use_legacy_auth_conf {
+      fail('The jruby-puppet.use-legacy-auth-conf setting is removed in Puppetserver 7')
+    }
   }
 
   if $jvm_extra_args {

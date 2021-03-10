@@ -62,12 +62,14 @@ jruby-puppet: {
 
     # (optional) Sets the upper limit for the random sleep set as a Retry-After header on 503 responses returned when max-queued-requests is enabled.
     max-retry-delay: <%= @server_max_retry_delay %>
+<%- if scope.function_versioncmp([@server_puppetserver_version, '7.0']) < 0 -%>
 
     # (optional) Authorize access to Puppet master endpoints via rules
     # specified in the legacy Puppet auth.conf file (if true) or via rules
     # specified in the Puppet Server HOCON-formatted auth.conf (if false or not
     # specified).
     use-legacy-auth-conf: <%= @server_use_legacy_auth_conf %>
+<%- end -%>
 
     # (optional) enable or disable environment class cache
     environment-class-cache-enabled: <%= @server_environment_class_cache_enabled %>
