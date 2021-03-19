@@ -30,7 +30,7 @@ define puppet::config::entry (
   # they make sure that '1_main ' is ordered before '1_main_*'
   ensure_resource('concat::fragment', "puppet.conf_${section}", {
       target  => "${puppet::dir}/puppet.conf",
-      content => "\n[${section}]",
+      content => "\n\n[${section}]",
       order   => "${sectionorder}_${section} ",
   })
 
@@ -39,7 +39,7 @@ define puppet::config::entry (
   if (!defined(Concat::Fragment["puppet.conf_${section}_${key}"])){
     concat::fragment{"puppet.conf_${section}_${key}":
       target  => "${puppet::dir}/puppet.conf",
-      content => "    ${key} = ${_value}",
+      content => "\n    ${key} = ${_value}",
       order   => "${sectionorder}_${section}_${key} ",
     }
   } else {
