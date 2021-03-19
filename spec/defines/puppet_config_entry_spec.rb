@@ -20,8 +20,12 @@ describe 'puppet::config::entry' do
           }
         end
         it 'should contain the section header' do
-          should contain_concat__fragment('puppet.conf_main').with_content("\n\n[main]")
+          should contain_concat__fragment('puppet.conf_main').with_content("\n[main]")
           should contain_concat__fragment('puppet.conf_main').with_order("1_main ")
+        end
+        it 'should contain the section end' do
+          should contain_concat__fragment('puppet.conf_main_end').with_content("\n")
+          should contain_concat__fragment('puppet.conf_main_end').with_order("1_main~end")
         end
         it 'should contain the keyvalue pair' do
           should contain_concat__fragment('puppet.conf_main_foo').with_content(/^\s+foo = bar$/)
@@ -41,8 +45,12 @@ describe 'puppet::config::entry' do
           }
         end
         it 'should contain the section header' do
-          should contain_concat__fragment('puppet.conf_main').with_content("\n\n[main]")
+          should contain_concat__fragment('puppet.conf_main').with_content("\n[main]")
           should contain_concat__fragment('puppet.conf_main').with_order("1_main ")
+        end
+        it 'should contain the section end' do
+          should contain_concat__fragment('puppet.conf_main_end').with_content("\n")
+          should contain_concat__fragment('puppet.conf_main_end').with_order("1_main~end")
         end
         it 'should contain the keyvalue pair' do
           should contain_concat__fragment('puppet.conf_main_foo').with_content(/^\s+foo = bar,baz$/)
@@ -63,8 +71,12 @@ describe 'puppet::config::entry' do
           }
         end
         it 'should contain the section header' do
-          should contain_concat__fragment('puppet.conf_main').with_content("\n\n[main]")
+          should contain_concat__fragment('puppet.conf_main').with_content("\n[main]")
           should contain_concat__fragment('puppet.conf_main').with_order("1_main ")
+        end
+        it 'should contain the section end' do
+          should contain_concat__fragment('puppet.conf_main_end').with_content("\n")
+          should contain_concat__fragment('puppet.conf_main_end').with_order("1_main~end")
         end
         it 'should contain the keyvalue pair' do
           should contain_concat__fragment('puppet.conf_main_foo').with_content(/^\s+foo = bar:baz$/)

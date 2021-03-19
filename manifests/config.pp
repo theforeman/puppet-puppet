@@ -73,6 +73,12 @@ class puppet::config(
     puppet::config::main { $key: value => $value }
   }
 
+  concat::fragment { 'puppet.conf_comment':
+    target  => "${puppet_dir}/puppet.conf",
+    content => '# file managed by puppet',
+    order   => '0_comment',
+  }
+
   file { $puppet_dir:
     ensure => directory,
     owner  => $puppet::dir_owner,
