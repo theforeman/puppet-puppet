@@ -261,7 +261,7 @@ describe 'puppet' do
               .with_content(/^    # Whether to enable http-client metrics; defaults to 'true'.\n    metrics-enabled: false$/)
               .with_content(/^profiler: \{\n    # enable or disable profiling for the Ruby code;\n    enabled: false/)
           }
-          it { should contain_file('/etc/custom/puppetserver/conf.d/metrics.conf').with_ensure('absent') }
+          it { should contain_file('/etc/custom/puppetserver/conf.d/metrics.conf').with_ensure('file') }
         end
       end
 

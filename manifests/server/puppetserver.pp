@@ -262,13 +262,8 @@ class puppet::server::puppetserver (
     content => template('puppet/server/puppetserver/conf.d/product.conf.erb'),
   }
 
-  $metrics_conf_ensure = $server_metrics ? {
-    true    => file,
-    default => absent
-  }
-
   file { "${server_puppetserver_dir}/conf.d/metrics.conf":
-    ensure  => $metrics_conf_ensure,
+    ensure  => 'file',
     content => template('puppet/server/puppetserver/conf.d/metrics.conf.erb'),
   }
 }
