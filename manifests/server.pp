@@ -258,11 +258,11 @@
 #
 # $puppetserver_jruby9k::              For Puppetserver 5, use JRuby 9k? Defaults to false
 #
-# $puppetserver_metrics::              Enable metrics (Puppetserver 5.x only) and JRuby profiling?
-#                                      Defaults to true on Puppetserver 5.x and to false on Puppetserver 2.x
+# $puppetserver_metrics::              Enable puppetserver http-client metrics
+#                                      Defaults to false because that's the Puppet Inc. default behaviour.
 #
 # $puppetserver_profiler::             Enable JRuby profiling.
-#                                      Defaults to false because that's the Puppet Inc. default behaviour.#
+#                                      Defaults to false because that's the Puppet Inc. default behaviour.
 #
 # $metrics_jmx_enable::                Enable or disable JMX metrics reporter. Defaults to true
 #
@@ -484,9 +484,6 @@ class puppet::server(
   } else  {
     $real_puppetserver_version = '5.3.6'
   }
-
-  # Prefer the user setting,otherwise disable for Puppetserver 2.x, enabled for 5.x
-  $real_puppetserver_metrics = pick($puppetserver_metrics, true)
 
   if $jvm_extra_args {
     $real_jvm_extra_args = $jvm_extra_args
