@@ -112,6 +112,7 @@ class puppet::server::puppetserver (
   $server_environment_class_cache_enabled = $puppet::server::environment_class_cache_enabled,
   $server_jruby9k                         = $puppet::server::puppetserver_jruby9k,
   $server_metrics                         = $puppet::server::real_puppetserver_metrics,
+  $server_profiler                        = $puppet::server::puppetserver_profiler,
   $metrics_jmx_enable                     = $puppet::server::metrics_jmx_enable,
   $metrics_graphite_enable                = $puppet::server::metrics_graphite_enable,
   $metrics_graphite_host                  = $puppet::server::metrics_graphite_host,
