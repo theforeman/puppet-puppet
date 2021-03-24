@@ -261,6 +261,8 @@
 # $puppetserver_metrics::              Enable metrics (Puppetserver 5.x only) and JRuby profiling?
 #                                      Defaults to true on Puppetserver 5.x and to false on Puppetserver 2.x
 #
+# $puppetserver_profiler::             Enable JRuby profiling.
+#                                      Defaults to false because that's the Puppet Inc. default behaviour.#
 #
 # $metrics_jmx_enable::                Enable or disable JMX metrics reporter. Defaults to true
 #
@@ -423,6 +425,7 @@ class puppet::server(
   Boolean $allow_header_cert_info = $puppet::server_allow_header_cert_info,
   Boolean $puppetserver_jruby9k = $puppet::server_puppetserver_jruby9k,
   Optional[Boolean] $puppetserver_metrics = $puppet::server_puppetserver_metrics,
+  Boolean $puppetserver_profiler = $puppet::server_puppetserver_profiler,
   Boolean $metrics_jmx_enable = $puppet::server_metrics_jmx_enable,
   Boolean $metrics_graphite_enable = $puppet::server_metrics_graphite_enable,
   String $metrics_graphite_host = $puppet::server_metrics_graphite_host,

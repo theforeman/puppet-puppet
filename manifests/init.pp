@@ -437,8 +437,11 @@
 #
 # $server_puppetserver_jruby9k::            For Puppetserver 5, use JRuby 9k? Defaults to false
 #
-# $server_puppetserver_metrics::            Enable metrics (Puppetserver 5.x only) and JRuby profiling?
+# $server_puppetserver_metrics::            Enable metrics (Puppetserver 5.x only)
 #                                           Defaults to true on Puppetserver 5.x and to false on Puppetserver 2.x
+#
+# $server_puppetserver_profiler::           Enable JRuby profiling.
+#                                           Defaults to false because that's the Puppet Inc. default behaviour.
 #
 # $server_metrics_jmx_enable::              Enable or disable JMX metrics reporter. Defaults to true
 #
@@ -707,6 +710,7 @@ class puppet (
   Integer[0] $server_web_idle_timeout = $puppet::params::server_web_idle_timeout,
   Boolean $server_puppetserver_jruby9k = $puppet::params::server_puppetserver_jruby9k,
   Optional[Boolean] $server_puppetserver_metrics = $puppet::params::server_puppetserver_metrics,
+  Boolean $server_puppetserver_profiler = false,
   Boolean $server_metrics_jmx_enable = $puppet::params::server_metrics_jmx_enable,
   Boolean $server_metrics_graphite_enable = $puppet::params::server_metrics_graphite_enable,
   String $server_metrics_graphite_host = $puppet::params::server_metrics_graphite_host,
