@@ -734,6 +734,8 @@ class puppet (
   Optional[Integer[1]] $server_max_open_files = $puppet::params::server_max_open_files,
   Optional[Stdlib::Absolutepath] $server_versioned_code_id = undef,
   Optional[Stdlib::Absolutepath] $server_versioned_code_content = undef,
+  Boolean $generate_ca_cert = $puppet::params::generate_ca_cert,
+
 ) inherits puppet::params {
   contain puppet::config
 

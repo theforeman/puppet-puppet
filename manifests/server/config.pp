@@ -164,15 +164,16 @@ class puppet::server::config inherits puppet::config {
       $creates = $puppet::server::ssl_cert
       $command = "${puppet::puppet_cmd} cert --generate ${puppet::server::certname} --allow-dns-alt-names"
     }
-
-    exec {'puppet_server_config-generate_ca_cert':
-      creates => $creates,
-      command => $command,
-      umask   => '0022',
-      require => [
-        Concat["${puppet::server::dir}/puppet.conf"],
-        Exec['puppet_server_config-create_ssl_dir'],
-      ],
+    if $puppet::generate_ca_cert {
+      exec {'puppet_server_config-generate_ca_cert':
+        creates => $creates,
+        command => $command,
+        umask   => '0022',
+        require => [
+          Concat["${puppet::server::dir}/puppet.conf"],
+          Exec['puppet_server_config-create_ssl_dir'],
+        ],
+      }
     }
   } elsif $puppet::server::ca_crl_sync {
     # If not a ca AND sync the crl from the ca master

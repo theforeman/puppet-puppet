@@ -34,6 +34,7 @@ class puppet::params {
   $server_compile_mode = undef
   $dns_alt_names       = []
   $use_srv_records     = false
+  $generate_ca_cert    = true
 
   if defined('$::domain') {
     $srv_domain = $facts['networking']['domain']
