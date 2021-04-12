@@ -157,14 +157,15 @@ class puppet::server::config inherits puppet::config {
 
   # Generate a new CA and host cert if our host cert doesn't exist
   if $puppet::server::ca {
-    if versioncmp($::puppetversion, '6.0') > 0 {
-      $creates = $puppet::server::ssl_ca_cert
-      $command = "${puppet::puppetserver_cmd} ca setup"
-    } else {
-      $creates = $puppet::server::ssl_cert
-      $command = "${puppet::puppet_cmd} cert --generate ${puppet::server::certname} --allow-dns-alt-names"
-    }
     if $puppet::generate_ca_cert {
+      if versioncmp($::puppetversion, '6.0') > 0 {
+        $creates = $puppet::server::ssl_ca_cert
+        $command = "${puppet::puppetserver_cmd} ca setup"
+      } else {
+        $creates = $puppet::server::ssl_cert
+        $command = "${puppet::puppet_cmd} cert --generate ${puppet::server::certname} --allow-dns-alt-names"
+      }
+
       exec {'puppet_server_config-generate_ca_cert':
         creates => $creates,
         command => $command,
