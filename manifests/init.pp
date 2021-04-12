@@ -536,7 +536,7 @@
 #                                           invokes when on static_file_content requests.
 #                                           Defaults to undef
 #
-# $generate_ca_cert::                       Defaults to true. When true, the a ca cert is generated.
+# $generate_ca_cert::                       Whether to generate CA certificate. Defaults to true. When true, the a ca cert is generated.
 #
 # === Usage:
 #
