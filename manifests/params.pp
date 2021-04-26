@@ -303,17 +303,11 @@ class puppet::params {
       $unavailable_runmodes = []
     }
     'Redhat' : {
-      # PSBM is a CentOS 6 based distribution
-      # it reports its $osreleasemajor as 2, not 6.
-      # thats why we're matching for '2' in both parts
-      # Amazon Linux is like RHEL6 but reports its osreleasemajor as 2017 or 2018.
       $agent_restart_command = $facts['os']['release']['major'] ? {
-        /^(2|5|6|2017|2018)$/ => "/sbin/service ${service_name} reload",
         '7'       => "/usr/bin/systemctl reload-or-restart ${service_name}",
         default   => undef,
       }
       $unavailable_runmodes = $facts['os']['release']['major'] ? {
-        /^(2|5|6|2017|2018)$/ => ['systemd.timer'],
         default   => [],
       }
     }
