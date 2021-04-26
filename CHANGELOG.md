@@ -1,5 +1,22 @@
 # Changelog
 
+## [15.0.0](https://github.com/theforeman/puppet-puppet/tree/15.0.0) (2021-04-26)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/14.2.1...15.0.0)
+
+**Breaking changes:**
+
+- \(\#780\) puppetserver: don't purge metrics.conf / Use dedicated parameter for jruby profiler  [\#781](https://github.com/theforeman/puppet-puppet/pull/781) ([bastelfreak](https://github.com/bastelfreak))
+- Move to puppetserver\_foreman [\#749](https://github.com/theforeman/puppet-puppet/pull/749) ([ekohl](https://github.com/ekohl))
+
+**Implemented enhancements:**
+
+- Add `puppet::package_install_options` variable to allow you to pass flags to package resource [\#777](https://github.com/theforeman/puppet-puppet/pull/777) ([vollmerk](https://github.com/vollmerk))
+
+**Fixed bugs:**
+
+- Fix config append [\#782](https://github.com/theforeman/puppet-puppet/pull/782) ([SimonPe](https://github.com/SimonPe))
+
 ## [14.2.1](https://github.com/theforeman/puppet-puppet/tree/14.2.1) (2021-01-26)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/14.2.0...14.2.1)
