@@ -304,7 +304,7 @@ class puppet::params {
     }
     'Redhat' : {
       $agent_restart_command = $facts['os']['release']['major'] ? {
-        '7'       => "/usr/bin/systemctl reload-or-restart ${service_name}",
+        /^(7|8)$/ => "/usr/bin/systemctl reload-or-restart ${service_name}",
         default   => undef,
       }
       $unavailable_runmodes = $facts['os']['release']['major'] ? {
