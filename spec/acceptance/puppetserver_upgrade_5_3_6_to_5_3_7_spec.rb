@@ -23,23 +23,16 @@ describe 'Scenario: 5.3.6 to 5.3.7 upgrade:', if: ENV['BEAKER_PUPPET_COLLECTION'
   end
 
   context 'install 5.3.6' do
-    let(:pp) do
-      <<-EOS
-      class { '::puppet':
-        server                => true,
-        server_foreman        => false,
-        server_reports        => 'store',
-        server_external_nodes => '',
-        server_version        => '#{from_version}',
-        # only for install test - don't think to use this in production!
-        # https://docs.puppet.com/puppetserver/latest/tuning_guide.html
-        server_jvm_max_heap_size => '256m',
-        server_jvm_min_heap_size => '256m',
-      }
-      EOS
+    it_behaves_like 'an idempotent resource' do
+      let(:manifest) do
+        <<-EOS
+        class { 'puppet':
+          server         => true,
+          server_version => '#{from_version}',
+        }
+        EOS
+      end
     end
-
-    it_behaves_like 'a idempotent resource'
 
     describe command('puppetserver --version') do
       its(:stdout) { is_expected.to match("puppetserver version: 5.3.6\n") }
@@ -56,23 +49,16 @@ describe 'Scenario: 5.3.6 to 5.3.7 upgrade:', if: ENV['BEAKER_PUPPET_COLLECTION'
   end
 
   context 'upgrade to 5.3.7' do
-    let(:pp) do
-      <<-EOS
-      class { '::puppet':
-        server                => true,
-        server_foreman        => false,
-        server_reports        => 'store',
-        server_external_nodes => '',
-        server_version        => '#{to_version}',
-        # only for install test - don't think to use this in production!
-        # https://docs.puppet.com/puppetserver/latest/tuning_guide.html
-        server_jvm_max_heap_size => '256m',
-        server_jvm_min_heap_size => '256m',
-      }
-      EOS
+    it_behaves_like 'an idempotent resource' do
+      let(:manifest) do
+        <<-EOS
+        class { 'puppet':
+          server         => true,
+          server_version => '#{to_version}',
+        }
+        EOS
+      end
     end
-
-    it_behaves_like 'a idempotent resource'
 
     describe command('puppetserver --version') do
       its(:stdout) { is_expected.to match("puppetserver version: 5.3.7\n") }

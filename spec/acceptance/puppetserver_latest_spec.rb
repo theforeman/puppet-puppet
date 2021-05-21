@@ -13,20 +13,13 @@ describe 'Scenario: install puppetserver (latest):', unless: unsupported_puppets
     raise 'At least 2048MB free memory required' if memoryfree_mb < 256
   end
 
-  let(:pp) do
-    <<-EOS
-    class { '::puppet':
-      server                => true,
-      server_foreman        => false,
-      server_reports        => 'store',
-      server_external_nodes => '',
-      # only for install test - don't think to use this in production!
-      # https://docs.puppet.com/puppetserver/latest/tuning_guide.html
-      server_jvm_max_heap_size => '256m',
-      server_jvm_min_heap_size => '256m',
-    }
-    EOS
+  it_behaves_like 'an idempotent resource' do
+    let(:manifest) do
+      <<-EOS
+      class { 'puppet':
+        server => true,
+      }
+      EOS
+    end
   end
-
-  it_behaves_like 'a idempotent resource'
 end
