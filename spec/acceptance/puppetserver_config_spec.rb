@@ -14,23 +14,16 @@ describe 'Puppetserver config options', unless: unsupported_puppetserver do
   end
 
   describe 'server_max_open_files' do
-    let(:pp) do
-      <<-MANIFEST
-      class { '::puppet':
-        server                   => true,
-        server_foreman           => false,
-        server_reports           => 'store',
-        server_external_nodes    => '',
-        # only for install test - don't think to use this in production!
-        # https://docs.puppet.com/puppetserver/latest/tuning_guide.html
-        server_jvm_max_heap_size => '256m',
-        server_jvm_min_heap_size => '256m',
-        server_max_open_files    => 32143,
-      }
-      MANIFEST
+    it_behaves_like 'an idempotent resource' do
+      let(:manifest) do
+        <<-MANIFEST
+        class { 'puppet':
+          server                => true,
+          server_max_open_files => 32143,
+        }
+        MANIFEST
+      end
     end
-
-    it_behaves_like 'a idempotent resource'
 
     # pgrep -f java.*puppetserver would be better. But i cannot get it to work. Shellwords.escape() seems to break something
     describe command("grep '^Max open files' /proc/`cat /var/run/puppetlabs/puppetserver/puppetserver.pid`/limits"), :sudo => true do
