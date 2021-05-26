@@ -107,14 +107,8 @@ describe 'puppet' do
         case os
         when /\Adebian-/, /\A(redhat|centos|scientific)-(7|8)/, /\Afedora-/, /\Aubuntu-/, /\Aarchlinux-/
           it do
-            is_expected.to contain_exec('systemctl-daemon-reload-puppet')
-              .with_refreshonly(true)
-              .with_command('systemctl daemon-reload')
-          end
-
-          it do
             is_expected.to contain_service('puppet-run.timer')
-              .with_ensure(:stopped)
+              .with_ensure(false)
               .with_provider('systemd')
               .with_name('puppet-run.timer')
               .with_enable(false)
@@ -126,7 +120,6 @@ describe 'puppet' do
           it { is_expected.not_to contain_service('puppet-run.timer') }
           it { is_expected.not_to contain_file('/etc/systemd/system/puppet-run.timer') }
           it { is_expected.not_to contain_file('/etc/systemd/system/puppet-run.service') }
-          it { is_expected.not_to contain_exec('systemctl-daemon-reload-puppet') }
         end
       end
 
@@ -213,7 +206,7 @@ describe 'puppet' do
                 .with_enable('false')
             end
             it { is_expected.to contain_class('puppet::agent::service::systemd').with_enabled(false) }
-            it { is_expected.to contain_service('puppet-run.timer').with_ensure(:stopped) }
+            it { is_expected.to contain_service('puppet-run.timer').with_ensure(false) }
             it do
               is_expected.to contain_cron('puppet')
                 .with_command("#{bindir}/puppet agent --config #{confdir}/puppet.conf --onetime --no-daemonize")
@@ -259,7 +252,7 @@ describe 'puppet' do
                 .with_enable('false')
             end
             it { is_expected.to contain_class('puppet::agent::service::systemd').with_enabled(false) }
-            it { is_expected.to contain_service('puppet-run.timer').with_ensure(:stopped) }
+            it { is_expected.to contain_service('puppet-run.timer').with_ensure(false) }
             it do
               is_expected.to contain_cron('puppet')
                 .with_command("#{bindir}/puppet agent --config #{confdir}/puppet.conf --onetime --no-daemonize")
@@ -294,7 +287,7 @@ describe 'puppet' do
             it { is_expected.to contain_class('puppet::agent::service::daemon').with_enabled(false) }
             it { is_expected.to contain_class('puppet::agent::service::cron').with_enabled(false) }
             it { is_expected.to contain_class('puppet::agent::service::systemd').with_enabled(true) }
-            it { is_expected.to contain_service('puppet-run.timer').with_ensure(:running) }
+            it { is_expected.to contain_service('puppet-run.timer').with_ensure(true) }
 
             it do
               is_expected.to contain_file('/etc/systemd/system/puppet-run.timer')
@@ -312,17 +305,11 @@ describe 'puppet' do
             end
 
             it do
-              is_expected.to contain_exec('systemctl-daemon-reload-puppet')
-                .with_refreshonly(true)
-                .with_command('systemctl daemon-reload')
-            end
-
-            it do
               is_expected.to contain_service('puppet-run.timer')
                 .with_provider('systemd')
-                .with_ensure('running')
+                .with_ensure(true)
                 .with_name('puppet-run.timer')
-                .with_enable('true')
+                .with_enable(true)
             end
           else
             it { is_expected.to raise_error(Puppet::Error, /Runmode of systemd.timer not supported on #{facts[:kernel]} operating systems!/) }
@@ -343,7 +330,7 @@ describe 'puppet' do
             it { is_expected.to contain_class('puppet::agent::service::daemon').with_enabled(false) }
             it { is_expected.to contain_class('puppet::agent::service::cron').with_enabled(false) }
             it { is_expected.to contain_class('puppet::agent::service::systemd').with_enabled(true) }
-            it { is_expected.to contain_service('puppet-run.timer').with_ensure(:running) }
+            it { is_expected.to contain_service('puppet-run.timer').with_ensure(true) }
 
             it do
               is_expected.to contain_file('/etc/systemd/system/puppet-run.timer')
@@ -361,17 +348,11 @@ describe 'puppet' do
             end
 
             it do
-              is_expected.to contain_exec('systemctl-daemon-reload-puppet')
-                .with_refreshonly(true)
-                .with_command('systemctl daemon-reload')
-            end
-
-            it do
               is_expected.to contain_service('puppet-run.timer')
                 .with_provider('systemd')
-                .with_ensure('running')
+                .with_ensure(true)
                 .with_name('puppet-run.timer')
-                .with_enable('true')
+                .with_enable(true)
             end
           else
             it { is_expected.to raise_error(Puppet::Error, /Runmode of systemd.timer not supported on #{facts[:kernel]} operating systems!/) }
@@ -393,7 +374,7 @@ describe 'puppet' do
 
           case os
           when /\Adebian-/, /\A(redhat|centos|scientific)-(7|8)/, /\Afedora-/, /\Aubuntu-/, /\Aarchlinux-/
-            it { is_expected.to contain_service('puppet-run.timer').with_ensure(:stopped) }
+            it { is_expected.to contain_service('puppet-run.timer').with_ensure(false) }
           else
             it { is_expected.not_to contain_service('puppet-run.timer') }
           end
