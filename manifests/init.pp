@@ -462,7 +462,7 @@
 #
 # $server_puppetserver_experimental::       For Puppetserver 5, enable the /puppet/experimental route? Defaults to true
 #
-# $server_puppetserver_auth_template::      Template for generating /etc/puppetlabs/puppetserver/conf.d/auth.conf 
+# $server_puppetserver_auth_template::      Template for generating /etc/puppetlabs/puppetserver/conf.d/auth.conf
 #
 # $server_puppetserver_trusted_agents::     Certificate names of puppet agents that are allowed to fetch *all* catalogs
 #                                           Defaults to [] and all agents are only allowed to fetch their own catalogs.
@@ -535,6 +535,8 @@
 # $server_versioned_code_content::          Contains the path to an executable script that Puppet Server
 #                                           invokes when on static_file_content requests.
 #                                           Defaults to undef
+#
+# $generate_ca_cert::                       Whether to generate CA certificate. Defaults to true. When true, the a ca cert is generated.
 #
 # === Usage:
 #
@@ -734,6 +736,7 @@ class puppet (
   Optional[Integer[1]] $server_max_open_files = $puppet::params::server_max_open_files,
   Optional[Stdlib::Absolutepath] $server_versioned_code_id = undef,
   Optional[Stdlib::Absolutepath] $server_versioned_code_content = undef,
+  Boolean $generate_ca_cert = $puppet::params::generate_ca_cert,
 ) inherits puppet::params {
   contain puppet::config
 
