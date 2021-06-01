@@ -22,7 +22,6 @@ describe 'puppet' do
           server_jvm_extra_args: '',
           server_max_active_instances: 2,
           server_puppetserver_dir: '/etc/custom/puppetserver',
-          server_puppetserver_version: '5.3.6',
         }
       end
 
@@ -174,7 +173,7 @@ describe 'puppet' do
 
       describe 'server_multithreaded' do
         context 'with default parameters' do
-          context 'when server_puppetserver_version >= 5.3.6 and < 6.8.0' do
+          context 'when server_puppetserver_version < 6.8.0' do
             it { should contain_file(puppetserver_conf).without_content(/multithreaded/) }
           end
           context 'when server_puppetserver_version == 6.8.0' do
@@ -184,7 +183,7 @@ describe 'puppet' do
         end
         context 'with custom server_multithreaded' do
           let(:params) { super().merge(server_multithreaded: true) }
-          context 'when server_puppetserver_version >= 5.3.6 and < 6.8.0' do
+          context 'when server_puppetserver_version < 6.8.0' do
             it { should contain_file(puppetserver_conf).without_content(/multithreaded/) }
           end
           context 'when server_puppetserver_version == 6.8.0' do
@@ -433,21 +432,6 @@ describe 'puppet' do
       end
 
       describe 'Puppet Server CA related settings' do
-        context 'when server_puppetserver_version >= 5.3.6 and < 6.0.0' do
-          context 'with ca parameters set' do
-            let(:params) { super().merge(
-              server_ca_allow_sans: true,
-              server_ca_allow_auth_extensions: true,
-              )
-            }
-            it { should contain_file('/etc/custom/puppetserver/conf.d/ca.conf')
-                          .with_ensure('file')
-                          .with_content(/^( *)allow-subject-alt-names: true$/)
-                          .with_content(/^( *)allow-authorization-extensions: true$/)
-            }
-          end
-        end
-
         context 'when server_puppetserver_version >= 6.0.0' do
           let(:params) { super().merge(server_puppetserver_version: '6.0.0') }
           context 'with default parameters' do
@@ -515,9 +499,9 @@ describe 'puppet' do
         end
       end
 
-      describe 'when server_puppetserver_version < 5.3.6' do
+      describe 'when server_puppetserver_version < 6' do
         let(:params) { super().merge(server_puppetserver_version: '5.3.5') }
-        it { should raise_error(Puppet::Error, /puppetserver <5.3.6 is not supported by this module version/) }
+        it { should raise_error(Puppet::Error, /puppetserver <6 is not supported by this module version/) }
       end
 
       describe 'allow jetty specific server threads' do
@@ -551,7 +535,7 @@ describe 'puppet' do
               server_versioned_code_content: '/some/code/content/bin',
             )
           end
-    
+
           it {
             should contain_file(puppetserver_conf)
                .with_content(%r{^    code-id-command: /some/code/id/bin\n    code-content-command: /some/code/content/bin$})

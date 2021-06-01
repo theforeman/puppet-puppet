@@ -140,8 +140,8 @@ class puppet::server::puppetserver (
 ) {
   include puppet::server
 
-  if versioncmp($server_puppetserver_version, '5.3.6') < 0 {
-    fail('puppetserver <5.3.6 is not supported by this module version')
+  if versioncmp($server_puppetserver_version, '5') < 0 {
+    fail('puppetserver 5 is not supported by this module version')
   }
 
   $puppetserver_package = pick($puppet::server::package, 'puppetserver')
