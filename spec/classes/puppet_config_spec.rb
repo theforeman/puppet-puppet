@@ -5,8 +5,8 @@ describe 'puppet' do
     context "on #{os}" do
       case os_facts[:osfamily]
       when 'FreeBSD'
-        dir_owner = 'puppet'
-        dir_group = 'puppet'
+        dir_owner = 'root'
+        dir_group = nil
         confdir   = '/usr/local/etc/puppet'
         logdir    = '/var/log/puppet'
         rundir    = '/var/run/puppet'
@@ -21,8 +21,8 @@ describe 'puppet' do
         ssldir    = 'C:/ProgramData/PuppetLabs/puppet/etc/ssl'
         vardir    = 'C:/ProgramData/PuppetLabs/puppet/var'
       when 'Archlinux'
-        dir_owner = 'puppet'
-        dir_group = 'puppet'
+        dir_owner = 'root'
+        dir_group = nil
         confdir   = '/etc/puppetlabs/puppet'
         logdir    = '/var/log/puppetlabs/puppet'
         rundir    = '/var/run/puppetlabs'
