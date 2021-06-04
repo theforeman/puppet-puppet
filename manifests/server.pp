@@ -451,6 +451,18 @@ class puppet::server(
   Optional[Stdlib::Absolutepath] $versioned_code_id = $puppet::server_versioned_code_id,
   Optional[Stdlib::Absolutepath] $versioned_code_content = $puppet::server_versioned_code_content,
 ) {
+  # For Puppetserver, certain configuration parameters are version specific. We
+  # assume a particular version here.
+  if $puppetserver_version {
+    $real_puppetserver_version = $puppetserver_version
+  } elsif versioncmp($facts['puppetversion'], '7.0.0') >= 0 {
+    $real_puppetserver_version = '7.0.0'
+  } elsif versioncmp($facts['puppetversion'], '6.0.0') >= 0 {
+    $real_puppetserver_version = '6.0.0'
+  } else {
+    $real_puppetserver_version = '5.3.6'
+  }
+
   if $ca {
     $ssl_ca_cert     = "${ssl_dir}/ca/ca_crt.pem"
     $ssl_ca_crl      = "${ssl_dir}/ca/ca_crl.pem"
@@ -474,18 +486,6 @@ class puppet::server(
     }
   } else {
     $config_version_cmd = $config_version
-  }
-
-  # For Puppetserver, certain configuration parameters are version specific. We
-  # assume a particular version here.
-  if $puppetserver_version {
-    $real_puppetserver_version = $puppetserver_version
-  } elsif versioncmp($facts['puppetversion'], '7.0.0') >= 0 {
-    $real_puppetserver_version = '7.0.0'
-  } elsif versioncmp($facts['puppetversion'], '6.0.0') >= 0 {
-    $real_puppetserver_version = '6.0.0'
-  } else {
-    $real_puppetserver_version = '5.3.6'
   }
 
   if versioncmp($real_puppetserver_version, '7.0.0') >= 0 {
