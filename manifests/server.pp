@@ -246,6 +246,7 @@
 #
 # $use_legacy_auth_conf::              Should the puppetserver use the legacy puppet auth.conf?
 #                                      Defaults to false (the puppetserver will use its own conf.d/auth.conf)
+#                                      Note that Puppetserver 7 has dropped support for this.
 #
 # $check_for_updates::                 Should the puppetserver phone home to check for available updates?
 #
@@ -450,10 +451,30 @@ class puppet::server(
   Optional[Stdlib::Absolutepath] $versioned_code_id = $puppet::server_versioned_code_id,
   Optional[Stdlib::Absolutepath] $versioned_code_content = $puppet::server_versioned_code_content,
 ) {
+  # For Puppetserver, certain configuration parameters are version specific. We
+  # assume a particular version here.
+  if $puppetserver_version {
+    $real_puppetserver_version = $puppetserver_version
+  } elsif versioncmp($facts['puppetversion'], '7.0.0') >= 0 {
+    $real_puppetserver_version = '7.0.0'
+  } elsif versioncmp($facts['puppetversion'], '6.11.0') >= 0 {
+    $real_puppetserver_version = '6.11.0'
+  } elsif versioncmp($facts['puppetversion'], '6.0.0') >= 0 {
+    $real_puppetserver_version = '6.0.0'
+  } else {
+    $real_puppetserver_version = '5.3.6'
+  }
+
+  if versioncmp($real_puppetserver_version, '7.0.0') >= 0 {
+    $cadir = "${puppetserver_dir}/ca"
+  } else {
+    $cadir = "${ssl_dir}/ca"
+  }
+
   if $ca {
-    $ssl_ca_cert     = "${ssl_dir}/ca/ca_crt.pem"
-    $ssl_ca_crl      = "${ssl_dir}/ca/ca_crl.pem"
-    $ssl_chain       = $ssl_chain_filepath
+    $ssl_ca_cert     = "${cadir}/ca_crt.pem"
+    $ssl_ca_crl      = "${cadir}/ca_crl.pem"
+    $ssl_chain       = pick($ssl_chain_filepath, "${cadir}/ca_crt.pem")
     $crl_enable_real = pick($crl_enable, true)
   } else {
     $ssl_ca_cert     = "${ssl_dir}/certs/ca.pem"
@@ -475,14 +496,10 @@ class puppet::server(
     $config_version_cmd = $config_version
   }
 
-  # For Puppetserver, certain configuration parameters are version specific. We
-  # assume a particular version here.
-  if $puppetserver_version {
-    $real_puppetserver_version = $puppetserver_version
-  } elsif versioncmp($::puppetversion, '6.0.0') >= 0 {
-    $real_puppetserver_version = '6.0.0'
-  } else  {
-    $real_puppetserver_version = '5.3.6'
+  if versioncmp($real_puppetserver_version, '7.0.0') >= 0 {
+    if $use_legacy_auth_conf {
+      fail('The jruby-puppet.use-legacy-auth-conf setting is removed in Puppetserver 7')
+    }
   }
 
   if $jvm_extra_args {

@@ -416,6 +416,7 @@
 #
 # $server_use_legacy_auth_conf::            Should the puppetserver use the legacy puppet auth.conf?
 #                                           Defaults to false (the puppetserver will use its own conf.d/auth.conf)
+#                                           Note that Puppetserver 7 has dropped this option.
 #
 # $server_check_for_updates::               Should the puppetserver phone home to check for available updates?
 #                                           Defaults to true

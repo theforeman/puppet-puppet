@@ -44,7 +44,7 @@ class puppet::server::config inherits puppet::config {
   }
 
   if $trusted_external_command {
-    if versioncmp($::puppetversion, '6.11') < 0 {
+    if versioncmp($puppet::server::real_puppetserver_version, '6.11') < 0 {
       fail('$server_trusted_external_command is only available for Puppet > 6.11')
     }
     puppet::config::master {
@@ -157,7 +157,7 @@ class puppet::server::config inherits puppet::config {
 
   # Generate a new CA and host cert if our host cert doesn't exist
   if $puppet::server::ca {
-    if versioncmp($::puppetversion, '6.0') > 0 {
+    if versioncmp($puppet::server::real_puppetserver_version, '6.0') > 0 {
       $creates = $puppet::server::ssl_ca_cert
       $command = "${puppet::puppetserver_cmd} ca setup"
     } else {
@@ -173,6 +173,18 @@ class puppet::server::config inherits puppet::config {
         Concat["${puppet::server::dir}/puppet.conf"],
         Exec['puppet_server_config-create_ssl_dir'],
       ],
+    }
+
+    # In Puppet 7 the cadir was changed from $ssldir/ca to $puppetserver_dir/ca
+    # This migrates the directory if it was in the old location
+    # The migration command leaves a symlink in place
+    if versioncmp($puppet::server::real_puppetserver_version, '7.0') > 0 {
+      exec { 'migrate Puppetserver cadir':
+        command => "${puppet::puppetserver_cmd} ca migrate",
+        creates => $puppet::server::cadir,
+        onlyif  => "test -d '${puppet::server::ssldir}/ca' && ! test -L '${puppet::server::ssldir}'",
+        path    => $::path,
+      }
     }
   } elsif $puppet::server::ca_crl_sync {
     # If not a ca AND sync the crl from the ca master

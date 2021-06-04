@@ -99,7 +99,15 @@ class puppet::config(
       }
     }
   }
-  ~> file { "${puppet_dir}/auth.conf":
-    content => template($auth_template),
+
+  if versioncmp($facts['puppetversion'], '7.0.0') >= 0 {
+    file { "${puppet_dir}/auth.conf":
+      ensure => absent,
+    }
+  } else {
+    file { "${puppet_dir}/auth.conf":
+      ensure  => file,
+      content => template($auth_template),
+    }
   }
 }
