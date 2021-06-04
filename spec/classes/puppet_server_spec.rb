@@ -43,7 +43,7 @@ describe 'puppet' do
       conf_file           = "#{confdir}/puppet.conf"
       conf_d_dir          = "#{puppetserver_etcdir}/conf.d"
       environments_dir    = "#{codedir}/environments"
-      cadir               = "#{ssldir}/ca"
+      cadir               = facts[:puppetversion] >= '7.0' ? "#{puppetserver_etcdir}/ca" : "#{ssldir}/ca"
       if facts[:puppetversion] >= '6.0'
         cert_to_create      = "#{cadir}/ca_crt.pem"
       else
@@ -556,7 +556,7 @@ describe 'puppet' do
             super().merge(server_ca: true)
           end
 
-          it { should contain_file("#{conf_d_dir}/webserver.conf").with_content(%r{ssl-crl-path: #{ssldir}/ca/ca_crl\.pem}) }
+          it { should contain_file("#{conf_d_dir}/webserver.conf").with_content(%r{ssl-crl-path: #{cadir}/ca_crl\.pem}) }
         end
 
         context 'as non-ca' do

@@ -18,6 +18,16 @@ class documentation provided at the top of the manifests. In addition, there
 are hash parameters for each configuration section that can be used to supply
 any options that are not explicitly supported.
 
+## Upgrading from Puppetserver 6 to 7
+
+Puppetserver 7 moves the CA files from ssldir to its own. To move the existing
+files, `puppetserver ca migrate` can be used but this requires the puppetserver
+to be stopped. The module does run this command if needed, but doesn't stop the
+service so the application will fail.
+
+It is recommended to run this command directly after updating the packages. It
+leaves a symlink so the old config should continue to work.
+
 ## Environments support
 
 The module helps configure Puppet environments using directory environments.

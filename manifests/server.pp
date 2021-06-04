@@ -465,10 +465,16 @@ class puppet::server(
     $real_puppetserver_version = '5.3.6'
   }
 
+  if versioncmp($real_puppetserver_version, '7.0.0') >= 0 {
+    $cadir = "${puppetserver_dir}/ca"
+  } else {
+    $cadir = "${ssl_dir}/ca"
+  }
+
   if $ca {
-    $ssl_ca_cert     = "${ssl_dir}/ca/ca_crt.pem"
-    $ssl_ca_crl      = "${ssl_dir}/ca/ca_crl.pem"
-    $ssl_chain       = pick($ssl_chain_filepath, "${ssl_dir}/ca/ca_crt.pem")
+    $ssl_ca_cert     = "${cadir}/ca_crt.pem"
+    $ssl_ca_crl      = "${cadir}/ca_crl.pem"
+    $ssl_chain       = pick($ssl_chain_filepath, "${cadir}/ca_crt.pem")
     $crl_enable_real = pick($crl_enable, true)
   } else {
     $ssl_ca_cert     = "${ssl_dir}/certs/ca.pem"
