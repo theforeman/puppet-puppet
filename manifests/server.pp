@@ -457,6 +457,8 @@ class puppet::server(
     $real_puppetserver_version = $puppetserver_version
   } elsif versioncmp($facts['puppetversion'], '7.0.0') >= 0 {
     $real_puppetserver_version = '7.0.0'
+  } elsif versioncmp($facts['puppetversion'], '6.11.0') >= 0 {
+    $real_puppetserver_version = '6.11.0'
   } elsif versioncmp($facts['puppetversion'], '6.0.0') >= 0 {
     $real_puppetserver_version = '6.0.0'
   } else {

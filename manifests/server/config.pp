@@ -44,7 +44,7 @@ class puppet::server::config inherits puppet::config {
   }
 
   if $trusted_external_command {
-    if versioncmp($::puppetversion, '6.11') < 0 {
+    if versioncmp($puppet::server::real_puppetserver_version, '6.11') < 0 {
       fail('$server_trusted_external_command is only available for Puppet > 6.11')
     }
     puppet::config::master {
@@ -157,7 +157,7 @@ class puppet::server::config inherits puppet::config {
 
   # Generate a new CA and host cert if our host cert doesn't exist
   if $puppet::server::ca {
-    if versioncmp($::puppetversion, '6.0') > 0 {
+    if versioncmp($puppet::server::real_puppetserver_version, '6.0') > 0 {
       $creates = $puppet::server::ssl_ca_cert
       $command = "${puppet::puppetserver_cmd} ca setup"
     } else {
