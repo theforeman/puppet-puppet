@@ -401,7 +401,7 @@ class puppet::params {
     'TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384',
   ]
   $server_ssl_protocols                   = [ 'TLSv1.2' ]
-  $server_ssl_chain_filepath              = "${server_ssl_dir}/ca/ca_crt.pem"
+  $server_ssl_chain_filepath              = undef
   $server_check_for_updates               = true
   $server_environment_class_cache_enabled = false
   $server_allow_header_cert_info          = false

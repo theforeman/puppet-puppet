@@ -454,7 +454,7 @@ class puppet::server(
   if $ca {
     $ssl_ca_cert     = "${ssl_dir}/ca/ca_crt.pem"
     $ssl_ca_crl      = "${ssl_dir}/ca/ca_crl.pem"
-    $ssl_chain       = $ssl_chain_filepath
+    $ssl_chain       = pick($ssl_chain_filepath, "${ssl_dir}/ca/ca_crt.pem")
     $crl_enable_real = pick($crl_enable, true)
   } else {
     $ssl_ca_cert     = "${ssl_dir}/certs/ca.pem"
