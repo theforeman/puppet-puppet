@@ -1,5 +1,13 @@
 # Changelog
 
+## [16.0.0](https://github.com/theforeman/puppet-puppet/tree/16.0.0) (2021-07-19)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/15.0.0...16.0.0)
+
+**Implemented enhancements:**
+
+- Allow camptocamp/systemd 3.x + use it for timers [\#790](https://github.com/theforeman/puppet-puppet/pull/790) ([ekohl](https://github.com/ekohl))
+
 ## [15.0.0](https://github.com/theforeman/puppet-puppet/tree/15.0.0) (2021-04-26)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/14.2.1...15.0.0)
