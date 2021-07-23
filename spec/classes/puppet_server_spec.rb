@@ -5,11 +5,9 @@ describe 'puppet' do
     context "on #{os}", unless: unsupported_puppetmaster_osfamily(facts[:osfamily]) do
       if facts[:osfamily] == 'FreeBSD'
         codedir             = '/usr/local/etc/puppet'
-        conf_d_dir          = '/usr/local/etc/puppetserver/conf.d'
-        conf_file           = '/usr/local/etc/puppet/puppet.conf'
         confdir             = '/usr/local/etc/puppet'
-        environments_dir    = '/usr/local/etc/puppet/environments'
         etcdir              = '/usr/local/etc/puppet'
+        puppetserver_etcdir = '/usr/local/etc/puppetserver'
         puppetserver_logdir = '/var/log/puppetserver'
         puppetserver_rundir = '/var/run/puppetserver'
         puppetserver_vardir = '/var/puppet/server/data/puppetserver'
@@ -18,20 +16,16 @@ describe 'puppet' do
         vardir              = '/var/puppet'
         rubydir             = %r{^/usr/local/lib/ruby/site_ruby/\d+\.\d+/puppet$}
         puppetserver_pkg    = "puppetserver#{facts[:puppetversion].to_i}"
-        if facts[:puppetversion] >= '6.0'
-          puppetcacmd         = '/usr/local/bin/puppetserver ca setup'
-          cert_to_create      = "#{ssldir}/ca/ca_crt.pem"
-        else
-          puppetcacmd         = '/usr/local/bin/puppet cert --generate puppetmaster.example.com --allow-dns-alt-names'
-          cert_to_create      = "#{ssldir}/certs/puppetmaster.example.com.pem"
-        end
+        puppetcacmd         = if facts[:puppetversion] >= '6.0'
+                                '/usr/local/bin/puppetserver ca setup'
+                              else
+                                '/usr/local/bin/puppet cert --generate puppetmaster.example.com --allow-dns-alt-names'
+                              end
       else
         codedir             = '/etc/puppetlabs/code'
-        conf_d_dir          = '/etc/puppetlabs/puppetserver/conf.d'
-        conf_file           = '/etc/puppetlabs/puppet/puppet.conf'
         confdir             = '/etc/puppetlabs/puppet'
-        environments_dir    = '/etc/puppetlabs/code/environments'
         etcdir              = '/etc/puppetlabs/puppet'
+        puppetserver_etcdir = '/etc/puppetlabs/puppetserver'
         puppetserver_logdir = '/var/log/puppetlabs/puppetserver'
         puppetserver_rundir = '/var/run/puppetlabs/puppetserver'
         puppetserver_vardir = '/opt/puppetlabs/server/data/puppetserver'
@@ -40,13 +34,20 @@ describe 'puppet' do
         vardir              = '/opt/puppetlabs/puppet/cache'
         rubydir             = '/opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet'
         puppetserver_pkg    = 'puppetserver'
-        if facts[:puppetversion] >= '6.0'
-          puppetcacmd         = '/opt/puppetlabs/bin/puppetserver ca setup'
-          cert_to_create      = "#{ssldir}/ca/ca_crt.pem"
-        else
-          puppetcacmd         = '/opt/puppetlabs/bin/puppet cert --generate puppetmaster.example.com --allow-dns-alt-names'
-          cert_to_create      = "#{ssldir}/certs/puppetmaster.example.com.pem"
-        end
+        puppetcacmd         = if facts[:puppetversion] >= '6.0'
+                                '/opt/puppetlabs/bin/puppetserver ca setup'
+                              else
+                                '/opt/puppetlabs/bin/puppet cert --generate puppetmaster.example.com --allow-dns-alt-names'
+                              end
+      end
+      conf_file           = "#{confdir}/puppet.conf"
+      conf_d_dir          = "#{puppetserver_etcdir}/conf.d"
+      environments_dir    = "#{codedir}/environments"
+      cadir               = "#{ssldir}/ca"
+      if facts[:puppetversion] >= '6.0'
+        cert_to_create      = "#{cadir}/ca_crt.pem"
+      else
+        cert_to_create      = "#{ssldir}/certs/puppetmaster.example.com.pem"
       end
 
       let(:facts) { facts }
