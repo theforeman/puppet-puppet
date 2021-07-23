@@ -4,8 +4,6 @@ describe 'puppet' do
   on_supported_os.each do |os, facts|
     context "on #{os}", unless: unsupported_puppetmaster_osfamily(facts[:osfamily]) do
       if facts[:osfamily] == 'FreeBSD'
-        puppet_major = facts[:puppetversion].to_i
-
         codedir             = '/usr/local/etc/puppet'
         conf_d_dir          = '/usr/local/etc/puppetserver/conf.d'
         conf_file           = '/usr/local/etc/puppet/puppet.conf'
@@ -19,7 +17,7 @@ describe 'puppet' do
         ssldir              = '/var/puppet/ssl'
         vardir              = '/var/puppet'
         rubydir             = %r{^/usr/local/lib/ruby/site_ruby/\d+\.\d+/puppet$}
-        puppetserver_pkg    = puppet_major > 4 ? "puppetserver#{puppet_major}" : 'puppetserver'
+        puppetserver_pkg    = "puppetserver#{facts[:puppetversion].to_i}"
         if facts[:puppetversion] >= '6.0'
           puppetcacmd         = '/usr/local/bin/puppetserver ca setup'
           cert_to_create      = "#{ssldir}/ca/ca_crt.pem"
