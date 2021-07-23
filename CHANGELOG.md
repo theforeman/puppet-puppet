@@ -1,6 +1,16 @@
 # Changelog
 
-## [15.0.0](https://github.com/theforeman/puppet-puppet/tree/15.0.0) (2021-04-26)
+## [15.1.0](https://github.com/theforeman/puppet-puppet/tree/15.1.0) (2021-07-26)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/15.0.0...15.1.0)
+
+**Implemented enhancements:**
+
+- Allow camptocamp/systemd 3.x + use it for timers [\#790](https://github.com/theforeman/puppet-puppet/pull/790) ([ekohl](https://github.com/ekohl))
+- Allow Puppet 7 compatible versions of puppetlabs mods [\#788](https://github.com/theforeman/puppet-puppet/pull/788) ([ekohl](https://github.com/ekohl))
+- Support Puppet 7 [\#779](https://github.com/theforeman/puppet-puppet/pull/779) ([ekohl](https://github.com/ekohl))
+
+## [15.0.0](https://github.com/theforeman/puppet-puppet/tree/15.0.0) (2021-04-27)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/14.2.1...15.0.0)
 
