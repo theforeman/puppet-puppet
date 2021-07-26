@@ -33,6 +33,16 @@ describe 'Scenario: install puppetserver (latest):', unless: unsupported_puppets
           server                => true,
           server_max_open_files => 32143,
         }
+
+        # Puppet 5 + puppet/systemd 3 workaround
+        if versioncmp($facts['puppetversion'], '6.1') < 0 and $puppet::server_max_open_files {
+          exec { 'puppetserver-systemctl-daemon-reload':
+            command     => 'systemctl daemon-reload',
+            refreshonly => true,
+            path        => $facts['path'],
+            subscribe   => File['/etc/systemd/system/puppetserver.service.d/limits.conf'],
+          }
+        }
         MANIFEST
       end
     end
