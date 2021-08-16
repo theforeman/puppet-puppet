@@ -225,11 +225,6 @@ class puppet::params {
   $server_http                     = false
   $server_http_port                = 8139
 
-  # Need a new master template for the server?
-  $server_template      = 'puppet/server/puppet.conf.erb'
-  # Template for server settings in [main]
-  $server_main_template = 'puppet/server/puppet.conf.main.erb'
-
   # Set 'false' for static environments, or 'true' for git-based workflow
   $server_git_repo             = false
   # Git branch to puppet env mapping for the post receive hook
