@@ -53,6 +53,15 @@ Since version 15.0.0 the integration bits depend on the standalone module where
 previously it depended on
 [theforeman/foreman](https://forge.puppetlabs.com/theforeman/foreman)
 
+There is also optional integration for [katello/certs](https://forge.puppetlabs.com/katello/certs).
+This can be enabled via Hiera:
+
+```yaml
+puppet::server::foreman::katello: true
+```
+
+Then the `foreman_ssl_{ca,cert,key}` parameters are ignored and `certs::puppet` is used as a source.
+
 ## PuppetDB integration
 
 The Puppet master can be configured to export catalogs and reports to a
