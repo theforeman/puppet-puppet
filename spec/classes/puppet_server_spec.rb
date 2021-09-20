@@ -674,6 +674,23 @@ describe 'puppet' do
           it { should contain_puppet__config__master('trusted_external_command').with_value('/usr/local/sbin/trusted_external_command') }
         end
       end
+
+      describe 'with multiple environment paths' do
+        let(:params) do
+          super().merge(
+            server_envs_dir: ['/etc/puppetlabs/code/environments/', '/etc/puppetlabs/code/unmanaged-environments/'],
+            server_git_repo_path: '/test/puppet',
+            server_post_hook_name: 'post-receive',
+            server_git_repo: true,
+          )
+        end
+
+        it { should contain_puppet__config__main('environmentpath').with_value('/etc/puppetlabs/code/environments/:/etc/puppetlabs/code/unmanaged-environments/') }
+        it { should contain_file('/etc/puppetlabs/code/environments/') }
+        it { should contain_file('/etc/puppetlabs/code/unmanaged-environments/') }
+        it { should contain_git__repo('puppet_repo').that_requires('File[/etc/puppetlabs/code/environments/]') }
+        it { should contain_file('/test/puppet/hooks/post-receive').with_content(/ENVIRONMENT_BASEDIR\s=\s"\/etc\/puppetlabs\/code\/environments\/"/) }
+      end
     end
   end
 end

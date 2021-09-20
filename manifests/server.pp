@@ -70,7 +70,10 @@
 #
 # $environments_mode::                 Environments directory mode.
 #
-# $envs_dir::                          Directory that holds puppet environments
+# $envs_dir::                          List of directories that hold puppet environments
+#                                      All listed directories will be created and attributes managed,
+#                                      but only the first listed path will be used to populate
+#                                      environments from git repo branches.
 #
 # $envs_target::                       Indicates that $envs_dir should be
 #                                      a symbolic link to this target
@@ -371,7 +374,7 @@ class puppet::server(
   String $environments_owner = $puppet::server_environments_owner,
   Optional[String] $environments_group = $puppet::server_environments_group,
   Pattern[/^[0-9]{3,4}$/] $environments_mode = $puppet::server_environments_mode,
-  Stdlib::Absolutepath $envs_dir = $puppet::server_envs_dir,
+  Array[Stdlib::Absolutepath, 1] $envs_dir = $puppet::server_envs_dir,
   Optional[Stdlib::Absolutepath] $envs_target = $puppet::server_envs_target,
   Variant[Undef, String[0], Array[Stdlib::Absolutepath]] $common_modules_path = $puppet::server_common_modules_path,
   Pattern[/^[0-9]{3,4}$/] $git_repo_mode = $puppet::server_git_repo_mode,

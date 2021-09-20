@@ -241,10 +241,10 @@ class puppet::params {
   $server_environments_group   = $root_group
   $server_environments_mode    = '0755'
   # Where we store our puppet environments
-  $server_envs_dir             = "${codedir}/environments"
+  $server_envs_dir             = ["${codedir}/environments"]
   $server_envs_target          = undef
   # Modules in this directory would be shared across all environments
-  $server_common_modules_path  = unique(["${server_envs_dir}/common", "${codedir}/modules", "${sharedir}/modules", '/usr/share/puppet/modules'])
+  $server_common_modules_path  = unique(["${server_envs_dir[0]}/common", "${codedir}/modules", "${sharedir}/modules", '/usr/share/puppet/modules'])
 
   # Dynamic environments config, ignore if the git_repo is 'false'
   # Path to the repository
