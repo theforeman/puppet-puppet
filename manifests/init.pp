@@ -288,7 +288,7 @@
 #
 # $server_environment_timeout::             Timeout for cached compiled catalogs (10s, 5m, ...)
 #
-# $server_envs_dir::                        Directory that holds puppet environments
+# $server_envs_dir::                        List of directories which hold puppet environments
 #
 # $server_envs_target::                     Indicates that $envs_dir should be
 #                                           a symbolic link to this target
@@ -656,7 +656,7 @@ class puppet (
   String $server_environments_owner = $puppet::params::server_environments_owner,
   Optional[String] $server_environments_group = $puppet::params::server_environments_group,
   Pattern[/^[0-9]{3,4}$/] $server_environments_mode = $puppet::params::server_environments_mode,
-  Stdlib::Absolutepath $server_envs_dir = $puppet::params::server_envs_dir,
+  Array[Stdlib::Absolutepath, 1] $server_envs_dir = $puppet::params::server_envs_dir,
   Optional[Stdlib::Absolutepath] $server_envs_target = $puppet::params::server_envs_target,
   Variant[Undef, String[0], Array[Stdlib::Absolutepath]] $server_common_modules_path = $puppet::params::server_common_modules_path,
   Pattern[/^[0-9]{3,4}$/] $server_git_repo_mode = $puppet::params::server_git_repo_mode,

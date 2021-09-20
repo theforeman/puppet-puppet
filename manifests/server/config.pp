@@ -36,6 +36,7 @@ class puppet::server::config inherits puppet::config {
   $server_external_nodes       = $puppet::server::external_nodes
   $server_environment_timeout  = $puppet::server::environment_timeout
   $trusted_external_command    = $puppet::server::trusted_external_command
+  $primary_envs_dir            = $puppet::server::envs_dir[0]
 
   if $server_external_nodes and $server_external_nodes != '' {
     class{ 'puppet::server::enc':
@@ -56,7 +57,7 @@ class puppet::server::config inherits puppet::config {
 
   puppet::config::main {
     'reports':            value => $puppet::server::reports;
-    'environmentpath':    value => $puppet::server::envs_dir;
+    'environmentpath':    value => $puppet::server::envs_dir.join(':');
   }
   if $puppet::server::hiera_config and !empty($puppet::server::hiera_config){
     puppet::config::main {
@@ -258,7 +259,7 @@ class puppet::server::config inherits puppet::config {
       mode    => $puppet::server::git_repo_mode,
       user    => $puppet::server::git_repo_user,
       group   => $puppet::server::git_repo_group,
-      require => File[$puppet::vardir, $puppet::server::envs_dir],
+      require => File[$puppet::vardir, $primary_envs_dir],
     }
 
     $git_branch_map = $puppet::server::git_branch_map
