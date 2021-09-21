@@ -119,10 +119,6 @@
 #
 # $codedir::                           Override the puppet code directory.
 #
-# $config_version::                    How to determine the configuration version. When
-#                                      using git_repo, by default a git describe
-#                                      approach will be installed.
-#
 # $server_foreman_facts::              Should foreman receive facts from puppet
 #
 # $foreman::                           Should foreman integration be installed
@@ -365,7 +361,6 @@ class puppet::server(
   Variant[Undef, String[0], Stdlib::Absolutepath] $external_nodes = $puppet::server_external_nodes,
   Optional[Stdlib::Absolutepath] $trusted_external_command = $puppet::server_trusted_external_command,
   Array[String] $cipher_suites = $puppet::server_cipher_suites,
-  Optional[String] $config_version = $puppet::server_config_version,
   Integer[0] $connect_timeout = $puppet::server_connect_timeout,
   Integer[0] $web_idle_timeout = $puppet::server_web_idle_timeout,
   Boolean $git_repo = $puppet::server_git_repo,
@@ -485,16 +480,6 @@ class puppet::server(
 
   $ssl_cert      = "${ssl_dir}/certs/${certname}.pem"
   $ssl_cert_key  = "${ssl_dir}/private_keys/${certname}.pem"
-
-  if $config_version == undef {
-    if $git_repo {
-      $config_version_cmd = "git --git-dir ${envs_dir}/\$environment/.git describe --all --long"
-    } else {
-      $config_version_cmd = undef
-    }
-  } else {
-    $config_version_cmd = $config_version
-  }
 
   if versioncmp($real_puppetserver_version, '7.0.0') >= 0 {
     if $use_legacy_auth_conf {

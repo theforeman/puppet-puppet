@@ -232,10 +232,6 @@ class puppet::params {
   # Template for server settings in [main]
   $server_main_template = 'puppet/server/puppet.conf.main.erb'
 
-  # The script that is run to determine the reported manifest version. Undef
-  # means we determine it in server.pp
-  $server_config_version       = undef
-
   # Set 'false' for static environments, or 'true' for git-based workflow
   $server_git_repo             = false
   # Git branch to puppet env mapping for the post receive hook

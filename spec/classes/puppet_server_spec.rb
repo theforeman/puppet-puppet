@@ -88,7 +88,6 @@ describe 'puppet' do
         it { should_not contain_puppet__config__master('environment_timeout') }
         it { should_not contain_puppet__config__master('manifest') }
         it { should_not contain_puppet__config__master('modulepath') }
-        it { should_not contain_puppet__config__master('config_version') }
         it { should_not contain_puppet__config__master('trusted_external_command') }
 
         it { should contain_puppet__config__master('external_nodes').with_value("#{etcdir}\/node.rb") }

@@ -274,10 +274,6 @@
 #
 # $server_http_port::                       Puppet master HTTP port; defaults to 8139.
 #
-# $server_config_version::                  How to determine the configuration version. When
-#                                           using git_repo, by default a git describe
-#                                           approach will be installed.
-#
 # $server_foreman_facts::                   Should foreman receive facts from puppet
 #
 # $server_foreman::                         Should foreman integration be installed
@@ -650,7 +646,6 @@ class puppet (
   Variant[Undef, String[0], Stdlib::Absolutepath] $server_external_nodes = $puppet::params::server_external_nodes,
   Optional[Stdlib::Absolutepath] $server_trusted_external_command = $puppet::params::server_trusted_external_command,
   Array[String] $server_cipher_suites = $puppet::params::server_cipher_suites,
-  Optional[String] $server_config_version = $puppet::params::server_config_version,
   Integer[0] $server_connect_timeout = $puppet::params::server_connect_timeout,
   Boolean $server_git_repo = $puppet::params::server_git_repo,
   Boolean $server_default_manifest = $puppet::params::server_default_manifest,
