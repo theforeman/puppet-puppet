@@ -34,6 +34,9 @@
 # @param server_jruby_gem_home
 #   Puppetserver jruby gemhome
 #
+# @param server_environment_vars
+#   Puppetserver hash of environment vars
+#
 # @param server_cipher_suites
 #   Puppetserver array of acceptable ciphers
 #
@@ -78,6 +81,7 @@ class puppet::server::puppetserver (
   $server_puppetserver_rundir             = $puppet::server::puppetserver_rundir,
   $server_puppetserver_logdir             = $puppet::server::puppetserver_logdir,
   $server_jruby_gem_home                  = $puppet::server::jruby_gem_home,
+  $server_environment_vars                = $puppet::server::server_environment_vars,
   $server_ruby_load_paths                 = $puppet::server::ruby_load_paths,
   $server_cipher_suites                   = $puppet::server::cipher_suites,
   $server_max_active_instances            = $puppet::server::max_active_instances,
