@@ -196,8 +196,6 @@
 #
 # $systemd_unit_name::                      The name of the puppet systemd units.
 #
-# $remove_lock::                            Remove the agent lock when running.
-#
 # $dir_owner::                              Owner of the base puppet directory, used when
 #                                           puppet::server is false.
 #
@@ -616,7 +614,6 @@ class puppet (
   Array[String] $auth_allowed = $puppet::params::auth_allowed,
   Variant[String, Array[String]] $client_package = $puppet::params::client_package,
   Boolean $agent = $puppet::params::agent,
-  Boolean $remove_lock = $puppet::params::remove_lock,
   Boolean $report = $puppet::params::report,
   Variant[String, Boolean] $client_certname = $puppet::params::client_certname,
   Optional[String] $puppetmaster = $puppet::params::puppetmaster,

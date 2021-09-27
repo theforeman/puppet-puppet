@@ -200,7 +200,6 @@ class puppet::params {
 
   # Will this host be a puppet agent ?
   $agent                      = true
-  $remove_lock                = true
   $client_certname            = $::clientcert
 
   if defined('$::puppetmaster') {

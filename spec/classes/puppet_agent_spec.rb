@@ -73,17 +73,6 @@ describe 'puppet' do
         it { is_expected.not_to contain_puppet__config__agent('prerun_command') }
         it { is_expected.not_to contain_puppet__config__agent('postrun_command') }
 
-        if facts[:osfamily] == 'Debian'
-          it do
-            is_expected.to contain_augeas('puppet::set_start')
-              .with_context('/files/etc/default/puppet')
-              .with_changes('set START yes')
-              .with_incl('/etc/default/puppet')
-              .with_lens('Shellvars.lns')
-          end
-          it { is_expected.to contain_file('/var/lib/puppet/state/agent_disabled.lock').with_ensure(:absent) }
-        end
-
         # service
         it { is_expected.to contain_class('puppet::agent::service') }
 
@@ -185,17 +174,6 @@ describe 'puppet' do
           when /\Adebian-/, /\A(redhat|centos|scientific)-(7|8)/, /\Afedora-/, /\Aubuntu-/
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_concat__fragment('puppet.conf_agent') }
-            if facts[:osfamily] == 'Debian'
-              it do
-                is_expected.to contain_augeas('puppet::set_start')
-                  .with_context('/files/etc/default/puppet')
-                  .with_changes('set START no')
-                  .with_incl('/etc/default/puppet')
-                  .with_lens('Shellvars.lns')
-              end
-              it { is_expected.to contain_file('/var/lib/puppet/state/agent_disabled.lock').with_ensure(:absent) }
-            end
-
             it { is_expected.to contain_class('puppet::agent::service::cron').with_enabled(true) }
             it { is_expected.to contain_class('puppet::agent::service::daemon').with_enabled(false) }
             it do
@@ -412,14 +390,6 @@ describe 'puppet' do
         end
 
         it { is_expected.to contain_service('puppet').with_name('pe-puppet') }
-      end
-
-      context 'with remove_lock => false' do
-        let :params do
-          super().merge(remove_lock: false)
-        end
-
-        it { should_not contain_file('/var/lib/puppet/state/agent_disabled.lock') }
       end
 
       context 'with report => false' do
