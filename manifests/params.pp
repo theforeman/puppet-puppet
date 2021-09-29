@@ -360,7 +360,7 @@ class puppet::params {
 
   # This is some very trivial "tuning". See the puppet reference:
   # https://docs.puppet.com/puppetserver/latest/tuning_guide.html
-  $mem_in_mb = $facts['memory']['system']['total_bytes'] / 1024 / 1024
+  $mem_in_mb = Integer($facts['memory']['system']['total_bytes']) / 1024 / 1024
   if $mem_in_mb >= 3072 {
     $server_jvm_min_heap_size = '2G'
     $server_jvm_max_heap_size = '2G'
