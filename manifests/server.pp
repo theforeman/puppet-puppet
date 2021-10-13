@@ -123,19 +123,9 @@
 #                                      using git_repo, by default a git describe
 #                                      approach will be installed.
 #
-# $server_foreman_facts::              Should foreman receive facts from puppet
-#
 # $foreman::                           Should foreman integration be installed
 #
-# $foreman_url::                       Foreman URL
-#
-# $foreman_ssl_ca::                    SSL CA of the Foreman server
-#
-# $foreman_ssl_cert::                  Client certificate for authenticating against Foreman server
-#
-# $foreman_ssl_key::                   Key for authenticating against Foreman server
-#
-# $puppet_basedir::                    Where is the puppet code base located
+# $foreman_facts::                     Should foreman receive facts from puppet
 #
 # $compile_mode::                      Used to control JRuby's "CompileMode", which may improve performance.
 #
@@ -400,12 +390,7 @@ class puppet::server(
   Boolean $strict_variables = $puppet::server_strict_variables,
   Hash[String, Data] $additional_settings = $puppet::server_additional_settings,
   Boolean $foreman = $puppet::server_foreman,
-  Stdlib::HTTPUrl $foreman_url = $puppet::server_foreman_url,
-  Optional[Stdlib::Absolutepath] $foreman_ssl_ca = $puppet::server_foreman_ssl_ca,
-  Optional[Stdlib::Absolutepath] $foreman_ssl_cert = $puppet::server_foreman_ssl_cert,
-  Optional[Stdlib::Absolutepath] $foreman_ssl_key = $puppet::server_foreman_ssl_key,
-  Boolean $server_foreman_facts = $puppet::server_foreman_facts,
-  Optional[Stdlib::Absolutepath] $puppet_basedir = $puppet::server_puppet_basedir,
+  Boolean $foreman_facts = $puppet::server_foreman_facts,
   Enum['current', 'future'] $parser = $puppet::server_parser,
   Variant[Undef, Enum['unlimited'], Pattern[/^\d+[smhdy]?$/]] $environment_timeout = $puppet::server_environment_timeout,
   String $jvm_java_bin = $puppet::server_jvm_java_bin,
@@ -514,4 +499,15 @@ class puppet::server(
 
   Class['puppet::server::install'] ~> Class['puppet::server::config']
   Class['puppet::config', 'puppet::server::config'] ~> Class['puppet::server::service']
+
+  ## Foreman
+  if $puppet::server::foreman {
+    class { 'puppet::server::psf':
+      enc    => $external_nodes == '/usr/bin/psf',
+      facts  => $server_foreman_facts,
+      report => 'psf' in $reports.split(','),
+    }
+    contain puppet::server::psf
+    Class['puppet::server::install'] -> Class['puppet::server::psf'] -> Class['puppet::server::config']
+  }
 }

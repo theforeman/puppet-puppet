@@ -218,8 +218,8 @@ class puppet::params {
   $server                          = false
   $server_ca                       = true
   $server_ca_crl_sync              = false
-  $server_reports                  = 'foreman'
-  $server_external_nodes           = "${dir}/node.rb"
+  $server_reports                  = 'psf'
+  $server_external_nodes           = '/usr/bin/psf'
   $server_trusted_external_command = undef
   $server_request_timeout          = 60
   $server_certname                 = $::clientcert
@@ -332,14 +332,6 @@ class puppet::params {
   $lower_fqdn              = downcase($facts['networking']['fqdn'])
   $server_foreman          = true
   $server_foreman_facts    = true
-  $server_puppet_basedir   = $aio_package ? {
-    true  => '/opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet',
-    false => undef,
-  }
-  $server_foreman_url      = "https://${lower_fqdn}"
-  $server_foreman_ssl_ca   = undef
-  $server_foreman_ssl_cert = undef
-  $server_foreman_ssl_key  = undef
 
   # Which Parser do we want to use? https://docs.puppetlabs.com/references/latest/configuration.html#parser
   $server_parser = 'current'

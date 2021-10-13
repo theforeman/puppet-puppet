@@ -33,6 +33,7 @@ class puppet::server::puppetdb (
     puppetdb_port               => $port,
     puppetdb_soft_write_failure => $soft_write_failure,
     manage_storeconfigs         => false,
+    manage_routes               => false,
     restart_puppet              => false,
   }
   Class['puppetdb::master::puppetdb_conf'] ~> Class['puppet::server::service']

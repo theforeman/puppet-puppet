@@ -278,19 +278,9 @@
 #                                           using git_repo, by default a git describe
 #                                           approach will be installed.
 #
-# $server_foreman_facts::                   Should foreman receive facts from puppet
-#
 # $server_foreman::                         Should foreman integration be installed
 #
-# $server_foreman_url::                     Foreman URL
-#
-# $server_foreman_ssl_ca::                  SSL CA of the Foreman server
-#
-# $server_foreman_ssl_cert::                Client certificate for authenticating against Foreman server
-#
-# $server_foreman_ssl_key::                 Key for authenticating against Foreman server
-#
-# $server_puppet_basedir::                  Where is the puppet code base located
+# $server_foreman_facts::                   Should foreman receive facts from puppet
 #
 # $server_request_timeout::                 Timeout in node.rb script for fetching
 #                                           catalog from Foreman (in seconds).
@@ -684,12 +674,7 @@ class puppet (
   Boolean $server_strict_variables = $puppet::params::server_strict_variables,
   Hash[String, Data] $server_additional_settings = $puppet::params::server_additional_settings,
   Boolean $server_foreman = $puppet::params::server_foreman,
-  Stdlib::HTTPUrl $server_foreman_url = $puppet::params::server_foreman_url,
-  Optional[Stdlib::Absolutepath] $server_foreman_ssl_ca = $puppet::params::server_foreman_ssl_ca,
-  Optional[Stdlib::Absolutepath] $server_foreman_ssl_cert = $puppet::params::server_foreman_ssl_cert,
-  Optional[Stdlib::Absolutepath] $server_foreman_ssl_key = $puppet::params::server_foreman_ssl_key,
   Boolean $server_foreman_facts = $puppet::params::server_foreman_facts,
-  Optional[Stdlib::Absolutepath] $server_puppet_basedir = $puppet::params::server_puppet_basedir,
   Enum['current', 'future'] $server_parser = $puppet::params::server_parser,
   Variant[Undef, Enum['unlimited'], Pattern[/^\d+[smhdy]?$/]] $server_environment_timeout = $puppet::params::server_environment_timeout,
   String $server_jvm_java_bin = $puppet::params::server_jvm_java_bin,

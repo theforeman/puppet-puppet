@@ -36,6 +36,7 @@ class puppet::server::config inherits puppet::config {
   $server_external_nodes       = $puppet::server::external_nodes
   $server_environment_timeout  = $puppet::server::environment_timeout
   $trusted_external_command    = $puppet::server::trusted_external_command
+  $storeconfigs                = $puppet::server::storeconfigs
 
   if $server_external_nodes and $server_external_nodes != '' {
     class{ 'puppet::server::enc':
@@ -83,7 +84,7 @@ class puppet::server::config inherits puppet::config {
     'certname':           value => $puppet::server::certname;
     'parser':             value => $puppet::server::parser;
     'strict_variables':   value => $puppet::server::strict_variables;
-    'storeconfigs':       value => $puppet::server::storeconfigs;
+    'storeconfigs':       value => $storeconfigs;
   }
 
   if $puppet::server::ssl_dir_manage {
@@ -99,13 +100,6 @@ class puppet::server::config inherits puppet::config {
 
   $puppet::server_additional_settings.each |$key,$value| {
     puppet::config::master { $key: value => $value }
-  }
-
-  file { "${puppet::vardir}/reports":
-    ensure => directory,
-    owner  => $puppet::server::user,
-    group  => $puppet::server::group,
-    mode   => '0750',
   }
 
   if '/usr/share/puppet/modules' in $puppet::server::common_modules_path {
@@ -296,21 +290,37 @@ class puppet::server::config inherits puppet::config {
     }
   }
 
-  ## Foreman
-  if $puppet::server::foreman {
-    # Include foreman components for the puppetmaster
-    # ENC script, reporting script etc.
-    class { 'puppetserver_foreman':
-      foreman_url      => $puppet::server::foreman_url,
-      enc_upload_facts => $puppet::server::server_foreman_facts,
-      enc_timeout      => $puppet::server::request_timeout,
-      puppet_home      => $puppet::server::puppetserver_vardir,
-      puppet_basedir   => $puppet::server::puppet_basedir,
-      puppet_etcdir    => $puppet::dir,
-      ssl_ca           => pick($puppet::server::foreman_ssl_ca, $puppet::server::ssl_ca_cert),
-      ssl_cert         => pick($puppet::server::foreman_ssl_cert, $puppet::server::ssl_cert),
-      ssl_key          => pick($puppet::server::foreman_ssl_key, $puppet::server::ssl_cert_key),
+  # Configure indirectors via routes.yaml.
+  $manage_routes = true  # TODO: parameter
+  if $manage_routes {
+    # If storeconfigs is set, that implies puppetdb is used
+    if $storeconfigs {
+      if $puppet::server::foreman_facts {
+        $terminus = 'psf-puppetdb' # TODO: implement this
+      } else {
+        $terminus = 'puppetdb'
+      }
+    } elsif $puppet::server::foreman_facts {
+      $terminus = 'psf'
+    } else {
+      $terminus = undef
     }
-    contain puppetserver_foreman
+
+    $routes = {
+      'master' => {
+        'facts' => {
+          'terminus' => $terminus,
+          'cache'    => 'json',  # TODO is this needed? yaml for puppet < 7
+        }
+      }
+    }
+
+    file { "${puppet::dir}/routes.yaml":
+      ensure  => bool2str($terminus, 'file', 'absent'),
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      content => to_yaml($routes),
+    }
   }
 }

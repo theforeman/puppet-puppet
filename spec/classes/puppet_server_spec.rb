@@ -152,14 +152,14 @@ describe 'puppet' do
         it { should_not contain_file("#{confdir}/autosign.conf").with_content(/# Managed by Puppet/) }
         it { should_not contain_file("#{confdir}/autosign.conf").with_content(/foo.bar/) }
 
+        # psf
         it 'should set up the ENC' do
-          should contain_class('puppetserver_foreman')
-            .with_foreman_url('https://foo.example.com')
-            .with_enc_upload_facts(true)
-            .with_enc_timeout(60)
-            .with_puppet_home(puppetserver_vardir)
-            .with_puppet_etcdir(etcdir)
-            .with_puppet_basedir(rubydir)
+          should contain_class('puppet::server::psf')
+            .with_enc(true)
+            .with_facts(true)
+            .with_report(true)
+            .that_requires('Class[puppet::server::install]')
+            .that_comes_before('Class[puppet::server::config]')
         end
 
         # service

@@ -47,11 +47,7 @@ Requires [theforeman/git](https://forge.puppetlabs.com/theforeman/git).
 The Foreman integration is optional, but on by default when `server` is true.
 It can be disabled by setting `server_foreman` to false.
 
-Requires [theforeman/puppetserver_foreman](https://forge.puppetlabs.com/theforeman/puppetserver_foreman).
-
-Since version 15.0.0 the integration bits depend on the standalone module where
-previously it depended on
-[theforeman/foreman](https://forge.puppetlabs.com/theforeman/foreman)
+Since version 16 [PSF](https://github.com/ekohl/psf) is used for integration.
 
 ## PuppetDB integration
 
@@ -65,7 +61,7 @@ Requires [puppetlabs/puppetdb](https://forge.puppetlabs.com/puppetlabs/puppetdb)
 ```puppet
 class { 'puppet':
   server              => true,
-  server_reports      => 'puppetdb,foreman',
+  server_reports      => 'puppetdb,psf',
   server_storeconfigs => true,
 }
 class { 'puppet::server::puppetdb':
@@ -122,7 +118,7 @@ wrapper classes or even your ENC (if it supports param classes). For example:
     # Want to integrate with an existing PuppetDB?
     class { '::puppet':
       server              => true,
-      server_reports      => 'puppetdb,foreman',
+      server_reports      => 'puppetdb,psf',
       server_storeconfigs => true,
     }
     class { 'puppet::server::puppetdb':
