@@ -10,22 +10,19 @@ class puppet::server::psf (
   }
 
   if $package_ensure != 'absent' {
-    service { 'psfd@enc.socket':
-      ensure  => $enc,
-      enable  => $enc,
-      require => Package[$package_name],
-    }
-
-    service { 'psfd@facts.socket':
-      ensure  => $facts,
-      enable  => $facts,
-      require => Package[$package_name],
-    }
-
-    service { 'psfd@report.socket':
-      ensure  => $report,
-      enable  => $report,
-      require => Package[$package_name],
+    {
+      'enc'    => $enc,
+      'facts'  => $facts,
+      'report' => $report,
+    }.each |$service, $ensure| {
+      service { "psfd@${service}.socket":
+        ensure  => $enc,
+        enable  => $enc,
+        require => Package[$package_name],
+      }
+      ~> service { "psfd@${service}.service":
+        subscribe => File <| title == '/etc/foreman-proxy/settings.yml' |>,
+      }
     }
   }
 }
