@@ -1,5 +1,5 @@
 [![Puppet Forge](https://img.shields.io/puppetforge/v/theforeman/puppet.svg)](https://forge.puppetlabs.com/theforeman/puppet)
-[![Build Status](https://travis-ci.org/theforeman/puppet-puppet.svg?branch=master)](https://travis-ci.org/theforeman/puppet-puppet)
+[![CI](https://github.com/theforeman/puppet-puppet/actions/workflows/ci.yml/badge.svg?event=schedule)](https://github.com/theforeman/puppet-puppet/actions/workflows/ci.yml)
 
 # Puppet module for installing the Puppet agent and master
 
