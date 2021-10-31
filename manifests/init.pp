@@ -322,7 +322,14 @@
 #
 # $server_environment_vars::                A hash of environment variables and their values
 #                                           which the puppetserver is allowed to see.
-#                                           To pass an existing variable use {'MYVAR': '${MYVAR}'}.
+#                                           To define literal values double quotes should be used:
+#                                           {'MYVAR': '"MYVALUE"'}. Omitting the inner quotes
+#                                           might lead to unexpected results since the HOCON
+#                                           format does not allow characters like $,
+#                                           curly/square brackets or = in unquoted strings.
+#                                           Multi line strings are also allowed as long as they are
+#                                           triple quoted: {'MYVAR': "\"\"\"MY\nMULTI\nLINE\nVALUE\"\"\""}
+#                                           To pass an existing variable use substitutions: {'MYVAR': '${MYVAR}'}.
 #
 # $allow_any_crl_auth::                     Allow any authentication for the CRL. This
 #                                           is needed on the puppet CA to accept clients
