@@ -1,5 +1,13 @@
 # Changelog
 
+## [15.2.0](https://github.com/theforeman/puppet-puppet/tree/15.2.0) (2021-11-05)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/15.1.0...15.2.0)
+
+**Implemented enhancements:**
+
+- Switch to puppet/systemd [\#804](https://github.com/theforeman/puppet-puppet/pull/804) ([ekohl](https://github.com/ekohl))
+
 ## [15.1.0](https://github.com/theforeman/puppet-puppet/tree/15.1.0) (2021-07-26)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/15.0.0...15.1.0)
