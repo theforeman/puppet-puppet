@@ -142,7 +142,7 @@
 #                                           required.
 # $package_install_options::                Flags that should be passed to the package manager
 #                                           during installation. Defaults to undef. May be
-#                                           a string or a hash, see Puppet Package resource
+#                                           a string, an array or a hash, see Puppet Package resource
 #                                           documentation for the provider matching your package manager
 #
 # $unavailable_runmodes::                   Runmodes that are not available for the
@@ -565,7 +565,7 @@ class puppet (
   Optional[String] $dir_owner = $puppet::params::dir_owner,
   Optional[String] $dir_group = $puppet::params::dir_group,
   Optional[String] $package_provider = $puppet::params::package_provider,
-  Optional[Variant[String,Hash]] $package_install_options = $puppet::params::package_install_options,
+  Optional[Variant[String,Hash,Array]] $package_install_options = $puppet::params::package_install_options,
   Optional[Variant[Stdlib::Absolutepath, Stdlib::HTTPUrl]] $package_source = $puppet::params::package_source,
   Integer[0, 65535] $port = $puppet::params::port,
   Boolean $pluginsync = $puppet::params::pluginsync,
