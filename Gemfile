@@ -21,4 +21,7 @@ gem 'voxpupuli-acceptance', '~> 1.0', {"groups"=>["system_tests"]}
 gem 'puppetlabs_spec_helper', {"groups"=>["system_tests"]}
 gem 'hocon'
 
+# Pin rdoc to prevent updating bundled psych (https://github.com/ruby/rdoc/commit/ebe185c8775b2afe844eb3da6fa78adaa79e29a4)
+gem 'rdoc', '< 6.4'
+
 # vim:ft=ruby
