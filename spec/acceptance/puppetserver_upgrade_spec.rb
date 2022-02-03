@@ -20,9 +20,6 @@ describe 'Scenario: minor version upgrade', unless: unsupported_puppetserver do
   when 'puppet6'
     from_version = '6.7.0'
     to_version = '6.7.2'
-  when 'puppet5'
-    from_version = '5.3.6'
-    to_version = '5.3.7'
   else
     raise 'Unsupported Puppet collection'
   end

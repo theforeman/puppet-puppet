@@ -44,9 +44,6 @@ class puppet::server::config inherits puppet::config {
   }
 
   if $trusted_external_command {
-    if versioncmp($puppet::server::real_puppetserver_version, '6.11') < 0 {
-      fail('$server_trusted_external_command is only available for Puppet > 6.11')
-    }
     puppet::config::master {
       'trusted_external_command': value => $trusted_external_command,
     }
@@ -157,17 +154,9 @@ class puppet::server::config inherits puppet::config {
 
   # Generate a new CA and host cert if our host cert doesn't exist
   if $puppet::server::ca {
-    if versioncmp($puppet::server::real_puppetserver_version, '6.0') > 0 {
-      $creates = $puppet::server::ssl_ca_cert
-      $command = "${puppet::puppetserver_cmd} ca setup"
-    } else {
-      $creates = $puppet::server::ssl_cert
-      $command = "${puppet::puppet_cmd} cert --generate ${puppet::server::certname} --allow-dns-alt-names"
-    }
-
     exec {'puppet_server_config-generate_ca_cert':
-      creates => $creates,
-      command => $command,
+      creates => $puppet::server::ssl_ca_cert,
+      command => "${puppet::puppetserver_cmd} ca setup",
       umask   => '0022',
       require => [
         Concat["${puppet::server::dir}/puppet.conf"],

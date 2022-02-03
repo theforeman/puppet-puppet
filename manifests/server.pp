@@ -61,7 +61,6 @@
 # $external_nodes::                    External nodes classifier executable
 #
 # $trusted_external_command::          The external trusted facts script to use.
-#                                      (Puppet >= 6.11 only).
 #
 # $git_repo::                          Use git repository as a source of modules
 #
@@ -194,14 +193,14 @@
 # $max_requests_per_instance::         Max number of requests per jruby instance. Defaults to 0 (disabled)
 #
 # $max_queued_requests::               The maximum number of requests that may be queued waiting to borrow a
-#                                      JRuby from the pool. (Puppetserver 5.x only)
-#                                      Defaults to 0 (disabled) for Puppetserver >= 5.0
+#                                      JRuby from the pool.
+#                                      Defaults to 0 (disabled).
 #
 # $max_retry_delay::                   Sets the upper limit for the random sleep set as a Retry-After header on
-#                                      503 responses returned when max-queued-requests is enabled. (Puppetserver 5.x only)
-#                                      Defaults to 1800 for Puppetserver >= 5.0
+#                                      503 responses returned when max-queued-requests is enabled.
+#                                      Defaults to 1800 for
 #
-# $multithreaded::                     Use multithreaded jruby. (Puppetserver >= 6.8 only).  Defaults to false.
+# $multithreaded::                     Use multithreaded jruby. Defaults to false.
 #
 # $idle_timeout::                      How long the server will wait for a response on an existing connection
 #
@@ -276,9 +275,9 @@
 # $metrics_allowed::                   Specify metrics to allow in addition to those in the default list
 #                                      Defaults to undef
 #
-# $puppetserver_experimental::         For Puppetserver 5, enable the /puppet/experimental route? Defaults to true
+# $puppetserver_experimental::         Enable the /puppet/experimental route? Defaults to true
 #
-# $puppetserver_auth_template::        Template for generating /etc/puppetlabs/puppetserver/conf.d/auth.conf 
+# $puppetserver_auth_template::        Template for generating /etc/puppetlabs/puppetserver/conf.d/auth.conf
 #
 # $puppetserver_trusted_agents::       Certificate names of agents that are allowed to fetch *all* catalogs. Defaults to empty array
 #
@@ -449,12 +448,8 @@ class puppet::server(
     $real_puppetserver_version = $puppetserver_version
   } elsif versioncmp($facts['puppetversion'], '7.0.0') >= 0 {
     $real_puppetserver_version = '7.0.0'
-  } elsif versioncmp($facts['puppetversion'], '6.11.0') >= 0 {
-    $real_puppetserver_version = '6.11.0'
-  } elsif versioncmp($facts['puppetversion'], '6.0.0') >= 0 {
-    $real_puppetserver_version = '6.0.0'
   } else {
-    $real_puppetserver_version = '5.3.6'
+    $real_puppetserver_version = '6.15.0'
   }
 
   if versioncmp($real_puppetserver_version, '7.0.0') >= 0 {

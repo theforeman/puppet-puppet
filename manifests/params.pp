@@ -264,7 +264,7 @@ class puppet::params {
 
   $puppet_major = regsubst($::puppetversion, '^(\d+)\..*$', '\1')
 
-  if ($facts['os']['family'] =~ /(FreeBSD|DragonFly)/ and versioncmp($puppet_major, '5') >= 0) {
+  if ($facts['os']['family'] =~ /(FreeBSD|DragonFly)/) {
     $server_package = "puppetserver${puppet_major}"
   } else {
     $server_package = undef
@@ -406,7 +406,7 @@ class puppet::params {
 
   $server_puppetserver_version      = undef
 
-  # Puppetserver 5.x Which auth.conf shall we use?
+  # Which auth.conf shall we use?
   $server_use_legacy_auth_conf      = false
 
   # Puppetserver metrics shipping
@@ -418,7 +418,7 @@ class puppet::params {
   $server_metrics_graphite_interval = 5
   $server_metrics_allowed           = undef
 
-  # For Puppetserver 5, should the /puppet/experimental route be enabled?
+  # Should the /puppet/experimental route be enabled?
   $server_puppetserver_experimental = true
 
   # For custom auth.conf settings allow passing in a template

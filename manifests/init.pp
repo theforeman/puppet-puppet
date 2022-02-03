@@ -222,7 +222,6 @@
 # $server_external_nodes::                  External nodes classifier executable
 #
 # $server_trusted_external_command::        The external trusted facts script to use.
-#                                           (Puppet >= 6.11 only).
 #
 # $server_git_repo::                        Use git repository as a source of modules
 #
@@ -362,14 +361,14 @@
 # $server_max_requests_per_instance::       Max number of requests a jruby instances will handle. Defaults to 0 (disabled)
 #
 # $server_max_queued_requests::             The maximum number of requests that may be queued waiting to borrow a
-#                                           JRuby from the pool. (Puppetserver 5.x only)
-#                                           Defaults to 0 (disabled) for Puppetserver >= 5.0
+#                                           JRuby from the pool.
+#                                           Defaults to 0 (disabled).
 #
 # $server_max_retry_delay::                 Sets the upper limit for the random sleep set as a Retry-After header on
-#                                           503 responses returned when max-queued-requests is enabled. (Puppetserver 5.x only)
-#                                           Defaults to 1800 for Puppetserver >= 5.0
+#                                           503 responses returned when max-queued-requests is enabled.
+#                                           Defaults to 1800.
 #
-# $server_multithreaded::                   Use multithreaded jruby. (Puppetserver >= 6.8 only).  Defaults to false.
+# $server_multithreaded::                   Use multithreaded jruby. Defaults to false.
 #
 # $server_idle_timeout::                    How long the server will wait for a response on an existing connection
 #
@@ -451,9 +450,9 @@
 # $server_metrics_allowed::                 Specify metrics to allow in addition to those in the default list
 #                                           Defaults to undef
 #
-# $server_puppetserver_experimental::       For Puppetserver 5, enable the /puppet/experimental route? Defaults to true
+# $server_puppetserver_experimental::       Enable the /puppet/experimental route? Defaults to true
 #
-# $server_puppetserver_auth_template::      Template for generating /etc/puppetlabs/puppetserver/conf.d/auth.conf 
+# $server_puppetserver_auth_template::      Template for generating /etc/puppetlabs/puppetserver/conf.d/auth.conf
 #
 # $server_puppetserver_trusted_agents::     Certificate names of puppet agents that are allowed to fetch *all* catalogs
 #                                           Defaults to [] and all agents are only allowed to fetch their own catalogs.
@@ -543,7 +542,7 @@
 #
 #   class {'puppet':
 #     agent_noop => true,
-#     version    => '6.11.0-1',
+#     version    => '6.15.0-1',
 #   }
 #
 class puppet (
