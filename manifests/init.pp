@@ -26,8 +26,6 @@
 #
 # $port::                                   Override the port of the master we connect to.
 #
-# $pluginsync::                             Enable pluginsync.
-#
 # $splay::                                  Switch to enable a random amount of time
 #                                           to sleep before each run.
 #
@@ -566,7 +564,6 @@ class puppet (
   Optional[Variant[String,Hash,Array]] $package_install_options = $puppet::params::package_install_options,
   Optional[Variant[Stdlib::Absolutepath, Stdlib::HTTPUrl]] $package_source = $puppet::params::package_source,
   Integer[0, 65535] $port = $puppet::params::port,
-  Boolean $pluginsync = $puppet::params::pluginsync,
   Boolean $splay = $puppet::params::splay,
   Variant[Integer[0],Pattern[/^\d+[smhdy]?$/]] $splaylimit = $puppet::params::splaylimit,
   Variant[Boolean, Stdlib::Absolutepath] $autosign = $puppet::params::autosign,

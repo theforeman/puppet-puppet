@@ -9,7 +9,6 @@ class puppet::params {
   $group               = 'puppet'
   $ip                  = '0.0.0.0'
   $port                = 8140
-  $pluginsync          = true
   $splay               = false
   $splaylimit          = 1800
   $runinterval         = 1800
