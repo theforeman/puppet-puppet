@@ -413,9 +413,6 @@ class puppet::params {
   # For Puppetserver 5, use JRuby 9k?
   $server_puppetserver_jruby9k      = false
 
-  # this switch also controls Ruby profiling, by default disabled for Puppetserver 2.x, enabled for 5.x
-  $server_puppetserver_metrics = undef
-
   # Puppetserver metrics shipping
   $server_metrics_jmx_enable        = true
   $server_metrics_graphite_enable   = false
