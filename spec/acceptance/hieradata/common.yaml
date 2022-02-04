@@ -4,5 +4,5 @@ puppet::server_reports: 'store'
 puppet::server_external_nodes: ''
 # only for install test - don't think to use this in production!
 # https://docs.puppet.com/puppetserver/latest/tuning_guide.html
-puppet::server_jvm_max_heap_size: '256m'
+puppet::server_jvm_max_heap_size: '768m'
 puppet::server_jvm_min_heap_size: '256m'
