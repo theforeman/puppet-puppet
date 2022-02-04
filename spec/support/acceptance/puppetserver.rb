@@ -3,6 +3,6 @@ def unsupported_puppetserver
   when 'Fedora'
     true
   when 'Ubuntu'
-    ENV['BEAKER_PUPPET_COLLECTION'] == 'puppet6' && host_inventory['facter']['os']['distro']['codename'] == 'focal'
+    ENV['BEAKER_PUPPET_COLLECTION'] == 'puppet6' && host_inventory['facter']['os']['release']['major'] == '20.04'
   end
 end
