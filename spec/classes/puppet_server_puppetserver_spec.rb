@@ -172,6 +172,16 @@ describe 'puppet' do
         end
       end
 
+      describe 'environment-vars' do
+        context 'with default parameters' do
+          it { should contain_file(puppetserver_conf).with_content(/^    environment-vars: \{\s*\}$/) }
+        end
+        context 'with {"foo" => "bar"}' do
+          let(:params) { super().merge(server_environment_vars: { 'foo' => 'bar' }) }
+          it { should contain_file(puppetserver_conf).with_content(/^    environment-vars: \{\s*"foo" : bar\s*\}$/) }
+        end
+      end
+
       describe 'server_max_requests_per_instance' do
         context 'with default parameters' do
           it { should contain_file(puppetserver_conf).with_content(/^    max-requests-per-instance: 0$/) }

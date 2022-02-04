@@ -311,6 +311,17 @@
 #
 # $server_jruby_gem_home::                  Where jruby gems are located for puppetserver
 #
+# $server_environment_vars::                A hash of environment variables and their values
+#                                           which the puppetserver is allowed to see.
+#                                           To define literal values double quotes should be used:
+#                                           {'MYVAR': '"MYVALUE"'}. Omitting the inner quotes
+#                                           might lead to unexpected results since the HOCON
+#                                           format does not allow characters like $,
+#                                           curly/square brackets or = in unquoted strings.
+#                                           Multi line strings are also allowed as long as they are
+#                                           triple quoted: {'MYVAR': "\"\"\"MY\nMULTI\nLINE\nVALUE\"\"\""}
+#                                           To pass an existing variable use substitutions: {'MYVAR': '${MYVAR}'}.
+#
 # $allow_any_crl_auth::                     Allow any authentication for the CRL. This
 #                                           is needed on the puppet CA to accept clients
 #                                           from a the puppet CA proxy.
@@ -685,6 +696,7 @@ class puppet (
   Optional[Variant[String,Array[String]]] $server_jvm_extra_args = $puppet::params::server_jvm_extra_args,
   Optional[String] $server_jvm_cli_args = $puppet::params::server_jvm_cli_args,
   Optional[Stdlib::Absolutepath] $server_jruby_gem_home = $puppet::params::server_jruby_gem_home,
+  Hash[String, String] $server_environment_vars = $puppet::params::server_environment_vars,
   Integer[1] $server_max_active_instances = $puppet::params::server_max_active_instances,
   Integer[0] $server_max_requests_per_instance = $puppet::params::server_max_requests_per_instance,
   Integer[0] $server_max_queued_requests = $puppet::params::server_max_queued_requests,

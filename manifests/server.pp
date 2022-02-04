@@ -158,6 +158,10 @@
 #
 # $jruby_gem_home::                    Where jruby gems are located for puppetserver
 #
+# $server_environment_vars::           A hash of environment variables and their values
+#                                      which the puppetserver is allowed to see.
+#                                      To pass an existing variable use {'MYVAR': '${MYVAR}'}.
+#
 # $default_manifest::                  Toggle if default_manifest setting should
 #                                      be added to the [main] section
 #
@@ -407,6 +411,7 @@ class puppet::server(
   Optional[Variant[String,Array[String]]] $jvm_extra_args = $puppet::server_jvm_extra_args,
   Optional[String] $jvm_cli_args = $puppet::server_jvm_cli_args,
   Optional[Stdlib::Absolutepath] $jruby_gem_home = $puppet::server_jruby_gem_home,
+  Hash[String, String] $server_environment_vars = $puppet::server_environment_vars,
   Integer[1] $max_active_instances = $puppet::server_max_active_instances,
   Integer[0] $max_requests_per_instance = $puppet::server_max_requests_per_instance,
   Integer[0] $max_queued_requests = $puppet::server_max_queued_requests,

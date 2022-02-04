@@ -73,6 +73,20 @@ jruby-puppet: {
 
     # (optional) enable or disable environment class cache
     environment-class-cache-enabled: <%= @server_environment_class_cache_enabled %>
+
+    # (optional) A map of environment variables which are made visible to
+    # Ruby code running within JRuby, for example, via the Ruby ENV class.
+    # By default, the only environment variables whose values are set into JRuby from the shell are HOME and PATH.
+    # The default value for the GEM_HOME environment variable in JRuby is set from the value provided for the
+    # jruby-puppet.gem-home key.
+    # Any variable set from the map for the environment-vars key overrides these defaults.
+    # Avoid overriding HOME, PATH, or GEM_HOME here because these values are already configurable via the shell
+    # or jruby-puppet.gem-home.
+    environment-vars: {
+    <%- @server_environment_vars.each do |env_key, env_val| -%>
+      "<%= env_key %>" : <%= env_val %>
+    <%- end -%>
+    }
 <%- if @compile_mode %>
 
     compile-mode: <%= @compile_mode %>
