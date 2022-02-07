@@ -1,3 +1,67 @@
+## [16.0.0](https://github.com/theforeman/puppet-puppet/tree/16.0.0) (2022-02-07)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/15.2.0...16.0.0)
+
+**Breaking changes:**
+
+- Drop EL6 support [\#823](https://github.com/theforeman/puppet-puppet/pull/823) ([ekohl](https://github.com/ekohl))
+- Drop Puppet 5 support, require \>= 6.15.0 + drop pluginsync & jruby9k parameters [\#822](https://github.com/theforeman/puppet-puppet/pull/822) ([ekohl](https://github.com/ekohl))
+- Remove Puppet start workaround on Debian [\#807](https://github.com/theforeman/puppet-puppet/pull/807) ([ekohl](https://github.com/ekohl))
+- Drop config\_version and environment.conf [\#805](https://github.com/theforeman/puppet-puppet/pull/805) ([optiz0r](https://github.com/optiz0r))
+- Support multiple envs\_dir directories [\#803](https://github.com/theforeman/puppet-puppet/pull/803) ([optiz0r](https://github.com/optiz0r))
+
+**Implemented enhancements:**
+
+- Support multiple path in environmentpath parameter [\#708](https://github.com/theforeman/puppet-puppet/issues/708)
+- puppet/extlib: Allow 6.x [\#821](https://github.com/theforeman/puppet-puppet/pull/821) ([bastelfreak](https://github.com/bastelfreak))
+- Improve support for chocolatey package provider on Windows [\#818](https://github.com/theforeman/puppet-puppet/pull/818) ([fraenki](https://github.com/fraenki))
+- puppetlabs/stdlib: Allow 8.x [\#817](https://github.com/theforeman/puppet-puppet/pull/817) ([bastelfreak](https://github.com/bastelfreak))
+- Support "environment-vars" setting in puppetserver.conf [\#806](https://github.com/theforeman/puppet-puppet/pull/806) ([phihos](https://github.com/phihos))
+- Rely on the service\_provider fact [\#694](https://github.com/theforeman/puppet-puppet/pull/694) ([ekohl](https://github.com/ekohl))
+
+## [15.2.0](https://github.com/theforeman/puppet-puppet/tree/15.2.0) (2021-11-05)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/15.1.0...15.2.0)
+
+**Implemented enhancements:**
+
+- Switch to puppet/systemd [\#804](https://github.com/theforeman/puppet-puppet/pull/804) ([ekohl](https://github.com/ekohl))
+
+## [15.1.0](https://github.com/theforeman/puppet-puppet/tree/15.1.0) (2021-07-26)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/15.0.0...15.1.0)
+
+**Implemented enhancements:**
+
+- Allow camptocamp/systemd 3.x + use it for timers [\#790](https://github.com/theforeman/puppet-puppet/pull/790) ([ekohl](https://github.com/ekohl))
+- Allow Puppet 7 compatible versions of puppetlabs mods [\#788](https://github.com/theforeman/puppet-puppet/pull/788) ([ekohl](https://github.com/ekohl))
+- Support Puppet 7 [\#779](https://github.com/theforeman/puppet-puppet/pull/779) ([ekohl](https://github.com/ekohl))
+
+## [15.0.0](https://github.com/theforeman/puppet-puppet/tree/15.0.0) (2021-04-27)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/14.2.1...15.0.0)
+
+**Breaking changes:**
+
+- \(\#780\) puppetserver: don't purge metrics.conf / Use dedicated parameter for jruby profiler  [\#781](https://github.com/theforeman/puppet-puppet/pull/781) ([bastelfreak](https://github.com/bastelfreak))
+- Move to puppetserver\_foreman [\#749](https://github.com/theforeman/puppet-puppet/pull/749) ([ekohl](https://github.com/ekohl))
+
+**Implemented enhancements:**
+
+- Add `puppet::package_install_options` variable to allow you to pass flags to package resource [\#777](https://github.com/theforeman/puppet-puppet/pull/777) ([vollmerk](https://github.com/vollmerk))
+
+**Fixed bugs:**
+
+- Fix config append [\#782](https://github.com/theforeman/puppet-puppet/pull/782) ([SimonPe](https://github.com/SimonPe))
+
+## [14.2.1](https://github.com/theforeman/puppet-puppet/tree/14.2.1) (2021-01-26)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/14.2.0...14.2.1)
+
+**Fixed bugs:**
+
+- run Puppet agent from systemd only after network is brought up [\#765](https://github.com/theforeman/puppet-puppet/pull/765) ([anarcat](https://github.com/anarcat))
+
 ## [14.2.0](https://github.com/theforeman/puppet-puppet/tree/14.2.0) (2020-10-29)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/14.1.0...14.2.0)
