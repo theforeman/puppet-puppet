@@ -2,7 +2,6 @@
 # @api private
 class puppet::agent::config inherits puppet::config {
   puppet::config::agent{
-    'classfile':         value => $puppet::classfile;
     'localconfig':       value => '$vardir/localconfig';
     'default_schedules': value => false;
     'report':            value => $puppet::report;
@@ -13,6 +12,11 @@ class puppet::agent::config inherits puppet::config {
     'runinterval':       value => $puppet::runinterval;
     'noop':              value => $puppet::agent_noop;
     'usecacheonfailure': value => $puppet::usecacheonfailure;
+  }
+  if $puppet::classfile {
+    puppet::config::agent {
+      'classfile':         value => $puppet::classfile;
+    }
   }
   if $puppet::http_connect_timeout != undef {
     puppet::config::agent {

@@ -35,11 +35,9 @@ class puppet::params {
   $use_srv_records     = false
   $srv_domain          = fact('networking.domain')
 
-  # lint:ignore:puppet_url_without_modules
-  $pluginsource        = 'puppet:///plugins'
-  $pluginfactsource    = 'puppet:///pluginfacts'
-  # lint:endignore
-  $classfile           = '$statedir/classes.txt'
+  $pluginsource        = undef
+  $pluginfactsource    = undef
+  $classfile           = undef
   $syslogfacility      = undef
   $environment         = $::environment
 
