@@ -1,57 +1,12 @@
 # Default parameters
 # @api private
 class puppet::params {
-
-  # Basic config
-  $version             = 'present'
-  $manage_user         = true
-  $user                = 'puppet'
-  $group               = 'puppet'
-  $ip                  = '0.0.0.0'
-  $port                = 8140
-  $splay               = false
-  $splaylimit          = 1800
-  $runinterval         = 1800
-  $runmode             = 'service'
-  $report              = true
-
-  # Not defined here as the commands depend on module parameter "dir"
-  $cron_cmd            = undef
-  $systemd_cmd         = undef
-
-  $agent_noop          = false
-  $show_diff           = false
-  $module_repository   = undef
-  $hiera_config        = '$confdir/hiera.yaml'
-  $usecacheonfailure   = true
-  $ca_server           = undef
-  $ca_port             = undef
-  $ca_crl_filepath     = undef
-  $server_crl_enable   = undef
-  $prerun_command      = undef
-  $postrun_command     = undef
-  $server_compile_mode = undef
-  $dns_alt_names       = []
-  $use_srv_records     = false
-
-  if defined('$::domain') {
-    $srv_domain = $facts['networking']['domain']
-  } else {
-    $srv_domain = undef
-  }
-
-  # lint:ignore:puppet_url_without_modules
-  $pluginsource        = 'puppet:///plugins'
-  $pluginfactsource    = 'puppet:///pluginfacts'
-  # lint:endignore
-  $classfile           = '$statedir/classes.txt'
-  $syslogfacility      = undef
-  $environment         = $::environment
-
+  $server_user  = 'puppet'
+  $server_group = 'puppet'
+  $srv_domain   = fact('networking.domain')
+  $environment  = $::environment
   # aio_agent_version is a core fact that's empty on non-AIO
-  $aio_package      = fact('aio_agent_version') =~ String[1]
-
-  $systemd_randomizeddelaysec = 0
+  $aio_package = fact('aio_agent_version') =~ String[1]
 
   case $facts['os']['family'] {
     'Windows' : {
@@ -158,19 +113,10 @@ class puppet::params {
     }
   }
 
-  $http_connect_timeout = undef
-  $http_read_timeout = undef
-
   $autosign         = "${dir}/autosign.conf"
-  $autosign_entries = []
-  $autosign_mode    = '0664'
-  $autosign_content = undef
-  $autosign_source  = undef
 
   $puppet_cmd = "${bindir}/puppet"
   $puppetserver_cmd = "${bindir}/puppetserver"
-
-  $manage_packages = true
 
   if $facts['os']['family'] == 'Windows' {
     $dir_owner = undef
@@ -185,93 +131,43 @@ class puppet::params {
     default   => undef,
   }
 
-  $package_source = undef
-  $package_install_options = undef
-
-  # Need your own config templates? Specify here:
-  $auth_template   = 'puppet/auth.conf.erb'
-
-  # Allow any to the CRL. Needed in case of puppet CA proxy
-  $allow_any_crl_auth = false
-
-  # Authenticated nodes to allow
-  $auth_allowed = ['$1']
-
-  # Will this host be a puppet agent ?
-  $agent                      = true
   $client_certname            = $::clientcert
-
   if defined('$::puppetmaster') {
     $puppetmaster             = $::puppetmaster
   } else {
     $puppetmaster             = undef
   }
 
-  # Hashes containing additional settings
-  $additional_settings        = {}
-  $agent_additional_settings  = {}
-  $server_additional_settings = {}
-
   # Will this host be a puppetmaster?
-  $server                          = false
-  $server_ca                       = true
-  $server_ca_crl_sync              = false
-  $server_reports                  = 'foreman'
   $server_external_nodes           = "${dir}/node.rb"
-  $server_trusted_external_command = undef
-  $server_request_timeout          = 60
   $server_certname                 = $::clientcert
-  $server_strict_variables         = false
-  $server_http                     = false
-  $server_http_port                = 8139
-
-  # Need a new master template for the server?
-  $server_template      = 'puppet/server/puppet.conf.erb'
-  # Template for server settings in [main]
-  $server_main_template = 'puppet/server/puppet.conf.main.erb'
-
-  # Set 'false' for static environments, or 'true' for git-based workflow
-  $server_git_repo             = false
-  # Git branch to puppet env mapping for the post receive hook
-  $server_git_branch_map       = {}
 
   # Owner of the environments dir: for cases external service needs write
   # access to manage it.
-  $server_environments_owner   = $user
+  $server_environments_owner   = $server_user
   $server_environments_group   = $root_group
-  $server_environments_mode    = '0755'
   # Where we store our puppet environments
   $server_envs_dir             = ["${codedir}/environments"]
-  $server_envs_target          = undef
   # Modules in this directory would be shared across all environments
   $server_common_modules_path  = unique(["${server_envs_dir[0]}/common", "${codedir}/modules", "${sharedir}/modules", '/usr/share/puppet/modules'])
 
   # Dynamic environments config, ignore if the git_repo is 'false'
   # Path to the repository
   $server_git_repo_path       = "${vardir}/puppet.git"
-  # mode of the repository
-  $server_git_repo_mode       = '0755'
   # user of the repository
-  $server_git_repo_user       = $user
+  $server_git_repo_user       = $server_user
   # group of the repository
-  $server_git_repo_group      = $user
-  # Override these if you need your own hooks
-  $server_post_hook_content   = 'puppet/server/post-receive.erb'
-  $server_post_hook_name      = 'post-receive'
-  $server_custom_trusted_oid_mapping = undef
-
-  $server_storeconfigs = false
+  $server_git_repo_group      = $server_group
 
   $puppet_major = regsubst($::puppetversion, '^(\d+)\..*$', '\1')
 
   if ($facts['os']['family'] =~ /(FreeBSD|DragonFly)/) {
     $server_package = "puppetserver${puppet_major}"
   } else {
-    $server_package = undef
+    $server_package = 'puppetserver'
   }
 
   $server_ssl_dir = $ssldir
-  $server_version = undef
 
   if $aio_package {
     $client_package = ['puppet-agent']
@@ -284,8 +180,6 @@ class puppet::params {
   # Puppet service name
   $service_name = 'puppet'
 
-  # Puppet onedshot systemd service and timer name
-  $systemd_unit_name = 'puppet-run'
   # Mechanisms to manage and reload/restart the agent
   # If supported on the OS, reloading is prefered since it does not kill a currently active puppet run
   if $facts['service_provider'] == 'systemd' {
@@ -317,22 +211,11 @@ class puppet::params {
 
   # Foreman parameters
   $lower_fqdn              = downcase($facts['networking']['fqdn'])
-  $server_foreman          = true
-  $server_foreman_facts    = true
   $server_puppet_basedir   = $aio_package ? {
     true  => '/opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet',
     false => undef,
   }
   $server_foreman_url      = "https://${lower_fqdn}"
-  $server_foreman_ssl_ca   = undef
-  $server_foreman_ssl_cert = undef
-  $server_foreman_ssl_key  = undef
-
-  # Which Parser do we want to use? https://docs.puppetlabs.com/references/latest/configuration.html#parser
-  $server_parser = 'current'
-
-  # Timeout for cached environments, changed in puppet 3.7.x
-  $server_environment_timeout = undef
 
   # puppet server configuration file
   $server_jvm_config = $facts['os']['family'] ? {
@@ -340,10 +223,6 @@ class puppet::params {
     'Debian' => '/etc/default/puppetserver',
     default  => '/etc/default/puppetserver',
   }
-
-  $server_jvm_java_bin   = '/usr/bin/java'
-  $server_jvm_extra_args = undef
-  $server_jvm_cli_args   = undef
 
   # This is some very trivial "tuning". See the puppet reference:
   # https://docs.puppet.com/puppetserver/latest/tuning_guide.html
@@ -363,20 +242,6 @@ class puppet::params {
     $server_jvm_max_heap_size = '768m'
   }
 
-  $server_ssl_dir_manage                  = true
-  $server_ssl_key_manage                  = true
-  $server_default_manifest                = false
-  $server_default_manifest_path           = '/etc/puppet/manifests/default_manifest.pp'
-  $server_default_manifest_content        = '' # lint:ignore:empty_string_assignment
-  $server_max_requests_per_instance       = 0
-  $server_max_queued_requests             = 0
-  $server_max_retry_delay                 = 1800
-  $server_multithreaded                   = false
-  $server_idle_timeout                    = 1200000
-  $server_web_idle_timeout                = 30000
-  $server_connect_timeout                 = 120000
-  $server_ca_auth_required                = true
-  $server_ca_client_self_delete           = false
   $server_admin_api_whitelist             = [ 'localhost', $lower_fqdn ]
   $server_ca_client_whitelist             = [ 'localhost', $lower_fqdn ]
   $server_cipher_suites                   = [
@@ -387,38 +252,7 @@ class puppet::params {
     'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256',
     'TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384',
   ]
-  $server_ssl_protocols                   = [ 'TLSv1.2' ]
-  $server_ssl_chain_filepath              = undef
-  $server_check_for_updates               = true
-  $server_environment_class_cache_enabled = false
-  $server_allow_header_cert_info          = false
-  $server_ca_allow_sans                   = false
-  $server_ca_allow_auth_extensions        = false
-  $server_ca_enable_infra_crl             = false
-  $server_max_open_files                  = undef
-  $server_environment_vars                = {}
-
-  $server_puppetserver_version      = undef
-
-  # Which auth.conf shall we use?
-  $server_use_legacy_auth_conf      = false
 
   # Puppetserver metrics shipping
-  $server_metrics_jmx_enable        = true
-  $server_metrics_graphite_enable   = false
-  $server_metrics_graphite_host     = '127.0.0.1'
-  $server_metrics_graphite_port     = 2003
   $server_metrics_server_id         = $lower_fqdn
-  $server_metrics_graphite_interval = 5
-  $server_metrics_allowed           = undef
-
-  # Should the /puppet/experimental route be enabled?
-  $server_puppetserver_experimental = true
-
-  # For custom auth.conf settings allow passing in a template
-  $server_puppetserver_auth_template = undef
-
-  # Normally agents can only fetch their own catalogs.  If you want some nodes to be able to fetch *any* catalog, add them here.
-  $server_puppetserver_trusted_agents = []
-  $server_puppetserver_trusted_certificate_extensions = []
 }

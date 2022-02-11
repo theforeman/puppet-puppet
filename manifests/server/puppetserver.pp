@@ -147,8 +147,6 @@ class puppet::server::puppetserver (
     fail('puppetserver <6.15.0 is not supported by this module version')
   }
 
-  $puppetserver_package = pick($puppet::server::package, 'puppetserver')
-
   $jvm_cmd_arr = ["-Xms${jvm_min_heap_size}", "-Xmx${jvm_max_heap_size}", $jvm_extra_args]
   $jvm_cmd = strip(join(flatten($jvm_cmd_arr), ' '))
 

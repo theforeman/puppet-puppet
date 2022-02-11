@@ -26,16 +26,15 @@ class puppet::server::install {
   }
 
   if $puppet::manage_packages == true or $puppet::manage_packages == 'server' {
-    $server_package = pick($puppet::server::package, 'puppetserver')
     $server_version = pick($puppet::server::version, $puppet::version)
 
-    package { $server_package:
+    package { $puppet::server::package:
       ensure          => $server_version,
       install_options => $puppet::package_install_options,
     }
 
     if $puppet::server::manage_user {
-      Package[$server_package] -> User[$puppet::server::user]
+      Package[$puppet::server::package] -> User[$puppet::server::user]
     }
   }
 }
