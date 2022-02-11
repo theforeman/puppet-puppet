@@ -111,10 +111,6 @@
 #                                           read after the elapsed interval then the
 #                                           connection will be closed.
 #
-# $user::                                   Override the name of the puppet user.
-#
-# $group::                                  Override the name of the puppet group.
-#
 # $dir::                                    Override the puppet directory.
 #
 # $codedir::                                Override the puppet code directory.
@@ -558,8 +554,6 @@
 #
 class puppet (
   String $version = $puppet::params::version,
-  String $user = $puppet::params::user,
-  String $group = $puppet::params::group,
   Stdlib::Absolutepath $dir = $puppet::params::dir,
   Stdlib::Absolutepath $codedir = $puppet::params::codedir,
   Stdlib::Absolutepath $vardir = $puppet::params::vardir,
@@ -625,8 +619,8 @@ class puppet (
   Boolean $server = $puppet::params::server,
   Array[String] $server_admin_api_whitelist = $puppet::params::server_admin_api_whitelist,
   Boolean $server_manage_user = $puppet::params::manage_user,
-  String $server_user = $puppet::params::user,
-  String $server_group = $puppet::params::group,
+  String $server_user = $puppet::params::server_user,
+  String $server_group = $puppet::params::server_group,
   String $server_dir = $puppet::params::dir,
   String $server_ip = $puppet::params::ip,
   Stdlib::Port $server_port = $puppet::params::port,

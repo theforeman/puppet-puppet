@@ -216,8 +216,8 @@ class puppet::server::config inherits puppet::config {
   if $puppet::server::default_manifest and $puppet::server::default_manifest_content != '' {
     file { $puppet::server::default_manifest_path:
       ensure  => file,
-      owner   => $puppet::user,
-      group   => $puppet::group,
+      owner   => $puppet::server::user,
+      group   => $puppet::server::group,
       mode    => '0644',
       content => $puppet::server::default_manifest_content,
     }

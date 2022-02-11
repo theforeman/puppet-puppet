@@ -5,8 +5,8 @@ class puppet::params {
   # Basic config
   $version             = 'present'
   $manage_user         = true
-  $user                = 'puppet'
-  $group               = 'puppet'
+  $server_user         = 'puppet'
+  $server_group        = 'puppet'
   $ip                  = '0.0.0.0'
   $port                = 8140
   $splay               = false
@@ -225,7 +225,7 @@ class puppet::params {
 
   # Owner of the environments dir: for cases external service needs write
   # access to manage it.
-  $server_environments_owner   = $user
+  $server_environments_owner   = $server_user
   $server_environments_group   = $root_group
   $server_environments_mode    = '0755'
   # Where we store our puppet environments
@@ -240,9 +240,9 @@ class puppet::params {
   # mode of the repository
   $server_git_repo_mode       = '0755'
   # user of the repository
-  $server_git_repo_user       = $user
+  $server_git_repo_user       = $server_user
   # group of the repository
-  $server_git_repo_group      = $user
+  $server_git_repo_group      = $server_group
   # Override these if you need your own hooks
   $server_post_hook_content   = 'puppet/server/post-receive.erb'
   $server_post_hook_name      = 'post-receive'
