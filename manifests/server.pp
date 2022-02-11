@@ -392,7 +392,7 @@ class puppet::server(
   Boolean $ssl_key_manage = $puppet::server_ssl_key_manage,
   Array[String] $ssl_protocols = $puppet::server_ssl_protocols,
   Optional[Stdlib::Absolutepath] $ssl_chain_filepath = $puppet::server_ssl_chain_filepath,
-  Optional[Variant[String, Array[String]]] $package = $puppet::server_package,
+  Variant[String, Array[String]] $package = $puppet::server_package,
   Optional[String] $version = $puppet::server_version,
   String $certname = $puppet::server_certname,
   Integer[0] $request_timeout = $puppet::server_request_timeout,

@@ -668,7 +668,7 @@ class puppet (
   Boolean $server_ssl_key_manage = true,
   Array[String] $server_ssl_protocols = ['TLSv1.2'],
   Optional[Stdlib::Absolutepath] $server_ssl_chain_filepath = undef,
-  Optional[Variant[String, Array[String]]] $server_package = $puppet::params::server_package,
+  Variant[String, Array[String]] $server_package = $puppet::params::server_package,
   Optional[String] $server_version = undef,
   String $server_certname = $puppet::params::server_certname,
   Integer[0] $server_request_timeout = 60,

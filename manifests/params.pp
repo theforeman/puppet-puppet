@@ -164,7 +164,7 @@ class puppet::params {
   if ($facts['os']['family'] =~ /(FreeBSD|DragonFly)/) {
     $server_package = "puppetserver${puppet_major}"
   } else {
-    $server_package = undef
+    $server_package = 'puppetserver'
   }
 
   $server_ssl_dir = $ssldir
