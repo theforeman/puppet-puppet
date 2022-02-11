@@ -33,12 +33,7 @@ class puppet::params {
   $server_compile_mode = undef
   $dns_alt_names       = []
   $use_srv_records     = false
-
-  if defined('$::domain') {
-    $srv_domain = $facts['networking']['domain']
-  } else {
-    $srv_domain = undef
-  }
+  $srv_domain          = fact('networking.domain')
 
   # lint:ignore:puppet_url_without_modules
   $pluginsource        = 'puppet:///plugins'
