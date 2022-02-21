@@ -442,7 +442,8 @@
 #                                           Defaults to false because that's the Puppet Inc. default behaviour.
 #
 # $server_puppetserver_profiler::           Enable JRuby profiling.
-#                                           Defaults to false because that's the Puppet Inc. default behaviour.
+#                                           Defaults to true because that's the Puppet Inc. default behaviour (since Puppetserver 5.0.0).
+#                                           If set to false, compiler and function metrics will not be available, (eg. when enabling graphite metrics)
 #
 # $server_metrics_jmx_enable::              Enable or disable JMX metrics reporter. Defaults to true
 #
@@ -708,7 +709,7 @@ class puppet (
   Boolean $server_allow_header_cert_info = $puppet::params::server_allow_header_cert_info,
   Integer[0] $server_web_idle_timeout = $puppet::params::server_web_idle_timeout,
   Boolean $server_puppetserver_metrics = false,
-  Boolean $server_puppetserver_profiler = false,
+  Boolean $server_puppetserver_profiler = true,
   Boolean $server_metrics_jmx_enable = $puppet::params::server_metrics_jmx_enable,
   Boolean $server_metrics_graphite_enable = $puppet::params::server_metrics_graphite_enable,
   String $server_metrics_graphite_host = $puppet::params::server_metrics_graphite_host,

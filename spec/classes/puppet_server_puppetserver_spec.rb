@@ -273,7 +273,7 @@ describe 'puppet' do
           it {
             should contain_file(puppetserver_conf)
               .with_content(/^    # Whether to enable http-client metrics; defaults to 'true'.\n    metrics-enabled: true$(.*)/)
-              .with_content(/^profiler: \{\n    # enable or disable profiling for the Ruby code;\n    enabled: false/)
+              .with_content(/^profiler: \{\n    # enable or disable profiling for the Ruby code;\n    enabled: true/)
           }
           it {
             should contain_file('/etc/custom/puppetserver/conf.d/metrics.conf')
@@ -292,9 +292,17 @@ describe 'puppet' do
           it {
             should contain_file(puppetserver_conf)
               .with_content(/^    # Whether to enable http-client metrics; defaults to 'true'.\n    metrics-enabled: false$/)
-              .with_content(/^profiler: \{\n    # enable or disable profiling for the Ruby code;\n    enabled: false/)
+              .with_content(/^profiler: \{\n    # enable or disable profiling for the Ruby code;\n    enabled: true/)
           }
           it { should contain_file('/etc/custom/puppetserver/conf.d/metrics.conf').with_ensure('file') }
+        end
+
+        context 'when server_profiler => false' do
+          let(:params) { super().merge(server_puppetserver_profiler: false) }
+          it {
+            should contain_file(puppetserver_conf)
+              .with_content(/^profiler: \{\n    # enable or disable profiling for the Ruby code;\n    enabled: false/)
+          }
         end
       end
 
