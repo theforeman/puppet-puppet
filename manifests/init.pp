@@ -538,6 +538,9 @@
 #                                           invokes when on static_file_content requests.
 #                                           Defaults to undef
 #
+# $server_jolokia_metrics_whitelist::       The whitelist of clients that
+#                                           can query the jolokia /metrics/v2 endpoint
+#
 # === Usage:
 #
 # * Simple usage:
@@ -733,6 +736,7 @@ class puppet (
   Optional[Integer[1]] $server_max_open_files = $puppet::params::server_max_open_files,
   Optional[Stdlib::Absolutepath] $server_versioned_code_id = undef,
   Optional[Stdlib::Absolutepath] $server_versioned_code_content = undef,
+  Array[String[1]] $server_jolokia_metrics_whitelist = [],
 ) inherits puppet::params {
   contain puppet::config
 
