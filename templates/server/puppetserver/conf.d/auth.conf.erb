@@ -357,6 +357,21 @@ authorization: {
             name: "puppetlabs experimental"
         },
 <%- end -%>
+<%- unless @jolokia_metrics_whitelist.empty? -%>
+        {
+            match-request: {
+                path: "/metrics/v2"
+                type: path
+            }
+            allow: [
+<%- @jolokia_metrics_whitelist.each do |client| -%>
+                "<%= client %>",
+<%- end -%>
+            ]
+            sort-order: 500
+            name: "jolokia metrics"
+        },
+<%- end -%>
         {
             # Deny everything else. This ACL is not strictly
             # necessary, but illustrates the default policy

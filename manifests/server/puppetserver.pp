@@ -144,6 +144,7 @@ class puppet::server::puppetserver (
   $versioned_code_id                      = $puppet::server::versioned_code_id,
   $versioned_code_content                 = $puppet::server::versioned_code_content,
   $disable_fips                           = $facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] == '8',
+  $jolokia_metrics_whitelist              = $puppet::server::jolokia_metrics_whitelist,
 ) {
   include puppet::server
 

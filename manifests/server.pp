@@ -331,6 +331,9 @@
 # $versioned_code_content::            Contains the path to an executable script that Puppet Server invokes when an agent makes
 #                                      a static_file_content API request for the contents of a file resource that
 #                                      has a source attribute with a puppet:/// URI value.
+#
+# $jolokia_metrics_whitelist::         The whitelist of clients that
+#                                      can query the jolokia /metrics/v2 endpoint
 class puppet::server(
   Variant[Boolean, Stdlib::Absolutepath] $autosign = $puppet::autosign,
   Array[String] $autosign_entries = $puppet::autosign_entries,
@@ -449,6 +452,7 @@ class puppet::server(
   Optional[Integer[1]] $max_open_files = $puppet::server_max_open_files,
   Optional[Stdlib::Absolutepath] $versioned_code_id = $puppet::server_versioned_code_id,
   Optional[Stdlib::Absolutepath] $versioned_code_content = $puppet::server_versioned_code_content,
+  Array[String[1]] $jolokia_metrics_whitelist = $puppet::server_jolokia_metrics_whitelist,
 ) {
   # For Puppetserver, certain configuration parameters are version specific. We
   # assume a particular version here.

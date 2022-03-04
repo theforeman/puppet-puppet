@@ -564,6 +564,23 @@ describe 'puppet' do
           }
         end
       end
+
+      describe 'jolokia_metrics_whitelist' do
+        let(:content) { catalogue.resource('file', auth_conf).send(:parameters)[:content] }
+        let(:rules) { Hocon.parse(content)['authorization']['rules'] }
+        let(:rule) { rules.find {|rule| rule['name'] == 'jolokia metrics' } }
+
+        context 'by default' do
+          it { expect(rule).to be_nil }
+        end
+
+        context 'when set' do
+          let(:params) { super().merge(server_jolokia_metrics_whitelist: ['localhost', 'host.example.com']) }
+
+          it { expect(rule['match-request']['path']).to eq('/metrics/v2') }
+          it { expect(rule['allow']).to eq(['localhost', 'host.example.com']) }
+        end
+      end
     end
   end
 end
