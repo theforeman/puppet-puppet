@@ -59,13 +59,23 @@ describe 'puppet' do
                      .with_incl('/etc/default/puppetserver')
                      .with_lens('Shellvars.lns')
           }
-          it {
-            should contain_augeas('puppet::server::puppetserver::jvm')
-              .with_changes(['set JAVA_ARGS \'"-Xms2G -Xmx2G"\'', 'set JAVA_BIN /usr/bin/java'])
-              .with_context('/files/etc/default/puppetserver')
-              .with_incl('/etc/default/puppetserver')
-              .with_lens('Shellvars.lns')
-          }
+          if facts[:os]['family'] == 'RedHat' and facts[:os]['release']['major'] == '8'
+            it {
+              should contain_augeas('puppet::server::puppetserver::jvm')
+                .with_changes(['set JAVA_ARGS \'"-Xms2G -Xmx2G -Dcom.redhat.fips=false"\'', 'set JAVA_BIN /usr/bin/java'])
+                .with_context('/files/etc/default/puppetserver')
+                .with_incl('/etc/default/puppetserver')
+                .with_lens('Shellvars.lns')
+            }
+          else
+            it {
+              should contain_augeas('puppet::server::puppetserver::jvm')
+                .with_changes(['set JAVA_ARGS \'"-Xms2G -Xmx2G"\'', 'set JAVA_BIN /usr/bin/java'])
+                .with_context('/files/etc/default/puppetserver')
+                .with_incl('/etc/default/puppetserver')
+                .with_lens('Shellvars.lns')
+            }
+          end
           it do
             should contain_augeas('puppet::server::puppetserver::jruby_jar')
               .with_changes(['rm JRUBY_JAR'])
@@ -374,6 +384,17 @@ describe 'puppet' do
               .with_changes(['set puppetserver_java_opts \'"-Xms2G -Xmx2G -XX:foo=bar -XX:bar=foo"\''])
               .with_context('/files/etc/rc.conf')
           }
+        elsif facts[:os]['family'] == 'RedHat' and facts[:os]['release']['major'] == '8'
+          it {
+            should contain_augeas('puppet::server::puppetserver::jvm')
+              .with_changes([
+                              'set JAVA_ARGS \'"-Xms2G -Xmx2G -Dcom.redhat.fips=false -XX:foo=bar -XX:bar=foo"\'',
+                              'set JAVA_BIN /usr/bin/java'
+                            ])
+              .with_context('/files/etc/default/puppetserver')
+              .with_incl('/etc/default/puppetserver')
+              .with_lens('Shellvars.lns')
+          }
         else
           it {
             should contain_augeas('puppet::server::puppetserver::jvm')
@@ -390,16 +411,30 @@ describe 'puppet' do
 
       describe 'with cli_args parameter', unless: facts[:osfamily] == 'FreeBSD' do
         let(:params) { super().merge(server_jvm_cli_args: '-Djava.io.tmpdir=/var/puppettmp') }
-        it do
-          should contain_augeas('puppet::server::puppetserver::jvm')
-            .with_changes([
-                            'set JAVA_ARGS \'"-Xms2G -Xmx2G"\'',
-                            'set JAVA_BIN /usr/bin/java',
-                            'set JAVA_ARGS_CLI \'"-Djava.io.tmpdir=/var/puppettmp"\''
-                          ])
-            .with_context('/files/etc/default/puppetserver')
-            .with_incl('/etc/default/puppetserver')
-            .with_lens('Shellvars.lns')
+        if facts[:os]['family'] == 'RedHat' and facts[:os]['release']['major'] == '8'
+          it {
+            should contain_augeas('puppet::server::puppetserver::jvm')
+              .with_changes([
+                              'set JAVA_ARGS \'"-Xms2G -Xmx2G -Dcom.redhat.fips=false"\'',
+                              'set JAVA_BIN /usr/bin/java',
+                              'set JAVA_ARGS_CLI \'"-Djava.io.tmpdir=/var/puppettmp"\''
+                            ])
+              .with_context('/files/etc/default/puppetserver')
+              .with_incl('/etc/default/puppetserver')
+              .with_lens('Shellvars.lns')
+          }
+        else
+          it {
+            should contain_augeas('puppet::server::puppetserver::jvm')
+              .with_changes([
+                              'set JAVA_ARGS \'"-Xms2G -Xmx2G"\'',
+                              'set JAVA_BIN /usr/bin/java',
+                              'set JAVA_ARGS_CLI \'"-Djava.io.tmpdir=/var/puppettmp"\''
+                            ])
+              .with_context('/files/etc/default/puppetserver')
+              .with_incl('/etc/default/puppetserver')
+              .with_lens('Shellvars.lns')
+          }
         end
       end
 

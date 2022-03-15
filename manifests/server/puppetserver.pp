@@ -60,6 +60,9 @@
 # @param server_multithreaded
 #   Configures the puppetserver to use multithreaded jruby.
 #
+# @param disable_fips
+#   Disables FIPS support within the JVM
+#
 # @example
 #
 #   # configure memory for java < 8
@@ -140,6 +143,7 @@ class puppet::server::puppetserver (
   $max_open_files                         = $puppet::server::max_open_files,
   $versioned_code_id                      = $puppet::server::versioned_code_id,
   $versioned_code_content                 = $puppet::server::versioned_code_content,
+  $disable_fips                           = $facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] == '8',
 ) {
   include puppet::server
 
@@ -149,7 +153,12 @@ class puppet::server::puppetserver (
 
   $puppetserver_package = pick($puppet::server::package, 'puppetserver')
 
-  $jvm_cmd_arr = ["-Xms${jvm_min_heap_size}", "-Xmx${jvm_max_heap_size}", $jvm_extra_args]
+  $jvm_heap_arr = ["-Xms${jvm_min_heap_size}", "-Xmx${jvm_max_heap_size}"]
+  if $disable_fips {
+    $jvm_cmd_arr = $jvm_heap_arr + ['-Dcom.redhat.fips=false', $jvm_extra_args]
+  } else {
+    $jvm_cmd_arr = $jvm_heap_arr + [$jvm_extra_args]
+  }
   $jvm_cmd = strip(join(flatten($jvm_cmd_arr), ' '))
 
   if $facts['os']['family'] == 'FreeBSD' {
