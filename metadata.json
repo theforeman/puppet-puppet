@@ -4,7 +4,7 @@
   "author": "theforeman",
   "summary": "Puppet agent and server configuration",
   "license": "GPL-3.0+",
-  "source": "git://github.com/theforeman/puppet-puppet",
+  "source": "https://github.com/theforeman/puppet-puppet",
   "project_page": "https://github.com/theforeman/puppet-puppet",
   "issues_url": "https://github.com/theforeman/puppet-puppet/issues",
   "description": "Module for installing the Puppet agent and Puppet server",
