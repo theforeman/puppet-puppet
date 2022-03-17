@@ -1,5 +1,13 @@
 # Changelog
 
+## [16.1.0](https://github.com/theforeman/puppet-puppet/tree/16.1.0) (2022-03-17)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/16.0.0...16.1.0)
+
+**Implemented enhancements:**
+
+- Disable FIPS support within JVM for Puppet [\#828](https://github.com/theforeman/puppet-puppet/pull/828) ([ehelms](https://github.com/ehelms))
+
 ## [16.0.0](https://github.com/theforeman/puppet-puppet/tree/16.0.0) (2022-02-07)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/15.2.0...16.0.0)
