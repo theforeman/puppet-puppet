@@ -25,7 +25,9 @@ describe 'Scenario: install puppetserver (latest):', unless: unsupported_puppets
     end
   end
 
-  describe 'server_max_open_files' do
+  # This is broken on Ubuntu Focal
+  # https://github.com/theforeman/puppet-puppet/issues/832
+  describe 'server_max_open_files', unless: unsupported_puppetserver || fact('os.release.major') == '20.04' do
     it_behaves_like 'an idempotent resource' do
       let(:manifest) do
         <<-MANIFEST
