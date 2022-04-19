@@ -1,5 +1,18 @@
 # Changelog
 
+## [16.2.0](https://github.com/theforeman/puppet-puppet/tree/16.2.0) (2022-04-19)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/16.1.0...16.2.0)
+
+**Implemented enhancements:**
+
+- Add `server_jolokia_metrics_whitelist` parameter [\#826](https://github.com/theforeman/puppet-puppet/pull/826) ([alexjfisher](https://github.com/alexjfisher))
+- Change `server_puppetserver_profiler` and `server_puppetserver_metrics` defaults to true [\#825](https://github.com/theforeman/puppet-puppet/pull/825) ([alexjfisher](https://github.com/alexjfisher))
+
+**Fixed bugs:**
+
+- metadata.json: Use https URL to git repo [\#830](https://github.com/theforeman/puppet-puppet/pull/830) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [16.1.0](https://github.com/theforeman/puppet-puppet/tree/16.1.0) (2022-03-17)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/16.0.0...16.1.0)
