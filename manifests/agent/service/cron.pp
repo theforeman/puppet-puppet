@@ -1,9 +1,9 @@
 # Set up running the agent via cron
 # @api private
 class puppet::agent::service::cron (
-  Boolean                 $enabled = false,
-  Optional[Integer[0,23]] $hour    = undef,
-  Optional[Integer[0,59]] $minute  = undef,
+  Boolean                 $enabled                             = false,
+  Optional[Integer[0,23]] $hour                                = undef,
+  Variant[Integer[0,59], Array[Integer[0,59]], Undef] $minute  = undef,
 ) {
   unless $puppet::runmode == 'unmanaged' or 'cron' in $puppet::unavailable_runmodes {
     if $enabled {
