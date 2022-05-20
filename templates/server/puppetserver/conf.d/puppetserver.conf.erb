@@ -139,3 +139,11 @@ profiler: {
     # enable or disable profiling for the Ruby code;
     enabled: <%= @server_profiler %>
 }
+
+<%- if scope.function_versioncmp([@server_puppetserver_version, '7.0']) >= 0 -%>
+# Settings related to telemetry
+dropsonde: {
+    # enable or disable telemetry
+    enabled: <%= @server_telemetry %>
+}
+<%- end -%>

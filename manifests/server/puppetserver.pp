@@ -119,6 +119,7 @@ class puppet::server::puppetserver (
   $server_environment_class_cache_enabled = $puppet::server::environment_class_cache_enabled,
   $server_metrics                         = $puppet::server::puppetserver_metrics,
   $server_profiler                        = $puppet::server::puppetserver_profiler,
+  $server_telemetry                       = $puppet::server::puppetserver_telemetry,
   $metrics_jmx_enable                     = $puppet::server::metrics_jmx_enable,
   $metrics_graphite_enable                = $puppet::server::metrics_graphite_enable,
   $metrics_graphite_host                  = $puppet::server::metrics_graphite_host,

@@ -306,6 +306,30 @@ describe 'puppet' do
         end
       end
 
+      describe 'server_telemetry' do
+        context 'when server_puppetserver_version == 7.0.0' do
+          let(:params) { super().merge(server_puppetserver_version: '7.0.0') }
+          context 'with default parameters' do
+            it {
+              should contain_file(puppetserver_conf)
+                .with_content(/^dropsonde: \{\n    # enable or disable telemetry\n    enabled: true/)
+            }
+          end
+
+          context 'when server_telemetry => false' do
+          let(:params) { super().merge(server_puppetserver_telemetry: false) }
+            it {
+              should contain_file(puppetserver_conf)
+                .with_content(/^dropsonde: \{\n    # enable or disable telemetry\n    enabled: false/)
+            }
+          end
+        end
+
+        context 'when server_puppetserver_version >= 6.15.0 and < 7.0.0' do
+          it { should contain_file(puppetserver_conf).without_content(/^dropsonde: \{/) }
+        end
+      end
+
       describe 'server_experimental' do
         context 'when server_experimental => true' do
           let(:params) { super().merge(server_puppetserver_experimental: true) }

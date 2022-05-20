@@ -265,6 +265,10 @@
 # $puppetserver_profiler::             Enable JRuby profiling.
 #                                      Defaults to false because that's the Puppet Inc. default behaviour.
 #
+# $puppetserver_telemetry::            Enable Dropsonde telemetry.
+#                                      Valid on puppetserver >= 7
+#                                      Defaults to true because that's the Puppet Inc. default behaviour since puppet 7
+#
 # $metrics_jmx_enable::                Enable or disable JMX metrics reporter. Defaults to true
 #
 # $metrics_graphite_enable::           Enable or disable Graphite metrics reporter. Defaults to false
@@ -429,6 +433,7 @@ class puppet::server(
   Boolean $allow_header_cert_info = $puppet::server_allow_header_cert_info,
   Optional[Boolean] $puppetserver_metrics = $puppet::server_puppetserver_metrics,
   Boolean $puppetserver_profiler = $puppet::server_puppetserver_profiler,
+  Boolean $puppetserver_telemetry = $puppet::server_puppetserver_telemetry,
   Boolean $metrics_jmx_enable = $puppet::server_metrics_jmx_enable,
   Boolean $metrics_graphite_enable = $puppet::server_metrics_graphite_enable,
   String $metrics_graphite_host = $puppet::server_metrics_graphite_host,
