@@ -1,6 +1,15 @@
 # Changelog
 
-## [16.2.0](https://github.com/theforeman/puppet-puppet/tree/16.2.0) (2022-04-19)
+## [16.3.0](https://github.com/theforeman/puppet-puppet/tree/16.3.0) (2022-06-20)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/16.2.0...16.3.0)
+
+**Implemented enhancements:**
+
+- Add dropsonde telemetry config [\#838](https://github.com/theforeman/puppet-puppet/pull/838) ([teluq-pbrideau](https://github.com/teluq-pbrideau))
+- Add Array of Integers as valid type for run\_minute [\#835](https://github.com/theforeman/puppet-puppet/pull/835) ([danifr](https://github.com/danifr))
+
+## [16.2.0](https://github.com/theforeman/puppet-puppet/tree/16.2.0) (2022-04-20)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/16.1.0...16.2.0)
 
