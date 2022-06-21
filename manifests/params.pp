@@ -1,7 +1,6 @@
 # Default parameters
 # @api private
 class puppet::params {
-
   # Basic config
   $version             = 'present'
   $manage_user         = true
@@ -370,8 +369,8 @@ class puppet::params {
   $server_connect_timeout                 = 120000
   $server_ca_auth_required                = true
   $server_ca_client_self_delete           = false
-  $server_admin_api_whitelist             = [ 'localhost', $lower_fqdn ]
-  $server_ca_client_whitelist             = [ 'localhost', $lower_fqdn ]
+  $server_admin_api_whitelist             = ['localhost', $lower_fqdn]
+  $server_ca_client_whitelist             = ['localhost', $lower_fqdn]
   $server_cipher_suites                   = [
     'TLS_DHE_RSA_WITH_AES_128_GCM_SHA256',
     'TLS_DHE_RSA_WITH_AES_256_GCM_SHA384',
@@ -380,7 +379,7 @@ class puppet::params {
     'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256',
     'TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384',
   ]
-  $server_ssl_protocols                   = [ 'TLSv1.2' ]
+  $server_ssl_protocols                   = ['TLSv1.2']
   $server_ssl_chain_filepath              = undef
   $server_check_for_updates               = true
   $server_environment_class_cache_enabled = false

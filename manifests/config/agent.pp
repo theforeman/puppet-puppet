@@ -11,7 +11,7 @@ define puppet::config::agent (
   String $key    = $name,
   String $joiner = ','
 ) {
-  puppet::config::entry{"agent_${name}":
+  puppet::config::entry { "agent_${name}":
     key          => $key,
     value        => $value,
     joiner       => $joiner,

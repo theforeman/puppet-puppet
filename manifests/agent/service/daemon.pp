@@ -5,7 +5,7 @@ class puppet::agent::service::daemon (
 ) {
   unless $puppet::runmode == 'unmanaged' or 'service' in $puppet::unavailable_runmodes {
     if $enabled {
-      service {'puppet':
+      service { 'puppet':
         ensure     => running,
         name       => $puppet::service_name,
         hasstatus  => true,
@@ -14,7 +14,7 @@ class puppet::agent::service::daemon (
         restart    => $puppet::agent_restart_command,
       }
     } else {
-      service {'puppet':
+      service { 'puppet':
         ensure    => stopped,
         name      => $puppet::service_name,
         hasstatus => true,

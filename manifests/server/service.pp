@@ -4,7 +4,7 @@
 # @param $service_name The service name to manage
 #
 # @api private
-class puppet::server::service(
+class puppet::server::service (
   Boolean $enable = true,
   String $service_name = 'puppetserver',
 ) {

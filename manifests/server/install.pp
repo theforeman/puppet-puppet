@@ -1,7 +1,6 @@
 # Install the puppet server
 # @api private
 class puppet::server::install {
-
   # Mirror the relationship, as defined() is parse-order dependent
   # Ensures 'puppet' user group is present before managing users
   if defined(Class['foreman_proxy::config']) {

@@ -11,7 +11,7 @@ define puppet::config::main (
   String $key    = $name,
   String $joiner = ','
 ) {
-  puppet::config::entry{"main${name}":
+  puppet::config::entry { "main${name}":
     key          => $key,
     value        => $value,
     joiner       => $joiner,

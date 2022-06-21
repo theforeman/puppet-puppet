@@ -41,14 +41,14 @@ define puppet::config::entry (
 
   # this adds the '$key =' for the first value,
   # otherwise it just appends it with the joiner to separate it from the previous value.
-  if (!defined(Concat::Fragment["puppet.conf_${section}_${key}"])){
-    concat::fragment{"puppet.conf_${section}_${key}":
+  if (!defined(Concat::Fragment["puppet.conf_${section}_${key}"])) {
+    concat::fragment { "puppet.conf_${section}_${key}":
       target  => "${puppet::dir}/puppet.conf",
       content => "\n    ${key} = ${_value}",
       order   => "${sectionorder}_${section}_${key} ",
     }
   } else {
-    concat::fragment{"puppet.conf_${section}_${key}_${name}":
+    concat::fragment { "puppet.conf_${section}_${key}_${name}":
       target  => "${puppet::dir}/puppet.conf",
       content => "${joiner}${_value}",
       order   => "${sectionorder}_${section}_${key}_${name} ",

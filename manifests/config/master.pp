@@ -11,7 +11,7 @@ define puppet::config::master (
   String $key    = $name,
   String $joiner = ','
 ) {
-  puppet::config::entry{"master_${name}":
+  puppet::config::entry { "master_${name}":
     key          => $key,
     value        => $value,
     joiner       => $joiner,

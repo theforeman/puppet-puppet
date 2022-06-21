@@ -1,7 +1,6 @@
 # Set up the puppet agent as a service
 # @api private
 class puppet::agent::service {
-
   case $puppet::runmode {
     'service': {
       $service_enabled = true
@@ -29,7 +28,7 @@ class puppet::agent::service {
   }
 
   if $puppet::runmode in $puppet::unavailable_runmodes {
-    fail("Runmode of ${puppet::runmode} not supported on ${::kernel} operating systems!")
+    fail("Runmode of ${puppet::runmode} not supported on ${facts['kernel']} operating systems!")
   }
 
   class { 'puppet::agent::service::daemon':

@@ -39,7 +39,7 @@ class puppet::server::config inherits puppet::config {
   $primary_envs_dir            = $puppet::server::envs_dir[0]
 
   if $server_external_nodes and $server_external_nodes != '' {
-    class{ 'puppet::server::enc':
+    class { 'puppet::server::enc':
       enc_path => $server_external_nodes,
     }
   }
@@ -59,7 +59,7 @@ class puppet::server::config inherits puppet::config {
     'reports':            value => $puppet::server::reports;
     'environmentpath':    value => $puppet::server::envs_dir.join(':');
   }
-  if $puppet::server::hiera_config and !empty($puppet::server::hiera_config){
+  if $puppet::server::hiera_config and !empty($puppet::server::hiera_config) {
     puppet::config::main {
       'hiera_config':       value => $puppet::server::hiera_config;
     }
@@ -147,7 +147,7 @@ class puppet::server::config inherits puppet::config {
 
   # If the ssl dir is not the default dir, it needs to be created before running
   # the generate ca cert or it will fail.
-  exec {'puppet_server_config-create_ssl_dir':
+  exec { 'puppet_server_config-create_ssl_dir':
     creates => $puppet::server::ssl_dir,
     command => "/bin/mkdir -p ${puppet::server::ssl_dir}",
     umask   => '0022',
@@ -155,7 +155,7 @@ class puppet::server::config inherits puppet::config {
 
   # Generate a new CA and host cert if our host cert doesn't exist
   if $puppet::server::ca {
-    exec {'puppet_server_config-generate_ca_cert':
+    exec { 'puppet_server_config-generate_ca_cert':
       creates => $puppet::server::ssl_ca_cert,
       command => "${puppet::puppetserver_cmd} ca setup",
       umask   => '0022',

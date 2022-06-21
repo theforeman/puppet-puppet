@@ -164,10 +164,10 @@ class puppet::server::puppetserver (
   $jvm_cmd = strip(join(flatten($jvm_cmd_arr), ' '))
 
   if $facts['os']['family'] == 'FreeBSD' {
-    $server_gem_paths = [ '${jruby-puppet.gem-home}', "\"${server_puppetserver_vardir}/vendored-jruby-gems\"", ] # lint:ignore:single_quote_string_with_variables
+    $server_gem_paths = ['${jruby-puppet.gem-home}', "\"${server_puppetserver_vardir}/vendored-jruby-gems\"",] # lint:ignore:single_quote_string_with_variables
     augeas { 'puppet::server::puppetserver::jvm':
       context => '/files/etc/rc.conf',
-      changes => [ "set puppetserver_java_opts '\"${jvm_cmd}\"'" ],
+      changes => ["set puppetserver_java_opts '\"${jvm_cmd}\"'"],
     }
   } else {
     if $jvm_cli_args {
@@ -191,7 +191,7 @@ class puppet::server::puppetserver (
 
     $bootstrap_paths = "${server_puppetserver_dir}/services.d/,/opt/puppetlabs/server/apps/puppetserver/config/services.d/"
 
-    $server_gem_paths = [ '${jruby-puppet.gem-home}', "\"${server_puppetserver_vardir}/vendored-jruby-gems\"", "\"/opt/puppetlabs/puppet/lib/ruby/vendor_gems\""] # lint:ignore:single_quote_string_with_variables
+    $server_gem_paths = ['${jruby-puppet.gem-home}', "\"${server_puppetserver_vardir}/vendored-jruby-gems\"", "\"/opt/puppetlabs/puppet/lib/ruby/vendor_gems\""] # lint:ignore:single_quote_string_with_variables
 
     augeas { 'puppet::server::puppetserver::bootstrap':
       lens    => 'Shellvars.lns',

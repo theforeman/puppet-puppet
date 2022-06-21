@@ -338,7 +338,7 @@
 #
 # $jolokia_metrics_whitelist::         The whitelist of clients that
 #                                      can query the jolokia /metrics/v2 endpoint
-class puppet::server(
+class puppet::server (
   Variant[Boolean, Stdlib::Absolutepath] $autosign = $puppet::autosign,
   Array[String] $autosign_entries = $puppet::autosign_entries,
   Pattern[/^[0-9]{3,4}$/] $autosign_mode = $puppet::autosign_mode,

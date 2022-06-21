@@ -19,7 +19,7 @@ class puppet::agent::service::cron (
         hour    => $_hour,
         minute  => $_minute,
       }
-    } else{
+    } else {
       cron { 'puppet':
         ensure => absent,
       }
