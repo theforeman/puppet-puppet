@@ -34,11 +34,7 @@ class puppet::params {
   $dns_alt_names       = []
   $use_srv_records     = false
 
-  if defined('$::domain') {
-    $srv_domain = $facts['networking']['domain']
-  } else {
-    $srv_domain = undef
-  }
+  $srv_domain = fact('networking.domain')
 
   # lint:ignore:puppet_url_without_modules
   $pluginsource        = 'puppet:///plugins'
@@ -46,7 +42,7 @@ class puppet::params {
   # lint:endignore
   $classfile           = '$statedir/classes.txt'
   $syslogfacility      = undef
-  $environment         = $::environment
+  $environment         = $server_facts['environment']
 
   # aio_agent_version is a core fact that's empty on non-AIO
   $aio_package      = fact('aio_agent_version') =~ String[1]
@@ -199,13 +195,10 @@ class puppet::params {
 
   # Will this host be a puppet agent ?
   $agent                      = true
-  $client_certname            = $::clientcert
+  $client_certname            = $trusted['certname']
 
-  if defined('$::puppetmaster') {
-    $puppetmaster             = $::puppetmaster
-  } else {
-    $puppetmaster             = undef
-  }
+  # Set by the Foreman ENC
+  $puppetmaster               = getvar('puppetmaster')
 
   # Hashes containing additional settings
   $additional_settings        = {}
@@ -220,7 +213,7 @@ class puppet::params {
   $server_external_nodes           = "${dir}/node.rb"
   $server_trusted_external_command = undef
   $server_request_timeout          = 60
-  $server_certname                 = $::clientcert
+  $server_certname                 = $trusted['certname']
   $server_strict_variables         = false
   $server_http                     = false
   $server_http_port                = 8139
@@ -262,7 +255,7 @@ class puppet::params {
 
   $server_storeconfigs = false
 
-  $puppet_major = regsubst($::puppetversion, '^(\d+)\..*$', '\1')
+  $puppet_major = regsubst($facts['puppetversion'], '^(\d+)\..*$', '\1')
 
   if ($facts['os']['family'] =~ /(FreeBSD|DragonFly)/) {
     $server_package = "puppetserver${puppet_major}"

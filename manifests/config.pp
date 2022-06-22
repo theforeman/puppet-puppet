@@ -43,7 +43,7 @@ class puppet::config(
   }
   if $use_srv_records {
     unless $srv_domain {
-      fail('$::domain fact found to be undefined and $srv_domain is undefined')
+      fail('domain fact found to be undefined and $srv_domain is undefined')
     }
     puppet::config::main{
       'use_srv_records': value => true;

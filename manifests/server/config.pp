@@ -173,19 +173,19 @@ class puppet::server::config inherits puppet::config {
         command => "${puppet::puppetserver_cmd} ca migrate",
         creates => $puppet::server::cadir,
         onlyif  => "test -d '${puppet::server::ssl_dir}/ca' && ! test -L '${puppet::server::ssl_dir}'",
-        path    => $::path,
+        path    => $facts['path'],
         before  => Exec['puppet_server_config-generate_ca_cert'],
       }
     }
   } elsif $puppet::server::ca_crl_sync {
     # If not a ca AND sync the crl from the ca master
-    if defined('$::servername') {
+    if $server_facts['servername'] {
       file { $puppet::server::ssl_ca_crl:
         ensure  => file,
         owner   => $puppet::server::user,
         group   => $puppet::server::group,
         mode    => '0644',
-        content => file($::settings::cacrl, $::settings::hostcrl, '/dev/null'),
+        content => file($settings::cacrl, $settings::hostcrl, '/dev/null'),
       }
     }
   }

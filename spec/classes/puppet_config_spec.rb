@@ -128,7 +128,7 @@ describe 'puppet' do
         context 'domain fact is unset' do
           let(:facts) { override_facts(super(), networking: {domain: nil}) }
 
-          it { is_expected.to raise_error(Puppet::Error, /\$::domain fact found to be undefined and \$srv_domain is undefined/) }
+          it { is_expected.to raise_error(Puppet::Error, /domain fact found to be undefined and \$srv_domain is undefined/) }
         end
 
         context 'is overriden via param' do
@@ -142,12 +142,9 @@ describe 'puppet' do
       end
 
       describe 'client_certname' do
-        context 'with client_certname => $::clientcert' do
-          let :facts do
-            # rspec-puppet(-facts) doesn't mock this
-            super().merge(clientcert: 'client.example.com')
-          end
+        let(:node) { 'client.example.com' }
 
+        context 'with client_certname => trusted certname' do
           it { is_expected.to contain_puppet__config__main('certname').with_value('client.example.com') }
         end
 

@@ -170,18 +170,11 @@ describe 'puppet' do
         let(:facts) do
           override_facts(super(),
             networking: {fqdn: 'PUPPETMASTER.example.com'},
-            # clientcert is always lowercase by Puppet design
-            clientcert: 'puppetmaster.example.com'
           )
         end
 
         it { should compile.with_all_deps }
-
-        it 'should use lowercase certificates' do
-          should contain_class('puppet::server::puppetserver')
-            .with_server_ssl_cert("#{ssldir}/certs/puppetmaster.example.com.pem")
-            .with_server_ssl_cert_key("#{ssldir}/private_keys/puppetmaster.example.com.pem")
-        end
+        it { should contain_class('puppet').with_server_foreman_url('https://puppetmaster.example.com') }
       end
 
       describe 'with ip parameter' do
@@ -503,6 +496,8 @@ describe 'puppet' do
           end
 
           it 'should not sync the crl' do
+            # https://github.com/puppetlabs/rspec-puppet/issues/37
+            pending("rspec-puppet always sets $server_facts['servername']")
             should_not contain_file('/etc/custom/puppetlabs/puppet/ssl/crl.pem')
           end
         end
