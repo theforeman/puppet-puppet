@@ -1,6 +1,7 @@
 # Set up the puppet config
 # @api private
 class puppet::config (
+  # lint:ignore:parameter_types
   $allow_any_crl_auth  = $puppet::allow_any_crl_auth,
   $auth_allowed        = $puppet::auth_allowed,
   $auth_template       = $puppet::auth_template,
@@ -17,6 +18,7 @@ class puppet::config (
   $use_srv_records     = $puppet::use_srv_records,
   $additional_settings = $puppet::additional_settings,
   $client_certname     = $puppet::client_certname,
+  # lint:endignore
 ) {
   puppet::config::main {
     'vardir': value => $puppet::vardir;
