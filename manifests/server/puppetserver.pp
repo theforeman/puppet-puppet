@@ -164,7 +164,7 @@ class puppet::server::puppetserver (
   $jvm_cmd = strip(join(flatten($jvm_cmd_arr), ' '))
 
   if $facts['os']['family'] == 'FreeBSD' {
-    $server_gem_paths = ['${jruby-puppet.gem-home}', "\"${server_puppetserver_vardir}/vendored-jruby-gems\"",] # lint:ignore:single_quote_string_with_variables
+    $server_gem_paths = ['${jruby-puppet.gem-home}', "\"${server_puppetserver_vardir}/vendored-jruby-gems\"", sprintf('"%s"', regsubst($facts['ruby']['sitedir'], 'site_ruby', 'gems'))] # lint:ignore:single_quote_string_with_variables
     augeas { 'puppet::server::puppetserver::jvm':
       context => '/files/etc/rc.conf',
       changes => ["set puppetserver_java_opts '\"${jvm_cmd}\"'"],
