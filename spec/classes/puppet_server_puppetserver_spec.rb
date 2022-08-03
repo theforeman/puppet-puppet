@@ -494,7 +494,7 @@ describe 'puppet' do
         if ['FreeBSD', 'DragonFly'].include?(facts[:osfamily])
           it do
             should contain_file(puppetserver_conf)
-              .with_content(%r{^    gem-path: \[\$\{jruby-puppet.gem-home\}, "#{server_vardir}/vendored-jruby-gems"\]$})
+              .with_content(%r{^    gem-path: \[\$\{jruby-puppet.gem-home\}, "#{server_vardir}/vendored-jruby-gems", "#{facts[:ruby]['sitedir'].sub(/site_ruby/,'gems')}"\]$})
           end
         else
           it do
