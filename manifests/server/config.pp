@@ -185,7 +185,7 @@ class puppet::server::config inherits puppet::config {
         owner   => $puppet::server::user,
         group   => $puppet::server::group,
         mode    => '0644',
-        content => file($::settings::cacrl, $::settings::hostcrl, '/dev/null'),
+        content => file($settings::cacrl, $settings::hostcrl, '/dev/null'),
       }
     }
   }
