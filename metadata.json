@@ -24,6 +24,10 @@
       "version_requirement": ">= 4.18.0 < 9.0.0"
     },
     {
+      "name": "puppetlabs/cron_core",
+      "version_requirement": ">= 1.0.0 < 2.0.0"
+    },
+    {
       "name": "puppet/extlib",
       "version_requirement": ">= 3.0.0 < 7.0.0"
     },
