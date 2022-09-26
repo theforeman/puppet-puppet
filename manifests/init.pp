@@ -162,6 +162,9 @@
 #                                           of the classes associated with the retrieved
 #                                           configuration.
 #
+# $puppetconf_mode::                        The permissions for /etc/puppetlabs/puppet/puppet.conf
+#                                           default to '0644' and '0674' on windows
+#
 # == puppet::agent parameters
 #
 # $agent::                                  Should a puppet agent be installed
@@ -752,6 +755,7 @@ class puppet (
   Optional[Stdlib::Absolutepath] $server_versioned_code_id = undef,
   Optional[Stdlib::Absolutepath] $server_versioned_code_content = undef,
   Array[String[1]] $server_jolokia_metrics_whitelist = [],
+  Pattern[/^[0-9]{3,4}$/] $puppetconf_mode = $puppet::params::puppetconf_mode,
 ) inherits puppet::params {
   contain puppet::config
 

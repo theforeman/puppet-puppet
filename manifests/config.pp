@@ -89,7 +89,7 @@ class puppet::config (
   -> case $facts['os']['family'] {
     'Windows': {
       concat { "${puppet_dir}/puppet.conf":
-        mode  => '0674',
+        mode  => $puppet::puppetconf_mode,
       }
     }
 
@@ -97,7 +97,7 @@ class puppet::config (
       concat { "${puppet_dir}/puppet.conf":
         owner => 'root',
         group => $puppet::params::root_group,
-        mode  => '0644',
+        mode  => $puppet::puppetconf_mode,
       }
     }
   }
