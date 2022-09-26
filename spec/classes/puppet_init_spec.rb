@@ -10,18 +10,22 @@ describe 'puppet' do
         puppet_concat    = '/usr/local/etc/puppet/puppet.conf'
         puppet_directory = '/usr/local/etc/puppet'
         puppet_package   = "puppet#{puppet_major}"
+        puppetconf_mode  = '0644'
       when 'windows'
         puppet_concat    = 'C:/ProgramData/PuppetLabs/puppet/etc/puppet.conf'
         puppet_directory = 'C:/ProgramData/PuppetLabs/puppet/etc'
         puppet_package   = 'puppet-agent'
+        puppetconf_mode  = '0674'
       when 'Archlinux'
         puppet_concat    = '/etc/puppetlabs/puppet/puppet.conf'
         puppet_directory = '/etc/puppetlabs/puppet'
         puppet_package   = 'puppet'
+        puppetconf_mode  = '0644'
       else
         puppet_concat    = '/etc/puppetlabs/puppet/puppet.conf'
         puppet_directory = '/etc/puppetlabs/puppet'
         puppet_package   = 'puppet-agent'
+        puppetconf_mode  = '0644'
       end
 
       let :facts do
@@ -34,7 +38,7 @@ describe 'puppet' do
         it { should contain_class('puppet::config') }
         it { should_not contain_class('puppet::server') }
         it { should contain_file(puppet_directory).with_ensure('directory') }
-        it { should contain_concat(puppet_concat) }
+        it { should contain_concat(puppet_concat).with_mode(puppetconf_mode) }
         it { should contain_package(puppet_package)
           .with_ensure('present')
           .with_install_options(nil)
@@ -81,6 +85,14 @@ describe 'puppet' do
         } end
 
         it { should contain_puppet__config__main('ca_port').with_value(8140) }
+      end
+
+      describe 'with puppetconf_mode' do
+        let :params do {
+          :puppetconf_mode => '0640',
+        } end
+
+        it { should contain_concat(puppet_concat).with_mode('0640') }
       end
 
       # compilation is broken due to paths
