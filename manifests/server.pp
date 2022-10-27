@@ -338,6 +338,11 @@
 #
 # $jolokia_metrics_whitelist::         The whitelist of clients that
 #                                      can query the jolokia /metrics/v2 endpoint
+#
+# $jolokia_allow_unauthenticated::     Should we disable authentication for the metrics
+#
+# $auth_extra::                        Additional rules for the auth.conf
+
 class puppet::server(
   Variant[Boolean, Stdlib::Absolutepath] $autosign = $puppet::autosign,
   Array[String] $autosign_entries = $puppet::autosign_entries,
@@ -458,6 +463,8 @@ class puppet::server(
   Optional[Stdlib::Absolutepath] $versioned_code_id = $puppet::server_versioned_code_id,
   Optional[Stdlib::Absolutepath] $versioned_code_content = $puppet::server_versioned_code_content,
   Array[String[1]] $jolokia_metrics_whitelist = $puppet::server_jolokia_metrics_whitelist,
+  Optional[Boolean] $jolokia_allow_unauthenticated = $puppet::server_jolokia_allow_unauthenticated,
+  Optional[String] $auth_extra = $puppet::server_auth_extra,
 ) {
   # For Puppetserver, certain configuration parameters are version specific. We
   # assume a particular version here.
