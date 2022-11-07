@@ -436,7 +436,7 @@ class puppet::server (
   Boolean $allow_header_cert_info = $puppet::server_allow_header_cert_info,
   Optional[Boolean] $puppetserver_metrics = $puppet::server_puppetserver_metrics,
   Boolean $puppetserver_profiler = $puppet::server_puppetserver_profiler,
-  Boolean $puppetserver_telemetry = $puppet::server_puppetserver_telemetry,
+  Optional[Boolean] $puppetserver_telemetry = $puppet::server_puppetserver_telemetry,
   Boolean $metrics_jmx_enable = $puppet::server_metrics_jmx_enable,
   Boolean $metrics_graphite_enable = $puppet::server_metrics_graphite_enable,
   String $metrics_graphite_host = $puppet::server_metrics_graphite_host,

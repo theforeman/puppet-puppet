@@ -455,9 +455,9 @@
 #                                           If set to false, compiler and function metrics will not be available, (eg. when enabling graphite metrics)
 #
 # $server_puppetserver_telemetry::          Enable Dropsonde telemetry.
-#                                           Defaults to true, matching defaults in Puppetserver 7.
-#                                           If set to false, will disable module metrics submission via Dropsonde.
-#                                           Note that is only valid since Puppetserver 7.
+#                                           Undef means disabled while booleans are explicit opt-in or opt-out.
+#                                           This is different from Puppetserver's default values.
+#                                           Only valid since Puppetserver 7.
 #
 # $server_metrics_jmx_enable::              Enable or disable JMX metrics reporter. Defaults to true
 #
@@ -730,7 +730,7 @@ class puppet (
   Integer[0] $server_web_idle_timeout = $puppet::params::server_web_idle_timeout,
   Boolean $server_puppetserver_metrics = true,
   Boolean $server_puppetserver_profiler = true,
-  Boolean $server_puppetserver_telemetry = true,
+  Optional[Boolean] $server_puppetserver_telemetry = undef,
   Boolean $server_metrics_jmx_enable = $puppet::params::server_metrics_jmx_enable,
   Boolean $server_metrics_graphite_enable = $puppet::params::server_metrics_graphite_enable,
   String $server_metrics_graphite_host = $puppet::params::server_metrics_graphite_host,

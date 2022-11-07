@@ -312,6 +312,14 @@ describe 'puppet' do
           context 'with default parameters' do
             it {
               should contain_file(puppetserver_conf)
+                .with_content(/^dropsonde: \{\n    # enable or disable telemetry\n    enabled: false/)
+            }
+          end
+
+          context 'when server_telemetry => true' do
+          let(:params) { super().merge(server_puppetserver_telemetry: true) }
+            it {
+              should contain_file(puppetserver_conf)
                 .with_content(/^dropsonde: \{\n    # enable or disable telemetry\n    enabled: true/)
             }
           end

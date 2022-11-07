@@ -119,7 +119,7 @@ class puppet::server::puppetserver (
   Boolean $server_environment_class_cache_enabled = $puppet::server::environment_class_cache_enabled,
   Optional[Boolean] $server_metrics = $puppet::server::puppetserver_metrics,
   Boolean $server_profiler = $puppet::server::puppetserver_profiler,
-  Boolean $server_telemetry = $puppet::server::puppetserver_telemetry,
+  Boolean $server_telemetry = pick($puppet::server::puppetserver_telemetry, false),
   Boolean $metrics_jmx_enable = $puppet::server::metrics_jmx_enable,
   Boolean $metrics_graphite_enable = $puppet::server::metrics_graphite_enable,
   String $metrics_graphite_host = $puppet::server::metrics_graphite_host,
