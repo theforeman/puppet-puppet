@@ -22,6 +22,7 @@ class puppet::params {
   $show_diff           = false
   $module_repository   = undef
   $hiera_config        = '$confdir/hiera.yaml'
+  $localconfig         = '$vardir/localconfig'
   $usecacheonfailure   = true
   $ca_server           = undef
   $ca_port             = undef
@@ -32,6 +33,7 @@ class puppet::params {
   $server_compile_mode = undef
   $dns_alt_names       = []
   $use_srv_records     = false
+  $agent_default_schedules = false
 
   $srv_domain = fact('networking.domain')
 
