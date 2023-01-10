@@ -247,6 +247,10 @@ class puppet::params {
   $server_git_repo_user       = $user
   # group of the repository
   $server_git_repo_group      = $user
+  # check repositories for r10k modules
+  $server_git_repo_r10k       = false
+  # generate environment specific types
+  $server_git_repo_gen_types  = false
   # Override these if you need your own hooks
   $server_post_hook_content   = 'puppet/server/post-receive.erb'
   $server_post_hook_name      = 'post-receive'

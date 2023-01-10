@@ -241,6 +241,10 @@
 #
 # $server_git_repo_user::                   Git repository user
 #
+# $server_git_repo_r10k::                   Git repository contains Puppetfile for r10k
+#
+# $server_git_repo_gen_types::              Generate types for environment isolation
+#
 # $server_git_branch_map::                  Git branch to puppet env mapping for the
 #                                           default post receive hook
 #
@@ -659,6 +663,8 @@ class puppet (
   Array[String] $server_cipher_suites = $puppet::params::server_cipher_suites,
   Integer[0] $server_connect_timeout = $puppet::params::server_connect_timeout,
   Boolean $server_git_repo = $puppet::params::server_git_repo,
+  Boolean $server_git_repo_r10k = $puppet::params::server_git_repo_r10k,
+  Boolean $server_git_repo_gen_types = $puppet::params::server_git_repo_gen_types,
   Boolean $server_default_manifest = $puppet::params::server_default_manifest,
   Stdlib::Absolutepath $server_default_manifest_path = $puppet::params::server_default_manifest_path,
   String $server_default_manifest_content = $puppet::params::server_default_manifest_content,

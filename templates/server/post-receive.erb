@@ -100,7 +100,7 @@ $stdin.each_line do |line|
       Dir.chdir environment_path
       do_cmd("git fetch --all")
       do_cmd("git reset --hard 'origin/#{branchname}'")
-      if File.exists? "#{environment_path}/.gitmodules"
+      if File.exist? "#{environment_path}/.gitmodules"
         # ensure that we remove deleted sub modules too
         do_cmd("git status --short").split("\n").each do |file|
           # ?? old_submodule/
@@ -111,12 +111,33 @@ $stdin.each_line do |line|
         end
         do_cmd("git submodule sync")
         do_cmd("git submodule update --init --recursive")
+        <% if @git_repo_r10k -%>
+        if File.exist? 'Puppetfile'
+          puts("Installing modules using r10k")
+          do_cmd("r10k puppetfile install")
+        end
+        <% end -%>
+        <% if @git_repo_gen_types -%>
+        puts("Generating types for #{environment_name})"
+        do_cmd("puppet generate types --environmentpath #{ENVIRONMENT_BASEDIR} --environment #{environment_name}")
+        <% end -%>
       end
     else
       # Instantiate a new environment from the current repository.
 
       puts "Creating new environment #{environment_name}"
       do_cmd("git clone --recursive #{SOURCE_REPOSITORY} #{environment_path} --branch #{branchname}")
+      <% if @git_repo_r10k -%>
+      Dir.chdir environment_path
+      if File.exist? 'Puppetfile'
+        puts("Installing modules using r10k")
+        do_cmd("r10k puppetfile install")
+      end
+      <% end -%>
+      <% if @git_repo_gen_types -%>
+      puts("Generating types for #{environment_name})"
+      do_cmd("puppet generate types --environmentpath #{ENVIRONMENT_BASEDIR} --environment #{environment_name}")
+      <% end -%>
     end
   end
 end
