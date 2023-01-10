@@ -94,6 +94,8 @@
 #
 # $hiera_config::                           The hiera configuration file.
 #
+# $localconfig::                            The localconfig setting.
+#
 # $syslogfacility::                         Facility name to use when logging to syslog
 #
 # $use_srv_records::                        Whether DNS SRV records will be used to resolve
@@ -174,6 +176,8 @@
 # $postrun_command::                        A command which gets excuted after each Puppet run
 #
 # $environment::                            Default environment of the Puppet agent
+#
+# $agent_default_schedules::                A boolean to enable/disable the default schedules
 #
 # $agent_additional_settings::              A hash of additional agent settings.
 #                                           Example: {stringify_facts => true}
@@ -600,6 +604,7 @@ class puppet (
   Optional[String] $systemd_cmd = $puppet::params::systemd_cmd,
   Integer[0] $systemd_randomizeddelaysec = $puppet::params::systemd_randomizeddelaysec,
   Boolean $agent_noop = $puppet::params::agent_noop,
+  Boolean $agent_default_schedules = $puppet::params::agent_default_schedules,
   Boolean $show_diff = $puppet::params::show_diff,
   Optional[Stdlib::HTTPUrl] $module_repository = $puppet::params::module_repository,
   Optional[Integer[0]] $http_connect_timeout = $puppet::params::http_connect_timeout,
@@ -619,6 +624,7 @@ class puppet (
   Optional[String] $agent_restart_command = $puppet::params::agent_restart_command,
   String $classfile = $puppet::params::classfile,
   String $hiera_config = $puppet::params::hiera_config,
+  String $localconfig = $puppet::params::localconfig,
   String $auth_template = $puppet::params::auth_template,
   Boolean $allow_any_crl_auth = $puppet::params::allow_any_crl_auth,
   Array[String] $auth_allowed = $puppet::params::auth_allowed,
