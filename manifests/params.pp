@@ -379,7 +379,7 @@ class puppet::params {
     'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256',
     'TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384',
   ]
-  $server_ssl_protocols                   = ['TLSv1.2']
+  $server_ssl_protocols                   = ['TLSv1.3', 'TLSv1.2']
   $server_ssl_chain_filepath              = undef
   $server_check_for_updates               = true
   $server_environment_class_cache_enabled = false
