@@ -386,7 +386,7 @@
 # $server_connect_timeout::                 How long the server will wait for a response to a connection attempt
 #
 # $server_ssl_protocols::                   Array of SSL protocols to use.
-#                                           Defaults to [ 'TLSv1.2' ]
+#                                           Defaults to [ 'TLSv1.3', 'TLSv1.2' ]
 #
 # $server_ssl_chain_filepath::              Path to certificate chain for puppetserver
 #                                           Only used when $ca is true

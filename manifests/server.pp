@@ -217,7 +217,7 @@
 #                                      Defaults to the Jetty default of 30s
 #
 # $ssl_protocols::                     Array of SSL protocols to use.
-#                                      Defaults to [ 'TLSv1.2' ]
+#                                      Defaults to [ 'TLSv1.3', 'TLSv1.2' ]
 #
 # $ssl_chain_filepath::                Path to certificate chain for puppetserver
 #                                      Defaults to "${ssl_dir}/ca/ca_crt.pem"
