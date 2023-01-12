@@ -165,15 +165,16 @@ describe 'puppet' do
         end
       end
 
-      context 'puppetmaster' do
-        describe "when puppetmaster => 'mymaster.example.com'" do
+      context 'agent_server_hostname' do
+        describe "when agent_server_hostname => 'myserver.example.com'" do
           let :params do
-            super().merge(puppetmaster: 'mymaster.example.com')
+            super().merge(agent_server_hostname: 'myserver.example.com')
           end
 
-          it { is_expected.to contain_puppet__config__main('server').with_value('mymaster.example.com') }
+          it { is_expected.to contain_puppet__config__main('server').with_value('myserver.example.com') }
         end
 
+        # puppetmaster is provided via the Foreman ENC as a global variable
         context 'with global puppetmaster' do
           let(:facts) { super().merge(puppetmaster: 'global.example.com') }
 
@@ -181,10 +182,10 @@ describe 'puppet' do
             it { is_expected.to contain_puppet__config__main('server').with_value('global.example.com') }
           end
 
-          describe 'the puppetmaster parameter overrides global puppetmaster' do
-            let(:params) { super().merge(puppetmaster: 'mymaster.example.com') }
+          describe 'the agent_server_hostname parameter overrides global puppetmaster' do
+            let(:params) { super().merge(agent_server_hostname: 'myserver.example.com') }
 
-            it { is_expected.to contain_puppet__config__main('server').with_value('mymaster.example.com') }
+            it { is_expected.to contain_puppet__config__main('server').with_value('myserver.example.com') }
           end
         end
       end

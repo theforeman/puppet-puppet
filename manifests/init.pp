@@ -24,7 +24,7 @@
 #                                           Can also install only server packages with value
 #                                           of 'server' or only agent packages with 'agent'.
 #
-# $port::                                   Override the port of the master we connect to.
+# $agent_server_port::                      Override the port of the server we connect to.
 #
 # $splay::                                  Switch to enable a random amount of time
 #                                           to sleep before each run.
@@ -99,7 +99,7 @@
 # $syslogfacility::                         Facility name to use when logging to syslog
 #
 # $use_srv_records::                        Whether DNS SRV records will be used to resolve
-#                                           the Puppet master
+#                                           the Puppet server
 #
 # $srv_domain::                             Search domain for SRV records
 #
@@ -171,7 +171,7 @@
 #
 # $agent_noop::                             Run the agent in noop mode.
 #
-# $puppetmaster::                           Hostname of your puppetmaster (server
+# $agent_server_hostname::                  Hostname of your puppetserver (server
 #                                           directive in puppet.conf)
 #
 # $prerun_command::                         A command which gets excuted before each Puppet run
@@ -209,22 +209,22 @@
 #
 # == puppet::server parameters
 #
-# $server::                                 Should a puppet master be installed as well as the client
+# $server::                                 Should a puppet server be installed as well as the client
 #
-# $server_ip::                              Bind ip address of the puppetmaster
+# $server_ip::                              Bind ip address of the puppetserver
 #
-# $server_port::                            Puppet master port
+# $server_port::                            Puppet server port
 #
 # $server_ca::                              Provide puppet CA
 #
-# $server_ca_crl_sync::                     Sync puppet CA crl file to compile masters, Puppet CA Must be the Puppetserver
-#                                           for the compile masters. Defaults to false.
+# $server_ca_crl_sync::                     Sync puppet CA crl file to compilers, Puppet CA Must be the Puppetserver
+#                                           for the compilers. Defaults to false.
 #
 # $server_crl_enable::                      Turn on crl checking. Defaults to true when server_ca is true. Otherwise
 #                                           Defaults to false. Note unless you are using an external CA. It is recommended
 #                                           to set this to true. See $server_ca_crl_sync to enable syncing from CA Puppet Master
 #
-# $server_reports::                         List of report types to include on the puppetmaster
+# $server_reports::                         List of report types to include on the puppetserver
 #
 # $server_external_nodes::                  External nodes classifier executable
 #
@@ -267,16 +267,16 @@
 #
 # $server_manage_user::                     Whether to manage the server user resource
 #
-# $server_user::                            Name of the puppetmaster user.
+# $server_user::                            Username used for the puppetserver process
 #
-# $server_group::                           Name of the puppetmaster group.
+# $server_group::                           Group used for the puppetserver process
 #
 # $server_dir::                             Puppet configuration directory
 #
-# $server_http::                            Should the puppet master listen on HTTP as well as HTTPS.
+# $server_http::                            Should the puppet server listen on HTTP as well as HTTPS.
 #                                           Useful for load balancer or reverse proxy scenarios.
 #
-# $server_http_port::                       Puppet master HTTP port; defaults to 8139.
+# $server_http_port::                       Puppet server HTTP port; defaults to 8139.
 #
 # $server_foreman_facts::                   Should foreman receive facts from puppet
 #
@@ -347,13 +347,13 @@
 # $server_default_manifest_content::        A string to set the content of the default_manifest
 #                                           If set to '' it will not manage the file
 #
-# $server_package::                         Custom package name for puppet master
+# $server_package::                         Custom package name for puppet server
 #
-# $server_version::                         Custom package version for puppet master
+# $server_version::                         Custom package version for puppet server
 #
 # $server_ssl_dir::                         SSL directory
 #
-# $server_ssl_dir_manage::                  Toggle if ssl_dir should be added to the [master]
+# $server_ssl_dir_manage::                  Toggle if ssl_dir should be added to the [server]
 #                                           configuration section. This is necessary to
 #                                           disable in case CA is delegated to a separate instance
 #
@@ -561,7 +561,7 @@
 #
 #     include puppet
 #
-# * Installing a puppetmaster
+# * Installing a puppetserver
 #
 #   class {'puppet':
 #     server => true,
@@ -591,7 +591,7 @@ class puppet (
   Optional[String] $package_provider = $puppet::params::package_provider,
   Optional[Variant[String,Hash,Array]] $package_install_options = $puppet::params::package_install_options,
   Optional[Variant[Stdlib::Absolutepath, Stdlib::HTTPUrl]] $package_source = $puppet::params::package_source,
-  Stdlib::Port $port = $puppet::params::port,
+  Stdlib::Port $agent_server_port = $puppet::params::agent_server_port,
   Boolean $splay = $puppet::params::splay,
   Variant[Integer[0],Pattern[/^\d+[smhdy]?$/]] $splaylimit = $puppet::params::splaylimit,
   Variant[Boolean, Stdlib::Absolutepath] $autosign = $puppet::params::autosign,
@@ -637,7 +637,7 @@ class puppet (
   Boolean $agent = $puppet::params::agent,
   Boolean $report = $puppet::params::report,
   Variant[String, Boolean] $client_certname = $puppet::params::client_certname,
-  Optional[String] $puppetmaster = $puppet::params::puppetmaster,
+  Optional[String] $agent_server_hostname = $puppet::params::agent_server_hostname,
   String $systemd_unit_name = $puppet::params::systemd_unit_name,
   String $service_name = $puppet::params::service_name,
   Optional[String] $syslogfacility = $puppet::params::syslogfacility,
@@ -649,7 +649,7 @@ class puppet (
   String $server_group = $puppet::params::group,
   String $server_dir = $puppet::params::dir,
   String $server_ip = $puppet::params::ip,
-  Stdlib::Port $server_port = $puppet::params::port,
+  Stdlib::Port $server_port = $puppet::params::agent_server_port,
   Boolean $server_ca = $puppet::params::server_ca,
   Boolean $server_ca_crl_sync = $puppet::params::server_ca_crl_sync,
   Optional[Boolean] $server_crl_enable = $puppet::params::server_crl_enable,

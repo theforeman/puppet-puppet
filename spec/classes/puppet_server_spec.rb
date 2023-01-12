@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'puppet' do
   on_supported_os.each do |os, facts|
-    context "on #{os}", unless: unsupported_puppetmaster_osfamily(facts[:osfamily]) do
+    context "on #{os}", unless: unsupported_puppetserver_osfamily(facts[:osfamily]) do
       if facts[:osfamily] == 'FreeBSD'
         codedir             = '/usr/local/etc/puppet'
         confdir             = '/usr/local/etc/puppet'
@@ -19,7 +19,7 @@ describe 'puppet' do
         puppetcacmd         = if facts[:puppetversion] >= '6.0'
                                 '/usr/local/bin/puppetserver ca setup'
                               else
-                                '/usr/local/bin/puppet cert --generate puppetmaster.example.com --allow-dns-alt-names'
+                                '/usr/local/bin/puppet cert --generate puppetserver.example.com --allow-dns-alt-names'
                               end
       else
         codedir             = '/etc/puppetlabs/code'
@@ -37,7 +37,7 @@ describe 'puppet' do
         puppetcacmd         = if facts[:puppetversion] >= '6.0'
                                 '/opt/puppetlabs/bin/puppetserver ca setup'
                               else
-                                '/opt/puppetlabs/bin/puppet cert --generate puppetmaster.example.com --allow-dns-alt-names'
+                                '/opt/puppetlabs/bin/puppet cert --generate puppetserver.example.com --allow-dns-alt-names'
                               end
       end
       conf_file           = "#{confdir}/puppet.conf"
@@ -47,7 +47,7 @@ describe 'puppet' do
       if facts[:puppetversion] >= '6.0'
         cert_to_create      = "#{cadir}/ca_crt.pem"
       else
-        cert_to_create      = "#{ssldir}/certs/puppetmaster.example.com.pem"
+        cert_to_create      = "#{ssldir}/certs/puppetserver.example.com.pem"
       end
 
       let(:facts) { facts }
@@ -55,7 +55,7 @@ describe 'puppet' do
       let(:params) do
         {
           server: true,
-          server_certname: 'puppetmaster.example.com'
+          server_certname: 'puppetserver.example.com'
         }
       end
 
@@ -78,30 +78,30 @@ describe 'puppet' do
             .with_joiner(':')
         end
         it { should_not contain_puppet__config__main('default_manifest') }
-        it { should contain_puppet__config__master('autosign').with_value("#{etcdir}\/autosign.conf \{ mode = 0664 \}") }
-        it { should contain_puppet__config__master('ca').with_value('true') }
-        it { should contain_puppet__config__master('certname').with_value('puppetmaster.example.com') }
-        it { should contain_puppet__config__master('parser').with_value('current') }
-        it { should contain_puppet__config__master('strict_variables').with_value('false') }
-        it { should contain_puppet__config__master('ssldir').with_value(ssldir) }
-        it { should contain_puppet__config__master('storeconfigs').with_value(false) }
-        it { should_not contain_puppet__config__master('environment_timeout') }
-        it { should_not contain_puppet__config__master('manifest') }
-        it { should_not contain_puppet__config__master('modulepath') }
-        it { should_not contain_puppet__config__master('trusted_external_command') }
+        it { should contain_puppet__config__server('autosign').with_value("#{etcdir}\/autosign.conf \{ mode = 0664 \}") }
+        it { should contain_puppet__config__server('ca').with_value('true') }
+        it { should contain_puppet__config__server('certname').with_value('puppetserver.example.com') }
+        it { should contain_puppet__config__server('parser').with_value('current') }
+        it { should contain_puppet__config__server('strict_variables').with_value('false') }
+        it { should contain_puppet__config__server('ssldir').with_value(ssldir) }
+        it { should contain_puppet__config__server('storeconfigs').with_value(false) }
+        it { should_not contain_puppet__config__server('environment_timeout') }
+        it { should_not contain_puppet__config__server('manifest') }
+        it { should_not contain_puppet__config__server('modulepath') }
+        it { should_not contain_puppet__config__server('trusted_external_command') }
 
-        it { should contain_puppet__config__master('external_nodes').with_value("#{etcdir}\/node.rb") }
-        it { should contain_puppet__config__master('node_terminus').with_value('exec') }
-        it { should contain_puppet__config__master('logdir').with_value(puppetserver_logdir) }
-        it { should contain_puppet__config__master('rundir').with_value(puppetserver_rundir) }
-        it { should contain_puppet__config__master('vardir').with_value(puppetserver_vardir) }
+        it { should contain_puppet__config__server('external_nodes').with_value("#{etcdir}\/node.rb") }
+        it { should contain_puppet__config__server('node_terminus').with_value('exec') }
+        it { should contain_puppet__config__server('logdir').with_value(puppetserver_logdir) }
+        it { should contain_puppet__config__server('rundir').with_value(puppetserver_rundir) }
+        it { should contain_puppet__config__server('vardir').with_value(puppetserver_vardir) }
 
         it 'should set up SSL permissions' do
           should contain_file("#{ssldir}/private_keys") \
             .with_group('puppet') \
             .with_mode('0750')
 
-          should contain_file("#{ssldir}/private_keys/puppetmaster.example.com.pem") \
+          should contain_file("#{ssldir}/private_keys/puppetserver.example.com.pem") \
             .with_group('puppet') \
             .with_mode('0640')
 
@@ -170,12 +170,12 @@ describe 'puppet' do
       describe 'with uppercase hostname' do
         let(:facts) do
           override_facts(super(),
-            networking: {fqdn: 'PUPPETMASTER.example.com'},
+            networking: {fqdn: 'PUPPETSERVER.example.com'},
           )
         end
 
         it { should compile.with_all_deps }
-        it { should contain_class('puppet').with_server_foreman_url('https://puppetmaster.example.com') }
+        it { should contain_class('puppet').with_server_foreman_url('https://puppetserver.example.com') }
       end
 
       describe 'with ip parameter' do
@@ -217,7 +217,7 @@ describe 'puppet' do
           super().merge(autosign: true)
         end
 
-        it { should contain_puppet__config__master('autosign').with_value(true) }
+        it { should contain_puppet__config__server('autosign').with_value(true) }
       end
 
       describe 'when autosign => /somedir/custom_autosign, autosign_mode => 664' do
@@ -228,7 +228,7 @@ describe 'puppet' do
           )
         end
 
-        it { should contain_puppet__config__master('autosign').with_value('/somedir/custom_autosign { mode = 664 }') }
+        it { should contain_puppet__config__server('autosign').with_value('/somedir/custom_autosign { mode = 664 }') }
       end
 
       describe "when autosign_entries set to ['foo.bar']" do
@@ -278,7 +278,7 @@ describe 'puppet' do
             super().merge(autosign_content: 'foo.bar')
           end
 
-          it { should contain_puppet__config__master('autosign').with_value('/usr/local/bin/custom_autosign.sh { mode = 775 }') }
+          it { should contain_puppet__config__server('autosign').with_value('/usr/local/bin/custom_autosign.sh { mode = 775 }') }
           it { should contain_file('/usr/local/bin/custom_autosign.sh').with_content('foo.bar') }
         end
 
@@ -287,7 +287,7 @@ describe 'puppet' do
             super().merge(autosign_source: 'puppet:///foo/bar')
           end
 
-          it { should contain_puppet__config__master('autosign').with_value('/usr/local/bin/custom_autosign.sh { mode = 775 }') }
+          it { should contain_puppet__config__server('autosign').with_value('/usr/local/bin/custom_autosign.sh { mode = 775 }') }
           it { should contain_file('/usr/local/bin/custom_autosign.sh').with_source('puppet:///foo/bar') }
         end
       end
@@ -310,8 +310,8 @@ describe 'puppet' do
         end
 
         it { should_not contain_class('puppetserver_foreman') }
-        it { should_not contain_puppet__config__master('node_terminus') }
-        it { should_not contain_puppet__config__master('external_nodes') }
+        it { should_not contain_puppet__config__server('node_terminus') }
+        it { should_not contain_puppet__config__server('external_nodes') }
       end
 
       describe 'with server_default_manifest => true and undef content' do
@@ -439,7 +439,7 @@ describe 'puppet' do
         end
 
         it 'should configure puppet.conf' do
-          should contain_puppet__config__master('stringify_facts').with_value(true)
+          should contain_puppet__config__server('stringify_facts').with_value(true)
         end
       end
 
@@ -448,7 +448,7 @@ describe 'puppet' do
           super().merge(server_parser: 'future')
         end
 
-        it { should contain_puppet__config__master('parser').with_value('future') }
+        it { should contain_puppet__config__server('parser').with_value('future') }
       end
 
       describe 'with server_environment_timeout set' do
@@ -456,15 +456,15 @@ describe 'puppet' do
           super().merge(server_environment_timeout: '10m')
         end
 
-        it { should contain_puppet__config__master('environment_timeout').with_value('10m') }
+        it { should contain_puppet__config__server('environment_timeout').with_value('10m') }
       end
 
-      describe 'with no ssldir managed for master' do
+      describe 'with no ssldir managed for server' do
         let(:params) do
           super().merge(server_ssl_dir_manage: false)
         end
 
-        it { should_not contain_puppet__config__master('ssl_dir') }
+        it { should_not contain_puppet__config__server('ssl_dir') }
       end
 
       describe 'with ssl key management disabled for server' do
@@ -664,7 +664,7 @@ describe 'puppet' do
 
       describe 'server_trusted_external_command' do
         context 'with default parameters' do
-          it { should_not contain_puppet__config__master('trusted_external_command') }
+          it { should_not contain_puppet__config__server('trusted_external_command') }
         end
 
         describe 'when server_trusted_external_command => /usr/local/sbin/trusted_external_command' do
@@ -672,7 +672,7 @@ describe 'puppet' do
             super().merge(server_trusted_external_command: '/usr/local/sbin/trusted_external_command' )
           end
 
-          it { should contain_puppet__config__master('trusted_external_command').with_value('/usr/local/sbin/trusted_external_command') }
+          it { should contain_puppet__config__server('trusted_external_command').with_value('/usr/local/sbin/trusted_external_command') }
         end
       end
 

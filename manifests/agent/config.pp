@@ -6,7 +6,7 @@ class puppet::agent::config inherits puppet::config {
     'localconfig':       value => $puppet::localconfig;
     'default_schedules': value => $puppet::agent_default_schedules;
     'report':            value => $puppet::report;
-    'masterport':        value => $puppet::port;
+    'masterport':        value => $puppet::agent_server_port;
     'environment':       value => $puppet::environment;
     'splay':             value => $puppet::splay;
     'splaylimit':        value => $puppet::splaylimit;

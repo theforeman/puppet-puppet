@@ -16,7 +16,7 @@ class puppet::server::foreman (
     $ssl_key = pick($puppet::server::foreman_ssl_key, $puppet::server::ssl_cert_key)
   }
 
-  # Include foreman components for the puppetmaster
+  # Include foreman components for the puppetserver
   # ENC script, reporting script etc.
   class { 'puppetserver_foreman':
     foreman_url      => $puppet::server::foreman_url,

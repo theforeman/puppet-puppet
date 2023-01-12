@@ -17,7 +17,7 @@ ENVIRONMENT_BASEDIR = "<%= scope.lookupvar("puppet::server::config::primary_envs
 # such as git@git.host:puppet.git
 SOURCE_REPOSITORY = File.expand_path(ENV['GIT_DIR'])
 
-# Mapping of branches to directories.  In many cases, the master branch is
+# Mapping of branches to directories.  In many cases, the server branch is
 # checked out to the 'development' environment.
 BRANCH_MAP = {
 <% if @git_branch_map -%>

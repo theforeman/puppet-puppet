@@ -2,7 +2,7 @@
 # Managed by Puppet
 #
 # This is the default auth.conf file, which implements the default rules
-# used by the puppet master. (That is, the rules below will still apply
+# used by the puppet server. (That is, the rules below will still apply
 # even if this file is deleted.)
 #
 # The ACLs are evaluated in top-down order. More specific stanzas should
@@ -132,7 +132,7 @@ allow *
 ### clients can also access these paths, though they rarely need to.
 
 # allow access to the CA certificate; unauthenticated nodes need this
-# in order to validate the puppet master's certificate
+# in order to validate the puppet server's certificate
 path /puppet-ca/v1/certificate/ca
 auth any
 method find

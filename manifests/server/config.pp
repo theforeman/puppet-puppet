@@ -3,23 +3,23 @@
 class puppet::server::config inherits puppet::config {
   contain 'puppet::server::puppetserver'
   unless empty($puppet::server::puppetserver_vardir) {
-    puppet::config::master {
+    puppet::config::server {
       'vardir': value => $puppet::server::puppetserver_vardir;
     }
   }
   unless empty($puppet::server::puppetserver_rundir) {
-    puppet::config::master {
+    puppet::config::server {
       'rundir': value => $puppet::server::puppetserver_rundir;
     }
   }
   unless empty($puppet::server::puppetserver_logdir) {
-    puppet::config::master {
+    puppet::config::server {
       'logdir': value => $puppet::server::puppetserver_logdir;
     }
   }
 
   # Mirror the relationship, as defined() is parse-order dependent
-  # Ensures puppetmasters certs are generated before the proxy is needed
+  # Ensures puppetservers certs are generated before the proxy is needed
   if defined(Class['foreman_proxy::config']) and $foreman_proxy::ssl {
     Class['puppet::server::config'] ~> Class['foreman_proxy::config']
     Class['puppet::server::config'] ~> Class['foreman_proxy::service']
@@ -45,7 +45,7 @@ class puppet::server::config inherits puppet::config {
   }
 
   if $trusted_external_command {
-    puppet::config::master {
+    puppet::config::server {
       'trusted_external_command': value => $trusted_external_command,
     }
   }
@@ -75,7 +75,7 @@ class puppet::server::config inherits puppet::config {
     }
   }
 
-  puppet::config::master {
+  puppet::config::server {
     'autosign':           value => $autosign;
     'ca':                 value => $puppet::server::ca;
     'certname':           value => $puppet::server::certname;
@@ -85,18 +85,18 @@ class puppet::server::config inherits puppet::config {
   }
 
   if $puppet::server::ssl_dir_manage {
-    puppet::config::master {
+    puppet::config::server {
       'ssldir':           value => $puppet::server::ssl_dir;
     }
   }
   if $server_environment_timeout {
-    puppet::config::master {
+    puppet::config::server {
       'environment_timeout':  value => $server_environment_timeout;
     }
   }
 
   $puppet::server_additional_settings.each |$key,$value| {
-    puppet::config::master { $key: value => $value }
+    puppet::config::server { $key: value => $value }
   }
 
   file { "${puppet::vardir}/reports":
@@ -178,7 +178,7 @@ class puppet::server::config inherits puppet::config {
       }
     }
   } elsif $puppet::server::ca_crl_sync {
-    # If not a ca AND sync the crl from the ca master
+    # If not a ca AND sync the crl from the ca server
     if $server_facts['servername'] {
       file { $puppet::server::ssl_ca_crl:
         ensure  => file,

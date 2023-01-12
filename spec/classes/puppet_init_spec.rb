@@ -45,7 +45,7 @@ describe 'puppet' do
         }
       end
 
-      describe 'with server => true', :unless => unsupported_puppetmaster_osfamily(facts[:osfamily]) do
+      describe 'with server => true', :unless => unsupported_puppetserver_osfamily(facts[:osfamily]) do
         let :params do {
           :server => true,
         } end
