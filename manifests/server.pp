@@ -1,6 +1,6 @@
 # == Class: puppet::server
 #
-# Sets up a puppet master.
+# Sets up a puppet server.
 #
 # == puppet::server parameters
 #
@@ -31,32 +31,32 @@
 #
 # $manage_user::                       Whether to manage the puppet user resource
 #
-# $user::                              Name of the puppetmaster user.
+# $user::                              Name of the puppetserver user.
 #
-# $group::                             Name of the puppetmaster group.
+# $group::                             Name of the puppetserver group.
 #
 # $dir::                               Puppet configuration directory
 #
-# $ip::                                Bind ip address of the puppetmaster
+# $ip::                                Bind ip address of the puppetserver
 #
-# $port::                              Puppet master port
+# $port::                              Puppet server port
 #
 # $ca::                                Provide puppet CA
 #
 # $ca_crl_filepath::                   Path to ca_crl file
 #
-# $ca_crl_sync::                       Sync the puppet ca crl to compile masters. Requires compile masters to
-#                                      be agents of the CA master (MOM) defaults to false
+# $ca_crl_sync::                       Sync the puppet ca crl to compilers. Requires compilers to
+#                                      be agents of the CA server (primary server) defaults to false
 #
 # $crl_enable::                        Enable CRL processing, defaults to true when $ca is true else defaults
 #                                      to false
 #
-# $http::                              Should the puppet master listen on HTTP as well as HTTPS.
+# $http::                              Should the puppet server listen on HTTP as well as HTTPS.
 #                                      Useful for load balancer or reverse proxy scenarios.
 #
-# $http_port::                         Puppet master HTTP port; defaults to 8139.
+# $http_port::                         Puppet server HTTP port; defaults to 8139.
 #
-# $reports::                           List of report types to include on the puppetmaster
+# $reports::                           List of report types to include on the puppetserver
 #
 # $external_nodes::                    External nodes classifier executable
 #
@@ -101,9 +101,9 @@
 #
 # $ssl_dir::                           SSL directory
 #
-# $package::                           Custom package name for puppet master
+# $package::                           Custom package name for puppet server
 #
-# $version::                           Custom package version for puppet master
+# $version::                           Custom package version for puppet server
 #
 # $certname::                          The name to use when handling certificates.
 #
@@ -175,7 +175,7 @@
 # $default_manifest_content::          A string to set the content of the default_manifest
 #                                      If set to '' it will not manage the file
 #
-# $ssl_dir_manage::                    Toggle if ssl_dir should be added to the [master]
+# $ssl_dir_manage::                    Toggle if ssl_dir should be added to the [server]
 #                                      configuration section. This is necessary to
 #                                      disable in case CA is delegated to a separate instance
 #

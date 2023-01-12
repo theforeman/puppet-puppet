@@ -23,33 +23,33 @@ jruby-puppet: {
     # PLEASE NOTE: Use caution when modifying the below settings. Modifying
     # these settings will change the value of the corresponding Puppet settings
     # for Puppet Server, but not for the Puppet CLI tools. This likely will not
-    # be a problem with master-var-dir, master-run-dir, or master-log-dir unless
+    # be a problem with server-var-dir, server-run-dir, or server-log-dir unless
     # some critical setting in puppet.conf is interpolating the value of one
     # of the corresponding settings, but it is important that any changes made to
-    # master-conf-dir and master-code-dir are also made to the corresponding Puppet
+    # server-conf-dir and server-code-dir are also made to the corresponding Puppet
     # settings when running the Puppet CLI tools. See
     # https://docs.puppetlabs.com/puppetserver/latest/puppet_conf_setting_diffs.html#overriding-puppet-settings-in-puppet-server
     # for more information.
 
     # (optional) path to puppet conf dir; if not specified, will use
     # the puppet default
-    master-conf-dir: <%= @server_dir %>
+    server-conf-dir: <%= @server_dir %>
 
     # (optional) path to puppet code dir; if not specified, will use
     # the puppet default
-    master-code-dir: <%= @codedir %>
+    server-code-dir: <%= @codedir %>
 
     # (optional) path to puppet var dir; if not specified, will use
     # the puppet default
-    master-var-dir: <%= @server_puppetserver_vardir %>
+    server-var-dir: <%= @server_puppetserver_vardir %>
 
     # (optional) path to puppet run dir; if not specified, will use
     # the puppet default
-    master-run-dir: <%= @server_puppetserver_rundir %>
+    server-run-dir: <%= @server_puppetserver_rundir %>
 
     # (optional) path to puppet log dir; if not specified, will use
     # the puppet default
-    master-log-dir: <%= @server_puppetserver_logdir %>
+    server-log-dir: <%= @server_puppetserver_logdir %>
 
     # (optional) maximum number of JRuby instances to allow
     max-active-instances: <%= @server_max_active_instances %>
@@ -64,7 +64,7 @@ jruby-puppet: {
     max-retry-delay: <%= @server_max_retry_delay %>
 <%- if scope.function_versioncmp([@server_puppetserver_version, '7.0']) < 0 -%>
 
-    # (optional) Authorize access to Puppet master endpoints via rules
+    # (optional) Authorize access to Puppet server endpoints via rules
     # specified in the legacy Puppet auth.conf file (if true) or via rules
     # specified in the Puppet Server HOCON-formatted auth.conf (if false or not
     # specified).

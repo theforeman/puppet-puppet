@@ -3,7 +3,7 @@ require 'hocon'
 
 describe 'puppet' do
   on_supported_os.each do |os, facts|
-    next if unsupported_puppetmaster_osfamily(facts[:osfamily])
+    next if unsupported_puppetserver_osfamily(facts[:osfamily])
     context "on #{os}" do
       let(:facts) do
         facts
@@ -132,12 +132,12 @@ describe 'puppet' do
 
       describe 'server_puppetserver_vardir' do
         context 'with default parameters' do
-          it { should contain_file(puppetserver_conf).with_content(%r{^    master-var-dir: #{server_vardir}$}) }
+          it { should contain_file(puppetserver_conf).with_content(%r{^    server-var-dir: #{server_vardir}$}) }
         end
 
         context 'with custom server_puppetserver_vardir' do
           let(:params) { super().merge(server_puppetserver_vardir: '/opt/custom/puppetserver') }
-          it { should contain_file(puppetserver_conf).with_content(%r{^    master-var-dir: /opt/custom/puppetserver$}) }
+          it { should contain_file(puppetserver_conf).with_content(%r{^    server-var-dir: /opt/custom/puppetserver$}) }
         end
       end
 

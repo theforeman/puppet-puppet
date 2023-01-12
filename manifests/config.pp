@@ -2,22 +2,22 @@
 # @api private
 class puppet::config (
   # lint:ignore:parameter_types
-  $allow_any_crl_auth  = $puppet::allow_any_crl_auth,
-  $auth_allowed        = $puppet::auth_allowed,
-  $auth_template       = $puppet::auth_template,
-  $ca_server           = $puppet::ca_server,
-  $ca_port             = $puppet::ca_port,
-  $dns_alt_names       = $puppet::dns_alt_names,
-  $module_repository   = $puppet::module_repository,
-  $pluginsource        = $puppet::pluginsource,
-  $pluginfactsource    = $puppet::pluginfactsource,
-  $puppet_dir          = $puppet::dir,
-  $puppetmaster        = $puppet::puppetmaster,
-  $syslogfacility      = $puppet::syslogfacility,
-  $srv_domain          = $puppet::srv_domain,
-  $use_srv_records     = $puppet::use_srv_records,
-  $additional_settings = $puppet::additional_settings,
-  $client_certname     = $puppet::client_certname,
+  $allow_any_crl_auth    = $puppet::allow_any_crl_auth,
+  $auth_allowed          = $puppet::auth_allowed,
+  $auth_template         = $puppet::auth_template,
+  $ca_server             = $puppet::ca_server,
+  $ca_port               = $puppet::ca_port,
+  $dns_alt_names         = $puppet::dns_alt_names,
+  $module_repository     = $puppet::module_repository,
+  $pluginsource          = $puppet::pluginsource,
+  $pluginfactsource      = $puppet::pluginfactsource,
+  $puppet_dir            = $puppet::dir,
+  $agent_server_hostname = $puppet::agent_server_hostname,
+  $syslogfacility        = $puppet::syslogfacility,
+  $srv_domain            = $puppet::srv_domain,
+  $use_srv_records       = $puppet::use_srv_records,
+  $additional_settings   = $puppet::additional_settings,
+  $client_certname       = $puppet::client_certname,
   # lint:endignore
 ) {
   puppet::config::main {
@@ -53,7 +53,7 @@ class puppet::config (
     }
   } else {
     puppet::config::main {
-      'server': value => pick($puppetmaster, $facts['networking']['fqdn']);
+      'server': value => pick($agent_server_hostname, $facts['networking']['fqdn']);
     }
   }
   if $pluginsource {

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'puppet::server::puppetdb' do
   on_supported_os.each do |os, os_facts|
-    context "on #{os}", unless: unsupported_puppetmaster_osfamily(os_facts[:osfamily]) do
+    context "on #{os}", unless: unsupported_puppetserver_osfamily(os_facts[:osfamily]) do
       let(:facts) { os_facts }
       let(:params) { {server: 'mypuppetdb.example.com'} }
       let(:pre_condition) do
@@ -16,7 +16,7 @@ describe 'puppet::server::puppetdb' do
       end
 
       it { is_expected.to compile.with_all_deps }
-      it { is_expected.to contain_puppet__config__master('storeconfigs').with_value(true) }
+      it { is_expected.to contain_puppet__config__server('storeconfigs').with_value(true) }
       it 'configures PuppetDB' do
         is_expected.to contain_class('puppetdb::master::config')
           .with_puppetdb_server('mypuppetdb.example.com')
