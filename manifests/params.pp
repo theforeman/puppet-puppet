@@ -241,10 +241,12 @@ class puppet::params {
   $server_common_modules_path  = unique(["${server_envs_dir[0]}/common", "${codedir}/modules", "${sharedir}/modules", '/usr/share/puppet/modules'])
 
   # Dynamic environments config, ignore if the git_repo is 'false'
-  # Path to the repository
+  # Path to the repository on disk
   $server_git_repo_path       = "${vardir}/puppet.git"
-  # mode of the repository
-  $server_git_repo_mode       = '0755'
+  # Umask for vcsrepo operations
+  $server_git_repo_umask      = '0022'
+  # mode of the repository hooks
+  $server_git_repo_hook_mode  = '0755'
   # user of the repository
   $server_git_repo_user       = $user
   # group of the repository

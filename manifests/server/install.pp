@@ -10,6 +10,10 @@ class puppet::server::install {
     Class['puppet::server::install'] -> Class['foreman::config']
   }
 
+  if $puppet::server::git_repo {
+    ensure_packages(['git'])
+  }
+
   if $puppet::server::manage_user {
     $shell = $puppet::server::git_repo ? {
       true    => $facts['os']['family'] ? {
@@ -21,6 +25,10 @@ class puppet::server::install {
 
     user { $puppet::server::user:
       shell => $shell,
+    }
+
+    if $puppet::server::git_repo {
+      Package['git'] -> User[$puppet::server::user]
     }
   }
 

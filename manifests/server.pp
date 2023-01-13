@@ -80,9 +80,11 @@
 #
 # $common_modules_path::               Common modules paths
 #
-# $git_repo_path::                     Git repository path
+# $git_repo_path::                     Git repository path on disk
 #
-# $git_repo_mode::                     Git repository mode
+# $git_repo_umask::                    Umask used during git operations
+#
+# $git_repo_hook_mode::                Git repository hook mode
 #
 # $git_repo_group::                    Git repository group
 #
@@ -384,8 +386,9 @@ class puppet::server (
   Array[Stdlib::Absolutepath, 1] $envs_dir = $puppet::server_envs_dir,
   Optional[Stdlib::Absolutepath] $envs_target = $puppet::server_envs_target,
   Variant[Undef, String[0], Array[Stdlib::Absolutepath]] $common_modules_path = $puppet::server_common_modules_path,
-  Pattern[/^[0-9]{3,4}$/] $git_repo_mode = $puppet::server_git_repo_mode,
+  Pattern[/^[0-9]{3,4}$/] $git_repo_hook_mode = $puppet::server_git_repo_hook_mode,
   Stdlib::Absolutepath $git_repo_path = $puppet::server_git_repo_path,
+  Pattern[/^[0-9]{3,4}$/] $git_repo_umask = $puppet::server_git_repo_umask,
   String $git_repo_group = $puppet::server_git_repo_group,
   String $git_repo_user = $puppet::server_git_repo_user,
   Hash[String, String] $git_branch_map = $puppet::server_git_branch_map,
