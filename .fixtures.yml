@@ -10,3 +10,4 @@ fixtures:
     puppetserver_foreman: 'https://github.com/theforeman/puppet-puppetserver_foreman.git'
     stdlib:               'https://github.com/puppetlabs/puppetlabs-stdlib.git'
     systemd:              'https://github.com/voxpupuli/puppet-systemd.git'
+    vcsrepo:              'https://github.com/puppetlabs/puppetlabs-vcsrepo.git'

@@ -229,25 +229,20 @@ class puppet::server::config inherits puppet::config {
   }
 
   if $puppet::server::git_repo {
-    include git
-
-    if $puppet::server::manage_user {
-      Class['git'] -> User[$puppet::server::user]
-    }
-
     file { $puppet::vardir:
       ensure => directory,
       owner  => 'root',
       group  => 'root',
     }
 
-    git::repo { 'puppet_repo':
-      bare    => true,
-      target  => $puppet::server::git_repo_path,
-      mode    => $puppet::server::git_repo_mode,
-      user    => $puppet::server::git_repo_user,
-      group   => $puppet::server::git_repo_group,
-      require => File[$puppet::vardir, $primary_envs_dir],
+    vcsrepo { 'puppet_repo':
+      ensure   => 'bare',
+      provider => 'git',
+      path     => $puppet::server::git_repo_path,
+      user     => $puppet::server::git_repo_user,
+      group    => $puppet::server::git_repo_group,
+      umask    => $puppet::server::git_repo_umask,
+      require  => File[$puppet::vardir, $primary_envs_dir],
     }
 
     $git_branch_map = $puppet::server::git_branch_map
@@ -256,8 +251,8 @@ class puppet::server::config inherits puppet::config {
       content => template($puppet::server::post_hook_content),
       owner   => $puppet::server::git_repo_user,
       group   => $puppet::server::git_repo_group,
-      mode    => $puppet::server::git_repo_mode,
-      require => Git::Repo['puppet_repo'],
+      mode    => $puppet::server::git_repo_hook_mode,
+      require => Vcsrepo['puppet_repo'],
     }
   }
 

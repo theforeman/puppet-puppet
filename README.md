@@ -29,7 +29,10 @@ sets up `/var/lib/puppet/puppet.git` where each branch maps to one environment.
 Avoid using 'server' as this name isn't permitted.  On each push to the repo, a
 hook updates `/etc/puppet/environments` with the contents of the branch.
 
-Requires [theforeman/git](https://forge.puppetlabs.com/theforeman/git).
+Permissions can be controlled via the `git_repo_{user,group,hook_mode,umask}`
+parameters.
+
+Requires [puppetlabs/vcsrepo](https://forge.puppetlabs.com/puppetlabs/vcsrepo) >= 5.2.0.
 
 ## Foreman integration
 

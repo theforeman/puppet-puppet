@@ -347,7 +347,7 @@ describe 'puppet' do
                   end
           should contain_user('puppet')
             .with_shell(shell)
-            .that_requires('Class[git]')
+            .that_requires('Package[git]')
         end
 
         it do
@@ -357,9 +357,9 @@ describe 'puppet' do
         end
 
         it do
-          should contain_git__repo('puppet_repo')
-            .with_bare(true)
-            .with_target("#{vardir}/puppet.git")
+          should contain_vcsrepo('puppet_repo')
+            .with_ensure('bare')
+            .with_path("#{vardir}/puppet.git")
             .with_user('puppet')
             .that_requires("File[#{environments_dir}]")
         end
@@ -368,7 +368,7 @@ describe 'puppet' do
           should contain_file("#{vardir}/puppet.git/hooks/post-receive")
             .with_owner('puppet') \
             .with_mode('0755') \
-            .that_requires('Git::Repo[puppet_repo]') \
+            .that_requires('Vcsrepo[puppet_repo]') \
             .with_content(/BRANCH_MAP = \{[^a-zA-Z=>]\}/)
         end
 
@@ -672,7 +672,7 @@ describe 'puppet' do
         it { should contain_puppet__config__main('environmentpath').with_value('/etc/puppetlabs/code/environments/:/etc/puppetlabs/code/unmanaged-environments/') }
         it { should contain_file('/etc/puppetlabs/code/environments/') }
         it { should contain_file('/etc/puppetlabs/code/unmanaged-environments/') }
-        it { should contain_git__repo('puppet_repo').that_requires('File[/etc/puppetlabs/code/environments/]') }
+        it { should contain_vcsrepo('puppet_repo').that_requires('File[/etc/puppetlabs/code/environments/]') }
         it { should contain_file('/test/puppet/hooks/post-receive').with_content(/ENVIRONMENT_BASEDIR\s=\s"\/etc\/puppetlabs\/code\/environments\/"/) }
       end
     end
