@@ -70,6 +70,8 @@
 #
 # $environments_mode::                 Environments directory mode.
 #
+# $environments_recurse::              Should the environments directory be managed recursively
+#
 # $envs_dir::                          List of directories that hold puppet environments
 #                                      All listed directories will be created and attributes managed,
 #                                      but only the first listed path will be used to populate
@@ -381,6 +383,7 @@ class puppet::server (
   String $environments_owner = $puppet::server_environments_owner,
   Optional[String] $environments_group = $puppet::server_environments_group,
   Pattern[/^[0-9]{3,4}$/] $environments_mode = $puppet::server_environments_mode,
+  Boolean $environments_recurse = $puppet::server_environments_recurse,
   Array[Stdlib::Absolutepath, 1] $envs_dir = $puppet::server_envs_dir,
   Optional[Stdlib::Absolutepath] $envs_target = $puppet::server_envs_target,
   Variant[Undef, String[0], Array[Stdlib::Absolutepath]] $common_modules_path = $puppet::server_common_modules_path,

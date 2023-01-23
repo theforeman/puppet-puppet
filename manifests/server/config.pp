@@ -232,12 +232,13 @@ class puppet::server::config inherits puppet::config {
   }
 
   file { $puppet::server::envs_dir:
-    ensure => $ensure,
-    owner  => $puppet::server::environments_owner,
-    group  => $puppet::server::environments_group,
-    mode   => $puppet::server::environments_mode,
-    target => $puppet::server::envs_target,
-    force  => true,
+    ensure  => $ensure,
+    owner   => $puppet::server::environments_owner,
+    group   => $puppet::server::environments_group,
+    mode    => $puppet::server::environments_mode,
+    target  => $puppet::server::envs_target,
+    recurse => $puppet::server::environments_recurse,
+    force   => true,
   }
 
   if $puppet::server::git_repo {
