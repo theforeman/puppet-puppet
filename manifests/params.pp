@@ -234,6 +234,7 @@ class puppet::params {
   $server_environments_owner   = $user
   $server_environments_group   = $root_group
   $server_environments_mode    = '0755'
+  $server_environments_recurse = false
   # Where we store our puppet environments
   $server_envs_dir             = ["${codedir}/environments"]
   $server_envs_target          = undef

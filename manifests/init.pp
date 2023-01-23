@@ -235,6 +235,8 @@
 #
 # $server_environments_mode::               Environments directory mode.
 #
+# $server_environments_recurse::            Should the environments directory be managed recursively
+#
 # $server_common_modules_path::             Common modules paths
 #
 # $server_git_repo_path::                   Git repository path
@@ -671,6 +673,7 @@ class puppet (
   String $server_environments_owner = $puppet::params::server_environments_owner,
   Optional[String] $server_environments_group = $puppet::params::server_environments_group,
   Pattern[/^[0-9]{3,4}$/] $server_environments_mode = $puppet::params::server_environments_mode,
+  Boolean $server_environments_recurse = $puppet::params::server_environments_recurse,
   Array[Stdlib::Absolutepath, 1] $server_envs_dir = $puppet::params::server_envs_dir,
   Optional[Stdlib::Absolutepath] $server_envs_target = $puppet::params::server_envs_target,
   Variant[Undef, String[0], Array[Stdlib::Absolutepath]] $server_common_modules_path = $puppet::params::server_common_modules_path,
