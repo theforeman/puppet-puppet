@@ -69,6 +69,7 @@ class puppet::params {
       $server_puppetserver_logdir = undef
       $server_ruby_load_paths     = []
       $server_jruby_gem_home      = undef
+      $puppetconf_mode            = '0674'
     }
 
     /^(FreeBSD|DragonFly)$/ : {
@@ -96,6 +97,7 @@ class puppet::params {
         # lint:endignore
       }
       $server_jruby_gem_home      = '/var/puppet/server/data/puppetserver/jruby-gems'
+      $puppetconf_mode            = '0644'
     }
 
     'Archlinux' : {
@@ -114,6 +116,7 @@ class puppet::params {
       $server_puppetserver_logdir = undef
       $server_ruby_load_paths     = []
       $server_jruby_gem_home      = undef
+      $puppetconf_mode            = '0644'
     }
 
     default : {
@@ -152,6 +155,7 @@ class puppet::params {
         $server_jruby_gem_home      = '/var/lib/puppet/jruby-gems'
       }
       $root_group = undef
+      $puppetconf_mode = '0644'
     }
   }
 
