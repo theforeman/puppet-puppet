@@ -1,6 +1,6 @@
 {
   "name": "theforeman-puppet",
-  "version": "16.3.0",
+  "version": "16.4.0",
   "author": "theforeman",
   "summary": "Puppet agent and server configuration",
   "license": "GPL-3.0+",

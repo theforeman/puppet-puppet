@@ -1,5 +1,20 @@
 # Changelog
 
+## [16.4.0](https://github.com/theforeman/puppet-puppet/tree/16.4.0) (2023-02-02)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/16.3.0...16.4.0)
+
+**Implemented enhancements:**
+
+- bump puppet/systemd to \< 5.0.0 [\#863](https://github.com/theforeman/puppet-puppet/pull/863) ([jhoblitt](https://github.com/jhoblitt))
+- Refs [\#35985](https://projects.theforeman.org/issues/35985) - Implement optional Katello integration [\#862](https://github.com/theforeman/puppet-puppet/pull/862) ([ekohl](https://github.com/ekohl))
+- Fixes [\#35983](https://projects.theforeman.org/issues/35983) - Permit recursive ownership/permissions for environments [\#861](https://github.com/theforeman/puppet-puppet/pull/861) ([jcpunk](https://github.com/jcpunk))
+- Avoid using global variables [\#858](https://github.com/theforeman/puppet-puppet/pull/858) ([ekohl](https://github.com/ekohl))
+- Default to TLS1.3 or TLS1.2 by default since puppet supports both [\#854](https://github.com/theforeman/puppet-puppet/pull/854) ([jcpunk](https://github.com/jcpunk))
+- Permit setting `default_schedules` to `true` [\#852](https://github.com/theforeman/puppet-puppet/pull/852) ([jcpunk](https://github.com/jcpunk))
+- Allow permissions change of puppet.conf [\#847](https://github.com/theforeman/puppet-puppet/pull/847) ([teluq-pbrideau](https://github.com/teluq-pbrideau))
+- Update to voxpupuli-test 5 [\#841](https://github.com/theforeman/puppet-puppet/pull/841) ([ekohl](https://github.com/ekohl))
+
 ## [16.3.0](https://github.com/theforeman/puppet-puppet/tree/16.3.0) (2022-06-20)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/16.2.0...16.3.0)
