@@ -98,45 +98,47 @@ or as part of the Foreman installer.
 As a parameterized class, all the configurable options can be overridden from your
 wrapper classes or even your ENC (if it supports param classes). For example:
 
-    # Agent and cron (or daemon):
-    class { '::puppet': runmode => 'cron' }
+```puppet
+# Agent and cron (or daemon):
+class { 'puppet': runmode => 'cron' }
 
-    # Agent and puppetmaster:
-    class { '::puppet': server => true }
+# Agent and puppetmaster:
+class { 'puppet': server => true }
 
-    # You want to use git?
-    class { '::puppet':
-      server          => true
-      server_git_repo => true
-    }
+# You want to use git?
+class { 'puppet':
+  server          => true
+  server_git_repo => true
+}
 
-    # Maybe you're using gitolite, new hooks, and a different port?
-    class { '::puppet':
-      server                   => true
-      server_port              => 8141,
-      server_git_repo          => true,
-      server_git_repo_path     => '/var/lib/gitolite/repositories/puppet.git',
-      server_post_hook_name    => 'post-receive.puppet',
-      server_post_hook_content => 'puppetserver/post-hook.puppet',
-    }
+# Maybe you're using gitolite, new hooks, and a different port?
+class { 'puppet':
+  server                   => true
+  server_port              => 8141,
+  server_git_repo          => true,
+  server_git_repo_path     => '/var/lib/gitolite/repositories/puppet.git',
+  server_post_hook_name    => 'post-receive.puppet',
+  server_post_hook_content => 'puppetserver/post-hook.puppet',
+}
 
-    # Configure master without Foreman integration
-    class { '::puppet':
-      server                => true,
-      server_foreman        => false,
-      server_reports        => 'store',
-      server_external_nodes => '',
-    }
+# Configure master without Foreman integration
+class { 'puppet':
+  server                => true,
+  server_foreman        => false,
+  server_reports        => 'store',
+  server_external_nodes => '',
+}
 
-    # Want to integrate with an existing PuppetDB?
-    class { '::puppet':
-      server              => true,
-      server_reports      => 'puppetdb,foreman',
-      server_storeconfigs => true,
-    }
-    class { 'puppet::server::puppetdb':
-      server => 'mypuppetdb.example.com',
-    }
+# Want to integrate with an existing PuppetDB?
+class { 'puppet':
+  server              => true,
+  server_reports      => 'puppetdb,foreman',
+  server_storeconfigs => true,
+}
+class { 'puppet::server::puppetdb':
+  server => 'mypuppetdb.example.com',
+}
+```
 
 Look in _init.pp_ for what can be configured this way, see Contributing if anything
 doesn't work.
@@ -144,10 +146,12 @@ doesn't work.
 To use this in standalone mode, edit a file (e.g. install.pp), put in a class resource,
 as per the examples above, and the execute _puppet apply_ e.g:
 
-    cat > install.pp <<EOF
-    class { '::puppet': server => true }
-    EOF
-    puppet apply install.pp --modulepath /path_to/extracted_tarball
+```sh
+cat > install.pp <<EOF
+class { '::puppet': server => true }
+EOF
+puppet apply install.pp --modulepath /path_to/extracted_tarball
+```
 
 # Advanced scenarios
 
@@ -165,12 +169,14 @@ For puppetserver, this HTTP instance accepts **ALL** connections and no further 
 configured. Allowed hosts should be tightly controlled; anyone with access to an allowed
 host can access all client catalogues and client certificates.**
 
-    # Configure an HTTP puppetmaster vhost in addition to the standard SSL vhost
-    class { '::puppet':
-      server               => true,
-      server_http          => true,
-      server_http_port     => 8130, # default: 8139
-    }
+```puppet
+# Configure an HTTP puppetmaster vhost in addition to the standard SSL vhost
+class { '::puppet':
+  server               => true,
+  server_http          => true,
+  server_http_port     => 8130, # default: 8139
+}
+```
 
 ## Puppet Server configuration
 
