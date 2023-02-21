@@ -1,5 +1,13 @@
 # Changelog
 
+## [16.4.0](https://github.com/theforeman/puppet-puppet/tree/16.4.0) (2023-02-21)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/16.4.0...16.4.0)
+
+**Implemented enhancements:**
+
+- Fixes [\#35728](https://projects.theforeman.org/issues/35728) - Disable telemetry by default [\#851](https://github.com/theforeman/puppet-puppet/pull/851) ([ekohl](https://github.com/ekohl))
+
 ## [16.4.0](https://github.com/theforeman/puppet-puppet/tree/16.4.0) (2023-02-02)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/16.3.0...16.4.0)
