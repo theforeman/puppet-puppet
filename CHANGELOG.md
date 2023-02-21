@@ -1,8 +1,8 @@
 # Changelog
 
-## [16.4.0](https://github.com/theforeman/puppet-puppet/tree/16.4.0) (2023-02-21)
+## [16.5.0](https://github.com/theforeman/puppet-puppet/tree/16.5.0) (2023-02-21)
 
-[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/16.4.0...16.4.0)
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/16.4.0...16.5.0)
 
 **Implemented enhancements:**
 
