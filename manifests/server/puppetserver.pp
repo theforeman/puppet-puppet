@@ -169,6 +169,8 @@ class puppet::server::puppetserver (
       context => '/files/etc/rc.conf',
       changes => ["set puppetserver_java_opts '\"${jvm_cmd}\"'"],
     }
+  } elsif $facts['os']['family'] == 'Debian' and !$puppet::params::aio_package {
+    $server_gem_paths = ['${jruby-puppet.gem-home}', '/usr/lib/puppetserver/vendored-jruby-gems'] # lint:ignore:single_quote_string_with_variables
   } else {
     if $jvm_cli_args {
       $changes = [

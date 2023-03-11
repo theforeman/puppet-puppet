@@ -147,12 +147,21 @@ class puppet::params {
         $vardir                     = '/var/lib/puppet'
         $sharedir                   = '/usr/share/puppet'
         $bindir                     = '/usr/bin'
-        $server_puppetserver_dir    = '/etc/puppetserver'
-        $server_puppetserver_vardir = $vardir
-        $server_puppetserver_rundir = undef
-        $server_puppetserver_logdir = undef
-        $server_ruby_load_paths     = []
-        $server_jruby_gem_home      = '/var/lib/puppet/jruby-gems'
+        if $facts['os']['family'] == 'Debian' {
+          $server_puppetserver_dir    = '/etc/puppet/puppetserver'
+          $server_puppetserver_vardir = '/var/lib/puppetserver'
+          $server_puppetserver_rundir = '/run/puppetserver'
+          $server_puppetserver_logdir = '/var/log/puppetserver'
+          $server_ruby_load_paths     = ['/usr/lib/puppetserver/ruby/vendor_ruby']
+          $server_jruby_gem_home      = '/var/lib/puppetserver/jruby-gems'
+        } else {
+          $server_puppetserver_dir    = '/etc/puppetserver'
+          $server_puppetserver_vardir = $vardir
+          $server_puppetserver_rundir = undef
+          $server_puppetserver_logdir = undef
+          $server_ruby_load_paths     = []
+          $server_jruby_gem_home      = '/var/lib/puppet/jruby-gems'
+        }
       }
       $root_group = undef
       $puppetconf_mode = '0644'
