@@ -281,7 +281,8 @@ class puppet::params {
   $server_ssl_dir = $ssldir
   $server_version = undef
 
-  if $aio_package {
+  if $aio_package or
+    ($facts['os']['name'] == 'Debian' and Integer($facts['os']['release']['major']) >= 12) {
     $client_package = ['puppet-agent']
   } elsif ($facts['os']['family'] =~ /(FreeBSD|DragonFly)/) {
     $client_package = ["puppet${puppet_major}"]
