@@ -237,15 +237,6 @@ class puppet::server::puppetserver (
     content => template('puppet/server/puppetserver/services.d/ca.cfg.erb'),
   }
 
-  unless $facts['os']['family'] == 'FreeBSD' {
-    file { '/opt/puppetlabs/server/apps/puppetserver/config':
-      ensure => directory,
-    }
-    file { '/opt/puppetlabs/server/apps/puppetserver/config/services.d':
-      ensure => directory,
-    }
-  }
-
   file { "${server_puppetserver_dir}/conf.d/ca.conf":
     ensure  => file,
     content => template('puppet/server/puppetserver/conf.d/ca.conf.erb'),
