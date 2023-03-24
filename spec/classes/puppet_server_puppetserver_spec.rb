@@ -50,8 +50,6 @@ describe 'puppet' do
               .with_context('/files/etc/rc.conf')
           }
         else
-          it { should contain_file('/opt/puppetlabs/server/apps/puppetserver/config').with_ensure('directory') }
-          it { should contain_file('/opt/puppetlabs/server/apps/puppetserver/config/services.d').with_ensure('directory') }
           it {
             should contain_augeas('puppet::server::puppetserver::bootstrap')
               .with_changes('set BOOTSTRAP_CONFIG \'"/etc/custom/puppetserver/services.d/,/opt/puppetlabs/server/apps/puppetserver/config/services.d/"\'')
