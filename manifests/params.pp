@@ -282,7 +282,7 @@ class puppet::params {
   $server_version = undef
 
   if $aio_package or
-    ($facts['os']['name'] == 'Debian' and Integer($facts['os']['release']['major']) >= 12) {
+    ($facts['os']['name'] == 'Debian' and versioncmp($facts['os']['release']['major'], '12') >= 0) {
     $client_package = ['puppet-agent']
   } elsif ($facts['os']['family'] =~ /(FreeBSD|DragonFly)/) {
     $client_package = ["puppet${puppet_major}"]
