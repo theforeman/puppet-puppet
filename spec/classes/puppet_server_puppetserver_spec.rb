@@ -22,8 +22,6 @@ describe 'puppet' do
           server_jvm_extra_args: '',
           server_max_active_instances: 2,
           server_puppetserver_dir: '/etc/custom/puppetserver',
-          # Keep this to the minimally supported version
-          server_puppetserver_version: '6.15.0',
         }
       end
 
@@ -138,34 +136,6 @@ describe 'puppet' do
         context 'with custom server_puppetserver_vardir' do
           let(:params) { super().merge(server_puppetserver_vardir: '/opt/custom/puppetserver') }
           it { should contain_file(puppetserver_conf).with_content(%r{^    server-var-dir: /opt/custom/puppetserver$}) }
-        end
-      end
-
-      describe 'use-legacy-auth-conf' do
-        context 'when server_puppetserver_version >= 6.15.0 and < 7.0.0' do
-          context 'with default parameters' do
-            it { should contain_file(puppetserver_conf).with_content(/^    use-legacy-auth-conf: false$/) }
-          end
-
-          context 'when use-legacy-auth-conf = true' do
-            let(:params) { super().merge(server_use_legacy_auth_conf: true) }
-
-            it { should contain_file(puppetserver_conf).with_content(/^    use-legacy-auth-conf: true$/) }
-          end
-        end
-
-        context 'when server_puppetserver_version == 7.0.0' do
-          let(:params) { super().merge(server_puppetserver_version: '7.0.0') }
-
-          context 'with default parameters' do
-            it { should contain_file(puppetserver_conf).without_content(/use-legacy-auth-conf/) }
-          end
-
-          context 'when use-legacy-auth-conf = true' do
-            let(:params) { super().merge(server_use_legacy_auth_conf: true) }
-
-            it { should compile.and_raise_error(/jruby-puppet.use-legacy-auth-conf setting is removed/) }
-          end
         end
       end
 
@@ -305,34 +275,27 @@ describe 'puppet' do
       end
 
       describe 'server_telemetry' do
-        context 'when server_puppetserver_version == 7.0.0' do
-          let(:params) { super().merge(server_puppetserver_version: '7.0.0') }
-          context 'with default parameters' do
-            it {
-              should contain_file(puppetserver_conf)
-                .with_content(/^dropsonde: \{\n    # enable or disable telemetry\n    enabled: false/)
-            }
-          end
-
-          context 'when server_telemetry => true' do
-          let(:params) { super().merge(server_puppetserver_telemetry: true) }
-            it {
-              should contain_file(puppetserver_conf)
-                .with_content(/^dropsonde: \{\n    # enable or disable telemetry\n    enabled: true/)
-            }
-          end
-
-          context 'when server_telemetry => false' do
-          let(:params) { super().merge(server_puppetserver_telemetry: false) }
-            it {
-              should contain_file(puppetserver_conf)
-                .with_content(/^dropsonde: \{\n    # enable or disable telemetry\n    enabled: false/)
-            }
-          end
+        context 'with default parameters' do
+          it {
+            should contain_file(puppetserver_conf)
+              .with_content(/^dropsonde: \{\n    # enable or disable telemetry\n    enabled: false/)
+          }
         end
 
-        context 'when server_puppetserver_version >= 6.15.0 and < 7.0.0' do
-          it { should contain_file(puppetserver_conf).without_content(/^dropsonde: \{/) }
+        context 'when server_telemetry => true' do
+        let(:params) { super().merge(server_puppetserver_telemetry: true) }
+          it {
+            should contain_file(puppetserver_conf)
+              .with_content(/^dropsonde: \{\n    # enable or disable telemetry\n    enabled: true/)
+          }
+        end
+
+        context 'when server_telemetry => false' do
+        let(:params) { super().merge(server_puppetserver_telemetry: false) }
+          it {
+            should contain_file(puppetserver_conf)
+              .with_content(/^dropsonde: \{\n    # enable or disable telemetry\n    enabled: false/)
+          }
         end
       end
 
@@ -557,11 +520,6 @@ describe 'puppet' do
 
           it { expect(rule['allow']).to eq(['catalog-diff',{'extensions'=>{'pp_authorization'=>'catalog'}}]) }
         end
-      end
-
-      describe 'when server_puppetserver_version < 6.15.0' do
-        let(:params) { super().merge(server_puppetserver_version: '5.3.5') }
-        it { should compile.and_raise_error(/puppetserver <6\.15\.0 is not supported by this module version/) }
       end
 
       describe 'allow jetty specific server threads' do

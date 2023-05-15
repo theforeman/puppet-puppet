@@ -59,33 +59,6 @@ describe 'puppet' do
         it { is_expected.to contain_puppet__config__main('hostprivkey').with_value('$privatekeydir/$certname.pem { mode = 640 }') }
         it { is_expected.to contain_puppet__config__main('show_diff').with_value('false') }
         it { is_expected.to contain_puppet__config__main('server').with_value(facts[:networking]['fqdn']) }
-
-        context 'puppet < 7', if: os_facts[:puppetversion].to_i < 7 do
-          it { is_expected.to contain_file("#{confdir}/auth.conf").with_ensure('file').with_content(%r{/puppet/v3/}) }
-          it { is_expected.not_to contain_file("#{confdir}/auth.conf").with_content(%r{^path /certificate_revocation_list/ca\nmethod find$}) }
-        end
-
-        context 'puppet >= 7', if: os_facts[:puppetversion].to_i >= 7 do
-          it { is_expected.to contain_file("#{confdir}/auth.conf").with_ensure('absent') }
-        end
-      end
-
-      context 'auth.conf parameters', if: os_facts[:puppetversion].to_i < 7 do
-        describe 'with allow_any_crl_auth' do
-          let :params do
-            super().merge(allow_any_crl_auth: true)
-          end
-
-          it { is_expected.to contain_file("#{confdir}/auth.conf").with_content(%r{^path /puppet-ca/v1/certificate_revocation_list/ca\nauth any$}) }
-        end
-
-        describe 'with auth_allowed' do
-          let :params do
-            super().merge(auth_allowed: ['$1', 'puppetproxy'])
-          end
-
-          it { is_expected.to contain_file("#{confdir}/auth.conf").with_content(/^allow \$1, puppetproxy$/) }
-        end
       end
 
       describe "when dns_alt_names => ['foo','bar']" do

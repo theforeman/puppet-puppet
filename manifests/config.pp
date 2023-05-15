@@ -4,7 +4,6 @@ class puppet::config (
   # lint:ignore:parameter_types
   $allow_any_crl_auth    = $puppet::allow_any_crl_auth,
   $auth_allowed          = $puppet::auth_allowed,
-  $auth_template         = $puppet::auth_template,
   $ca_server             = $puppet::ca_server,
   $ca_port               = $puppet::ca_port,
   $dns_alt_names         = $puppet::dns_alt_names,
@@ -99,17 +98,6 @@ class puppet::config (
         group => $puppet::params::root_group,
         mode  => $puppet::puppetconf_mode,
       }
-    }
-  }
-
-  if versioncmp($facts['puppetversion'], '7.0.0') >= 0 {
-    file { "${puppet_dir}/auth.conf":
-      ensure => absent,
-    }
-  } else {
-    file { "${puppet_dir}/auth.conf":
-      ensure  => file,
-      content => template($auth_template),
     }
   }
 }

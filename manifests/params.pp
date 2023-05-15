@@ -189,9 +189,6 @@ class puppet::params {
   $package_source = undef
   $package_install_options = undef
 
-  # Need your own config templates? Specify here:
-  $auth_template   = 'puppet/auth.conf.erb'
-
   # Allow any to the CRL. Needed in case of puppet CA proxy
   $allow_any_crl_auth = false
 
@@ -398,9 +395,6 @@ class puppet::params {
   $server_environment_vars                = {}
 
   $server_puppetserver_version      = undef
-
-  # Which auth.conf shall we use?
-  $server_use_legacy_auth_conf      = false
 
   # Puppetserver metrics shipping
   $server_metrics_jmx_enable        = true

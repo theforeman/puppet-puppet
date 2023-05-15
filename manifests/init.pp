@@ -152,8 +152,6 @@
 #                                           Windows and ['systemd.timer'] on other
 #                                           systems.
 #
-# $auth_template::                          Use a custom template for /etc/puppetlabs/puppet/auth.conf
-#
 # $pluginsource::                           URL to retrieve Puppet plugins from during pluginsync
 #
 # $pluginfactsource::                       URL to retrieve Puppet facts from during pluginsync
@@ -406,7 +404,6 @@
 #                                           'TLS_RSA_WITH_AES_128_CBC_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA', ]
 #
 # $server_ruby_load_paths::                 List of ruby paths
-#                                           Defaults based on $::puppetversion
 #
 # $server_ca_client_whitelist::             The whitelist of client certificates that
 #                                           can query the certificate-status endpoint
@@ -424,10 +421,6 @@
 #
 # $server_ca_client_self_delete::           Adds a rule to auth.conf, that allows a client to delete its own certificate
 #                                           Defaults to false
-#
-# $server_use_legacy_auth_conf::            Should the puppetserver use the legacy puppet auth.conf?
-#                                           Defaults to false (the puppetserver will use its own conf.d/auth.conf)
-#                                           Note that Puppetserver 7 has dropped this option.
 #
 # $server_check_for_updates::               Should the puppetserver phone home to check for available updates?
 #                                           Defaults to true
@@ -448,16 +441,13 @@
 #                                           Defaults to 30000, using the Jetty default of 30s
 #
 # $server_puppetserver_metrics::            Enable puppetserver http-client metrics
-#                                           Defaults to true, matching defaults in Puppetserver 5+.
 #
 # $server_puppetserver_profiler::           Enable JRuby profiling.
-#                                           Defaults to true, matching defaults in Puppetserver 5+.
 #                                           If set to false, compiler and function metrics will not be available, (eg. when enabling graphite metrics)
 #
 # $server_puppetserver_telemetry::          Enable Dropsonde telemetry.
 #                                           Undef means disabled while booleans are explicit opt-in or opt-out.
 #                                           This is different from Puppetserver's default values.
-#                                           Only valid since Puppetserver 7.
 #
 # $server_metrics_jmx_enable::              Enable or disable JMX metrics reporter. Defaults to true
 #
@@ -571,7 +561,7 @@
 #
 #   class {'puppet':
 #     agent_noop => true,
-#     version    => '6.15.0-1',
+#     version    => '7.24.0-1',
 #   }
 #
 class puppet (
@@ -630,7 +620,6 @@ class puppet (
   String $classfile = $puppet::params::classfile,
   String $hiera_config = $puppet::params::hiera_config,
   String $localconfig = $puppet::params::localconfig,
-  String $auth_template = $puppet::params::auth_template,
   Boolean $allow_any_crl_auth = $puppet::params::allow_any_crl_auth,
   Array[String] $auth_allowed = $puppet::params::auth_allowed,
   Variant[String, Array[String]] $client_package = $puppet::params::client_package,
@@ -723,7 +712,6 @@ class puppet (
   Integer[0] $server_max_queued_requests = $puppet::params::server_max_queued_requests,
   Integer[0] $server_max_retry_delay = $puppet::params::server_max_retry_delay,
   Boolean $server_multithreaded = $puppet::params::server_multithreaded,
-  Boolean $server_use_legacy_auth_conf = $puppet::params::server_use_legacy_auth_conf,
   Boolean $server_check_for_updates = $puppet::params::server_check_for_updates,
   Boolean $server_environment_class_cache_enabled = $puppet::params::server_environment_class_cache_enabled,
   Boolean $server_allow_header_cert_info = $puppet::params::server_allow_header_cert_info,

@@ -16,11 +16,7 @@ describe 'puppet' do
         vardir              = '/var/puppet'
         rubydir             = %r{^/usr/local/lib/ruby/site_ruby/\d+\.\d+/puppet$}
         puppetserver_pkg    = "puppetserver#{facts[:puppetversion].to_i}"
-        puppetcacmd         = if facts[:puppetversion] >= '6.0'
-                                '/usr/local/bin/puppetserver ca setup'
-                              else
-                                '/usr/local/bin/puppet cert --generate puppetserver.example.com --allow-dns-alt-names'
-                              end
+        puppetcacmd         = '/usr/local/bin/puppetserver ca setup'
       else
         codedir             = '/etc/puppetlabs/code'
         confdir             = '/etc/puppetlabs/puppet'
@@ -34,21 +30,12 @@ describe 'puppet' do
         vardir              = '/opt/puppetlabs/puppet/cache'
         rubydir             = '/opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet'
         puppetserver_pkg    = 'puppetserver'
-        puppetcacmd         = if facts[:puppetversion] >= '6.0'
-                                '/opt/puppetlabs/bin/puppetserver ca setup'
-                              else
-                                '/opt/puppetlabs/bin/puppet cert --generate puppetserver.example.com --allow-dns-alt-names'
-                              end
+        puppetcacmd         = '/opt/puppetlabs/bin/puppetserver ca setup'
       end
       conf_file           = "#{confdir}/puppet.conf"
       conf_d_dir          = "#{puppetserver_etcdir}/conf.d"
       environments_dir    = "#{codedir}/environments"
-      cadir               = facts[:puppetversion] >= '7.0' ? "#{puppetserver_etcdir}/ca" : "#{ssldir}/ca"
-      if facts[:puppetversion] >= '6.0'
-        cert_to_create      = "#{cadir}/ca_crt.pem"
-      else
-        cert_to_create      = "#{ssldir}/certs/puppetserver.example.com.pem"
-      end
+      cadir               = "#{puppetserver_etcdir}/ca"
 
       let(:facts) { facts }
 
@@ -111,7 +98,7 @@ describe 'puppet' do
             .with_umask('0022')
 
           should contain_exec('puppet_server_config-generate_ca_cert') \
-            .with_creates(cert_to_create) \
+            .with_creates("#{cadir}/ca_crt.pem") \
             .with_command(puppetcacmd) \
             .with_umask('0022') \
             .that_requires(["Concat[#{conf_file}]", 'Exec[puppet_server_config-create_ssl_dir]'])

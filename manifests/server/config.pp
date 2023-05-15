@@ -164,19 +164,6 @@ class puppet::server::config inherits puppet::config {
         Exec['puppet_server_config-create_ssl_dir'],
       ],
     }
-
-    # In Puppet 7 the cadir was changed from $ssldir/ca to $puppetserver_dir/ca
-    # This migrates the directory if it was in the old location
-    # The migration command leaves a symlink in place
-    if versioncmp($puppet::server::real_puppetserver_version, '7.0') > 0 {
-      exec { 'migrate Puppetserver cadir':
-        command => "${puppet::puppetserver_cmd} ca migrate",
-        creates => $puppet::server::cadir,
-        onlyif  => "test -d '${puppet::server::ssl_dir}/ca' && ! test -L '${puppet::server::ssl_dir}'",
-        path    => $facts['path'],
-        before  => Exec['puppet_server_config-generate_ca_cert'],
-      }
-    }
   } elsif $puppet::server::ca_crl_sync {
     # If not a ca AND sync the crl from the ca server
     if $server_facts['servername'] {

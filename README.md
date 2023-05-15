@@ -7,26 +7,15 @@ Installs and configures the Puppet agent and optionally a Puppet server (when
 `server` is true).  Part of the [Foreman installer](https://github.com/theforeman/foreman-installer)
 or to be used as a Puppet module.
 
-When using Puppet Server (version 5.3.6 is the lowest version, this module supports),
-the module supports and assumes you will be installing the latest version.
-If you know you'll be installing an earlier or specific version, you will
-need to override `server_puppetserver_version`. More information in the Puppet
-Server section below.
-
 Many puppet.conf options for agents, servers and other are parameterized, with
 class documentation provided at the top of the manifests. In addition, there
 are hash parameters for each configuration section that can be used to supply
 any options that are not explicitly supported.
 
-## Upgrading from Puppetserver 6 to 7
+## Compatibility
 
-Puppetserver 7 moves the CA files from ssldir to its own. To move the existing
-files, `puppetserver ca migrate` can be used but this requires the puppetserver
-to be stopped. The module does run this command if needed, but doesn't stop the
-service so the application will fail.
-
-It is recommended to run this command directly after updating the packages. It
-leaves a symlink so the old config should continue to work.
+See the module metadata for supported operating systems and compatible Puppet
+versions. The Puppetserver version should also match this.
 
 ## Environments support
 
@@ -177,14 +166,6 @@ class { '::puppet':
   server_http_port     => 8130, # default: 8139
 }
 ```
-
-## Puppet Server configuration
-
-Puppet Server requires slightly different configuration between different
-versions, which this module supports. It's recommended that you set the
-`server_puppetserver_version` parameter to the MAJOR.MINOR.PATCH version
-you have installed. By default the module will configure for the latest
-version available.
 
 # Contributing
 
