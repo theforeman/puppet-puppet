@@ -113,8 +113,6 @@ class puppet::server::puppetserver (
   Boolean $server_ca_client_self_delete = $puppet::server::ca_client_self_delete,
   Array[String] $server_ca_client_whitelist = $puppet::server::ca_client_whitelist,
   Array[String] $server_admin_api_whitelist = $puppet::server::admin_api_whitelist,
-  String[1] $server_puppetserver_version = $puppet::server::real_puppetserver_version,
-  Boolean $server_use_legacy_auth_conf = $puppet::server::use_legacy_auth_conf,
   Boolean $server_check_for_updates = $puppet::server::check_for_updates,
   Boolean $server_environment_class_cache_enabled = $puppet::server::environment_class_cache_enabled,
   Optional[Boolean] $server_metrics = $puppet::server::puppetserver_metrics,
@@ -148,10 +146,6 @@ class puppet::server::puppetserver (
   Array[String[1]] $jolokia_metrics_whitelist = $puppet::server::jolokia_metrics_whitelist,
 ) {
   include puppet::server
-
-  if versioncmp($server_puppetserver_version, '6.15.0') < 0 {
-    fail('puppetserver <6.15.0 is not supported by this module version')
-  }
 
   $puppetserver_package = pick($puppet::server::package, 'puppetserver')
 

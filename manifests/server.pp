@@ -229,7 +229,6 @@
 #                                      'TLS_RSA_WITH_AES_128_CBC_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA', ]
 #
 # $ruby_load_paths::                   List of ruby paths
-#                                      Defaults based on $::puppetversion
 #
 # $ca_client_whitelist::               The whitelist of client certificates that
 #                                      can query the certificate-status endpoint
@@ -247,10 +246,6 @@
 #
 # $ca_client_self_delete::             Adds a rule to auth.conf, that allows a client to self delete its own certificate
 #                                      Defaults to false
-#
-# $use_legacy_auth_conf::              Should the puppetserver use the legacy puppet auth.conf?
-#                                      Defaults to false (the puppetserver will use its own conf.d/auth.conf)
-#                                      Note that Puppetserver 7 has dropped support for this.
 #
 # $check_for_updates::                 Should the puppetserver phone home to check for available updates?
 #
@@ -430,7 +425,6 @@ class puppet::server (
   Integer[0] $max_queued_requests = $puppet::server_max_queued_requests,
   Integer[0] $max_retry_delay = $puppet::server_max_retry_delay,
   Boolean $multithreaded = $puppet::server_multithreaded,
-  Boolean $use_legacy_auth_conf = $puppet::server_use_legacy_auth_conf,
   Boolean $check_for_updates = $puppet::server_check_for_updates,
   Boolean $environment_class_cache_enabled = $puppet::server_environment_class_cache_enabled,
   Boolean $allow_header_cert_info = $puppet::server_allow_header_cert_info,
@@ -462,21 +456,7 @@ class puppet::server (
   Optional[Stdlib::Absolutepath] $versioned_code_content = $puppet::server_versioned_code_content,
   Array[String[1]] $jolokia_metrics_whitelist = $puppet::server_jolokia_metrics_whitelist,
 ) {
-  # For Puppetserver, certain configuration parameters are version specific. We
-  # assume a particular version here.
-  if $puppetserver_version {
-    $real_puppetserver_version = $puppetserver_version
-  } elsif versioncmp($facts['puppetversion'], '7.0.0') >= 0 {
-    $real_puppetserver_version = '7.0.0'
-  } else {
-    $real_puppetserver_version = '6.15.0'
-  }
-
-  if versioncmp($real_puppetserver_version, '7.0.0') >= 0 {
-    $cadir = "${puppetserver_dir}/ca"
-  } else {
-    $cadir = "${ssl_dir}/ca"
-  }
+  $cadir = "${puppetserver_dir}/ca"
 
   if $ca {
     $ssl_ca_cert     = "${cadir}/ca_crt.pem"
@@ -492,12 +472,6 @@ class puppet::server (
 
   $ssl_cert      = "${ssl_dir}/certs/${certname}.pem"
   $ssl_cert_key  = "${ssl_dir}/private_keys/${certname}.pem"
-
-  if versioncmp($real_puppetserver_version, '7.0.0') >= 0 {
-    if $use_legacy_auth_conf {
-      fail('The jruby-puppet.use-legacy-auth-conf setting is removed in Puppetserver 7')
-    }
-  }
 
   if $jvm_extra_args {
     $real_jvm_extra_args = $jvm_extra_args

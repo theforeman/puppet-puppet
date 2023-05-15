@@ -1,12 +1,8 @@
 fixtures:
   repositories:
-    augeas_core:
-      repo: 'https://github.com/puppetlabs/puppetlabs-augeas_core'
-      puppet_version: '>= 6.0.0'
+    augeas_core: 'https://github.com/puppetlabs/puppetlabs-augeas_core'
     concat:   'https://github.com/puppetlabs/puppetlabs-concat.git'
-    cron_core:
-      repo: 'https://github.com/puppetlabs/puppetlabs-cron_core'
-      puppet_version: '>= 6.0.0'
+    cron_core: 'https://github.com/puppetlabs/puppetlabs-cron_core'
     extlib:               'https://github.com/voxpupuli/puppet-extlib.git'
     git:                  'https://github.com/theforeman/puppet-git.git'
     inifile:              'https://github.com/puppetlabs/puppetlabs-inifile.git'
