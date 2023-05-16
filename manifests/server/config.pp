@@ -95,7 +95,7 @@ class puppet::server::config inherits puppet::config {
     }
   }
 
-  $puppet::server_additional_settings.each |$key,$value| {
+  $puppet::server::additional_settings.each |$key,$value| {
     puppet::config::server { $key: value => $value }
   }
 
