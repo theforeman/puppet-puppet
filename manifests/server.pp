@@ -268,8 +268,8 @@
 #                                      Defaults to false because that's the Puppet Inc. default behaviour.
 #
 # $puppetserver_telemetry::            Enable Dropsonde telemetry.
-#                                      Valid on puppetserver >= 7
-#                                      Defaults to true because that's the Puppet Inc. default behaviour since puppet 7
+#                                      Undef means disabled while booleans are explicit opt-in or opt-out.
+#                                      This is different from Puppetserver's default values.
 #
 # $metrics_jmx_enable::                Enable or disable JMX metrics reporter. Defaults to true
 #
