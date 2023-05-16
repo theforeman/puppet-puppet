@@ -1,5 +1,27 @@
 # Changelog
 
+## [17.0.0](https://github.com/theforeman/puppet-puppet/tree/17.0.0) (2023-05-16)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/16.5.0...17.0.0)
+
+**Breaking changes:**
+
+- Drop Puppet 6 support [\#873](https://github.com/theforeman/puppet-puppet/pull/873) ([ekohl](https://github.com/ekohl))
+- Drop Ubuntu 16.04, Debian 9, Fedora 31, SLES 11, Windows 8; add F36, EL9 [\#872](https://github.com/theforeman/puppet-puppet/pull/872) ([ekohl](https://github.com/ekohl))
+- Fixes [\#35933](https://projects.theforeman.org/issues/35933) Update for change from puppet master to server [\#859](https://github.com/theforeman/puppet-puppet/pull/859) ([jcpunk](https://github.com/jcpunk))
+
+**Implemented enhancements:**
+
+- Include Puppet CRL update API auth [\#875](https://github.com/theforeman/puppet-puppet/pull/875) ([ekohl](https://github.com/ekohl))
+- Mark compatible with puppetlabs/concat 8.x [\#871](https://github.com/theforeman/puppet-puppet/pull/871) ([ekohl](https://github.com/ekohl))
+- Stop managing services.d dir in /opt/puppetlabs [\#869](https://github.com/theforeman/puppet-puppet/pull/869) ([ekohl](https://github.com/ekohl))
+- Support new non-AIO puppet Debian packages [\#868](https://github.com/theforeman/puppet-puppet/pull/868) ([jcharaoui](https://github.com/jcharaoui))
+
+**Fixed bugs:**
+
+- Respect puppet::server::additional\_settings parameter [\#874](https://github.com/theforeman/puppet-puppet/pull/874) ([ekohl](https://github.com/ekohl))
+- Keep ruby's system Gem.dir in gem-path on FreeBSD [\#843](https://github.com/theforeman/puppet-puppet/pull/843) ([llua](https://github.com/llua))
+
 ## [16.5.0](https://github.com/theforeman/puppet-puppet/tree/16.5.0) (2023-02-21)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/16.4.0...16.5.0)
