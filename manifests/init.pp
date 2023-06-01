@@ -400,8 +400,10 @@
 #                                           Defaults to "${ssl_dir}/ca/ca_crt.pem"
 #
 # $server_cipher_suites::                   List of SSL ciphers to use in negotiation
-#                                           Defaults to [ 'TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA',
-#                                           'TLS_RSA_WITH_AES_128_CBC_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA', ]
+#                                           Defaults to ['TLS_AES_128_GCM_SHA256', 'TLS_AES_256_GCM_SHA384',
+#                                           'TLS_DHE_RSA_WITH_AES_128_GCM_SHA256', 'TLS_DHE_RSA_WITH_AES_256_GCM_SHA384',
+#                                           'TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256', 'TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384',
+#                                           'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256', 'TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384']
 #
 # $server_ruby_load_paths::                 List of ruby paths
 #

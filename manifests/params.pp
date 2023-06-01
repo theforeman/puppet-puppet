@@ -386,6 +386,8 @@ class puppet::params {
   $server_admin_api_whitelist             = ['localhost', $lower_fqdn]
   $server_ca_client_whitelist             = ['localhost', $lower_fqdn]
   $server_cipher_suites                   = [
+    'TLS_AES_128_GCM_SHA256',
+    'TLS_AES_256_GCM_SHA384',
     'TLS_DHE_RSA_WITH_AES_128_GCM_SHA256',
     'TLS_DHE_RSA_WITH_AES_256_GCM_SHA384',
     'TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256',
