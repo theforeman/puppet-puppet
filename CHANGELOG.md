@@ -1,5 +1,13 @@
 # Changelog
 
+## [17.1.0](https://github.com/theforeman/puppet-puppet/tree/17.1.0) (2023-06-19)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/17.0.0...17.1.0)
+
+**Implemented enhancements:**
+
+- Add TLS1.3 ciphers to default server\_cipher\_suites [\#878](https://github.com/theforeman/puppet-puppet/pull/878) ([alexjfisher](https://github.com/alexjfisher))
+
 ## [17.0.0](https://github.com/theforeman/puppet-puppet/tree/17.0.0) (2023-05-16)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/16.5.0...17.0.0)
