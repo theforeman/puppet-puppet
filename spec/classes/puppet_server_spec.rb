@@ -154,15 +154,11 @@ describe 'puppet' do
         it { should contain_class('puppet::server::puppetserver') }
       end
 
-      describe 'with uppercase hostname' do
-        let(:facts) do
-          override_facts(super(),
-            networking: {fqdn: 'PUPPETSERVER.example.com'},
-          )
-        end
+      describe 'with server_foreman_url' do
+        let(:params) { super().merge(server_foreman_url: 'https://foreman.example.com') }
 
         it { should compile.with_all_deps }
-        it { should contain_class('puppet').with_server_foreman_url('https://puppetserver.example.com') }
+        it { should contain_class('puppet').with_server_foreman_url('https://foreman.example.com') }
       end
 
       describe 'with ip parameter' do
