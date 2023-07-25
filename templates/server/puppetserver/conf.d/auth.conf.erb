@@ -88,7 +88,7 @@ authorization: {
             allow-unauthenticated: true
 <%- else -%>
             allow: [
-<%- @server_ca_client_whitelist.each do |client| -%>
+<%- @server_ca_client_allowlist.each do |client| -%>
                 "<%= client %>",
 <%- end -%>
                 {
@@ -126,7 +126,7 @@ authorization: {
             allow-unauthenticated: true
 <%- else -%>
             allow: [
-<%- @server_ca_client_whitelist.each do |client| -%>
+<%- @server_ca_client_allowlist.each do |client| -%>
                 "<%= client %>",
 <%- end -%>
                 {
@@ -149,7 +149,7 @@ authorization: {
             },
             allow: [
                 "$2",
-<%- @server_admin_api_whitelist.each do |client| -%>
+<%- @server_admin_api_allowlist.each do |client| -%>
                 "<%= client %>",
 <%- end -%>
                 {
@@ -216,7 +216,7 @@ authorization: {
                 method: delete
             }
             allow: [
-<%- @server_admin_api_whitelist.each do |client| -%>
+<%- @server_admin_api_allowlist.each do |client| -%>
                 "<%= client %>",
 <%- end -%>
             ]
@@ -230,7 +230,7 @@ authorization: {
                 method: delete
             }
             allow: [
-<%- @server_admin_api_whitelist.each do |client| -%>
+<%- @server_admin_api_allowlist.each do |client| -%>
                 "<%= client %>",
 <%- end -%>
             ]
@@ -361,14 +361,14 @@ authorization: {
             name: "puppetlabs experimental"
         },
 <%- end -%>
-<%- unless @jolokia_metrics_whitelist.empty? -%>
+<%- unless @jolokia_metrics_allowlist.empty? -%>
         {
             match-request: {
                 path: "/metrics/v2"
                 type: path
             }
             allow: [
-<%- @jolokia_metrics_whitelist.each do |client| -%>
+<%- @jolokia_metrics_allowlist.each do |client| -%>
                 "<%= client %>",
 <%- end -%>
             ]
