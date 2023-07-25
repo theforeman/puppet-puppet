@@ -409,14 +409,14 @@
 #
 # $server_ruby_load_paths::                 List of ruby paths
 #
-# $server_ca_client_whitelist::             The whitelist of client certificates that
+# $server_ca_client_allowlist::             The allowlist of client certificates that
 #                                           can query the certificate-status endpoint
 #                                           Defaults to [ '127.0.0.1', '::1', $::ipaddress ]
 #
 # $server_custom_trusted_oid_mapping::      A hash of custom trusted oid mappings. Defaults to undef
 #                                           Example: { 1.3.6.1.4.1.34380.1.2.1.1 => { shortname => 'myshortname' } }
 #
-# $server_admin_api_whitelist::             The whitelist of clients that
+# $server_admin_api_allowlist::             The allowlist of clients that
 #                                           can query the puppet-admin-api endpoint
 #                                           Defaults to [ '127.0.0.1', '::1', $::ipaddress ]
 #
@@ -546,7 +546,7 @@
 #                                           invokes when on static_file_content requests.
 #                                           Defaults to undef
 #
-# $server_jolokia_metrics_whitelist::       The whitelist of clients that
+# $server_jolokia_metrics_allowlist::       The allowlist of clients that
 #                                           can query the jolokia /metrics/v2 endpoint
 #
 # === Usage:
@@ -636,7 +636,7 @@ class puppet (
   Optional[String] $syslogfacility = $puppet::params::syslogfacility,
   String $environment = $puppet::params::environment,
   Boolean $server = $puppet::params::server,
-  Array[String] $server_admin_api_whitelist = $puppet::params::server_admin_api_whitelist,
+  Array[String] $server_admin_api_allowlist = $puppet::params::server_admin_api_allowlist,
   Boolean $server_manage_user = $puppet::params::manage_user,
   String $server_user = $puppet::params::user,
   String $server_group = $puppet::params::group,
@@ -648,7 +648,7 @@ class puppet (
   Optional[Boolean] $server_crl_enable = $puppet::params::server_crl_enable,
   Boolean $server_ca_auth_required = $puppet::params::server_ca_auth_required,
   Boolean $server_ca_client_self_delete = $puppet::params::server_ca_client_self_delete,
-  Array[String] $server_ca_client_whitelist = $puppet::params::server_ca_client_whitelist,
+  Array[String] $server_ca_client_allowlist = $puppet::params::server_ca_client_allowlist,
   Optional[Puppet::Custom_trusted_oid_mapping] $server_custom_trusted_oid_mapping = $puppet::params::server_custom_trusted_oid_mapping,
   Boolean $server_http = $puppet::params::server_http,
   Stdlib::Port $server_http_port = $puppet::params::server_http_port,
@@ -747,7 +747,7 @@ class puppet (
   Optional[Integer[1]] $server_max_open_files = $puppet::params::server_max_open_files,
   Optional[Stdlib::Absolutepath] $server_versioned_code_id = undef,
   Optional[Stdlib::Absolutepath] $server_versioned_code_content = undef,
-  Array[String[1]] $server_jolokia_metrics_whitelist = [],
+  Array[String[1]] $server_jolokia_metrics_allowlist = [],
   Stdlib::Filemode $puppetconf_mode = $puppet::params::puppetconf_mode,
 ) inherits puppet::params {
   contain puppet::config

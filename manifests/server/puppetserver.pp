@@ -111,8 +111,8 @@ class puppet::server::puppetserver (
   Integer[0] $server_connect_timeout = $puppet::server::connect_timeout,
   Boolean $server_ca_auth_required = $puppet::server::ca_auth_required,
   Boolean $server_ca_client_self_delete = $puppet::server::ca_client_self_delete,
-  Array[String] $server_ca_client_whitelist = $puppet::server::ca_client_whitelist,
-  Array[String] $server_admin_api_whitelist = $puppet::server::admin_api_whitelist,
+  Array[String] $server_ca_client_allowlist = $puppet::server::ca_client_allowlist,
+  Array[String] $server_admin_api_allowlist = $puppet::server::admin_api_allowlist,
   Boolean $server_check_for_updates = $puppet::server::check_for_updates,
   Boolean $server_environment_class_cache_enabled = $puppet::server::environment_class_cache_enabled,
   Optional[Boolean] $server_metrics = $puppet::server::puppetserver_metrics,
@@ -143,7 +143,7 @@ class puppet::server::puppetserver (
   Optional[Stdlib::Absolutepath] $versioned_code_id = $puppet::server::versioned_code_id,
   Optional[Stdlib::Absolutepath] $versioned_code_content = $puppet::server::versioned_code_content,
   Boolean $disable_fips = $facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] == '8',
-  Array[String[1]] $jolokia_metrics_whitelist = $puppet::server::jolokia_metrics_whitelist,
+  Array[String[1]] $jolokia_metrics_allowlist = $puppet::server::jolokia_metrics_allowlist,
 ) {
   include puppet::server
 
