@@ -180,10 +180,7 @@ To use this in standalone mode, edit a file (e.g. install.pp), put in a class re
 as per the examples above, and the execute _puppet apply_ e.g:
 
 ```sh
-cat > install.pp <<EOF
-class { '::puppet': server => true }
-EOF
-puppet apply install.pp --modulepath /path_to/extracted_tarball
+puppet apply -e 'class { 'puppet': server => true }' --modulepath /path_to/extracted_tarball
 ```
 
 # Advanced scenarios
