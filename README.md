@@ -71,6 +71,50 @@ class { 'puppet::server::puppetdb':
 }
 ```
 
+Above example manages Puppetserver + PuppetDB integration. It won't install the
+PuppetDB. To do so, you also need the `puppetdb` class
+
+```puppet
+class { 'puppet':
+  server              => true,
+  server_reports      => 'puppetdb,foreman',
+  server_storeconfigs => true,
+}
+include puppetdb
+class { 'puppet::server::puppetdb':
+  server => 'mypuppetdb.example.com',
+}
+```
+
+Then the PuppetDB module will also configure postgresql and setup the database.
+If you want to manage postgresql installation on your own:
+
+```puppet
+class { 'postgresql::globals':
+  encoding            => 'UTF-8',
+  locale              => 'en_US.UTF-8',
+  version             => '15',
+  manage_package_repo => true,
+}
+class { 'postgresql::server':
+  listen_addresses => '127.0.0.1',
+}
+postgresql::server::extension { 'pg_trgm':
+  database => 'puppetdb',
+  require  => Postgresql::Server::Db['puppetdb'],
+  before   => Service['puppetdb'],
+}
+class { 'puppetdb':
+  manage_dbserver => false,
+}
+class { 'puppet::server::puppetdb':
+  server => 'mypuppetdb.example.com',
+}
+```
+
+Above code will install Puppetserver/PuppetDB/PostgreSQL on a single server. It
+will use the upstream postgresql repositories. It was tested on Ubuntu.
+
 Please also make sure your puppetdb ciphers are compatible with your puppet server ciphers, ie that the two following parameters match:
 ```
 puppet::server::cipher_suites
@@ -136,10 +180,9 @@ To use this in standalone mode, edit a file (e.g. install.pp), put in a class re
 as per the examples above, and the execute _puppet apply_ e.g:
 
 ```sh
-cat > install.pp <<EOF
-class { '::puppet': server => true }
+puppet apply --modulepath /path_to/extracted_tarball <<EOF
+class { 'puppet': server => true }
 EOF
-puppet apply install.pp --modulepath /path_to/extracted_tarball
 ```
 
 # Advanced scenarios
