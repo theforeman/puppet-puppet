@@ -15,6 +15,9 @@ unless unsupported_puppetserver || unsupported_puppetserver_upgrade
     end
 
     case ENV['BEAKER_PUPPET_COLLECTION']
+    when 'puppet8'
+      from_version = '8.2.0'
+      to_version = '8.3.0'
     when 'puppet7'
       from_version = '7.6.0'
       to_version = '7.13.0'
