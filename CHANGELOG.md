@@ -1,5 +1,15 @@
 # Changelog
 
+## [18.0.0](https://github.com/theforeman/puppet-puppet/tree/18.0.0) (2023-08-16)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/17.1.0...18.0.0)
+
+**Breaking changes:**
+
+- Refs [\#36620](https://projects.theforeman.org/issues/36620) - Replace whitelist with allowlist [\#881](https://github.com/theforeman/puppet-puppet/pull/881) ([treydock](https://github.com/treydock))
+- Refs [\#36573](https://projects.theforeman.org/issues/36573) - Drop default value for foreman\_url [\#880](https://github.com/theforeman/puppet-puppet/pull/880) ([ekohl](https://github.com/ekohl))
+- Fixes [\#35943](https://projects.theforeman.org/issues/35943) - Switch to puppetlabs vcsrepo for gitrepo tracking [\#860](https://github.com/theforeman/puppet-puppet/pull/860) ([jcpunk](https://github.com/jcpunk))
+
 ## [17.1.0](https://github.com/theforeman/puppet-puppet/tree/17.1.0) (2023-06-19)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/17.0.0...17.1.0)
