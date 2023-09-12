@@ -89,6 +89,9 @@
 # $ca_crl_filepath::                        Path to CA CRL file, dynamically resolves based on
 #                                           $::server_ca status.
 #
+# $certificate_revocation::                 Whether certificate revocation checking should be
+#                                           enabled, and what level of checking should be performed
+#
 # $dns_alt_names::                          Use additional DNS names when generating a
 #                                           certificate.  Defaults to an empty Array.
 #
@@ -611,6 +614,7 @@ class puppet (
   Optional[Variant[String, Boolean]] $ca_server = $puppet::params::ca_server,
   Optional[Stdlib::Port] $ca_port = $puppet::params::ca_port,
   Optional[String] $ca_crl_filepath = $puppet::params::ca_crl_filepath,
+  Optional[Variant[Boolean, Enum['chain', 'leaf']]] $certificate_revocation = $puppet::params::certificate_revocation,
   Optional[String] $prerun_command = $puppet::params::prerun_command,
   Optional[String] $postrun_command = $puppet::params::postrun_command,
   Array[String] $dns_alt_names = $puppet::params::dns_alt_names,
