@@ -6,6 +6,7 @@ class puppet::config (
   $auth_allowed          = $puppet::auth_allowed,
   $ca_server             = $puppet::ca_server,
   $ca_port               = $puppet::ca_port,
+  $certificate_revocation = $puppet::certificate_revocation,
   $dns_alt_names         = $puppet::dns_alt_names,
   $module_repository     = $puppet::module_repository,
   $pluginsource          = $puppet::pluginsource,
@@ -38,6 +39,9 @@ class puppet::config (
   }
   if $ca_port {
     puppet::config::main { 'ca_port': value => $ca_port; }
+  }
+  if $certificate_revocation != undef {
+    puppet::config::main { 'certificate_revocation': value => $certificate_revocation; }
   }
   if $dns_alt_names and !empty($dns_alt_names) {
     puppet::config::main { 'dns_alt_names': value => $dns_alt_names; }

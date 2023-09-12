@@ -87,6 +87,22 @@ describe 'puppet' do
         it { should contain_puppet__config__main('ca_port').with_value(8140) }
       end
 
+      describe 'with undef certificate_revocation' do
+        let :params do {
+          :certificate_revocation => :undef,
+        } end
+
+        it { should_not contain_puppet__config__main('certificate_revocation') }
+      end
+
+      describe 'with certificate_revocation' do
+        let :params do {
+          :certificate_revocation => 'leaf',
+        } end
+
+        it { should contain_puppet__config__main('certificate_revocation').with_value('leaf') }
+      end
+
       describe 'with puppetconf_mode' do
         let :params do {
           :puppetconf_mode => '0640',

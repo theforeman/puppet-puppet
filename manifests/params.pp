@@ -27,6 +27,7 @@ class puppet::params {
   $ca_server           = undef
   $ca_port             = undef
   $ca_crl_filepath     = undef
+  $certificate_revocation = undef
   $server_crl_enable   = undef
   $prerun_command      = undef
   $postrun_command     = undef
