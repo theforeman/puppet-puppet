@@ -2,7 +2,7 @@ require 'spec_helper_acceptance'
 
 describe 'Scenario: install puppet' do
   before(:context) do
-    on default, puppet('resource', 'service', 'puppet', 'ensure=stopped', 'enable=false')
+    on default, 'puppet resource service puppet ensure=stopped enable=false'
   end
 
   it_behaves_like 'an idempotent resource' do
