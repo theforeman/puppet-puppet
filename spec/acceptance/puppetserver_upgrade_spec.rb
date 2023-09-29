@@ -3,7 +3,7 @@ require 'spec_helper_acceptance'
 describe 'Scenario: minor version upgrade', unless: unsupported_puppetserver do
   before(:all) do
     if check_for_package(default, 'puppetserver')
-      on default, puppet('resource package puppetserver ensure=purged')
+      on default, 'puppet resource package puppetserver ensure=purged'
       on default, 'rm -rf /etc/sysconfig/puppetserver /etc/puppetlabs/puppetserver'
       on default, 'rm -rf /etc/puppetlabs/puppet/ssl'
     end
