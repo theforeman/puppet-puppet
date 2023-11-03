@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-unless unsupported_puppetserver
+unless unsupported_puppetserver || unsupported_puppetserver_upgrade
   describe 'Scenario: minor version upgrade' do
     before(:all) do
       if check_for_package(default, 'puppetserver')
@@ -16,12 +16,7 @@ unless unsupported_puppetserver
 
     case ENV['BEAKER_PUPPET_COLLECTION']
     when 'puppet7'
-      from_version =
-        if fact('os.family') == 'RedHat' && fact('os.release.major') == '9'
-          '7.13.0'
-        else
-          '7.6.0'
-        end
+      from_version = '7.6.0'
       to_version = '7.13.0'
     else
       raise 'Unsupported Puppet collection'
