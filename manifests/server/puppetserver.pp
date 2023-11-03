@@ -214,6 +214,14 @@ class puppet::server::puppetserver (
         unit     => 'puppetserver.service',
         content  => "[Service]\nLimitNOFILE=${max_open_files}\n",
       }
+
+      # https://github.com/puppetlabs/ezbake/pull/623
+      systemd::dropin_file { 'puppetserver.service-privatetmp.conf':
+        ensure   => present,
+        filename => 'privatetmp.conf',
+        unit     => 'puppetserver.service',
+        content  => "[Service]\nPrivateTmp=true\n",
+      }
     } else {
       file_line { 'puppet::server::puppetserver::max_open_files':
         ensure => $ensure_max_open_files,
