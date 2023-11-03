@@ -16,7 +16,12 @@ unless unsupported_puppetserver
 
     case ENV['BEAKER_PUPPET_COLLECTION']
     when 'puppet7'
-      from_version = '7.6.0'
+      from_version =
+        if fact('os.family') == 'RedHat' && fact('os.release.major') == '9'
+          '7.13.0'
+        else
+          '7.6.0'
+        end
       to_version = '7.13.0'
     else
       raise 'Unsupported Puppet collection'
