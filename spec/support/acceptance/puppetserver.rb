@@ -4,5 +4,7 @@ def unsupported_puppetserver
     true
   when 'Fedora'
     true
+  when 'Debian'
+    host_inventory['facter']['os']['release']['major'] == '12'
   end
 end
