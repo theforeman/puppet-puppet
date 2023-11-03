@@ -56,6 +56,24 @@
       ]
     },
     {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "AlmaLinux",
+      "operatingsystemrelease": [
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
+        "9"
+      ]
+    },
+    {
       "operatingsystem": "Scientific",
       "operatingsystemrelease": [
         "7"
