@@ -13,7 +13,7 @@ authorization: {
                 method: [get, post]
             }
 <%= scope.call_function(
-  'to_json_pretty',
+  'stdlib::to_json_pretty',
   [
     {'allow' => @server_trusted_agents + ['$1'] + @server_trusted_certificate_extensions.map { |extension| { 'extensions' => extension } } }
   ]
@@ -33,7 +33,7 @@ authorization: {
             deny: "*"
 <%- else -%>
 <%= scope.call_function(
-  'to_json_pretty',
+  'stdlib::to_json_pretty',
   [
     {'allow' => @server_trusted_agents + @server_trusted_certificate_extensions.map { |extension| { 'extensions' => extension } } }
   ]
