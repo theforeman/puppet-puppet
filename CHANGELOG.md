@@ -1,5 +1,28 @@
 # Changelog
 
+## [19.0.0](https://github.com/theforeman/puppet-puppet/tree/19.0.0) (2023-11-14)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/18.0.0...19.0.0)
+
+**Breaking changes:**
+
+- Update to puppetlabs-stdlib 9.x, allow puppetlabs-concat 9.x & puppet-extlib 7.x [\#898](https://github.com/theforeman/puppet-puppet/pull/898) ([ekohl](https://github.com/ekohl))
+- Drop Debian 10 & Ubuntu 18.04 [\#889](https://github.com/theforeman/puppet-puppet/pull/889) ([ekohl](https://github.com/ekohl))
+
+**Implemented enhancements:**
+
+- Add Debian 12 support [\#896](https://github.com/theforeman/puppet-puppet/pull/896) ([evgeni](https://github.com/evgeni))
+- Add Ubuntu 22.04 support [\#895](https://github.com/theforeman/puppet-puppet/pull/895) ([evgeni](https://github.com/evgeni))
+- set PrivateTmp=true for puppetserver [\#892](https://github.com/theforeman/puppet-puppet/pull/892) ([evgeni](https://github.com/evgeni))
+- Test puppetserver on Debian 11 [\#890](https://github.com/theforeman/puppet-puppet/pull/890) ([ekohl](https://github.com/ekohl))
+- Allow disabling CRL checking on agent [\#887](https://github.com/theforeman/puppet-puppet/pull/887) ([cm-jc](https://github.com/cm-jc))
+- Allow puppet/systemd 5.x and 6.x [\#886](https://github.com/theforeman/puppet-puppet/pull/886) ([evgeni](https://github.com/evgeni))
+- Add Puppet 8 support [\#884](https://github.com/theforeman/puppet-puppet/pull/884) ([bastelfreak](https://github.com/bastelfreak))
+
+**Fixed bugs:**
+
+- Fix CentOS 9 support in metadata.json [\#893](https://github.com/theforeman/puppet-puppet/pull/893) ([evgeni](https://github.com/evgeni))
+
 ## [18.0.0](https://github.com/theforeman/puppet-puppet/tree/18.0.0) (2023-08-16)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/17.1.0...18.0.0)
