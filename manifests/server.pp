@@ -337,6 +337,8 @@
 #
 # $jolokia_metrics_allowlist::         The allowlist of clients that
 #                                      can query the jolokia /metrics/v2 endpoint
+#
+# $jolokia_metrics_policy_location::   The path to a allowlist file for the jolokia metrics endpoint
 class puppet::server (
   Variant[Boolean, Stdlib::Absolutepath] $autosign = $puppet::autosign,
   Array[String] $autosign_entries = $puppet::autosign_entries,
