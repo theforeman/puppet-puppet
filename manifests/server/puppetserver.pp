@@ -144,6 +144,7 @@ class puppet::server::puppetserver (
   Optional[Stdlib::Absolutepath] $versioned_code_content = $puppet::server::versioned_code_content,
   Boolean $disable_fips = $facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] == '8',
   Array[String[1]] $jolokia_metrics_allowlist = $puppet::server::jolokia_metrics_allowlist,
+  Optional[Stdlib::Unixpath] $jolokia_metrics_policy_location = $puppet::server::jolokia_metrics_policy_location,
 ) {
   include puppet::server
 

@@ -552,6 +552,8 @@
 # $server_jolokia_metrics_allowlist::       The allowlist of clients that
 #                                           can query the jolokia /metrics/v2 endpoint
 #
+# $server_jolokia_metrics_policy_location:: The path to the jolokia policy allowlist file
+#
 # === Usage:
 #
 # * Simple usage:
@@ -753,6 +755,7 @@ class puppet (
   Optional[Stdlib::Absolutepath] $server_versioned_code_content = undef,
   Array[String[1]] $server_jolokia_metrics_allowlist = [],
   Stdlib::Filemode $puppetconf_mode = $puppet::params::puppetconf_mode,
+  Optional[Stdlib::Absolutepath] $server_jolokia_metrics_policy_location = undef,
 ) inherits puppet::params {
   contain puppet::config
 
