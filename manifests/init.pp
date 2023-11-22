@@ -552,7 +552,7 @@
 # $server_jolokia_metrics_allowlist::       The allowlist of clients that
 #                                           can query the jolokia /metrics/v2 endpoint
 #
-# $server_jolokia_metrics_policy_location:: The path to the jolokia policy allowlist file
+# $server_jolokia_metrics_policy::          The content of the jolokia-access.xml file for the jolokia metrics endpoint
 #
 # === Usage:
 #
