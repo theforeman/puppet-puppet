@@ -275,8 +275,8 @@ class puppet::server::puppetserver (
 
   if $jolokia_metrics_policy != undef {
     file { '/etc/puppetlabs/puppetserver/jolokia-access.xml' :
-      ensure  => file,
-      content => $jolokia_metrics_policy,
+      ensure => file,
+      source => $jolokia_metrics_policy,
     }
   }
 }
