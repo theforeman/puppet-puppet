@@ -460,7 +460,6 @@ class puppet::server (
   Optional[Stdlib::Absolutepath] $versioned_code_id = $puppet::server_versioned_code_id,
   Optional[Stdlib::Absolutepath] $versioned_code_content = $puppet::server_versioned_code_content,
   Array[String[1]] $jolokia_metrics_allowlist = $puppet::server_jolokia_metrics_allowlist,
-  Optional[Stdlib::Absolutepath] $jolokia_metrics_policy_location = $puppet::server_jolokia_metrics_policy_location,
   Optional[String] $jolokia_metrics_policy = $puppet::server_jolokia_metrics_policy,
 ) {
   $cadir = "${puppetserver_dir}/ca"
