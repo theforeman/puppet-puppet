@@ -755,7 +755,7 @@ class puppet (
   Optional[Stdlib::Absolutepath] $server_versioned_code_content = undef,
   Array[String[1]] $server_jolokia_metrics_allowlist = [],
   Stdlib::Filemode $puppetconf_mode = $puppet::params::puppetconf_mode,
-  Optional[Stdlib::Absolutepath] $server_jolokia_metrics_policy_location = undef,
+  Optional[String] $server_jolokia_metrics_policy = undef,
 ) inherits puppet::params {
   contain puppet::config
 
