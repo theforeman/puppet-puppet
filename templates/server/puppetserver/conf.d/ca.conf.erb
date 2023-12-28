@@ -7,4 +7,11 @@ certificate-authority: {
 
     # enable the separate CRL for Puppet infrastructure nodes
     enable-infra-crl: <%= @ca_enable_infra_crl %>
+
+    # Setup auto renewal of certs
+    allow-auto-renewal: <%= @server_ca_allow_auto_renewal %>
+    # This value determines the lifetime of the cert if auto-renewal is enabled
+    auto-renewal-cert-ttl: <%= @server_ca_allow_auto_renewal_cert_ttl %>
+    # Default cert expiration time. If the value is set here, it will take precedence over ca-ttl setting in puppet.conf
+    #ca-ttl: "60d"
 }

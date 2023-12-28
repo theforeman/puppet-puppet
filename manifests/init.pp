@@ -539,6 +539,12 @@
 # $server_ca_enable_infra_crl::             Enable the separate CRL for Puppet infrastructure nodes
 #                                           Defaults to false
 #
+# $server_ca_allow_auto_renewal::           Enable the auto renewal for client certificates
+#                                           Defaults to false
+#
+# $server_ca_allow_auto_renewal_cert_ttl::  Set the auto renewal interval for client certificates
+#                                           Defaults to 60d
+#
 # $server_max_open_files::                  Increase the max open files limit for Puppetserver.
 #                                           Defaults to undef
 #
@@ -748,6 +754,8 @@ class puppet (
   Boolean $server_ca_allow_sans = $puppet::params::server_ca_allow_sans,
   Boolean $server_ca_allow_auth_extensions = $puppet::params::server_ca_allow_auth_extensions,
   Boolean $server_ca_enable_infra_crl = $puppet::params::server_ca_enable_infra_crl,
+  Boolean $server_ca_allow_auto_renewal = $puppet::params::server_ca_allow_auto_renewal,
+  String $server_ca_allow_auto_renewal_cert_ttl = $puppet::params::server_ca_allow_auto_renewal_cert_ttl,
   Optional[Integer[1]] $server_max_open_files = $puppet::params::server_max_open_files,
   Optional[Stdlib::Absolutepath] $server_versioned_code_id = undef,
   Optional[Stdlib::Absolutepath] $server_versioned_code_content = undef,

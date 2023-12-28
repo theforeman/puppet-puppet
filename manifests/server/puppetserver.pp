@@ -73,6 +73,7 @@
 #   }
 #
 class puppet::server::puppetserver (
+  Optional[Pattern[/^[\d]\.[\d]+\.[\d]+$/]] $puppetserver_version = $puppet::server::puppetserver_version,
   String $config = $puppet::server::jvm_config,
   String $java_bin = $puppet::server::jvm_java_bin,
   Variant[String, Array[String]] $jvm_extra_args = $puppet::server::real_jvm_extra_args,
@@ -139,6 +140,8 @@ class puppet::server::puppetserver (
   Boolean $ca_allow_sans = $puppet::server::ca_allow_sans,
   Boolean $ca_allow_auth_extensions = $puppet::server::ca_allow_auth_extensions,
   Boolean $ca_enable_infra_crl = $puppet::server::ca_enable_infra_crl,
+  Boolean $server_ca_allow_auto_renewal = $puppet::server::server_ca_allow_auto_renewal,
+  String $server_ca_allow_auto_renewal_cert_ttl = $puppet::server::server_ca_allow_auto_renewal_cert_ttl,
   Optional[Integer[1]] $max_open_files = $puppet::server::max_open_files,
   Optional[Stdlib::Absolutepath] $versioned_code_id = $puppet::server::versioned_code_id,
   Optional[Stdlib::Absolutepath] $versioned_code_content = $puppet::server::versioned_code_content,
@@ -146,6 +149,17 @@ class puppet::server::puppetserver (
   Array[String[1]] $jolokia_metrics_allowlist = $puppet::server::jolokia_metrics_allowlist,
 ) {
   include puppet::server
+
+  # For Puppetserver, certain configuration parameters are version specific.
+  # We need a method to determine what version is installed.
+  if $puppetserver_version {
+    $real_puppetserver_version = $puppetserver_version
+  } elsif versioncmp($facts['puppetversion'], '7.0.0') >= 0 {
+    $real_puppetserver_version = $facts['puppetversion']
+  } else {
+    # our minimum supported version of puppet server
+    $real_puppetserver_version = '7.0.0'
+  }
 
   $puppetserver_package = pick($puppet::server::package, 'puppetserver')
 
