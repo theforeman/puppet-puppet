@@ -12,7 +12,7 @@ concurrency:
 jobs:
   puppet:
     name: Puppet
-    uses: voxpupuli/gha-puppet/.github/workflows/beaker.yml@v2
+    uses: evgeni/gha-puppet/.github/workflows/beaker.yml@podman
     with:
       pidfile_workaround: 'true'
       rubocop: false
