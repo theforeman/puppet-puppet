@@ -1,19 +1,35 @@
 ---
+# Managed by modulesync - DO NOT EDIT
+# https://voxpupuli.org/docs/updating-files-managed-with-modulesync/
+
 name: CI
 
 on:
-  pull_request:
-
+  - pull_request
+  - push
 
 concurrency:
   group: ${{ github.ref_name }}
   cancel-in-progress: true
 
 jobs:
-  puppet:
-    name: Puppet
-    uses: voxpupuli/gha-puppet/.github/workflows/beaker.yml@v2
-    with:
-      pidfile_workaround: 'true'
-      rubocop: false
-      cache-version: '1'
+  acceptance:
+    runs-on: ubuntu-22.04
+    env:
+      BUNDLE_WITHOUT: development:test:release
+    steps:
+      - run: sudo apt-get install -y podman
+      - run: systemctl start --user podman.socket
+      - uses: actions/checkout@v4
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+      - name: Run tests
+        run: bundle exec rake beaker
+        env:
+          BEAKER_PUPPET_COLLECTION: puppet7
+          BEAKER_SETFILE: rocky8-64{hostname=rocky8-64-none.example.com}
+          BEAKER_HYPERVISOR: docker
+          DOCKER_HOST: unix:///run/user/1001/podman/podman.sock
