@@ -154,8 +154,8 @@ class puppet::server::puppetserver (
   # We need a method to determine what version is installed.
   if $puppetserver_version {
     $real_puppetserver_version = $puppetserver_version
-  } elsif versioncmp($facts['puppetversion'], '7.0.0') >= 0 {
-    $real_puppetserver_version = $facts['puppetversion']
+  } elsif versioncmp($facts['puppetversion'], '8.0.0') >= 0 {
+    $real_puppetserver_version = '8.0.0'
   } else {
     # our minimum supported version of puppet server
     $real_puppetserver_version = '7.0.0'
