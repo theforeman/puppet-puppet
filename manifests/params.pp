@@ -406,6 +406,8 @@ class puppet::params {
   $server_ca_allow_sans                   = false
   $server_ca_allow_auth_extensions        = false
   $server_ca_enable_infra_crl             = false
+  $server_ca_allow_auto_renewal           = false
+  $server_ca_allow_auto_renewal_cert_ttl  = '60d'
   $server_max_open_files                  = undef
   $server_environment_vars                = {}
 

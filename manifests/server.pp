@@ -302,6 +302,11 @@
 #
 # $ca_enable_infra_crl::               Enable the separate CRL for Puppet infrastructure nodes
 #                                      Defaults to false
+# $server_ca_allow_auto_renewal::           Enable the auto renewal for client certificates
+#                                           Defaults to false
+#
+# $server_ca_allow_auto_renewal_cert_ttl::  Set the auto renewal interval for client certificates
+#                                           Defaults to 60d
 #
 # $acceptor_threads::                  This sets the number of threads that the webserver will dedicate to accepting
 #                                      socket connections for unencrypted HTTP traffic. If not provided, the webserver
@@ -454,6 +459,8 @@ class puppet::server (
   Boolean $ca_allow_sans = $puppet::server_ca_allow_sans,
   Boolean $ca_allow_auth_extensions = $puppet::server_ca_allow_auth_extensions,
   Boolean $ca_enable_infra_crl = $puppet::server_ca_enable_infra_crl,
+  Boolean $server_ca_allow_auto_renewal = $puppet::server_ca_allow_auto_renewal,
+  String $server_ca_allow_auto_renewal_cert_ttl = $puppet::server_ca_allow_auto_renewal_cert_ttl,
   Optional[Integer[1]] $max_open_files = $puppet::server_max_open_files,
   Optional[Stdlib::Absolutepath] $versioned_code_id = $puppet::server_versioned_code_id,
   Optional[Stdlib::Absolutepath] $versioned_code_content = $puppet::server_versioned_code_content,
