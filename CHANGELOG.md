@@ -1,5 +1,18 @@
 # Changelog
 
+## [19.1.0](https://github.com/theforeman/puppet-puppet/tree/19.1.0) (2024-02-20)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/19.0.0...19.1.0)
+
+**Implemented enhancements:**
+
+- Add puppet8 certificate renewal endpoint. [\#905](https://github.com/theforeman/puppet-puppet/pull/905) ([jcpunk](https://github.com/jcpunk))
+- Add support for OracleLinux/AlmaLinux/Rocky 9 [\#900](https://github.com/theforeman/puppet-puppet/pull/900) ([evgeni](https://github.com/evgeni))
+
+**Fixed bugs:**
+
+- Replace File.exists? with File.exist? for Ruby 3.2 compatibility [\#906](https://github.com/theforeman/puppet-puppet/pull/906) ([tuxmea](https://github.com/tuxmea))
+
 ## [19.0.0](https://github.com/theforeman/puppet-puppet/tree/19.0.0) (2023-11-14)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/18.0.0...19.0.0)
