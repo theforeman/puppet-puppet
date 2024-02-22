@@ -147,6 +147,7 @@ class puppet::server::puppetserver (
   Optional[Stdlib::Absolutepath] $versioned_code_content = $puppet::server::versioned_code_content,
   Boolean $disable_fips = $facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] == '8',
   Array[String[1]] $jolokia_metrics_allowlist = $puppet::server::jolokia_metrics_allowlist,
+  Optional[String] $jolokia_metrics_policy = $puppet::server::jolokia_metrics_policy,
 ) {
   include puppet::server
 
@@ -284,5 +285,12 @@ class puppet::server::puppetserver (
   file { "${server_puppetserver_dir}/conf.d/metrics.conf":
     ensure  => 'file',
     content => template('puppet/server/puppetserver/conf.d/metrics.conf.erb'),
+  }
+
+  if $jolokia_metrics_policy != undef {
+    file { '/etc/puppetlabs/puppetserver/jolokia-access.xml' :
+      ensure => file,
+      source => $jolokia_metrics_policy,
+    }
   }
 }
