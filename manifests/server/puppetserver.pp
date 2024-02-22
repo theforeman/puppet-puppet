@@ -147,6 +147,8 @@ class puppet::server::puppetserver (
   Optional[Stdlib::Absolutepath] $versioned_code_content = $puppet::server::versioned_code_content,
   Boolean $disable_fips = $facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] == '8',
   Array[String[1]] $jolokia_metrics_allowlist = $puppet::server::jolokia_metrics_allowlist,
+  Optional[Boolean] $jolokia_allow_unauthenticated = $puppet::server::jolokia_allow_unauthenticated,
+  Optional[String] $auth_extra = $puppet::server::auth_extra,
 ) {
   include puppet::server
 

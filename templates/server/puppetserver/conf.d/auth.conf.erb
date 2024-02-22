@@ -375,6 +375,17 @@ authorization: {
             name: "puppetlabs experimental"
         },
 <%- end -%>
+<%- if @jolokia_allow_unauthenticated -%>
+        {
+            match-request: {
+                path: "/metrics/v2"
+                type: path
+            }
+            allow-unauthenticated: true
+            sort-order: 500
+            name: "jolokia metrics"
+        },
+<%- else -%>
 <%- unless @jolokia_metrics_allowlist.empty? -%>
         {
             match-request: {
@@ -389,6 +400,10 @@ authorization: {
             sort-order: 500
             name: "jolokia metrics"
         },
+<%- end -%>
+<%- end -%>
+<%- if @auth_extra -%>
+<%= @auth_extra %>
 <%- end -%>
         {
             # Deny everything else. This ACL is not strictly
