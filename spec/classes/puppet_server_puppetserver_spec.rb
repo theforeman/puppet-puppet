@@ -55,7 +55,7 @@ describe 'puppet' do
                      .with_incl('/etc/default/puppetserver')
                      .with_lens('Shellvars.lns')
           }
-          if facts[:os]['family'] == 'RedHat' and facts[:os]['release']['major'] == '8'
+          if facts[:os]['family'] == 'RedHat' and facts[:os]['release']['major'] != '7'
             it {
               should contain_augeas('puppet::server::puppetserver::jvm')
                 .with_changes(['set JAVA_ARGS \'"-Xms2G -Xmx2G -Dcom.redhat.fips=false"\'', 'set JAVA_BIN /usr/bin/java'])
@@ -385,7 +385,7 @@ describe 'puppet' do
               .with_changes(['set puppetserver_java_opts \'"-Xms2G -Xmx2G -XX:foo=bar -XX:bar=foo"\''])
               .with_context('/files/etc/rc.conf')
           }
-        elsif facts[:os]['family'] == 'RedHat' and facts[:os]['release']['major'] == '8'
+        elsif facts[:os]['family'] == 'RedHat' and facts[:os]['release']['major'] != '7'
           it {
             should contain_augeas('puppet::server::puppetserver::jvm')
               .with_changes([
@@ -412,7 +412,7 @@ describe 'puppet' do
 
       describe 'with cli_args parameter', unless: facts[:osfamily] == 'FreeBSD' do
         let(:params) { super().merge(server_jvm_cli_args: '-Djava.io.tmpdir=/var/puppettmp') }
-        if facts[:os]['family'] == 'RedHat' and facts[:os]['release']['major'] == '8'
+        if facts[:os]['family'] == 'RedHat' and facts[:os]['release']['major'] != '7'
           it {
             should contain_augeas('puppet::server::puppetserver::jvm')
               .with_changes([
