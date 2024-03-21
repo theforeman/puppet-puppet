@@ -17,10 +17,10 @@ unless unsupported_puppetserver || unsupported_puppetserver_upgrade
     case ENV['BEAKER_PUPPET_COLLECTION']
     when 'puppet8'
       from_version = '8.2.0'
-      to_version = '8.3.0'
+      to_version = '8.5.0'
     when 'puppet7'
-      from_version = '7.10.0'
-      to_version = '7.13.0'
+      from_version = '7.13.0'
+      to_version = '7.16.0'
     else
       raise 'Unsupported Puppet collection'
     end
