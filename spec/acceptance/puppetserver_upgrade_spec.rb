@@ -19,7 +19,7 @@ unless unsupported_puppetserver || unsupported_puppetserver_upgrade
       from_version = '8.2.0'
       to_version = '8.3.0'
     when 'puppet7'
-      from_version = '7.6.0'
+      from_version = '7.10.0'
       to_version = '7.13.0'
     else
       raise 'Unsupported Puppet collection'
