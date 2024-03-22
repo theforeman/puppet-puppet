@@ -420,7 +420,7 @@ class puppet::server (
   Optional[Stdlib::Absolutepath] $puppet_basedir = $puppet::server_puppet_basedir,
   Enum['current', 'future'] $parser = $puppet::server_parser,
   Variant[Undef, Enum['unlimited'], Pattern[/^\d+[smhdy]?$/]] $environment_timeout = $puppet::server_environment_timeout,
-  String $jvm_java_bin = $puppet::server_jvm_java_bin,
+  Optional[Stdlib::Absolutepath] $jvm_java_bin = $puppet::server_jvm_java_bin,
   String $jvm_config = $puppet::server_jvm_config,
   Pattern[/^[0-9]+[kKmMgG]$/] $jvm_min_heap_size = $puppet::server_jvm_min_heap_size,
   Pattern[/^[0-9]+[kKmMgG]$/] $jvm_max_heap_size = $puppet::server_jvm_max_heap_size,

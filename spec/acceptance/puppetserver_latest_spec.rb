@@ -25,6 +25,14 @@ describe 'Scenario: install puppetserver (latest):', unless: unsupported_puppets
     end
   end
 
+  if ENV['BEAKER_PUPPET_COLLECTION'] != 'puppet7' && fact('os.family') == 'RedHat' && ['8', '9'].include?(fact('os.release.major'))
+    describe 'JRE version' do
+      it { expect(package('java-17-openjdk-headless')).to be_installed }
+      it { expect(package('java-11-openjdk-headless')).not_to be_installed }
+      it { expect(file('/etc/sysconfig/puppetserver')).to be_file.and(have_attributes(content: include('JAVA_BIN=/usr/lib/jvm/jre-17/bin/java'))) }
+    end
+  end
+
   # This is broken on Ubuntu Focal
   # https://github.com/theforeman/puppet-puppet/issues/832
   describe 'server_max_open_files', unless: unsupported_puppetserver || fact('os.release.major') == '20.04' do
