@@ -14,6 +14,5 @@ jobs:
     name: Puppet
     uses: voxpupuli/gha-puppet/.github/workflows/beaker.yml@v2
     with:
-      pidfile_workaround: 'true'
       rubocop: false
       cache-version: '1'

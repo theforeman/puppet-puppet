@@ -6,7 +6,8 @@ def unsupported_puppetserver
   when 'Debian'
     os['name'] == 'Debian' && os['release']['major'] == '12'
   when 'RedHat'
-    os['name'] == 'Fedora'
+    # puppetserver uses PIDFile, which breaks on Docker
+    os['name'] == 'Fedora' || (default[:hypervisor] == 'docker' && os['release']['major'] == '8')
   end
 end
 
