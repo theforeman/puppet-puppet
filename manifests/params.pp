@@ -350,7 +350,6 @@ class puppet::params {
     default  => '/etc/default/puppetserver',
   }
 
-  $server_jvm_java_bin   = '/usr/bin/java'
   $server_jvm_extra_args = undef
   $server_jvm_cli_args   = undef
 

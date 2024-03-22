@@ -305,7 +305,7 @@
 # $server_envs_target::                     Indicates that $envs_dir should be
 #                                           a symbolic link to this target
 #
-# $server_jvm_java_bin::                    Set the default java to use.
+# $server_jvm_java_bin::                    Set the default java to use. If unspecified, it will be derived from the Puppet version.
 #
 # $server_jvm_config::                      Specify the puppetserver jvm configuration file.
 #
@@ -714,7 +714,7 @@ class puppet (
   Optional[Stdlib::Absolutepath] $server_puppet_basedir = $puppet::params::server_puppet_basedir,
   Enum['current', 'future'] $server_parser = $puppet::params::server_parser,
   Variant[Undef, Enum['unlimited'], Pattern[/^\d+[smhdy]?$/]] $server_environment_timeout = $puppet::params::server_environment_timeout,
-  String $server_jvm_java_bin = $puppet::params::server_jvm_java_bin,
+  Optional[Stdlib::Absolutepath] $server_jvm_java_bin = undef,
   String $server_jvm_config = $puppet::params::server_jvm_config,
   Pattern[/^[0-9]+[kKmMgG]$/] $server_jvm_min_heap_size = $puppet::params::server_jvm_min_heap_size,
   Pattern[/^[0-9]+[kKmMgG]$/] $server_jvm_max_heap_size = $puppet::params::server_jvm_max_heap_size,

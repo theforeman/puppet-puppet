@@ -75,7 +75,7 @@
 class puppet::server::puppetserver (
   Optional[Pattern[/^[\d]\.[\d]+\.[\d]+$/]] $puppetserver_version = $puppet::server::puppetserver_version,
   String $config = $puppet::server::jvm_config,
-  String $java_bin = $puppet::server::jvm_java_bin,
+  Optional[Stdlib::Absolutepath] $java_bin = $puppet::server::jvm_java_bin,
   Variant[String, Array[String]] $jvm_extra_args = $puppet::server::real_jvm_extra_args,
   Optional[String] $jvm_cli_args = $puppet::server::jvm_cli_args,
   Pattern[/^[0-9]+[kKmMgG]$/] $jvm_min_heap_size = $puppet::server::jvm_min_heap_size,
@@ -163,6 +163,27 @@ class puppet::server::puppetserver (
 
   $puppetserver_package = pick($puppet::server::package, 'puppetserver')
 
+  if $java_bin {
+    $_java_bin = $java_bin
+  } elsif versioncmp($real_puppetserver_version, '8.0.0') >= 0 {
+    # Follows logic that https://github.com/puppetlabs/ezbake/pull/627 suggests, but takes it a
+    # step further by also ensuring EL 8 has Java 17
+    $_java_bin = case $facts['os']['family'] {
+      'RedHat': {
+        $facts['os']['release']['major'] ? {
+          /^([89])$/ => '/usr/lib/jvm/jre-17/bin/java',
+          '7'        => '/usr/lib/jvm/jre-11/bin/java',
+          default    => '/usr/bin/java'
+        }
+      }
+      default: {
+        '/usr/bin/java'
+      }
+    }
+  } else {
+    $_java_bin = '/usr/bin/java'
+  }
+
   $jvm_heap_arr = ["-Xms${jvm_min_heap_size}", "-Xmx${jvm_max_heap_size}"]
   if $disable_fips {
     $jvm_cmd_arr = $jvm_heap_arr + ['-Dcom.redhat.fips=false', $jvm_extra_args]
@@ -183,13 +204,13 @@ class puppet::server::puppetserver (
     if $jvm_cli_args {
       $changes = [
         "set JAVA_ARGS '\"${jvm_cmd}\"'",
-        "set JAVA_BIN ${java_bin}",
+        "set JAVA_BIN ${_java_bin}",
         "set JAVA_ARGS_CLI '\"${jvm_cli_args}\"'",
       ]
     } else {
       $changes = [
         "set JAVA_ARGS '\"${jvm_cmd}\"'",
-        "set JAVA_BIN ${java_bin}",
+        "set JAVA_BIN ${_java_bin}",
       ]
     }
     augeas { 'puppet::server::puppetserver::jvm':
