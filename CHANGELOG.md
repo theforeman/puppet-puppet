@@ -1,5 +1,14 @@
 # Changelog
 
+## [19.2.0](https://github.com/theforeman/puppet-puppet/tree/19.2.0) (2024-03-22)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/19.1.0...19.2.0)
+
+**Implemented enhancements:**
+
+- Fixes [\#37291](https://projects.theforeman.org/issues/37291) - Use explicit java on RH with Puppetserver 8 [\#910](https://github.com/theforeman/puppet-puppet/pull/910) ([ekohl](https://github.com/ekohl))
+- Disable FIPS on EL8+ [\#908](https://github.com/theforeman/puppet-puppet/pull/908) ([ehelms](https://github.com/ehelms))
+
 ## [19.1.0](https://github.com/theforeman/puppet-puppet/tree/19.1.0) (2024-02-20)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/19.0.0...19.1.0)
