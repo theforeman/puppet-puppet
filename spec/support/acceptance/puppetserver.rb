@@ -1,11 +1,12 @@
 def unsupported_puppetserver
-  case host_inventory['facter']['os']['name']
+  os = host_inventory['facter']['os']
+  case os['family']
   when 'Archlinux'
     true
-  when 'Fedora'
-    true
   when 'Debian'
-    host_inventory['facter']['os']['release']['major'] == '12'
+    os['name'] == 'Debian' && os['release']['major'] == '12'
+  when 'RedHat'
+    os['name'] == 'Fedora'
   end
 end
 
