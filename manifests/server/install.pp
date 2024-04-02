@@ -11,7 +11,7 @@ class puppet::server::install {
   }
 
   if $puppet::server::git_repo {
-    ensure_packages(['git'])
+    stdlib::ensure_packages(['git'])
   }
 
   if $puppet::server::manage_user {
