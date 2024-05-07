@@ -29,7 +29,7 @@
     },
     {
       "name": "puppet/systemd",
-      "version_requirement": ">= 2.9.0 < 7.0.0"
+      "version_requirement": ">= 2.9.0 < 8.0.0"
     }
   ],
   "requirements": [
