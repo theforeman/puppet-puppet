@@ -22,7 +22,6 @@ class puppet::params {
   $show_diff           = false
   $module_repository   = undef
   $hiera_config        = '$confdir/hiera.yaml'
-  $localconfig         = '$vardir/localconfig'
   $usecacheonfailure   = true
   $ca_server           = undef
   $ca_port             = undef
