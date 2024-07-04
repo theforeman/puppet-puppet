@@ -97,8 +97,6 @@
 #
 # $hiera_config::                           The hiera configuration file.
 #
-# $localconfig::                            The localconfig setting.
-#
 # $syslogfacility::                         Facility name to use when logging to syslog
 #
 # $use_srv_records::                        Whether DNS SRV records will be used to resolve
@@ -633,7 +631,6 @@ class puppet (
   Optional[String] $agent_restart_command = $puppet::params::agent_restart_command,
   String $classfile = $puppet::params::classfile,
   String $hiera_config = $puppet::params::hiera_config,
-  String $localconfig = $puppet::params::localconfig,
   Boolean $allow_any_crl_auth = $puppet::params::allow_any_crl_auth,
   Array[String] $auth_allowed = $puppet::params::auth_allowed,
   Variant[String, Array[String]] $client_package = $puppet::params::client_package,
