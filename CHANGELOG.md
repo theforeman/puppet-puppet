@@ -1,5 +1,18 @@
 # Changelog
 
+## [20.0.0](https://github.com/theforeman/puppet-puppet/tree/20.0.0) (2024-08-12)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/19.2.0...20.0.0)
+
+**Breaking changes:**
+
+- Remove localconfig \(see PUP-880\) [\#918](https://github.com/theforeman/puppet-puppet/pull/918) ([m8t](https://github.com/m8t))
+
+**Implemented enhancements:**
+
+- Update puppet\_metadata to ~\> 4.0 and voxpupuli-acceptance to ~\> 3.0 [\#916](https://github.com/theforeman/puppet-puppet/pull/916) ([archanaserver](https://github.com/archanaserver))
+- Add AlmaLinux 8 support [\#915](https://github.com/theforeman/puppet-puppet/pull/915) ([archanaserver](https://github.com/archanaserver))
+
 ## [19.2.0](https://github.com/theforeman/puppet-puppet/tree/19.2.0) (2024-05-16)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/19.1.0...19.2.0)
