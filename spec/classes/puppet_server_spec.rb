@@ -293,7 +293,19 @@ describe 'puppet' do
         end
 
         it { should_not contain_class('puppetserver_foreman') }
-        it { should_not contain_puppet__config__server('node_terminus') }
+        it { should contain_puppet__config__server('node_terminus').with_value('plain') }
+        it { should_not contain_puppet__config__server('external_nodes') }
+      end
+
+      describe 'with explicit plain terminus' do
+        let(:params) do
+          super().merge(
+            server_node_terminus: 'plain',
+            server_external_nodes: ''
+          )
+        end
+
+        it { should contain_puppet__config__server('node_terminus').with_value('plain') }
         it { should_not contain_puppet__config__server('external_nodes') }
       end
 
