@@ -44,8 +44,7 @@ class puppet::server::config inherits puppet::config {
       node_terminus => $server_node_terminus,
       enc_path      => $server_external_nodes,
     }
-  }
-  else {
+  } else {
     class { 'puppet::server::enc':
       node_terminus => $server_node_terminus,
     }
