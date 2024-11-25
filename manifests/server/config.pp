@@ -39,6 +39,24 @@ class puppet::server::config inherits puppet::config {
   $trusted_external_command    = $puppet::server::trusted_external_command
   $primary_envs_dir            = $puppet::server::envs_dir[0]
 
+  case $server_node_terminus {
+    'plain': {}
+    'exec': {
+      class { 'puppet::server::enc':
+        node_terminus => $server_node_terminus,
+        enc_path      => $server_external_nodes,
+      }
+    }
+    'console': {
+      class { 'puppet::server::enc':
+        node_terminus => $server_node_terminus,
+      }
+    }
+    default: {
+      fail('Invalid value of $server_node_terminus')
+    }
+  }
+
   if $server_external_nodes and $server_external_nodes != '' {
     class { 'puppet::server::enc':
       node_terminus => $server_node_terminus,
