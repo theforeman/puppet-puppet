@@ -231,8 +231,6 @@ class puppet::server::config inherits puppet::config {
   if $puppet::server::git_repo {
     file { $puppet::vardir:
       ensure => directory,
-      owner  => 'root',
-      group  => 'root',
     }
 
     vcsrepo { 'puppet_repo':
