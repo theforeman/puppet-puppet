@@ -233,6 +233,7 @@ class puppet::server::config inherits puppet::config {
       file { $puppet::vardir:
         ensure => directory,
       }
+    }
     else {
       file { $puppet::vardir:
         ensure => directory,
