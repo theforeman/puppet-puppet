@@ -353,6 +353,7 @@ describe 'puppet' do
         it do
           should contain_file(vardir)
             .with_ensure('directory')
+            .with_owner('root')
         end
 
         it do
