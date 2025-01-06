@@ -236,7 +236,7 @@ class puppet::server::config inherits puppet::config {
       user     => $puppet::server::git_repo_user,
       group    => $puppet::server::git_repo_group,
       umask    => $puppet::server::git_repo_umask,
-      require  => File[$puppet::vardir, $primary_envs_dir],
+      require  => File[$primary_envs_dir],
     }
 
     $git_branch_map = $puppet::server::git_branch_map
