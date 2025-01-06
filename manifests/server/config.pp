@@ -229,17 +229,12 @@ class puppet::server::config inherits puppet::config {
   }
 
   if $puppet::server::git_repo {
-    if $facts['os']['family'] == 'Debian' {
-      file { $puppet::vardir:
-        ensure => directory,
-      }
-    }
-    else {
-      file { $puppet::vardir:
-        ensure => directory,
-        owner  => 'root',
-        group  => 'root',
-      }
+    $vardir_owner = if !$puppet::aio_package and $facts['os']['family'] == 'Debian' { 'puppet' } else { 'root' }
+
+    file { $puppet::vardir:
+      ensure => directory,
+      owner  => $vardir_owner,
+      group  => $vardir_owner,
     }
 
     vcsrepo { 'puppet_repo':
