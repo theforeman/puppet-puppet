@@ -1,5 +1,13 @@
 # Changelog
 
+## [20.1.0](https://github.com/theforeman/puppet-puppet/tree/20.1.0) (2025-02-11)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/20.0.0...20.1.0)
+
+**Implemented enhancements:**
+
+- puppet/systemd: allow 8.x [\#924](https://github.com/theforeman/puppet-puppet/pull/924) ([evgeni](https://github.com/evgeni))
+
 ## [20.0.0](https://github.com/theforeman/puppet-puppet/tree/20.0.0) (2024-08-12)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/19.2.0...20.0.0)
