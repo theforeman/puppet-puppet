@@ -173,9 +173,9 @@
 # $agent_server_hostname::                  Hostname of your puppetserver (server
 #                                           directive in puppet.conf)
 #
-# $prerun_command::                         A command which gets excuted before each Puppet run
+# $prerun_command::                         A command which gets executed before each Puppet run
 #
-# $postrun_command::                        A command which gets excuted after each Puppet run
+# $postrun_command::                        A command which gets executed after each Puppet run
 #
 # $environment::                            Default environment of the Puppet agent
 #
@@ -193,7 +193,7 @@
 #
 # $service_name::                           The name of the puppet agent service.
 #
-# $agent_restart_command::                  The command which gets excuted on puppet service restart
+# $agent_restart_command::                  The command which gets executed on puppet service restart
 #
 # $client_package::                         Install a custom package to provide
 #                                           the puppet client
