@@ -3,7 +3,7 @@ require 'hocon'
 
 describe 'puppet' do
   on_supported_os.each do |os, facts|
-    next if unsupported_puppetserver_osfamily(facts[:osfamily])
+    next if unsupported_puppetserver_osfamily(facts[:os]['family'])
     context "on #{os}" do
       let(:facts) do
         facts
@@ -26,7 +26,7 @@ describe 'puppet' do
       end
 
       let(:server_vardir) do
-        if ['FreeBSD', 'DragonFly'].include?(facts[:operatingsystem])
+        if ['FreeBSD', 'DragonFly'].include?(facts[:os]['name'])
           '/var/puppet/server/data/puppetserver'
         else
           '/opt/puppetlabs/server/data/puppetserver'
@@ -41,7 +41,7 @@ describe 'puppet' do
             .with_content(%r{^#puppetlabs.services.ca.certificate-authority-disabled-service/certificate-authority-disabled-service})
             .with_content(%r{^puppetlabs.trapperkeeper.services.watcher.filesystem-watch-service/filesystem-watch-service})
         }
-        if facts[:osfamily] == 'FreeBSD'
+        if facts[:os]['family'] == 'FreeBSD'
           it {
             should contain_augeas('puppet::server::puppetserver::jvm')
               .with_changes(['set puppetserver_java_opts \'"-Xms2G -Xmx2G"\''])
@@ -343,10 +343,10 @@ describe 'puppet' do
         end
       end
 
-      describe 'server_max_open_files', unless: facts[:osfamily] == 'FreeBSD' do
+      describe 'server_max_open_files', unless: facts[:os]['family'] == 'FreeBSD' do
         context 'when server_max_open_files => undef' do
           it do
-            if facts['service_provider'] == 'systemd'
+            if facts[:service_provider] == 'systemd'
               should contain_systemd__dropin_file('puppetserver.service-limits.conf')
                 .with_ensure('absent')
             else
@@ -360,7 +360,7 @@ describe 'puppet' do
           let(:params) { super().merge(server_max_open_files: 32143) }
 
           it do
-            if facts['service_provider'] == 'systemd'
+            if facts[:service_provider] == 'systemd'
                 should contain_systemd__dropin_file('puppetserver.service-limits.conf')
                   .with_ensure('present')
                   .with_filename('limits.conf')
@@ -379,7 +379,7 @@ describe 'puppet' do
 
       describe 'with extra_args parameter' do
         let(:params) { super().merge(server_jvm_extra_args: ['-XX:foo=bar', '-XX:bar=foo']) }
-        if facts[:osfamily] == 'FreeBSD'
+        if facts[:os]['family'] == 'FreeBSD'
           it {
             should contain_augeas('puppet::server::puppetserver::jvm')
               .with_changes(['set puppetserver_java_opts \'"-Xms2G -Xmx2G -XX:foo=bar -XX:bar=foo"\''])
@@ -410,7 +410,7 @@ describe 'puppet' do
         end
       end
 
-      describe 'with cli_args parameter', unless: facts[:osfamily] == 'FreeBSD' do
+      describe 'with cli_args parameter', unless: facts[:os]['family'] == 'FreeBSD' do
         let(:params) { super().merge(server_jvm_cli_args: '-Djava.io.tmpdir=/var/puppettmp') }
         if facts[:os]['family'] == 'RedHat'
           it {
@@ -441,7 +441,7 @@ describe 'puppet' do
 
       describe 'with jvm_config file parameter' do
         let(:params) { super().merge(server_jvm_config: '/etc/custom/puppetserver') }
-        if facts[:osfamily] == 'FreeBSD'
+        if facts[:os]['family'] == 'FreeBSD'
           it { should contain_augeas('puppet::server::puppetserver::jvm').with_context('/files/etc/rc.conf') }
         else
           it do
@@ -454,7 +454,7 @@ describe 'puppet' do
       end
 
       describe 'gem-path' do
-        if ['FreeBSD', 'DragonFly'].include?(facts[:osfamily])
+        if ['FreeBSD', 'DragonFly'].include?(facts[:os]['family'])
           it do
             should contain_file(puppetserver_conf)
               .with_content(%r{^    gem-path: \[\$\{jruby-puppet.gem-home\}, "#{server_vardir}/vendored-jruby-gems", "#{facts[:ruby]['sitedir'].sub(/site_ruby/,'gems')}"\]$})

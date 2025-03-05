@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'puppet' do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
-      case facts[:osfamily]
+      case facts[:os]['family']
       when 'FreeBSD'
         puppet_major = facts[:puppetversion].to_i
 
@@ -41,7 +41,7 @@ describe 'puppet' do
 
       describe 'with no custom parameters' do
         # For windows we specify a package provider which doesn't compile
-        if facts[:osfamily] != 'windows'
+        if facts[:os]['family'] != 'windows'
           it { is_expected.to compile.with_all_deps }
         end
 
@@ -343,7 +343,7 @@ describe 'puppet' do
           end
 
           # For windows we specify a package provider which doesn't compile
-          if facts[:osfamily] != 'windows'
+          if facts[:os]['family'] != 'windows'
             it { is_expected.to compile.with_all_deps }
           end
           it { is_expected.to contain_class('puppet::agent::service::daemon').with_enabled(false) }
@@ -364,7 +364,7 @@ describe 'puppet' do
           end
 
           # For windows we specify a package provider which doesn't compile
-          if facts[:osfamily] != 'windows'
+          if facts[:os]['family'] != 'windows'
             it { is_expected.to compile.with_all_deps }
           end
           it { is_expected.to contain_class('puppet::agent::service::daemon').with_enabled(false) }

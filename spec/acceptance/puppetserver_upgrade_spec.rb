@@ -25,7 +25,7 @@ unless unsupported_puppetserver || unsupported_puppetserver_upgrade
       raise 'Unsupported Puppet collection'
     end
 
-    case fact('osfamily')
+    case fact('os.family')
     when 'Debian'
       from_version_exact = "#{from_version}-1#{fact('os.distro.codename')}"
       to_version_exact = "#{to_version}-1#{fact('os.distro.codename')}"
