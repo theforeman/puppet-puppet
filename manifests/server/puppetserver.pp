@@ -145,7 +145,7 @@ class puppet::server::puppetserver (
   Optional[Integer[1]] $max_open_files = $puppet::server::max_open_files,
   Optional[Stdlib::Absolutepath] $versioned_code_id = $puppet::server::versioned_code_id,
   Optional[Stdlib::Absolutepath] $versioned_code_content = $puppet::server::versioned_code_content,
-  Boolean $disable_fips = $facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] != '7',
+  Boolean $disable_fips = $facts['os']['family'] == 'RedHat',
   Array[String[1]] $jolokia_metrics_allowlist = $puppet::server::jolokia_metrics_allowlist,
 ) {
   include puppet::server
@@ -172,7 +172,6 @@ class puppet::server::puppetserver (
       'RedHat': {
         $facts['os']['release']['major'] ? {
           /^([89])$/ => '/usr/lib/jvm/jre-17/bin/java',
-          '7'        => '/usr/lib/jvm/jre-11/bin/java',
           default    => '/usr/bin/java'
         }
       }
