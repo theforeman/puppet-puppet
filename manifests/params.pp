@@ -86,16 +86,8 @@ class puppet::params {
       $server_puppetserver_vardir = '/var/puppet/server/data/puppetserver'
       $server_puppetserver_rundir = '/var/run/puppetserver'
       $server_puppetserver_logdir = '/var/log/puppetserver'
-      if fact('ruby') {
-        $ruby_gem_dir               = regsubst($facts['ruby']['version'], '^(\d+\.\d+).*$', '/usr/local/lib/ruby/gems/\1/gems')
-        $server_ruby_load_paths     = [$facts['ruby']['sitedir'], "${ruby_gem_dir}/facter-${facts['facterversion']}/lib"]
-      } else {
-        # On FreeBSD 11 the ruby fact doesn't resolve - at least in facterdb
-        # lint:ignore:legacy_facts
-        $ruby_gem_dir               = regsubst($facts['rubyversion'], '^(\d+\.\d+).*$', '/usr/local/lib/ruby/gems/\1/gems')
-        $server_ruby_load_paths     = [$facts['rubysitedir'], "${ruby_gem_dir}/facter-${facts['facterversion']}/lib"]
-        # lint:endignore
-      }
+      $ruby_gem_dir               = regsubst($facts['ruby']['version'], '^(\d+\.\d+).*$', '/usr/local/lib/ruby/gems/\1/gems')
+      $server_ruby_load_paths     = [$facts['ruby']['sitedir'], "${ruby_gem_dir}/facter-${facts['facterversion']}/lib"]
       $server_jruby_gem_home      = '/var/puppet/server/data/puppetserver/jruby-gems'
       $puppetconf_mode            = '0644'
     }
