@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'puppet' do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
-      case facts[:osfamily]
+      case facts[:os]['family']
       when 'FreeBSD'
         puppet_major = facts[:puppetversion].to_i
 
@@ -33,7 +33,7 @@ describe 'puppet' do
       end
 
       describe 'with no custom parameters' do
-        it { is_expected.to compile.with_all_deps unless facts[:osfamily] == 'windows' }
+        it { is_expected.to compile.with_all_deps unless facts[:os]['family'] == 'windows' }
         it { should contain_class('puppet::agent') }
         it { should contain_class('puppet::config') }
         it { should_not contain_class('puppet::server') }
@@ -45,7 +45,7 @@ describe 'puppet' do
         }
       end
 
-      describe 'with server => true', :unless => unsupported_puppetserver_osfamily(facts[:osfamily]) do
+      describe 'with server => true', :unless => unsupported_puppetserver_osfamily(facts[:os]['family']) do
         let :params do {
           :server => true,
         } end
@@ -112,7 +112,7 @@ describe 'puppet' do
       end
 
       # compilation is broken due to paths
-      context 'on non-windows', unless: facts[:osfamily] == 'windows' do
+      context 'on non-windows', unless: facts[:os]['family'] == 'windows' do
         describe 'with package_source => Httpurl' do
           let :params do {
             :package_source => 'https://example.com:123/test'

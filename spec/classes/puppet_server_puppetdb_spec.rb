@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'puppet::server::puppetdb' do
   on_supported_os.each do |os, os_facts|
-    context "on #{os}", unless: unsupported_puppetserver_osfamily(os_facts[:osfamily]) do
+    context "on #{os}", unless: unsupported_puppetserver_osfamily(os_facts[:os]['family']) do
       let(:facts) { os_facts }
       let(:params) { {server: 'mypuppetdb.example.com'} }
       let(:pre_condition) do

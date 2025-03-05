@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe 'puppet' do
   on_supported_os.each do |os, facts|
-    context "on #{os}", unless: unsupported_puppetserver_osfamily(facts[:osfamily]) do
-      if facts[:osfamily] == 'FreeBSD'
+    context "on #{os}", unless: unsupported_puppetserver_osfamily(facts[:os]['family']) do
+      if facts[:os]['family'] == 'FreeBSD'
         codedir             = '/usr/local/etc/puppet'
         confdir             = '/usr/local/etc/puppet'
         etcdir              = '/usr/local/etc/puppet'
@@ -339,7 +339,7 @@ describe 'puppet' do
         end
 
         it 'should create the puppet user' do
-          shell = case facts[:osfamily]
+          shell = case facts[:os]['family']
                   when /^(FreeBSD|DragonFly)$/
                     '/usr/local/bin/git-shell'
                   else

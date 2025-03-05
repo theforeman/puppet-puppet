@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'puppet' do
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do
-      case os_facts[:osfamily]
+      case os_facts[:os]['family']
       when 'FreeBSD'
         dir_owner = 'root'
         dir_group = nil
