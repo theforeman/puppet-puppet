@@ -190,12 +190,13 @@ class puppet::server::config inherits puppet::config {
       $autosign_content = undef
     }
     file { $puppet::server::autosign:
-      ensure  => file,
-      owner   => $puppet::server::user,
-      group   => $puppet::server::group,
-      mode    => $puppet::server::autosign_mode,
-      content => $autosign_content,
-      source  => $puppet::server::autosign_source,
+      ensure    => file,
+      owner     => $puppet::server::user,
+      group     => $puppet::server::group,
+      mode      => $puppet::server::autosign_mode,
+      content   => $autosign_content,
+      source    => $puppet::server::autosign_source,
+      show_diff => false,
     }
   }
 
