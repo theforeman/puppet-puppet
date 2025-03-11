@@ -263,10 +263,14 @@ class puppet::params {
 
   $puppet_major = regsubst($facts['puppetversion'], '^(\d+)\..*$', '\1')
 
+  # Add support for OpenVox
+  $puppet_flavor       = $facts['puppet_flavor'].downcase()
+  $puppetserver_flavor = regsubst("${puppet_flavor}server", 'openvox', 'openvox-')
+
   if ($facts['os']['family'] =~ /(FreeBSD|DragonFly)/) {
-    $server_package = "puppetserver${puppet_major}"
+    $server_package = "${puppetserver_flavor}${puppet_major}"
   } else {
-    $server_package = undef
+    $server_package = $puppetserver_flavor
   }
 
   $server_ssl_dir = $ssldir
@@ -274,11 +278,11 @@ class puppet::params {
 
   if $aio_package or
   ($facts['os']['name'] == 'Debian' and versioncmp($facts['os']['release']['major'], '12') >= 0) {
-    $client_package = ['puppet-agent']
+    $client_package = ["${puppet_flavor}-agent"]
   } elsif ($facts['os']['family'] =~ /(FreeBSD|DragonFly)/) {
-    $client_package = ["puppet${puppet_major}"]
+    $client_package = ["${puppet_flavor}${puppet_major}"]
   } else {
-    $client_package = ['puppet']
+    $client_package = [$puppet_flavor]
   }
 
   # Puppet service name
