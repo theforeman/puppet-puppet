@@ -264,7 +264,7 @@ class puppet::params {
   $puppet_major = regsubst($facts['puppetversion'], '^(\d+)\..*$', '\1')
 
   # Add support for OpenVox. Default to puppet if nothing is installed yet
-  $puppet_flavor       = pick($facts['puppet_flavor'], 'puppet').downcase()
+  $puppet_flavor       = pick($facts['puppet_flavor'], 'puppet')
   $puppetserver_flavor = regsubst("${puppet_flavor}server", 'openvox', 'openvox-')
 
   $server_package = if ($facts['os']['family'] =~ /(FreeBSD|DragonFly)/) {

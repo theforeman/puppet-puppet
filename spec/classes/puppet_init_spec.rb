@@ -52,7 +52,7 @@ describe 'puppet' do
       describe 'with already installed packages' do
         describe 'legacy Perforce opensource packages' do
           let :facts do
-            facts.merge(puppet_flavor: 'Puppet')
+            facts.merge(puppet_flavor: 'puppet')
           end
           it { should contain_package(puppet_package)
             .with_ensure('present')
@@ -61,7 +61,7 @@ describe 'puppet' do
         end
         describe 'OpenVox packages' do
           let :facts do
-            facts.merge(puppet_flavor: 'OpenVox')
+            facts.merge(puppet_flavor: 'openvox')
           end
           it { should contain_package(openvox_package)
             .with_ensure('present')

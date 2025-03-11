@@ -92,7 +92,7 @@ describe Facter::Util::Fact.to_s do
           puppet_string
         end
       end
-      it { expect(Facter.fact(:puppet_flavor).value).to eq('Puppet') }
+      it { expect(Facter.fact(:puppet_flavor).value).to eq('puppet') }
     end
     context 'with OpenVox' do
       before do
@@ -100,7 +100,7 @@ describe Facter::Util::Fact.to_s do
           openvox_string
         end
       end
-      it { expect(Facter.fact(:puppet_flavor).value).to eq('OpenVox') }
+      it { expect(Facter.fact(:puppet_flavor).value).to eq('openvox') }
     end
   end
 end
