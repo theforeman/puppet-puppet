@@ -27,7 +27,7 @@ class puppet::config (
     'ssldir': value => $puppet::ssldir;
     'privatekeydir': value => '$ssldir/private_keys { group = service }';
     'hostprivkey': value => '$privatekeydir/$certname.pem { mode = 640 }';
-    'show_diff': value  => $puppet::show_diff;
+    'show_diff': value => $puppet::show_diff;
     'codedir': value => $puppet::codedir;
   }
 
@@ -92,7 +92,7 @@ class puppet::config (
   -> case $facts['os']['family'] {
     'Windows': {
       concat { "${puppet_dir}/puppet.conf":
-        mode  => $puppet::puppetconf_mode,
+        mode => $puppet::puppetconf_mode,
       }
     }
 
