@@ -56,7 +56,11 @@ metrics: {
             servlet-init-params: {
                 # Specify a custom security policy:
                 #  https://jolokia.org/reference/html/security.html
+<% if @jolokia_metrics_policy -%>
+                policyLocation: "file:///etc/puppetlabs/puppetserver/jolokia-access.xml"
+<%- else -%>
                 # policyLocation: "file:///etc/puppetlabs/puppetserver/jolokia-access.xml"
+<% end -%>
             }
         }
     }
