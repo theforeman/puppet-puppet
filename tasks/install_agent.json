@@ -1,11 +1,9 @@
 {
   "description": "Install the OpenVox agent package",
-  "private": true,
-  "input_method": "environment",
   "parameters": {
     "version": {
-      "description": "The version of openvox-agent to install",
-      "type": "Optional[String]"
+      "description": "The version of openvox-agent to install (defaults to latest when no agent is installed)",
+      "type": "Optional[String[1]]"
     },
     "collection": {
       "description": "The OpenVox collection to install from (defaults to openvox8, which maps to the latest collection released)",
@@ -13,38 +11,45 @@
     },
     "absolute_source": {
       "description": "The absolute source location to find the OpenVox agent package",
-      "type": "Optional[String]"
+      "type": "Optional[String[1]]"
     },
     "yum_source": {
       "description": "The source location to find yum repos (defaults to yum.voxpupuli.org)",
-      "type": "Optional[String]"
+      "type": "Optional[String[1]]"
     },
     "apt_source": {
       "description": "The source location to find apt repos (defaults to apt.voxpupuli.org)",
-      "type": "Optional[String]"
+      "type": "Optional[String[1]]"
     },
     "mac_source": {
       "description": "The source location to find mac packages (defaults to downloads.voxpupuli.org)",
-      "type": "Optional[String]"
+      "type": "Optional[String[1]]"
     },
     "windows_source": {
       "description": "The source location to find windows packages (defaults to downloads.voxpupuli.org)",
-      "type": "Optional[String]"
+      "type": "Optional[String[1]]"
     },
     "install_options": {
       "description": "optional install arguments to the windows installer (defaults to REINSTALLMODE=\"amus\")",
-      "type": "Optional[String]"
+      "type": "Optional[String[1]]"
     },
     "stop_service": {
-      "description": "Whether to stop the voxpupuli agent service after install",
+      "description": "Whether to stop the openvox agent service after install",
       "type": "Optional[Boolean]"
     },
     "retry": {
       "description": "The number of retries in case of network connectivity failures",
-      "type": "Optional[Integer]",
+      "type": "Integer[0]",
       "default": 5
     }
   },
-  "files": ["facts/tasks/bash.sh"],
+  "implementations": [
+    {
+      "name": "install_openvox_shell.sh",
+      "requirements": ["shell"],
+      "files": ["facts/tasks/bash.sh"],
+      "input_method": "environment"
+      }
+  ],
   "supports_noop": true
 }

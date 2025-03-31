@@ -441,9 +441,9 @@ if [ -f "$PT__installdir/facts/tasks/bash.sh" ]; then
         "4")  platform="debian"; platform_version="10";;
         "5")  platform="debian"; platform_version="11";;
         "6")  platform="debian"; platform_version="12";;
-        "19") platform="ubuntu"; platform_version="18.04";;
-        "20") platform="ubuntu"; platform_version="20.04";;
         "21") platform="ubuntu"; platform_version="22.04";;
+        "20") platform="ubuntu"; platform_version="20.04";;
+        "19") platform="ubuntu"; platform_version="18.04";;
       esac
       ;;
     *)
