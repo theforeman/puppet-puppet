@@ -5,7 +5,7 @@
   "parameters": {
     "version": {
       "description": "The version of openvox-agent to install",
-      "type": "Optional[String]"
+      "type": "Optional[String[1]]"
     },
     "collection": {
       "description": "The OpenVox collection to install from (defaults to openvox8, which maps to the latest collection released)",
