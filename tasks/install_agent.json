@@ -45,7 +45,7 @@
   },
   "implementations": [
     {
-      "name": "install_openvox_shell.sh",
+      "name": "install_agent_shell.sh",
       "requirements": ["shell"],
       "files": ["facts/tasks/bash.sh"],
       "input_method": "environment"
