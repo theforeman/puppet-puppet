@@ -7,7 +7,7 @@ set -e
 #
 
 # Error if non-root
-if [ `id -u` -ne 0 ]; then
+if [ $(id -u) -ne 0 ]; then
   echo "puppet::install_agent task must be run as root"
   exit 1
 fi
@@ -23,7 +23,7 @@ now () {
 
 # Logging functions instead of echo
 log () {
-    echo "`now` ${1}"
+    echo "$(now) ${1}"
 }
 
 info () {
@@ -139,7 +139,7 @@ fi
 if exists hexdump; then
   random_number=$(random_hexdump)
 else
-  random_number="`date +%N`"
+  random_number="$(date +%N)"
 fi
 
 tmp_dir="$tmp/install.sh.$$.$random_number"
@@ -150,7 +150,7 @@ tmp_stderr="$tmp/stderr.$$.$random_number"
 capture_tmp_stderr() {
   # spool up tmp_stderr from all the commands we called
   if [ -f "$tmp_stderr" ]; then
-    output=`cat ${tmp_stderr}`
+    output=$(cat ${tmp_stderr})
     stderr_results="${stderr_results}\nSTDERR from $1:\n\n$output\n"
   fi
 }
@@ -420,7 +420,7 @@ if [ -f "$PT__installdir/facts/tasks/bash.sh" ]; then
       ;;
     "Darwin")
       info "MacOS platform! Lets get you a DMG..."
-      os_version=`sw_vers | awk '/^ProductVersion:/ { print $2 }'`
+      os_version=$(sw_vers | awk '/^ProductVersion:/ { print $2 }')
       pkg_type=dmg
       platform=osx
       ;;
@@ -465,9 +465,9 @@ fi
 
 # Find which version of openvox or puppet is currently installed if any
 if [ -f /opt/puppetlabs/puppet/VERSION ]; then
-  installed_version=`cat /opt/puppetlabs/puppet/VERSION`
+  installed_version=$(cat /opt/puppetlabs/puppet/VERSION)
 elif type -p puppet >/dev/null; then
-  installed_version=`puppet --version`
+  installed_version=$(puppet --version)
 else
   installed_version=uninstalled
 fi
