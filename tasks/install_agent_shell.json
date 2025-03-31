@@ -1,0 +1,50 @@
+{
+  "description": "Install the OpenVox agent package",
+  "private": true,
+  "input_method": "environment",
+  "parameters": {
+    "version": {
+      "description": "The version of openvox-agent to install",
+      "type": "Optional[String]"
+    },
+    "collection": {
+      "description": "The OpenVox collection to install from (defaults to openvox8, which maps to the latest collection released)",
+      "type": "Optional[Enum[openvox7, openvox8]]"
+    },
+    "absolute_source": {
+      "description": "The absolute source location to find the OpenVox agent package",
+      "type": "Optional[String]"
+    },
+    "yum_source": {
+      "description": "The source location to find yum repos (defaults to yum.voxpupuli.org)",
+      "type": "Optional[String]"
+    },
+    "apt_source": {
+      "description": "The source location to find apt repos (defaults to apt.voxpupuli.org)",
+      "type": "Optional[String]"
+    },
+    "mac_source": {
+      "description": "The source location to find mac packages (defaults to downloads.voxpupuli.org)",
+      "type": "Optional[String]"
+    },
+    "windows_source": {
+      "description": "The source location to find windows packages (defaults to downloads.voxpupuli.org)",
+      "type": "Optional[String]"
+    },
+    "install_options": {
+      "description": "optional install arguments to the windows installer (defaults to REINSTALLMODE=\"amus\")",
+      "type": "Optional[String]"
+    },
+    "stop_service": {
+      "description": "Whether to stop the voxpupuli agent service after install",
+      "type": "Optional[Boolean]"
+    },
+    "retry": {
+      "description": "The number of retries in case of network connectivity failures",
+      "type": "Optional[Integer]",
+      "default": 5
+    }
+  },
+  "files": ["facts/tasks/bash.sh"],
+  "supports_noop": true
+}
