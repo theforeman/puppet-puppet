@@ -14,16 +14,19 @@
       "type": "Optional[String[1]]"
     },
     "yum_source": {
-      "description": "The source location to find yum repos (defaults to yum.voxpupuli.org)",
-      "type": "Optional[String[1]]"
+      "description": "The source location to find yum repos",
+      "type": "Optional[String[1]]",
+      "default": "http://yum.voxpupuli.org"
     },
     "apt_source": {
-      "description": "The source location to find apt repos (defaults to apt.voxpupuli.org)",
-      "type": "Optional[String[1]]"
+      "description": "The source location to find apt repos",
+      "type": "Optional[String[1]]",
+      "default": "http://apt.voxpupuli.org"
     },
     "mac_source": {
-      "description": "The source location to find mac packages (defaults to downloads.voxpupuli.org)",
-      "type": "Optional[String[1]]"
+      "description": "The source location to find mac packages",
+      "type": "Optional[String[1]]",
+      "default": "http://downloads.voxpupuli.org"
     },
     "windows_source": {
       "description": "The source location to find windows packages (defaults to downloads.voxpupuli.org)",

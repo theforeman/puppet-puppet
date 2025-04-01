@@ -159,8 +159,8 @@ trap "rm -f $tmp_stderr; rm -rf $tmp_dir; exit $1" 1 2 15
 
 # Cleanup
 cleanup() {
-  if [ -n "$tmp_dir" ]; then
-    rm -rf "$tmp_dir"
+  if [ -n "${tmp_dir}" ]; then
+    rm -rf $tmp_dir
   fi
   exit $1
 }
@@ -363,37 +363,53 @@ do_download() {
 }
 
 #####
+# Helper: Check whether the apt config file has been modified, warning and exiting early if it has
+#
+
+assert_unmodified_apt_config() {
+  openvox_list=/etc/apt/sources.list.d/openvox-release.list
+  openvox7_list=/etc/apt/sources.list.d/openvox7-release.list
+  openvox8_list=/etc/apt/sources.list.d/openvox8-release.list
+
+  if [[ -f $openvox_list ]]; then
+    list_file=$openvox_list
+  elif [[ -f $openvox7_list ]]; then
+    list_file=$openvox7_list
+  elif [[ -f $openvox8_list ]]; then
+    list_file=$openvox8_list
+  fi
+
+  # If puppet.list exists, get its md5sum on disk and its md5sum from the release package
+  if [[ -n $list_file ]]; then
+    # For md5sum, the checksum is the first word
+    file_md5=($(md5sum "$list_file"))
+    pkg=($(basename $list_file | cut -d. -f1))
+
+    # For dpkg-query with this output format, the sum is the second word
+    package_md5=($(dpkg-query -W -f='${Conffiles}\n' "${pkg}" | grep -F "$list_file"))
+
+    # If the $package_md5 array is set, and the md5sum on disk doesn't match the md5sum from dpkg-query, it has been modified
+    if [[ $package_md5 && ${file_md5[0]} != ${package_md5[1]} ]]; then
+      warn "Configuration file $list_file has been modified from the default. Skipping agent installation."
+      exit 1
+    fi
+  fi
+}
+
+#####
 # Source options
 #
 
 if [ -n "$PT_yum_source" ]; then
   yum_source=$PT_yum_source
-else
-  if [ "$nightly" = true ]; then
-    yum_source='http://nightlies.voxpupuli.org/yum'
-  else
-    yum_source='http://yum.voxpupuli.org'
-  fi
 fi
 
 if [ -n "$PT_apt_source" ]; then
   apt_source=$PT_apt_source
-else
-  if [ "$nightly" = true ]; then
-    apt_source='http://nightlies.voxpupuli.org/apt'
-  else
-    apt_source='http://apt.voxpupuli.org'
-  fi
 fi
 
 if [ -n "$PT_mac_source" ]; then
   mac_source=$PT_mac_source
-else
-  if [ "$nightly" = true ]; then
-    mac_source='http://nightlies.voxpupuli.org/downloads'
-  else
-    mac_source='http://downloads.voxpupuli.org'
-  fi
 fi
 
 #####
@@ -441,9 +457,9 @@ if [ -f "$PT__installdir/facts/tasks/bash.sh" ]; then
         "4")  platform="debian"; platform_version="10";;
         "5")  platform="debian"; platform_version="11";;
         "6")  platform="debian"; platform_version="12";;
-        "19") platform="ubuntu"; platform_version="18.04";;
-        "20") platform="ubuntu"; platform_version="20.04";;
         "21") platform="ubuntu"; platform_version="22.04";;
+        "20") platform="ubuntu"; platform_version="20.04";;
+        "19") platform="ubuntu"; platform_version="18.04";;
       esac
       ;;
     *)
@@ -494,13 +510,6 @@ esac
 
 # Determine the Collection
 if [ -n "$PT_collection" ]; then
-  # Check whether collection is nightly
-  if [[ "$PT_collection" == *"nightly"* ]]; then
-    nightly=true
-  else
-    nightly=false
-  fi
-
   collection=$PT_collection
 else
   collection='openvox8'
@@ -645,7 +654,7 @@ setup() {
         fi
       done
 
-      #assert_unmodified_apt_config
+      assert_unmodified_apt_config
 
       run_cmd "dpkg -i --force-confmiss ${2}"
       run_cmd "apt-get update -y >/dev/null 2>&1"

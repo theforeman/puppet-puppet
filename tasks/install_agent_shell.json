@@ -4,7 +4,7 @@
   "input_method": "environment",
   "parameters": {
     "version": {
-      "description": "The version of openvox-agent to install",
+      "description": "The version of openvox-agent to install (defaults to latest when no agent is installed)",
       "type": "Optional[String[1]]"
     },
     "collection": {
@@ -17,23 +17,18 @@
     },
     "yum_source": {
       "description": "The source location to find yum repos (defaults to yum.voxpupuli.org)",
-      "type": "Optional[String[1]]"
+      "type": "Optional[String[1]]",
+      "default": "http://downloads.voxpupuli.org"
     },
     "apt_source": {
       "description": "The source location to find apt repos (defaults to apt.voxpupuli.org)",
-      "type": "Optional[String[1]]"
+      "type": "Optional[String[1]]",
+      "default": "http://downloads.voxpupuli.org"
     },
     "mac_source": {
       "description": "The source location to find mac packages (defaults to downloads.voxpupuli.org)",
-      "type": "Optional[String[1]]"
-    },
-    "windows_source": {
-      "description": "The source location to find windows packages (defaults to downloads.voxpupuli.org)",
-      "type": "Optional[String[1]]"
-    },
-    "install_options": {
-      "description": "optional install arguments to the windows installer (defaults to REINSTALLMODE=\"amus\")",
-      "type": "Optional[String[1]]"
+      "type": "Optional[String[1]]",
+      "default": "http://downloads.voxpupuli.org"
     },
     "stop_service": {
       "description": "Whether to stop the voxpupuli agent service after install",
