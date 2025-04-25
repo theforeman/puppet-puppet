@@ -37,9 +37,10 @@ class puppet::agent::service {
   contain puppet::agent::service::daemon
 
   class { 'puppet::agent::service::systemd':
-    enabled => $systemd_enabled,
-    hour    => $puppet::run_hour,
-    minute  => $puppet::run_minute,
+    enabled  => $systemd_enabled,
+    hour     => $puppet::run_hour,
+    minute   => $puppet::run_minute,
+    timezone => $puppet::run_timezone,
   }
   contain puppet::agent::service::systemd
 
