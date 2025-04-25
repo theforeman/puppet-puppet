@@ -72,6 +72,10 @@
 # $run_minute::                             The minute at which to run the puppet agent
 #                                           when runmode is cron or systemd.timer.
 #
+# $run_timezone::                           The timezon for the run the puppet agent
+#                                           when runmode is systemd.timer.
+#                                           Use `timedatectl list-timezones` to list accepted values
+#
 # $cron_cmd::                               Specify command to launch when runmode is
 #                                           set 'cron'.
 #
@@ -605,6 +609,7 @@ class puppet (
   Enum['cron', 'service', 'systemd.timer', 'none', 'unmanaged'] $runmode = $puppet::params::runmode,
   Optional[Integer[0,23]] $run_hour = undef,
   Variant[Integer[0,59], Array[Integer[0,59]], Undef] $run_minute = undef,
+  Optional[String] $run_timezone = undef,
   Array[Enum['cron', 'service', 'systemd.timer', 'none']] $unavailable_runmodes = $puppet::params::unavailable_runmodes,
   Optional[String] $cron_cmd = $puppet::params::cron_cmd,
   Optional[String] $systemd_cmd = $puppet::params::systemd_cmd,
