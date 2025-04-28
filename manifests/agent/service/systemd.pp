@@ -4,7 +4,7 @@ class puppet::agent::service::systemd (
   Boolean                 $enabled                             = false,
   Optional[Integer[0,23]] $hour                                = undef,
   Variant[Integer[0,59], Array[Integer[0,59]], Undef] $minute  = undef,
-  Optional[String] $timezone                                   = undef,
+  Optional[String[1]] $timezone                                = undef,
 ) {
   unless $puppet::runmode == 'unmanaged' or 'systemd.timer' in $puppet::unavailable_runmodes {
     # Use the same times as for cron
