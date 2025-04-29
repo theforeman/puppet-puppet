@@ -72,7 +72,7 @@
 # $run_minute::                             The minute at which to run the puppet agent
 #                                           when runmode is cron or systemd.timer.
 #
-# $run_timezone::                           The timezon for the run the puppet agent
+# $run_timezone::                           The timezone for the run the puppet agent
 #                                           when runmode is systemd.timer.
 #                                           Use `timedatectl list-timezones` to list accepted values
 #
