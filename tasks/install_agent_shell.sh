@@ -422,6 +422,8 @@ if [ -f "$PT__installdir/facts/tasks/bash.sh" ]; then
   # Use facts module bash.sh implementation
   os=$(bash $PT__installdir/facts/tasks/bash.sh "platform")
   os_version=$(bash $PT__installdir/facts/tasks/bash.sh "release")
+  # Major OS Release
+  platform_version=$(echo $os_version | cut -d. -f1)
 
   case $os in
     "RedHat"|"Almalinux"|"Rocky"|"OracleLinux"|"CentOS")
@@ -449,6 +451,9 @@ if [ -f "$PT__installdir/facts/tasks/bash.sh" ]; then
       info "${os} platform! Lets get you a DEB..."
       pkg_type=deb
       platform=$(echo $os | tr '[:upper:]' '[:lower:]')
+      if [ $os == "Ubuntu" ]; then
+        platform_version=$os_version
+      fi
       ;;
     "Linuxmint"|"LinuxMint")
       info "Mint platform! Lets get you a DEB..."
@@ -467,9 +472,6 @@ if [ -f "$PT__installdir/facts/tasks/bash.sh" ]; then
       cleanup 1
       ;;
   esac
-
-  # Major OS Release
-  platform_version=$(echo $os_version | cut -d. -f1)
 else
   echo "This module depends on the puppetlabs-facts module"
   cleanup 1
