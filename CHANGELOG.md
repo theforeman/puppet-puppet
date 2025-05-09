@@ -1,6 +1,23 @@
 # Changelog
 
-## [20.1.0](https://github.com/theforeman/puppet-puppet/tree/20.1.0) (2025-02-11)
+## [21.0.0](https://github.com/theforeman/puppet-puppet/tree/21.0.0) (2025-05-09)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/20.1.0...21.0.0)
+
+**Breaking changes:**
+
+- Drop EL7 support [\#931](https://github.com/theforeman/puppet-puppet/pull/931) ([bastelfreak](https://github.com/bastelfreak))
+- Drop legacy FreeBSD 11 workaround [\#930](https://github.com/theforeman/puppet-puppet/pull/930) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- Add timezone param for systemd.timer [\#939](https://github.com/theforeman/puppet-puppet/pull/939) ([zipkid](https://github.com/zipkid))
+
+**Fixed bugs:**
+
+- Fix typo in help text: excuted -\> executed [\#927](https://github.com/theforeman/puppet-puppet/pull/927) ([ekohl](https://github.com/ekohl))
+
+## [20.1.0](https://github.com/theforeman/puppet-puppet/tree/20.1.0) (2025-02-12)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/20.0.0...20.1.0)
 
