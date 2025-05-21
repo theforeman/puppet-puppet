@@ -31,7 +31,7 @@ class puppet::server::puppetdb (
   Stdlib::Host $server = undef,
   Stdlib::Port $port = 8081,
   Boolean $soft_write_failure = false,
-  String $terminus_package = 'puppetdb-termini',
+  String[1] $terminus_package = 'puppetdb-termini',
 ) {
   class { 'puppetdb::master::config':
     puppetdb_server             => $server,
