@@ -7,7 +7,7 @@
 # @param joiner
 #   How to join an array value into a string
 define puppet::config::server (
-  Variant[Array[String], Boolean, String, Integer] $value,
+  Variant[Array[Variant[String,Sensitive[String]]], Boolean, String, Integer, Sensitive[String]] $value,
   String $key    = $name,
   String $joiner = ','
 ) {

@@ -13,7 +13,7 @@
 #   How to join an array value into a string
 define puppet::config::entry (
   String $key,
-  Variant[Array[String], Boolean, String, Integer] $value,
+  Variant[Array[Variant[String,Sensitive[String]]], Boolean, String, Integer, Sensitive[String]] $value,
   String $section,
   Variant[Integer[0], String] $sectionorder = 5,
   String $joiner       = ',',

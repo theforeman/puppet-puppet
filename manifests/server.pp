@@ -410,7 +410,7 @@ class puppet::server (
   String $certname = $puppet::server_certname,
   Integer[0] $request_timeout = $puppet::server_request_timeout,
   Boolean $strict_variables = $puppet::server_strict_variables,
-  Hash[String, Data] $additional_settings = $puppet::server_additional_settings,
+  Hash[String, Variant[Data,Sensitive[String]]] $additional_settings = $puppet::server_additional_settings,
   Boolean $foreman = $puppet::server_foreman,
   Optional[Stdlib::HTTPUrl] $foreman_url = $puppet::server_foreman_url,
   Optional[Stdlib::Absolutepath] $foreman_ssl_ca = $puppet::server_foreman_ssl_ca,
