@@ -1,6 +1,4 @@
 ---
-.github/workflows/ci.yml:
-  pidfile_workaround: true
 Gemfile:
   extra:
     - gem: hocon
