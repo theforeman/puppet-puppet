@@ -254,6 +254,54 @@ describe 'puppet' do
           end
         end
 
+        describe 'when runmode => cron with specified target' do
+          let :params do
+            super().merge(runmode: 'cron',
+                          cron_target: '/etc/cron.d/puppet'
+                         )
+          end
+
+          case os
+          when /\A(windows|archlinux)/
+            it { is_expected.to raise_error(Puppet::Error, /Runmode of cron not supported on #{facts[:kernel]} operating systems!/) }
+          when /\Adebian-/, /\A(redhat|centos|scientific)-(7|8)/, /\Afedora-/, /\Aubuntu-/, /\Asles-12/
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to contain_concat__fragment('puppet.conf_agent') }
+            it { is_expected.to contain_class('puppet::agent::service::cron').with_enabled(true) }
+            it { is_expected.to contain_class('puppet::agent::service::daemon').with_enabled(false) }
+            it do
+              is_expected.to contain_service('puppet')
+                .with_ensure('stopped')
+                .with_name('puppet')
+                .with_hasstatus('true')
+                .with_enable('false')
+            end
+            it { is_expected.to contain_class('puppet::agent::service::systemd').with_enabled(false) }
+            it { is_expected.to contain_service('puppet-run.timer').with_ensure(false) }
+            it do
+              is_expected.to contain_cron('puppet')
+                .with_command("#{bindir}/puppet agent --config #{confdir}/puppet.conf --onetime --no-daemonize")
+                .with_user('root')
+                .with_minute(%w[10 40])
+                .with_hour('*')
+            end
+          else
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to contain_class('puppet::agent::service::cron').with_enabled(true) }
+            it { is_expected.to contain_class('puppet::agent::service::daemon').with_enabled(false) }
+            it { is_expected.to contain_class('puppet::agent::service::systemd').with_enabled(false) }
+            it { is_expected.not_to contain_service('puppet-run.timer') }
+            it do
+              is_expected.to contain_cron('puppet')
+                .with_command("#{bindir}/puppet agent --config #{confdir}/puppet.conf --onetime --no-daemonize")
+                .with_user('root')
+                .with_minute(%w[10 40])
+                .with_hour('*')
+                .with_target('/etc/cron.d/puppet')
+            end
+          end
+        end
+
         describe 'when runmode => systemd.timer' do
           let :params do
             super().merge(runmode: 'systemd.timer')
