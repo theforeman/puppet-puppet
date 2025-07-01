@@ -351,12 +351,6 @@ describe 'puppet' do
         end
 
         it do
-          should contain_file(vardir)
-            .with_ensure('directory')
-            .with_owner('root')
-        end
-
-        it do
           should contain_vcsrepo('puppet_repo')
             .with_ensure('bare')
             .with_path("#{vardir}/puppet.git")
