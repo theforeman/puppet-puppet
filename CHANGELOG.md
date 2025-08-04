@@ -1,5 +1,14 @@
 # Changelog
 
+## [21.1.0](https://github.com/theforeman/puppet-puppet/tree/21.1.0) (2025-08-04)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/21.0.0...21.1.0)
+
+**Implemented enhancements:**
+
+- add posibility to manage terminus package [\#936](https://github.com/theforeman/puppet-puppet/pull/936) ([techsk8](https://github.com/techsk8))
+- Stop managing vardir as a resource [\#923](https://github.com/theforeman/puppet-puppet/pull/923) ([nomennesc-io](https://github.com/nomennesc-io))
+
 ## [21.0.0](https://github.com/theforeman/puppet-puppet/tree/21.0.0) (2025-05-09)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/20.1.0...21.0.0)
