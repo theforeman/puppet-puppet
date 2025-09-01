@@ -36,7 +36,7 @@ class puppet::params {
   $agent_default_schedules = false
   $facter_blocklist    = undef
   $facter_cachelist    = undef
-  $cache_ttl           = '1 day',
+  $cache_ttl           = '1 day'
 
   $srv_domain = fact('networking.domain')
 
