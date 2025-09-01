@@ -188,6 +188,12 @@
 # $agent_additional_settings::              A hash of additional agent settings.
 #                                           Example: {stringify_facts => true}
 #
+# $facter_blocklist::                       A hash of facts that puppet agent will block from usage
+#
+# $facter_cachelist::                       A hash of facts that puppet agent will cache
+#
+# $cache_ttl::                              puppet agent fact time to live
+#
 # $client_certname::                        The node's certificate name, and the unique
 #                                           identifier it uses when requesting catalogs.
 #
@@ -616,6 +622,9 @@ class puppet (
   Integer[0] $systemd_randomizeddelaysec = $puppet::params::systemd_randomizeddelaysec,
   Boolean $agent_noop = $puppet::params::agent_noop,
   Boolean $agent_default_schedules = $puppet::params::agent_default_schedules,
+  Optional[Array[String]] $facter_blocklist = undef,
+  Optional[Array[String]] $facter_cachelist = undef,
+  String $cache_ttl = '1 day',
   Boolean $show_diff = $puppet::params::show_diff,
   Optional[Stdlib::HTTPUrl] $module_repository = $puppet::params::module_repository,
   Optional[Integer[0]] $http_connect_timeout = $puppet::params::http_connect_timeout,
