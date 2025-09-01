@@ -1,10 +1,10 @@
 # Puppet agent facter configuration
 # @api private
 class puppet::agent::facter inherits puppet::config {
-  puppet::config::agent {
-    'blocklist': value => $puppet::facter_blocklist;
-    'cachelist': value => $puppet::facter_cachelist;
-    'cache_ttl': value => $puppet::cache_ttl;
+  puppet::config::agent::facter {
+    'blocklist': value => $puppet::config::facter_blocklist;
+    'cachelist': value => $puppet::config::facter_cachelist;
+    'cache_ttl': value => $puppet::config::cache_ttl;
   }
 
     if versioncmp(fact('aio_agent_version'),'7') >= 0 {
