@@ -31,6 +31,10 @@
       "name": "puppet/systemd",
       "version_requirement": ">= 2.9.0 < 9.0.0"
     }
+    {
+      "name": "puppetlabs/hocon",
+      "version_requirement": ">= 1.1.0 < 2.0.0"
+    }
   ],
   "requirements": [
     {
