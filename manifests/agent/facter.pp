@@ -1,10 +1,10 @@
 # Puppet agent facter configuration
 # @api private
-class puppet::agent::facter inherits puppet::config {
+class puppet::agent::facter inherits puppet::params {
   puppet::config::agent::facter {
-    'blocklist': value => $puppet::config::facter_blocklist;
-    'cachelist': value => $puppet::config::facter_cachelist;
-    'cache_ttl': value => $puppet::config::cache_ttl;
+    'blocklist': value => $puppet::params::facter_blocklist;
+    'cachelist': value => $puppet::params::facter_cachelist;
+    'cache_ttl': value => $puppet::params::cache_ttl;
   }
 
     if versioncmp(fact('aio_agent_version'),'7') >= 0 {
@@ -18,11 +18,11 @@ class puppet::agent::facter inherits puppet::config {
     }
 
 
-        if $puppet::config::blocklist {
+        if $puppet::params::blocklist {
       hocon_setting { 'blocklist facts group':
         ensure  => present,
         setting => 'fact-groups.blocked-facts',
-        value   => $puppet::config::blocklist,
+        value   => $puppet::params::blocklist,
         type    => 'array',
       }
       -> hocon_setting { 'blocklist facts':
@@ -41,17 +41,17 @@ class puppet::agent::facter inherits puppet::config {
         setting => 'facts.blocklist',
       }
     }
-    if $puppet::config::cachelist {
+    if $puppet::params::cachelist {
       hocon_setting { 'cachelist facts group':
         ensure  => present,
         setting => 'fact-groups.cached-facts',
-        value   => $puppet::config::cachelist,
+        value   => $puppet::params::cachelist,
         type    => 'array',
       }
       -> hocon_setting { 'cachelist facts':
         ensure  => present,
         setting => 'facts.ttls',
-        value   => [{'cached-facts' => $puppet::config::cache_ttl }],
+        value   => [{'cached-facts' => $puppet::params::cache_ttl }],
         type    => 'array',
       }
     } else {
