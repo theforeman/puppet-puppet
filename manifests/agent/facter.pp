@@ -18,11 +18,11 @@ class puppet::agent::facter inherits puppet::config {
     }
 
 
-        if $facts['blocklist'] {
+        if $puppet::config::blocklist {
       hocon_setting { 'blocklist facts group':
         ensure  => present,
         setting => 'fact-groups.blocked-facts',
-        value   => $facts['blocklist'],
+        value   => $puppet::config::blocklist,
         type    => 'array',
       }
       -> hocon_setting { 'blocklist facts':
@@ -41,17 +41,17 @@ class puppet::agent::facter inherits puppet::config {
         setting => 'facts.blocklist',
       }
     }
-    if $facts['cachelist'] {
+    if $puppet::config::cachelist {
       hocon_setting { 'cachelist facts group':
         ensure  => present,
         setting => 'fact-groups.cached-facts',
-        value   => $facts['cachelist'],
+        value   => $puppet::config::cachelist,
         type    => 'array',
       }
       -> hocon_setting { 'cachelist facts':
         ensure  => present,
         setting => 'facts.ttls',
-        value   => [{'cached-facts' => $facts['cache_ttl'] }],
+        value   => [{'cached-facts' => $puppet::config::cache_ttl }],
         type    => 'array',
       }
     } else {
