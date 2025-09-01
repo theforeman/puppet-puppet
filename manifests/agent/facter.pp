@@ -1,18 +1,13 @@
 # Puppet agent facter configuration
 # @api private
 class puppet::agent::facter inherits puppet::params {
-  puppet::config::agent::facter {
-    'blocklist': value => $puppet::params::facter_blocklist;
-    'cachelist': value => $puppet::params::facter_cachelist;
-    'cache_ttl': value => $puppet::params::cache_ttl;
-  }
 
     if versioncmp(fact('aio_agent_version'),'7') >= 0 {
     file { '/etc/puppetlabs/facter':
       ensure => directory,
     }
 
-        Hocon_setting {
+        hocon_setting { 'facter.confi':
       path    => '/etc/puppetlabs/facter/facter.conf',
       require => File['/etc/puppetlabs/facter'],
     }
@@ -66,4 +61,3 @@ class puppet::agent::facter inherits puppet::params {
     }
   }
 }
-
