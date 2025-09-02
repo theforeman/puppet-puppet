@@ -5,7 +5,7 @@ class puppet::agent::facter (
   Optional[Array[String]] $cachelist = undef,
   String $cache_ttl = '1 day',
 ) {
-    notify {"Running Facter Manifest":}
+
     if versioncmp(fact('aio_agent_version'),'7') >= 0 {
     file { '/etc/puppetlabs/facter':
       ensure => directory,
