@@ -5,7 +5,6 @@ class puppet::agent::facter (
   Optional[Array[String]] $cachelist = undef,
   String $cache_ttl = '1 day',
 ) {
-
   if versioncmp(fact('aio_agent_version'),'7') >= 0 {
     file { '/etc/puppetlabs/facter':
       ensure => directory,
@@ -49,7 +48,7 @@ class puppet::agent::facter (
       -> hocon_setting { 'cachelist facts':
         ensure  => present,
         setting => 'facts.ttls',
-        value   => [{'cached-facts' => $cache_ttl }],
+        value   => [{ 'cached-facts' => $cache_ttl }],
         type    => 'array',
       }
     } else {
