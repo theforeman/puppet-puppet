@@ -1,7 +1,11 @@
 # Puppet agent facter configuration
 # @api private
-class puppet::agent::facter inherits puppet::params {
-
+class puppet::agent::facter (
+  Optional[Array[String]] $blocklist = undef,
+  Optional[Array[String]] $cachelist = undef,
+  String $cache_ttl = '1 day',
+) {
+    notify {"Running Facter Manifest":}
     if versioncmp(fact('aio_agent_version'),'7') >= 0 {
     file { '/etc/puppetlabs/facter':
       ensure => directory,
@@ -13,11 +17,11 @@ class puppet::agent::facter inherits puppet::params {
     }
 
 
-        if $puppet::params::blocklist {
+        if $blocklist {
       hocon_setting { 'blocklist facts group':
         ensure  => present,
         setting => 'fact-groups.blocked-facts',
-        value   => $puppet::params::blocklist,
+        value   => $blocklist,
         type    => 'array',
       }
       -> hocon_setting { 'blocklist facts':
@@ -36,17 +40,17 @@ class puppet::agent::facter inherits puppet::params {
         setting => 'facts.blocklist',
       }
     }
-    if $puppet::params::cachelist {
+    if $cachelist {
       hocon_setting { 'cachelist facts group':
         ensure  => present,
         setting => 'fact-groups.cached-facts',
-        value   => $puppet::params::cachelist,
+        value   => $cachelist,
         type    => 'array',
       }
       -> hocon_setting { 'cachelist facts':
         ensure  => present,
         setting => 'facts.ttls',
-        value   => [{'cached-facts' => $puppet::params::cache_ttl }],
+        value   => [{'cached-facts' => $cache_ttl }],
         type    => 'array',
       }
     } else {
