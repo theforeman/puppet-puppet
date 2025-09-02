@@ -16,7 +16,6 @@ class puppet::agent::facter (
       require => File['/etc/puppetlabs/facter'],
     }
 
-
         if $::blocklist {
       hocon_setting { 'blocklist facts group':
         ensure  => present,
