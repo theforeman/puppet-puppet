@@ -11,7 +11,7 @@ class puppet::agent::facter (
       ensure => directory,
     }
 
-    hocon_setting { 'facter.confi':
+    hocon_setting { 'facter.conf':
       path    => '/etc/puppetlabs/facter/facter.conf',
       require => File['/etc/puppetlabs/facter'],
     }
