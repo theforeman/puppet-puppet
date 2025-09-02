@@ -11,12 +11,12 @@ class puppet::agent::facter (
       ensure => directory,
     }
 
-        hocon_setting { 'facter.confi':
+    hocon_setting { 'facter.confi':
       path    => '/etc/puppetlabs/facter/facter.conf',
       require => File['/etc/puppetlabs/facter'],
     }
 
-        if $::blocklist {
+    if $::blocklist {
       hocon_setting { 'blocklist facts group':
         ensure  => present,
         setting => 'fact-groups.blocked-facts',
