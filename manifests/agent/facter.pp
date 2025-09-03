@@ -19,8 +19,8 @@ class puppet::agent::facter (
 
     if $blocklist {
       hocon_setting { 'blocklist facts group':
-        path    => '/etc/puppetlabs/facter/facter.conf',
         ensure  => present,
+        path    => '/etc/puppetlabs/facter/facter.conf',
         setting => 'fact-groups.blocked-facts',
         value   => $blocklist,
         type    => 'array',
@@ -34,40 +34,40 @@ class puppet::agent::facter (
       }
     } else {
       hocon_setting { 'blocklist facts group':
-        path    => '/etc/puppetlabs/facter/facter.conf',
         ensure  => absent,
+        path    => '/etc/puppetlabs/facter/facter.conf',
         setting => 'fact-groups.blocked-facts',
       }
       hocon_setting { 'blocklist facts':
-        path    => '/etc/puppetlabs/facter/facter.conf',
         ensure  => absent,
+        path    => '/etc/puppetlabs/facter/facter.conf',
         setting => 'facts.blocklist',
       }
     }
     if $cachelist {
       hocon_setting { 'cachelist facts group':
-        path    => '/etc/puppetlabs/facter/facter.conf',
         ensure  => present,
+        path    => '/etc/puppetlabs/facter/facter.conf',
         setting => 'fact-groups.cached-facts',
         value   => $cachelist,
         type    => 'array',
       }
       -> hocon_setting { 'cachelist facts':
-        path    => '/etc/puppetlabs/facter/facter.conf',
         ensure  => present,
+        path    => '/etc/puppetlabs/facter/facter.conf',
         setting => 'facts.ttls',
         value   => [{ 'cached-facts' => $cache_ttl }],
         type    => 'array',
       }
     } else {
       hocon_setting { 'cachelist facts group':
-        path    => '/etc/puppetlabs/facter/facter.conf',
         ensure  => absent,
+        path    => '/etc/puppetlabs/facter/facter.conf',
         setting => 'fact-groups.cached-facts',
       }
       hocon_setting { 'cachelist facts':
-        path    => '/etc/puppetlabs/facter/facter.conf',
         ensure  => absent,
+        path    => '/etc/puppetlabs/facter/facter.conf',
         setting => 'facts.ttls',
       }
     }
