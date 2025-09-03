@@ -13,16 +13,20 @@ class puppet::agent::facter (
     hocon_setting { 'facter.conf':
       path    => '/etc/puppetlabs/facter/facter.conf',
       require => File['/etc/puppetlabs/facter'],
+      setting => 'managed',
+      value   => 'puppet',
     }
 
     if $blocklist {
       hocon_setting { 'blocklist facts group':
+        path    => '/etc/puppetlabs/facter/facter.conf',
         ensure  => present,
         setting => 'fact-groups.blocked-facts',
         value   => $blocklist,
         type    => 'array',
       }
       -> hocon_setting { 'blocklist facts':
+        path    => '/etc/puppetlabs/facter/facter.conf',
         ensure  => present,
         setting => 'facts.blocklist',
         value   => ['blocked-facts'],
@@ -30,22 +34,26 @@ class puppet::agent::facter (
       }
     } else {
       hocon_setting { 'blocklist facts group':
+        path    => '/etc/puppetlabs/facter/facter.conf',
         ensure  => absent,
         setting => 'fact-groups.blocked-facts',
       }
       hocon_setting { 'blocklist facts':
+        path    => '/etc/puppetlabs/facter/facter.conf',
         ensure  => absent,
         setting => 'facts.blocklist',
       }
     }
     if $cachelist {
       hocon_setting { 'cachelist facts group':
+        path    => '/etc/puppetlabs/facter/facter.conf',
         ensure  => present,
         setting => 'fact-groups.cached-facts',
         value   => $cachelist,
         type    => 'array',
       }
       -> hocon_setting { 'cachelist facts':
+        path    => '/etc/puppetlabs/facter/facter.conf',
         ensure  => present,
         setting => 'facts.ttls',
         value   => [{ 'cached-facts' => $cache_ttl }],
@@ -53,10 +61,12 @@ class puppet::agent::facter (
       }
     } else {
       hocon_setting { 'cachelist facts group':
+        path    => '/etc/puppetlabs/facter/facter.conf',
         ensure  => absent,
         setting => 'fact-groups.cached-facts',
       }
       hocon_setting { 'cachelist facts':
+        path    => '/etc/puppetlabs/facter/facter.conf',
         ensure  => absent,
         setting => 'facts.ttls',
       }
