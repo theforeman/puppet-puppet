@@ -5,7 +5,6 @@ class puppet::agent::facter (
   Optional[Array[String]] $cachelist = undef,
   String $cache_ttl = '1 day',
 ) {
-  if versioncmp(fact('aio_agent_version'),'7') >= 0 {
     file { '/etc/puppetlabs/facter':
       ensure => directory,
     }
@@ -26,8 +25,8 @@ class puppet::agent::facter (
         type    => 'array',
       }
       -> hocon_setting { 'blocklist facts':
-        path    => '/etc/puppetlabs/facter/facter.conf',
         ensure  => present,
+        path    => '/etc/puppetlabs/facter/facter.conf',
         setting => 'facts.blocklist',
         value   => ['blocked-facts'],
         type    => 'array',
