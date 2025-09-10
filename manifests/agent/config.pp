@@ -6,12 +6,14 @@ class puppet::agent::config inherits puppet::config {
     'default_schedules': value => $puppet::agent_default_schedules;
     'report':            value => $puppet::report;
     'masterport':        value => $puppet::agent_server_port;
-    'environment':       value => $puppet::environment;
     'splay':             value => $puppet::splay;
     'splaylimit':        value => $puppet::splaylimit;
     'runinterval':       value => $puppet::runinterval;
     'noop':              value => $puppet::agent_noop;
     'usecacheonfailure': value => $puppet::usecacheonfailure;
+  }
+  if $puppet::agent_manage_environment {
+    puppet::config::agent { 'environment': value => $puppet::environment }
   }
   if $puppet::http_connect_timeout != undef {
     puppet::config::agent {
