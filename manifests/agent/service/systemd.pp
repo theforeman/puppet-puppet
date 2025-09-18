@@ -1,4 +1,27 @@
 # Set up running the agent via a systemd timer
+#
+# @summary Configures Puppet agent to run via systemd timer
+#
+# This class sets up a systemd timer and service to run the Puppet agent
+# at regular intervals instead of running as a daemon service or cron job.
+# This provides better integration with systemd logging and service management.
+#
+# @param enabled
+#   Whether to enable the systemd timer for puppet agent runs.
+#
+# @param hour
+#   The hour(s) when puppet should run (0-23). If not specified, 
+#   it will be calculated based on the runinterval.
+#
+# @param minute
+#   The minute(s) when puppet should run (0-59). Can be an integer,
+#   array of integers, or undef. If not specified, it will be calculated
+#   based on the runinterval.
+#
+# @param timezone
+#   The timezone to use for the systemd timer. If not specified,
+#   the system timezone will be used.
+#
 # @api private
 class puppet::agent::service::systemd (
   Boolean                 $enabled                             = false,

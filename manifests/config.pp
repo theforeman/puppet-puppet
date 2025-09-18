@@ -1,4 +1,60 @@
 # Set up the puppet config
+#
+# @summary Manages the puppet configuration file
+#
+# This class manages the puppet.conf configuration file and sets up various
+# configuration sections including main, agent, and server settings.
+#
+# @param allow_any_crl_auth
+#   Allow any authentication for the CRL. This is needed on the puppet CA to accept clients
+#   from a the puppet CA proxy.
+#
+# @param auth_allowed
+#   An array of authenticated nodes allowed to access all catalog and node endpoints.
+#   default to ['$1'].
+#
+# @param ca_server
+#   The name of the CA server to use for certificate requests.
+#
+# @param ca_port
+#   The port to use when connecting to the CA server.
+#
+# @param certificate_revocation
+#   Whether certificate revocation should be supported by downloading a CRL.
+#
+# @param dns_alt_names
+#   Alternative DNS names that may be used to reach the server.
+#
+# @param module_repository
+#   The module repository to use for module installations.
+#
+# @param pluginsource
+#   The source for plugin synchronization.
+#
+# @param pluginfactsource
+#   The source for plugin fact synchronization.
+#
+# @param puppet_dir
+#   The puppet configuration directory.
+#
+# @param agent_server_hostname
+#   Hostname of your puppetserver (server directive in puppet.conf).
+#
+# @param syslogfacility
+#   Facility name to use when logging to syslog.
+#
+# @param srv_domain
+#   The domain to search for SRV records.
+#
+# @param use_srv_records
+#   Whether to use SRV records to locate servers.
+#
+# @param additional_settings
+#   A hash of additional settings to add to puppet.conf.
+#
+# @param client_certname
+#   The node's certificate name, and the unique identifier it uses when requesting catalogs.
+#
 # @api private
 class puppet::config (
   # lint:ignore:parameter_types

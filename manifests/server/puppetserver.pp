@@ -1,6 +1,9 @@
 # Configures the puppetserver jvm configuration file using augeas.
 #
-# @api private
+# @summary Manages Puppet Server (JVM-based) configuration and services
+#
+# This class configures the JVM-based Puppet Server including JVM settings,
+# security configurations, performance tuning, and service management.
 #
 # @param java_bin
 #   Path to the java executable to use
@@ -62,6 +65,183 @@
 #
 # @param disable_fips
 #   Disables FIPS support within the JVM
+#
+# @param puppetserver_version
+#   The version of puppetserver installed (or being installed).
+#   Unfortunately, different versions of puppetserver need configuring differently.
+#
+# @param server_puppetserver_rundir
+#   The path of the puppetserver run dir.
+#
+# @param server_puppetserver_logdir
+#   The path of the puppetserver log dir.
+#
+# @param server_ruby_load_paths
+#   List of ruby paths.
+#
+# @param server_ssl_ca_crl
+#   Path to the CA CRL file.
+#
+# @param server_ssl_ca_cert
+#   Path to the CA certificate file.
+#
+# @param server_ssl_cert
+#   Path to the server certificate file.
+#
+# @param server_ssl_cert_key
+#   Path to the server certificate key file.
+#
+# @param server_ssl_chain
+#   Path to the certificate chain file or boolean to enable/disable.
+#
+# @param server_crl_enable
+#   Enable CRL processing.
+#
+# @param server_ip
+#   Bind ip address of the puppetserver.
+#
+# @param server_port
+#   Puppet server port.
+#
+# @param server_http
+#   Should the puppet server listen on HTTP as well as HTTPS.
+#
+# @param server_http_port
+#   Puppet server HTTP port.
+#
+# @param server_ca
+#   Provide puppet CA.
+#
+# @param server_dir
+#   Puppet server configuration directory.
+#
+# @param codedir
+#   Override the puppet code directory.
+#
+# @param server_idle_timeout
+#   How long the server will wait for a response on an existing connection.
+#
+# @param server_web_idle_timeout
+#   Time in ms that Jetty allows a socket to be idle, after processing has completed.
+#
+# @param server_connect_timeout
+#   How long the server will wait for a response to a connection attempt.
+#
+# @param server_ca_auth_required
+#   Whether client certificates are needed to access the puppet-admin api.
+#
+# @param server_ca_client_self_delete
+#   Adds a rule to auth.conf, that allows a client to delete its own certificate.
+#
+# @param server_ca_client_allowlist
+#   The allowlist of client certificates that can query the certificate-status endpoint.
+#
+# @param server_admin_api_allowlist
+#   The allowlist of clients that can query the puppet-admin-api endpoint.
+#
+# @param server_check_for_updates
+#   Should the puppetserver phone home to check for available updates?
+#
+# @param server_environment_class_cache_enabled
+#   Enable environment class cache in conjunction with the use of the environment_classes API.
+#
+# @param server_metrics
+#   Enable puppetserver http-client metrics.
+#
+# @param server_profiler
+#   Enable JRuby profiling.
+#
+# @param server_telemetry
+#   Enable Dropsonde telemetry.
+#
+# @param metrics_jmx_enable
+#   Enable or disable JMX metrics reporter.
+#
+# @param metrics_graphite_enable
+#   Enable or disable Graphite metrics reporter.
+#
+# @param metrics_graphite_host
+#   Graphite server host.
+#
+# @param metrics_graphite_port
+#   Graphite server port.
+#
+# @param metrics_server_id
+#   A server id that will be used as part of the namespace for metrics produced.
+#
+# @param metrics_graphite_interval
+#   How often to send metrics to graphite (in seconds).
+#
+# @param metrics_allowed
+#   Specify metrics to allow in addition to those in the default list.
+#
+# @param server_experimental
+#   Enable the /puppet/experimental route?
+#
+# @param server_auth_template
+#   Template for generating /etc/puppetlabs/puppetserver/conf.d/auth.conf.
+#
+# @param server_trusted_agents
+#   Certificate names of puppet agents that are allowed to fetch *all* catalogs.
+#
+# @param server_trusted_certificate_extensions
+#   An array of hashes of certificate extensions and values to be used in auth.conf.
+#
+# @param allow_header_cert_info
+#   Enable client authentication over HTTP Headers.
+#
+# @param compile_mode
+#   Used to control JRuby's "CompileMode", which may improve performance.
+#
+# @param acceptor_threads
+#   This sets the number of threads that the webserver will dedicate to accepting
+#   socket connections for unencrypted HTTP traffic.
+#
+# @param selector_threads
+#   This sets the number of selectors that the webserver will dedicate to processing
+#   events on connected sockets for unencrypted HTTPS traffic.
+#
+# @param ssl_acceptor_threads
+#   This sets the number of threads that the webserver will dedicate to accepting
+#   socket connections for encrypted HTTPS traffic.
+#
+# @param ssl_selector_threads
+#   This sets the number of selectors that the webserver will dedicate to processing
+#   events on connected sockets for encrypted HTTPS traffic.
+#
+# @param max_threads
+#   This sets the maximum number of threads assigned to responding to HTTP and/or
+#   HTTPS requests for a single webserver.
+#
+# @param ca_allow_sans
+#   Allow CA to sign certificate requests that have Subject Alternative Names.
+#
+# @param ca_allow_auth_extensions
+#   Allow CA to sign certificate requests that have authorization extensions.
+#
+# @param ca_enable_infra_crl
+#   Enable the separate CRL for Puppet infrastructure nodes.
+#
+# @param server_ca_allow_auto_renewal
+#   Enable the auto renewal for client certificates.
+#
+# @param server_ca_allow_auto_renewal_cert_ttl
+#   Set the auto renewal interval for client certificates.
+#
+# @param max_open_files
+#   Increase the max open files limit for Puppetserver.
+#
+# @param versioned_code_id
+#   The path to an executable script that Puppet Server invokes to generate a code_id.
+#
+# @param versioned_code_content
+#   Contains the path to an executable script that Puppet Server invokes when on 
+#   static_file_content requests.
+#
+# @param jolokia_metrics_allowlist
+#   The allowlist of clients that can query the jolokia /metrics/v2 endpoint.
+#
+# @api private
 #
 # @example
 #

@@ -1,4 +1,16 @@
 # Set up running the agent as a daemon
+#
+# @summary Configures Puppet agent to run as a daemon service
+#
+# This class manages the puppet agent service, ensuring it runs as a 
+# background daemon process that continuously checks for configuration
+# changes at the specified runinterval.
+#
+# @param enabled
+#   Whether to enable and start the puppet agent daemon service.
+#   When true, the service will be running and enabled. When false,
+#   the service will be stopped and disabled.
+#
 # @api private
 class puppet::agent::service::daemon (
   Boolean $enabled = false,
