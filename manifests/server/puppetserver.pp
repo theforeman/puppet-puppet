@@ -156,7 +156,7 @@ class puppet::server::puppetserver (
     $real_puppetserver_version = '8.0.0'
   } else {
     # our minimum supported version of puppet server
-    $real_puppetserver_version = '7.0.0'
+    $real_puppetserver_version = '8.0.0'
   }
 
   $puppetserver_package = pick($puppet::server::package, 'puppetserver')
