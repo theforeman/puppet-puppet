@@ -5,7 +5,9 @@ fixtures:
     cron_core: 'https://github.com/puppetlabs/puppetlabs-cron_core'
     extlib:               'https://github.com/voxpupuli/puppet-extlib.git'
     git:                  'https://github.com/theforeman/puppet-git.git'
-    inifile:              'https://github.com/puppetlabs/puppetlabs-inifile.git'
+    inifile:
+      repo: 'https://github.com/puppetlabs/puppetlabs-inifile.git'
+      ref: 'ec56edb8901461324e656aea31541aa954d1c523'
     puppetdb:             'https://github.com/puppetlabs/puppetlabs-puppetdb.git'
     puppetserver_foreman: 'https://github.com/theforeman/puppet-puppetserver_foreman.git'
     stdlib:               'https://github.com/puppetlabs/puppetlabs-stdlib.git'
