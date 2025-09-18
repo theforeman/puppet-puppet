@@ -135,7 +135,7 @@ describe 'puppet' do
         it { should_not contain_puppet__config__agent('http_read_timeout') }
         it { should_not contain_file("#{confdir}/custom_trusted_oid_mapping.yaml") }
 
-        it { should contain_file("#{confdir}/autosign.conf") }
+        it { should contain_file("#{confdir}/autosign.conf").with_show_diff(false) }
         it { should_not contain_file("#{confdir}/autosign.conf").with_content(/# Managed by Puppet/) }
         it { should_not contain_file("#{confdir}/autosign.conf").with_content(/foo.bar/) }
 
