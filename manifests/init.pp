@@ -96,6 +96,8 @@
 # $certificate_revocation::                 Whether certificate revocation checking should be
 #                                           enabled, and what level of checking should be performed
 #
+# $hostprivkey::                            Override the hostprivkey setting in puppet.conf
+#
 # $dns_alt_names::                          Use additional DNS names when generating a
 #                                           certificate.  Defaults to an empty Array.
 #
