@@ -165,7 +165,7 @@ describe 'puppet' do
 
       describe 'with custom hostprivkey set' do
         let :params do
-          super().merge(hostprivkey: 'hostprivkey = $privatekeydir/$certname.pem { mode = 660 }'])
+          super().merge(hostprivkey: 'hostprivkey = $privatekeydir/$certname.pem { mode = 660 }')
         end
 
         it { is_expected.to contain_puppet__config__main('hostprivkey').with_value('$privatekeydir/$certname.pem { mode = 660 }') }
