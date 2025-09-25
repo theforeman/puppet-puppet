@@ -27,6 +27,7 @@ class puppet::config (
     'rundir': value => $puppet::rundir;
     'ssldir': value => $puppet::ssldir;
     'privatekeydir': value => '$ssldir/private_keys { group = service }';
+    'hostprivkey': value => $hostprivkey;
     'show_diff': value => $puppet::show_diff;
     'codedir': value => $puppet::codedir;
   }
@@ -71,15 +72,6 @@ class puppet::config (
   if $client_certname {
     puppet::config::main {
       'certname': value => $client_certname;
-    }
-  }
-  if $hostprivkey {
-    puppet::config::main {
-      'hostprivkey': value => $hostprivkey;
-    }
-  } else {
-    puppet::config::main {
-      'hostprivkey': value => '$privatekeydir/$certname.pem { mode = 640 }';
     }
   }
 

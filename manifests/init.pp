@@ -628,7 +628,7 @@ class puppet (
   Optional[Variant[Boolean, Enum['chain', 'leaf']]] $certificate_revocation = $puppet::params::certificate_revocation,
   Optional[String] $prerun_command = $puppet::params::prerun_command,
   Optional[String] $postrun_command = $puppet::params::postrun_command,
-  Optional[String] $hostprivkey = $puppet::params::hostprivkey,
+  String $hostprivkey = $puppet::params::hostprivkey,
   Array[String] $dns_alt_names = $puppet::params::dns_alt_names,
   Boolean $use_srv_records = $puppet::params::use_srv_records,
   Optional[String] $srv_domain = $puppet::params::srv_domain,
