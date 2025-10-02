@@ -5,7 +5,7 @@
 #
 # Note that this doesn't manage the server itself.
 #
-# @example
+# @example simple PuppetDB Setup
 #   class { 'puppet':
 #     server              => true,
 #     server_reports      => 'puppetdb,foreman',
