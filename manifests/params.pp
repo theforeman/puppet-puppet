@@ -296,10 +296,6 @@ class puppet::params {
     }
   } else {
     case $facts['os']['family'] {
-      'Debian': {
-        $agent_restart_command = "/usr/sbin/service ${service_name} reload"
-        $unavailable_runmodes = ['systemd.timer']
-      }
       'Windows': {
         $agent_restart_command = undef
         $unavailable_runmodes = ['cron', 'systemd.timer']
