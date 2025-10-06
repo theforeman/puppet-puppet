@@ -152,20 +152,13 @@ class puppet::server::puppetserver (
 
   # For Puppetserver, certain configuration parameters are version specific.
   # We need a method to determine what version is installed.
-  if $puppetserver_version {
-    $real_puppetserver_version = $puppetserver_version
-  } elsif versioncmp($facts['puppetversion'], '8.0.0') >= 0 {
-    $real_puppetserver_version = '8.0.0'
-  } else {
-    # our minimum supported version of puppet server
-    $real_puppetserver_version = '8.0.0'
-  }
+  $real_puppetserver_version = pick($puppetserver_version, '8.0.0')
 
   $puppetserver_package = pick($puppet::server::package, 'puppetserver')
 
   if $java_bin {
     $_java_bin = $java_bin
-  } elsif versioncmp($real_puppetserver_version, '8.0.0') >= 0 {
+  } else {
     # Follows logic that https://github.com/puppetlabs/ezbake/pull/627 suggests, but takes it a
     # step further by also ensuring EL 8 has Java 17
     $_java_bin = case $facts['os']['family'] {
@@ -179,8 +172,6 @@ class puppet::server::puppetserver (
         '/usr/bin/java'
       }
     }
-  } else {
-    $_java_bin = '/usr/bin/java'
   }
 
   $jvm_heap_arr = ["-Xms${jvm_min_heap_size}", "-Xmx${jvm_max_heap_size}"]
