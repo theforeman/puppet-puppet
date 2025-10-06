@@ -63,9 +63,7 @@
 # @param disable_fips
 #   Disables FIPS support within the JVM
 #
-# @example
-#
-#   # configure memory for java < 8
+# @example configure memory for java < 8
 #   class {'::puppet::server::puppetserver':
 #     jvm_min_heap_size => '1G',
 #     jvm_max_heap_size => '3G',
