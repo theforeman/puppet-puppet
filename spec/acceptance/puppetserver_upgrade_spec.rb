@@ -14,18 +14,28 @@ unless unsupported_puppetserver || unsupported_puppetserver_upgrade
       raise 'At least 256MB free memory required' if memoryfree_mb < 256
     end
 
+    # this is $implementation$majversion
     case ENV['BEAKER_PUPPET_COLLECTION']
     when 'puppet8'
       from_version = '8.2.0'
       to_version = '8.5.0'
+    when 'openvox8'
+      from_version = '8.8.1'
+      to_version = '8.11.0'
     else
       raise 'Unsupported Puppet collection'
     end
 
     case fact('os.family')
     when 'Debian'
-      from_version_exact = "#{from_version}-1#{fact('os.distro.codename')}"
-      to_version_exact = "#{to_version}-1#{fact('os.distro.codename')}"
+      case ENV['BEAKER_PUPPET_COLLECTION']
+      when 'puppet8'
+        from_version_exact = "#{from_version}-1#{fact('os.distro.codename')}"
+        to_version_exact = "#{to_version}-1#{fact('os.distro.codename')}"
+      when 'openvox8'
+        from_version_exact = "#{from_version}-1+#{fact('os.name').downcase}#{fact('os.release.major')}"
+        to_version_exact = "#{to_version}-1+#{fact('os.name').downcase}#{fact('os.release.major')}"
+      end
     else
       from_version_exact = from_version
       to_version_exact = to_version

@@ -14,6 +14,6 @@ def unsupported_puppetserver_upgrade
   when 'Fedora'
     true
   when 'Debian'
-    host_inventory['facter']['os']['release']['major'] == '12'
+    ENV['BEAKER_PUPPET_COLLECTION'] == 'puppet8' && host_inventory['facter']['os']['release']['major'] == '12'
   end
 end
