@@ -25,7 +25,7 @@ describe 'Scenario: install puppetserver (latest):', unless: unsupported_puppets
     end
   end
 
-  if ENV['BEAKER_PUPPET_COLLECTION'] != 'puppet7' && fact('os.family') == 'RedHat'
+  if fact('os.family') == 'RedHat'
     describe 'JRE version' do
       it { expect(package('java-17-openjdk-headless')).to be_installed }
       it { expect(package('java-11-openjdk-headless')).not_to be_installed }
