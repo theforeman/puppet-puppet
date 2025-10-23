@@ -185,6 +185,8 @@
 #
 # $agent_default_schedules::                A boolean to enable/disable the default schedules
 #
+# $agent_manage_environment::               A boolean to enable/disable managing the agent environment
+#
 # $agent_additional_settings::              A hash of additional agent settings.
 #                                           Example: {stringify_facts => true}
 #
@@ -616,6 +618,7 @@ class puppet (
   Integer[0] $systemd_randomizeddelaysec = $puppet::params::systemd_randomizeddelaysec,
   Boolean $agent_noop = $puppet::params::agent_noop,
   Boolean $agent_default_schedules = $puppet::params::agent_default_schedules,
+  Boolean $agent_manage_environment = $puppet::params::agent_manage_environment,
   Boolean $show_diff = $puppet::params::show_diff,
   Optional[Stdlib::HTTPUrl] $module_repository = $puppet::params::module_repository,
   Optional[Integer[0]] $http_connect_timeout = $puppet::params::http_connect_timeout,

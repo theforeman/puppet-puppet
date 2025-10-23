@@ -399,6 +399,14 @@ describe 'puppet' do
 
         it { is_expected.to contain_puppet__config__agent('report').with_value('false') }
       end
+
+      context 'with agent_manage_environment false' do
+        let(:params) { { agent_manage_environment: false } }
+
+        it do
+          is_expected.not_to contain_puppet__config__agent('environment')
+        end
+      end
     end
   end
 end
