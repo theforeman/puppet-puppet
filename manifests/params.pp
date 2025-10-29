@@ -31,6 +31,7 @@ class puppet::params {
   $prerun_command      = undef
   $postrun_command     = undef
   $server_compile_mode = undef
+  $hostprivkey         = '$privatekeydir/$certname.pem { mode = 640 }'
   $dns_alt_names       = []
   $use_srv_records     = false
   $agent_default_schedules = false

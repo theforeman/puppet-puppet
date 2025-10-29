@@ -96,6 +96,8 @@
 # $certificate_revocation::                 Whether certificate revocation checking should be
 #                                           enabled, and what level of checking should be performed
 #
+# $hostprivkey::                            Override the hostprivkey setting in puppet.conf
+#
 # $dns_alt_names::                          Use additional DNS names when generating a
 #                                           certificate.  Defaults to an empty Array.
 #
@@ -629,6 +631,7 @@ class puppet (
   Optional[Variant[Boolean, Enum['chain', 'leaf']]] $certificate_revocation = $puppet::params::certificate_revocation,
   Optional[String] $prerun_command = $puppet::params::prerun_command,
   Optional[String] $postrun_command = $puppet::params::postrun_command,
+  String[1] $hostprivkey = $puppet::params::hostprivkey,
   Array[String] $dns_alt_names = $puppet::params::dns_alt_names,
   Boolean $use_srv_records = $puppet::params::use_srv_records,
   Optional[String] $srv_domain = $puppet::params::srv_domain,

@@ -18,6 +18,7 @@ class puppet::config (
   $use_srv_records       = $puppet::use_srv_records,
   $additional_settings   = $puppet::additional_settings,
   $client_certname       = $puppet::client_certname,
+  $hostprivkey           = $puppet::hostprivkey,
   # lint:endignore
 ) {
   puppet::config::main {
@@ -26,7 +27,7 @@ class puppet::config (
     'rundir': value => $puppet::rundir;
     'ssldir': value => $puppet::ssldir;
     'privatekeydir': value => '$ssldir/private_keys { group = service }';
-    'hostprivkey': value => '$privatekeydir/$certname.pem { mode = 640 }';
+    'hostprivkey': value => $hostprivkey;
     'show_diff': value => $puppet::show_diff;
     'codedir': value => $puppet::codedir;
   }
