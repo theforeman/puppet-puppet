@@ -56,10 +56,8 @@ Then the `foreman_ssl_{ca,cert,key}` parameters are ignored and `certs::puppet` 
 
 ## PuppetDB integration
 
-The Puppet server can be configured to export catalogs and reports to a
-PuppetDB instance, using the puppetlabs/puppetdb module.  Use its
-`puppetdb::server` class to install the PuppetDB server and this module to
-configure the Puppet server to connect to PuppetDB.
+The Puppet server can be configured to export catalogs and reports to a PuppetDB instance, using the puppetlabs/puppetdb module.
+Use its `puppetdb::server` class to install the PuppetDB server and this module to configure the Puppet server to connect to PuppetDB.
 
 Requires [puppetlabs/puppetdb](https://forge.puppetlabs.com/puppetlabs/puppetdb)
 
@@ -74,8 +72,9 @@ class { 'puppet::server::puppetdb':
 }
 ```
 
-Above example manages Puppetserver + PuppetDB integration. It won't install the
-PuppetDB. To do so, you also need the `puppetdb` class
+Above example manages Puppetserver + PuppetDB integration.
+It won't install the PuppetDB.
+To do so, you also need the `puppetdb` class
 
 ```puppet
 class { 'puppet':
@@ -115,14 +114,32 @@ class { 'puppet::server::puppetdb':
 }
 ```
 
-Above code will install Puppetserver/PuppetDB/PostgreSQL on a single server. It
-will use the upstream postgresql repositories. It was tested on Ubuntu.
+Above code will install Puppetserver/PuppetDB/PostgreSQL on a single server.
+It will use the upstream postgresql repositories.
+It was tested on Ubuntu.
 
 Please also make sure your puppetdb ciphers are compatible with your puppet server ciphers, ie that the two following parameters match:
+
 ```
 puppet::server::cipher_suites
 puppetdb::server::cipher_suites
 ```
+
+By default, the Perforce packages are used.
+[Since November 2024, they don't receive updates anymore](https://www.puppet.com/blog/open-source-puppet-updates-2025).
+To use the new [OpenVoxProject packages](https://voxpupuli.org/openvox/), update the package names:
+
+```yaml
+---
+puppet::client_package: openvox-agent
+puppet::server_package: openvox-server
+puppetdb::puppetdb_package: openvoxdb
+puppetdb::master::config::terminus_package: openvoxdb-termini
+```
+
+If you replace the Perforce agent or server packages and switch to the OpenVox implementation by hand, without setting anything in Hiera, the module will detect this and just keeps working, no changes required.
+
+Further installation instructions are also documented on the [OpenVox project page](https://voxpupuli.org/openvox/install/).
 
 # Installation
 

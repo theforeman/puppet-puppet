@@ -10,21 +10,25 @@ describe 'puppet' do
         puppet_concat    = '/usr/local/etc/puppet/puppet.conf'
         puppet_directory = '/usr/local/etc/puppet'
         puppet_package   = "puppet#{puppet_major}"
+        openvox_package  = "openvox#{puppet_major}"
         puppetconf_mode  = '0644'
       when 'windows'
         puppet_concat    = 'C:/ProgramData/PuppetLabs/puppet/etc/puppet.conf'
         puppet_directory = 'C:/ProgramData/PuppetLabs/puppet/etc'
         puppet_package   = 'puppet-agent'
+        openvox_package  = 'openvox-agent'
         puppetconf_mode  = '0674'
       when 'Archlinux'
         puppet_concat    = '/etc/puppetlabs/puppet/puppet.conf'
         puppet_directory = '/etc/puppetlabs/puppet'
         puppet_package   = 'puppet'
+        openvox_package  = 'openvox'
         puppetconf_mode  = '0644'
       else
         puppet_concat    = '/etc/puppetlabs/puppet/puppet.conf'
         puppet_directory = '/etc/puppetlabs/puppet'
         puppet_package   = 'puppet-agent'
+        openvox_package  = 'openvox-agent'
         puppetconf_mode  = '0644'
       end
 
@@ -43,6 +47,27 @@ describe 'puppet' do
           .with_ensure('present')
           .with_install_options(nil)
         }
+      end
+
+      describe 'with already installed packages' do
+        describe 'legacy Perforce opensource packages' do
+          let :facts do
+            facts.merge(implementation: 'puppet')
+          end
+          it { should contain_package(puppet_package)
+            .with_ensure('present')
+            .with_install_options(nil)
+          }
+        end
+        describe 'OpenVox packages' do
+          let :facts do
+            facts.merge(implementation: 'openvox')
+          end
+          it { should contain_package(openvox_package)
+            .with_ensure('present')
+            .with_install_options(nil)
+          }
+        end
       end
 
       describe 'with server => true', :unless => unsupported_puppetserver_osfamily(facts[:os]['family']) do

@@ -152,8 +152,6 @@ class puppet::server::puppetserver (
   # We need a method to determine what version is installed.
   $real_puppetserver_version = pick($puppetserver_version, '8.0.0')
 
-  $puppetserver_package = pick($puppet::server::package, 'puppetserver')
-
   if $java_bin {
     $_java_bin = $java_bin
   } else {
