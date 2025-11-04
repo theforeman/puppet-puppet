@@ -210,6 +210,9 @@ authorization: {
                 method: post
             }
             allow: {
+<%- @server_ca_client_allowlist.each do |client| -%>
+                "<%= client %>",
+<%- end -%>
                extensions: {
                    pp_cli_auth: "true"
                }
@@ -225,6 +228,9 @@ authorization: {
                 method: post
             }
             allow: {
+<%- @server_ca_client_allowlist.each do |client| -%>
+                "<%= client %>",
+<%- end -%>
                extensions: {
                    pp_cli_auth: "true"
                }
