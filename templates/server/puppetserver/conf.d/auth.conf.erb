@@ -209,14 +209,16 @@ authorization: {
                 type: path
                 method: post
             }
-            allow: {
+            allow: [
 <%- @server_ca_client_allowlist.each do |client| -%>
                 "<%= client %>",
 <%- end -%>
-               extensions: {
-                   pp_cli_auth: "true"
-               }
-            }
+                {
+                    extensions: {
+                        pp_cli_auth: "true"
+                    }
+                }
+            ]
             sort-order: 500
             name: "puppetlabs cert sign"
         },
@@ -227,14 +229,16 @@ authorization: {
                 type: path
                 method: post
             }
-            allow: {
+            allow: [
 <%- @server_ca_client_allowlist.each do |client| -%>
                 "<%= client %>",
 <%- end -%>
-               extensions: {
-                   pp_cli_auth: "true"
-               }
-            }
+                {
+                    extensions: {
+                        pp_cli_auth: "true"
+                    }
+                }
+            ]
             sort-order: 500
             name: "puppetlabs cert sign all"
         },
