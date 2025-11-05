@@ -1,6 +1,29 @@
 # Changelog
 
-## [21.1.0](https://github.com/theforeman/puppet-puppet/tree/21.1.0) (2025-08-04)
+## [22.0.0](https://github.com/theforeman/puppet-puppet/tree/22.0.0) (2025-11-05)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/21.1.0...22.0.0)
+
+**Breaking changes:**
+
+- Drop Puppet 7 support [\#966](https://github.com/theforeman/puppet-puppet/pull/966) ([bastelfreak](https://github.com/bastelfreak))
+- Cleanup leftovers for Debian without systemd [\#964](https://github.com/theforeman/puppet-puppet/pull/964) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- Make agent 'environment' optional [\#593](https://github.com/theforeman/puppet-puppet/issues/593)
+- Enable acceptance testing for Debian 12 puppetserver [\#968](https://github.com/theforeman/puppet-puppet/pull/968) ([bastelfreak](https://github.com/bastelfreak))
+- Allow overriding hostprivkey [\#962](https://github.com/theforeman/puppet-puppet/pull/962) ([reverson](https://github.com/reverson))
+- Allow puppet/systemd 9.x [\#952](https://github.com/theforeman/puppet-puppet/pull/952) ([evgeni](https://github.com/evgeni))
+- Manage agent environment based on param [\#951](https://github.com/theforeman/puppet-puppet/pull/951) ([bwitt](https://github.com/bwitt))
+- Add OpenVox support [\#935](https://github.com/theforeman/puppet-puppet/pull/935) ([bastelfreak](https://github.com/bastelfreak))
+
+**Fixed bugs:**
+
+- Set the hostprivkey value [\#960](https://github.com/theforeman/puppet-puppet/issues/960)
+- puppet::server::puppetdb & puppet::server::puppetserver: Fix puppet-strings documentation [\#965](https://github.com/theforeman/puppet-puppet/pull/965) ([bastelfreak](https://github.com/bastelfreak))
+
+## [21.1.0](https://github.com/theforeman/puppet-puppet/tree/21.1.0) (2025-08-06)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/21.0.0...21.1.0)
 
