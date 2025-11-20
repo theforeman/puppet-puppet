@@ -33,14 +33,38 @@ class puppet::server::config inherits puppet::config {
   ## General configuration
   $ca_server                   = $puppet::ca_server
   $ca_port                     = $puppet::ca_port
+  $server_node_terminus        = $puppet::server::node_terminus
   $server_external_nodes       = $puppet::server::external_nodes
   $server_environment_timeout  = $puppet::server::environment_timeout
   $trusted_external_command    = $puppet::server::trusted_external_command
   $primary_envs_dir            = $puppet::server::envs_dir[0]
 
+  case $server_node_terminus {
+    'plain': {}
+    'exec': {
+      class { 'puppet::server::enc':
+        node_terminus => $server_node_terminus,
+        enc_path      => $server_external_nodes,
+      }
+    }
+    'console': {
+      class { 'puppet::server::enc':
+        node_terminus => $server_node_terminus,
+      }
+    }
+    default: {
+      fail('Invalid value of $server_node_terminus')
+    }
+  }
+
   if $server_external_nodes and $server_external_nodes != '' {
     class { 'puppet::server::enc':
-      enc_path => $server_external_nodes,
+      node_terminus => $server_node_terminus,
+      enc_path      => $server_external_nodes,
+    }
+  } else {
+    class { 'puppet::server::enc':
+      node_terminus => $server_node_terminus,
     }
   }
 

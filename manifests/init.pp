@@ -233,6 +233,8 @@
 #
 # $server_reports::                         List of report types to include on the puppetserver
 #
+# $server_node_terminus::                   Node data plugin for catalog compiling
+#
 # $server_external_nodes::                  External nodes classifier executable
 #
 # $server_trusted_external_command::        The external trusted facts script to use.
@@ -676,6 +678,7 @@ class puppet (
   Optional[Stdlib::Absolutepath] $server_puppetserver_rundir = $puppet::params::server_puppetserver_rundir,
   Optional[Stdlib::Absolutepath] $server_puppetserver_logdir = $puppet::params::server_puppetserver_logdir,
   Optional[Pattern[/^[\d]\.[\d]+\.[\d]+$/]] $server_puppetserver_version = $puppet::params::server_puppetserver_version,
+  Enum['plain', 'exec', 'classifier'] $server_node_terminus = $puppet::params::server_node_terminus,
   Variant[Undef, String[0], Stdlib::Absolutepath] $server_external_nodes = $puppet::params::server_external_nodes,
   Optional[Stdlib::Absolutepath] $server_trusted_external_command = $puppet::params::server_trusted_external_command,
   Array[String] $server_cipher_suites = $puppet::params::server_cipher_suites,
