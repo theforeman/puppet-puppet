@@ -79,6 +79,9 @@
 # $cron_cmd::                               Specify command to launch when runmode is
 #                                           set 'cron'.
 #
+# $cron_target::                            Specify the target crontab file when runmode is
+#                                           set 'cron'.
+#
 # $systemd_cmd::                            Specify command to launch when runmode is
 #                                           set 'systemd.timer'.
 #
@@ -616,6 +619,7 @@ class puppet (
   Optional[String[1]] $run_timezone = undef,
   Array[Enum['cron', 'service', 'systemd.timer', 'none']] $unavailable_runmodes = $puppet::params::unavailable_runmodes,
   Optional[String] $cron_cmd = $puppet::params::cron_cmd,
+  Optional[String] $cron_target = $puppet::params::cron_target,
   Optional[String] $systemd_cmd = $puppet::params::systemd_cmd,
   Integer[0] $systemd_randomizeddelaysec = $puppet::params::systemd_randomizeddelaysec,
   Boolean $agent_noop = $puppet::params::agent_noop,
