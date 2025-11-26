@@ -117,6 +117,10 @@ describe 'puppet' do
             .with_content(/^\s+name: "puppetlabs cert status"/)
             .with_content(%r{^\s+path: "/puppet-ca/v1/certificate_statuses"})
             .with_content(/^\s+name: "puppetlabs cert statuses"/)
+            .with_content(%r{^\s+path: "/puppet-ca/v1/sign"})
+            .with_content(/^\s+name: "puppetlabs cert sign"/)
+            .with_content(%r{^\s+path: "/puppet-ca/v1/sign/all"})
+            .with_content(/^\s+name: "puppetlabs cert sign all"/)
             .with_content(%r{^\s+path: "/puppet-admin-api/v1/environment-cache"})
             .with_content(/^\s+name: "environment-cache"/)
             .with_content(%r{^\s+path: "/puppet-admin-api/v1/jruby-pool"})
@@ -575,6 +579,48 @@ describe 'puppet' do
 
           it { expect(rule['match-request']['path']).to eq('/metrics/v2') }
           it { expect(rule['allow']).to eq(['localhost', 'host.example.com']) }
+        end
+      end
+
+      describe 'cert sign endpoint' do
+        let(:content) { catalogue.resource('file', auth_conf).send(:parameters)[:content] }
+        let(:rules) { Hocon.parse(content)['authorization']['rules'] }
+        let(:rule) { rules.find {|rule| rule['name'] == 'puppetlabs cert sign' } }
+
+        context 'by default' do
+          it { expect(rule).not_to be_nil }
+          it { expect(rule['match-request']['path']).to eq('/puppet-ca/v1/sign') }
+          it { expect(rule['match-request']['type']).to eq('path') }
+          it { expect(rule['match-request']['method']).to eq('post') }
+          it { expect(rule['sort-order']).to eq(500) }
+          it { expect(rule['allow']).to eq(['localhost', 'foo.example.com', {'extensions' => {'pp_cli_auth' => 'true'}}]) }
+        end
+
+        context 'with server_ca_client_allowlist set' do
+          let(:params) { super().merge(server_ca_client_allowlist: ['puppetserver.example.com', 'admin.example.com']) }
+
+          it { expect(rule['allow']).to eq(['puppetserver.example.com', 'admin.example.com', {'extensions' => {'pp_cli_auth' => 'true'}}]) }
+        end
+      end
+
+      describe 'cert sign all endpoint' do
+        let(:content) { catalogue.resource('file', auth_conf).send(:parameters)[:content] }
+        let(:rules) { Hocon.parse(content)['authorization']['rules'] }
+        let(:rule) { rules.find {|rule| rule['name'] == 'puppetlabs cert sign all' } }
+
+        context 'by default' do
+          it { expect(rule).not_to be_nil }
+          it { expect(rule['match-request']['path']).to eq('/puppet-ca/v1/sign/all') }
+          it { expect(rule['match-request']['type']).to eq('path') }
+          it { expect(rule['match-request']['method']).to eq('post') }
+          it { expect(rule['sort-order']).to eq(500) }
+          it { expect(rule['allow']).to eq(['localhost', 'foo.example.com', {'extensions' => {'pp_cli_auth' => 'true'}}]) }
+        end
+
+        context 'with server_ca_client_allowlist set' do
+          let(:params) { super().merge(server_ca_client_allowlist: ['puppetserver.example.com', 'admin.example.com']) }
+
+          it { expect(rule['allow']).to eq(['puppetserver.example.com', 'admin.example.com', {'extensions' => {'pp_cli_auth' => 'true'}}]) }
         end
       end
     end
