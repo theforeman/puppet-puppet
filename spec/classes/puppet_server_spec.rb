@@ -524,6 +524,11 @@ describe 'puppet' do
           it 'should not sync the crl' do
             should_not contain_file('/etc/custom/puppetlabs/puppet/ssl/crl.pem')
           end
+          it { should contain_file("#{conf_d_dir}/auth.conf").with_content(%r{path:\s*"/puppet-ca/v1/certificate_renewal"}) }
+          it { should contain_file("#{conf_d_dir}/auth.conf").with_content(%r{path:\s*"/puppet-ca/v1/certificate_status"}) }
+          it { should contain_file("#{conf_d_dir}/auth.conf").with_content(%r{path:\s*"/puppet-ca/v1/certificate_statuses"}) }
+          it { should contain_file("#{conf_d_dir}/auth.conf").with_content(%r{path:\s*"/puppet-ca/v1/sign"}) }
+          it { should contain_file("#{conf_d_dir}/auth.conf").with_content(%r{path:\s*"/puppet-ca/v1/sign/all"}) }
         end
       end
 
