@@ -1,6 +1,14 @@
 # Changelog
 
-## [22.0.0](https://github.com/theforeman/puppet-puppet/tree/22.0.0) (2025-11-05)
+## [22.0.1](https://github.com/theforeman/puppet-puppet/tree/22.0.1) (2025-12-08)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/22.0.0...22.0.1)
+
+**Fixed bugs:**
+
+- Fix puppetserver ca sign with puppet 8. [\#969](https://github.com/theforeman/puppet-puppet/pull/969) ([dforste](https://github.com/dforste))
+
+## [22.0.0](https://github.com/theforeman/puppet-puppet/tree/22.0.0) (2025-11-06)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/21.1.0...22.0.0)
 
