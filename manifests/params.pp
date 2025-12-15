@@ -289,7 +289,7 @@ class puppet::params {
   # Puppet service name
   $service_name = 'puppet'
 
-  # Puppet onedshot systemd service and timer name
+  # Puppet oneshot systemd service and timer name
   $systemd_unit_name = 'puppet-run'
   # Mechanisms to manage and reload/restart the agent
   # If supported on the OS, reloading is prefered since it does not kill a currently active puppet run
