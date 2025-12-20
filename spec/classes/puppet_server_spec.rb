@@ -35,7 +35,7 @@ describe 'puppet' do
       conf_file           = "#{confdir}/puppet.conf"
       conf_d_dir          = "#{puppetserver_etcdir}/conf.d"
       environments_dir    = "#{codedir}/environments"
-      cadir               = "#{puppetserver_etcdir}/ca"
+      ca_dir               = "#{puppetserver_etcdir}/ca"
 
       let(:facts) { facts }
 
@@ -67,6 +67,7 @@ describe 'puppet' do
         it { should_not contain_puppet__config__main('default_manifest') }
         it { should contain_puppet__config__server('autosign').with_value("#{etcdir}\/autosign.conf \{ mode = 0664 \}") }
         it { should contain_puppet__config__server('ca').with_value('true') }
+        it { should contain_puppet__config__server('cadir').with_value(ca_dir) }
         it { should contain_puppet__config__server('certname').with_value('puppetserver.example.com') }
         it { should contain_puppet__config__server('parser').with_value('current') }
         it { should contain_puppet__config__server('strict_variables').with_value('false') }
@@ -98,7 +99,7 @@ describe 'puppet' do
             .with_umask('0022')
 
           should contain_exec('puppet_server_config-generate_ca_cert') \
-            .with_creates("#{cadir}/ca_crt.pem") \
+            .with_creates("#{ca_dir}/ca_crt.pem") \
             .with_command(puppetcacmd) \
             .with_umask('0022') \
             .that_requires(["Concat[#{conf_file}]", 'Exec[puppet_server_config-create_ssl_dir]'])
@@ -463,6 +464,7 @@ describe 'puppet' do
 
         it { should contain_exec('puppet_server_config-create_ssl_dir') }
         it { should_not contain_exec('puppet_server_config-generate_ca_cert') }
+        it { should_not contain_puppet__config__server('cadir') }
       end
 
       describe 'with server_ca_crl_sync => true' do
@@ -538,7 +540,7 @@ describe 'puppet' do
             super().merge(server_ca: true)
           end
 
-          it { should contain_file("#{conf_d_dir}/webserver.conf").with_content(%r{ssl-crl-path: #{cadir}/ca_crl\.pem}) }
+          it { should contain_file("#{conf_d_dir}/webserver.conf").with_content(%r{ssl-crl-path: #{ca_dir}/ca_crl\.pem}) }
         end
 
         context 'as non-ca' do
@@ -673,6 +675,76 @@ describe 'puppet' do
         it { should contain_file('/etc/puppetlabs/code/unmanaged-environments/') }
         it { should contain_vcsrepo('puppet_repo').that_requires('File[/etc/puppetlabs/code/environments/]') }
         it { should contain_file('/test/puppet/hooks/post-receive').with_content(/ENVIRONMENT_BASEDIR\s=\s"\/etc\/puppetlabs\/code\/environments\/"/) }
+      end
+
+      describe 'with ca_dir overwritten' do
+        context 'when a ca' do
+          let(:params) do
+            super().merge(
+              server_ca: true,
+              server_ca_dir: '/opt/puppetlabs/ca',
+            )
+          end
+
+          it {
+            should contain_puppet__config__server('cadir').with_value('/opt/puppetlabs/ca')
+
+            should contain_file("#{conf_d_dir}/webserver.conf").with_content(%r{ssl-ca-cert: /opt/puppetlabs/ca/ca_crt\.pem})
+            should contain_file("#{conf_d_dir}/webserver.conf").with_content(%r{ssl-crl-path: /opt/puppetlabs/ca/ca_crl\.pem})
+            should contain_file("#{conf_d_dir}/webserver.conf").with_content(%r{ssl-cert-chain: /opt/puppetlabs/ca/ca_crt\.pem})
+
+            should contain_exec('puppet_server_config-generate_ca_cert').with(
+              creates: '/opt/puppetlabs/ca/ca_crt.pem',
+              command: puppetcacmd,
+              umask: '0022',
+            )
+            should contain_exec('puppet_server_config-generate_ca_cert').that_requires(
+              ["Concat[#{conf_file}]", 'Exec[puppet_server_config-create_ssl_dir]'],
+            )
+          }
+
+        end
+
+        context 'when not a ca' do
+          let(:params) do
+            super().merge(
+              server_ca: false,
+              server_ca_dir: '/opt/puppetlabs/ca',
+            )
+          end
+
+          it {
+            should_not contain_puppet__config__server('cadir')
+
+            should contain_file("#{conf_d_dir}/webserver.conf").with_content(%r{ssl-ca-cert: #{ssldir}/certs/ca\.pem})
+            should contain_file("#{conf_d_dir}/webserver.conf").without_content(%r{ssl-crl-path: #{ssldir}/crl\.pem})
+            should contain_file("#{conf_d_dir}/webserver.conf").without_content(%r{ssl-cert-chain: #{ssldir}/crl\.pem })
+
+            should_not contain_exec('puppet_server_config-generate_ca_cert')
+          }
+
+        end
+
+        context 'when not a ca and server_crl_enable' do
+          let(:params) do
+            super().merge(
+              server_ca: false,
+              server_ca_dir: '/opt/puppetlabs/ca',
+              server_crl_enable: true,
+            )
+          end
+
+          it {
+            should_not contain_puppet__config__server('cadir')
+
+            should contain_file("#{conf_d_dir}/webserver.conf").with_content(%r{ssl-ca-cert: #{ssldir}/certs/ca\.pem})
+            should contain_file("#{conf_d_dir}/webserver.conf").with_content(%r{ssl-crl-path: #{ssldir}/crl\.pem})
+            should contain_file("#{conf_d_dir}/webserver.conf").without_content(%r{ssl-cert-chain: #{ssldir}/crl\.pem })
+
+            should_not contain_exec('puppet_server_config-generate_ca_cert')
+          }
+
+        end
       end
     end
   end

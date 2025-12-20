@@ -378,6 +378,8 @@
 #
 # $server_puppetserver_dir::                The path of the puppetserver config dir
 #
+# $server_ca_dir::                          The path of the puppetserver CA dir
+#
 # $server_puppetserver_version::            The version of puppetserver installed (or being installed)
 #                                           Unfortunately, different versions of puppetserver need
 #                                           configuring differently. The default is derived from the
@@ -408,7 +410,7 @@
 #
 # $server_ssl_chain_filepath::              Path to certificate chain for puppetserver
 #                                           Only used when $ca is true
-#                                           Defaults to "${ssl_dir}/ca/ca_crt.pem"
+#                                           Defaults to "${ca_dir}/ca_crt.pem"
 #
 # $server_cipher_suites::                   List of SSL ciphers to use in negotiation
 #                                           Defaults to ['TLS_AES_128_GCM_SHA256', 'TLS_AES_256_GCM_SHA384',
@@ -672,6 +674,7 @@ class puppet (
   Stdlib::Port $server_http_port = $puppet::params::server_http_port,
   String $server_reports = $puppet::params::server_reports,
   Optional[Stdlib::Absolutepath] $server_puppetserver_dir = $puppet::params::server_puppetserver_dir,
+  Optional[Stdlib::Absolutepath] $server_ca_dir = $puppet::params::server_ca_dir,
   Optional[Stdlib::Absolutepath] $server_puppetserver_vardir = $puppet::params::server_puppetserver_vardir,
   Optional[Stdlib::Absolutepath] $server_puppetserver_rundir = $puppet::params::server_puppetserver_rundir,
   Optional[Stdlib::Absolutepath] $server_puppetserver_logdir = $puppet::params::server_puppetserver_logdir,
