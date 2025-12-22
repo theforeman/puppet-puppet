@@ -35,7 +35,7 @@ describe 'puppet' do
       conf_file           = "#{confdir}/puppet.conf"
       conf_d_dir          = "#{puppetserver_etcdir}/conf.d"
       environments_dir    = "#{codedir}/environments"
-      ca_dir               = "#{puppetserver_etcdir}/ca"
+      ca_dir              = "#{puppetserver_etcdir}/ca"
 
       let(:facts) { facts }
 
@@ -67,7 +67,8 @@ describe 'puppet' do
         it { should_not contain_puppet__config__main('default_manifest') }
         it { should contain_puppet__config__server('autosign').with_value("#{etcdir}\/autosign.conf \{ mode = 0664 \}") }
         it { should contain_puppet__config__server('ca').with_value('true') }
-        it { should contain_puppet__config__server('cadir').with_value(ca_dir) }
+        # Using the default of #{puppetserver_etcdir} should not produce a config entry, meaning the default value will be used
+        it { should_not contain_puppet__config__server('cadir') }
         it { should contain_puppet__config__server('certname').with_value('puppetserver.example.com') }
         it { should contain_puppet__config__server('parser').with_value('current') }
         it { should contain_puppet__config__server('strict_variables').with_value('false') }

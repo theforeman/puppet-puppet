@@ -66,7 +66,6 @@ class puppet::params {
       $bindir                     = "${dir_prefix}/bin"
       $root_group                 = undef
       $server_puppetserver_dir    = undef
-      $server_ca_dir              = undef
       $server_puppetserver_vardir = undef
       $server_puppetserver_rundir = undef
       $server_puppetserver_logdir = undef
@@ -86,7 +85,6 @@ class puppet::params {
       $bindir                     = '/usr/local/bin'
       $root_group                 = undef
       $server_puppetserver_dir    = '/usr/local/etc/puppetserver'
-      $server_ca_dir              = '/usr/local/etc/puppetserver/ca'
       $server_puppetserver_vardir = '/var/puppet/server/data/puppetserver'
       $server_puppetserver_rundir = '/var/run/puppetserver'
       $server_puppetserver_logdir = '/var/log/puppetserver'
@@ -107,7 +105,6 @@ class puppet::params {
       $bindir                     = '/usr/bin'
       $root_group                 = undef
       $server_puppetserver_dir    = undef
-      $server_ca_dir              = undef
       $server_puppetserver_vardir = undef
       $server_puppetserver_rundir = undef
       $server_puppetserver_logdir = undef
@@ -127,7 +124,6 @@ class puppet::params {
         $sharedir                   = '/opt/puppetlabs/puppet'
         $bindir                     = '/opt/puppetlabs/bin'
         $server_puppetserver_dir    = '/etc/puppetlabs/puppetserver'
-        $server_ca_dir              = '/etc/puppetlabs/puppetserver/ca'
         $server_puppetserver_vardir = '/opt/puppetlabs/server/data/puppetserver'
         $server_puppetserver_rundir = '/var/run/puppetlabs/puppetserver'
         $server_puppetserver_logdir = '/var/log/puppetlabs/puppetserver'
@@ -280,6 +276,7 @@ class puppet::params {
   }
 
   $server_ssl_dir = $ssldir
+  $server_ca_dir  = undef
   $server_version = undef
 
   $client_package = if $aio_package or ($facts['os']['name'] == 'Debian' and versioncmp($facts['os']['release']['major'], '12') >= 0) {

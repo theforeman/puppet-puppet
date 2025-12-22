@@ -374,7 +374,7 @@ class puppet::server (
   Optional[Stdlib::Absolutepath] $puppetserver_rundir = $puppet::server_puppetserver_rundir,
   Optional[Stdlib::Absolutepath] $puppetserver_logdir = $puppet::server_puppetserver_logdir,
   Stdlib::Absolutepath $puppetserver_dir = $puppet::server_puppetserver_dir,
-  Stdlib::Absolutepath $ca_dir = $puppet::server_ca_dir,
+  Optional[Stdlib::Absolutepath] $ca_dir = $puppet::server_ca_dir,
   Optional[Pattern[/^[\d]\.[\d]+\.[\d]+$/]] $puppetserver_version = $puppet::server_puppetserver_version,
   Variant[Undef, String[0], Stdlib::Absolutepath] $external_nodes = $puppet::server_external_nodes,
   Optional[Stdlib::Absolutepath] $trusted_external_command = $puppet::server_trusted_external_command,
@@ -470,9 +470,10 @@ class puppet::server (
   Array[String[1]] $jolokia_metrics_allowlist = $puppet::server_jolokia_metrics_allowlist,
 ) {
   if $ca {
-    $ssl_ca_cert     = "${ca_dir}/ca_crt.pem"
-    $ssl_ca_crl      = "${ca_dir}/ca_crl.pem"
-    $ssl_chain       = pick($ssl_chain_filepath, "${ca_dir}/ca_crt.pem")
+    $cadir           = pick($ca_dir, "${puppetserver_dir}/ca")
+    $ssl_ca_cert     = "${cadir}/ca_crt.pem"
+    $ssl_ca_crl      = "${cadir}/ca_crl.pem"
+    $ssl_chain       = pick($ssl_chain_filepath, "${cadir}/ca_crt.pem")
     $crl_enable_real = pick($crl_enable, true)
   } else {
     $ssl_ca_cert     = "${ssl_dir}/certs/ca.pem"
