@@ -84,6 +84,12 @@ class puppet::server::config inherits puppet::config {
     'storeconfigs':       value => $puppet::server::storeconfigs;
   }
 
+  if $puppet::server::ca and $puppet::server::ca_dir {
+    puppet::config::server { 'cadir':
+      value => $puppet::server::ca_dir,
+    }
+  }
+
   if $puppet::server::ssl_dir_manage {
     puppet::config::server {
       'ssldir':           value => $puppet::server::ssl_dir;

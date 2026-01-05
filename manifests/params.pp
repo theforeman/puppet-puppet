@@ -276,6 +276,7 @@ class puppet::params {
   }
 
   $server_ssl_dir = $ssldir
+  $server_ca_dir  = undef
   $server_version = undef
 
   $client_package = if $aio_package or ($facts['os']['name'] == 'Debian' and versioncmp($facts['os']['release']['major'], '12') >= 0) {

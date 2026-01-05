@@ -193,6 +193,8 @@
 #
 # $puppetserver_dir::                  The path of the puppetserver config dir
 #
+# $ca_dir::                            The path of the CA dir
+#
 # $puppetserver_version::              The version of puppetserver installed (or being installed)
 #                                      Unfortunately, different versions of puppetserver need configuring differently.
 #                                      By default we attempt to derive the version from the puppet version itself but
@@ -224,7 +226,7 @@
 #                                      Defaults to [ 'TLSv1.3', 'TLSv1.2' ]
 #
 # $ssl_chain_filepath::                Path to certificate chain for puppetserver
-#                                      Defaults to "${ssl_dir}/ca/ca_crt.pem"
+#                                      Defaults to "${ca_dir}/ca_crt.pem"
 #
 # $cipher_suites::                     List of SSL ciphers to use in negotiation
 #                                      Defaults to [ 'TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA',
@@ -372,6 +374,7 @@ class puppet::server (
   Optional[Stdlib::Absolutepath] $puppetserver_rundir = $puppet::server_puppetserver_rundir,
   Optional[Stdlib::Absolutepath] $puppetserver_logdir = $puppet::server_puppetserver_logdir,
   Stdlib::Absolutepath $puppetserver_dir = $puppet::server_puppetserver_dir,
+  Optional[Stdlib::Absolutepath] $ca_dir = $puppet::server_ca_dir,
   Optional[Pattern[/^[\d]\.[\d]+\.[\d]+$/]] $puppetserver_version = $puppet::server_puppetserver_version,
   Variant[Undef, String[0], Stdlib::Absolutepath] $external_nodes = $puppet::server_external_nodes,
   Optional[Stdlib::Absolutepath] $trusted_external_command = $puppet::server_trusted_external_command,
@@ -466,9 +469,8 @@ class puppet::server (
   Optional[Stdlib::Absolutepath] $versioned_code_content = $puppet::server_versioned_code_content,
   Array[String[1]] $jolokia_metrics_allowlist = $puppet::server_jolokia_metrics_allowlist,
 ) {
-  $cadir = "${puppetserver_dir}/ca"
-
   if $ca {
+    $cadir           = pick($ca_dir, "${puppetserver_dir}/ca")
     $ssl_ca_cert     = "${cadir}/ca_crt.pem"
     $ssl_ca_crl      = "${cadir}/ca_crl.pem"
     $ssl_chain       = pick($ssl_chain_filepath, "${cadir}/ca_crt.pem")
