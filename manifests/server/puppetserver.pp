@@ -237,8 +237,9 @@ class puppet::server::puppetserver (
       }
 
       # https://github.com/puppetlabs/ezbake/pull/623
+      # openvox-server 8.12 sets PrivateTmp automatically
       systemd::dropin_file { 'puppetserver.service-privatetmp.conf':
-        ensure   => present,
+        ensure   => absent,
         filename => 'privatetmp.conf',
         unit     => 'puppetserver.service',
         content  => "[Service]\nPrivateTmp=true\n",
