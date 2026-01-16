@@ -236,9 +236,14 @@ class puppet::server::puppetserver (
         content  => "[Service]\nLimitNOFILE=${max_open_files}\n",
       }
 
-      # https://github.com/puppetlabs/ezbake/pull/623
+      # openvox-server sets PrivateTmp directly in the unit file
+      $private_ensure = if $server_facts['implementation'] == 'openvox' {
+        'absent'
+      } else {
+        'present'
+      }
       systemd::dropin_file { 'puppetserver.service-privatetmp.conf':
-        ensure   => present,
+        ensure   => $private_ensure,
         filename => 'privatetmp.conf',
         unit     => 'puppetserver.service',
         content  => "[Service]\nPrivateTmp=true\n",
