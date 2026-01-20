@@ -344,6 +344,8 @@
 #
 # $jolokia_metrics_allowlist::         The allowlist of clients that
 #                                      can query the jolokia /metrics/v2 endpoint
+#
+# $jolokia_metrics_policy::            The content of the jolokia-access.xml file for the jolokia metrics endpoint
 class puppet::server (
   Variant[Boolean, Stdlib::Absolutepath] $autosign = $puppet::autosign,
   Array[String] $autosign_entries = $puppet::autosign_entries,
@@ -468,6 +470,7 @@ class puppet::server (
   Optional[Stdlib::Absolutepath] $versioned_code_id = $puppet::server_versioned_code_id,
   Optional[Stdlib::Absolutepath] $versioned_code_content = $puppet::server_versioned_code_content,
   Array[String[1]] $jolokia_metrics_allowlist = $puppet::server_jolokia_metrics_allowlist,
+  Optional[String] $jolokia_metrics_policy = $puppet::server_jolokia_metrics_policy,
 ) {
   if $ca {
     $cadir           = pick($ca_dir, "${puppetserver_dir}/ca")
