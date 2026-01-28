@@ -6,7 +6,7 @@ fixtures:
     extlib:               'https://github.com/voxpupuli/puppet-extlib.git'
     git:                  'https://github.com/theforeman/puppet-git.git'
     inifile:              'https://github.com/puppetlabs/puppetlabs-inifile.git'
-    puppetdb:             'https://github.com/puppetlabs/puppetlabs-puppetdb.git'
+    openvoxdb:            'https://github.com/voxpupuli/puppet-openvoxdb.git'
     puppetserver_foreman: 'https://github.com/theforeman/puppet-puppetserver_foreman.git'
     stdlib:               'https://github.com/puppetlabs/puppetlabs-stdlib.git'
     systemd:              'https://github.com/voxpupuli/puppet-systemd.git'
