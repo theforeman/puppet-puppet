@@ -230,6 +230,76 @@ class { '::puppet':
 }
 ```
 
+# Manage Facter/Openfact configuration
+
+This module can manage the Facter/Openfact configuration if requested.
+
+```puppet
+class { 'puppet':
+  # ...
+  facter_config => {
+    blocklist => [
+      'EC2',         # Remove if running in AWS cloud
+      'az_metadata', # Remove if running in Azure cloud
+      'cloud',       # Remove if running in any cloud
+      'load_averages',
+      'memory_noise',
+      'mountpoints',
+      'processors.speed',
+      'system_uptime',
+    ],
+    ttls => [
+      { 'timezone' => '7 days' },
+      { 'networking.fqdn' => '1 hour' },
+    ],
+    'fact-groups' => {
+      'memory_noise' => [
+        'memory.swap.available',
+        'memory.swap.available_bytes',
+        'memory.swap.capacity',
+        'memory.swap.used',
+        'memory.swap.used_bytes',
+        'memory.system.available',
+        'memory.system.available_bytes',
+        'memory.system.capacity',
+        'memory.system.used',
+        'memory.system.used_bytes',
+      ],
+    }
+  }
+}
+```
+
+This is also possible with Hiera:
+
+```yaml
+puppet::facter_config:
+  blocklist:
+    - 'EC2',         # Remove if running in AWS cloud
+    - 'az_metadata', # Remove if running in Azure cloud
+    - 'cloud',       # Remove if running in any cloud
+    - 'load_averages',
+    - 'memory_noise',
+    - 'mountpoints',
+    - 'processors.speed',
+    - 'system_uptime',
+  ttls:
+    - timezone: 30 days
+    - 'networking.fqdn': 1 hour
+  fact-groups:
+    memory_noise:
+      - 'memory.swap.available',
+      - 'memory.swap.available_bytes',
+      - 'memory.swap.capacity',
+      - 'memory.swap.used',
+      - 'memory.swap.used_bytes',
+      - 'memory.system.available',
+      - 'memory.system.available_bytes',
+      - 'memory.system.capacity',
+      - 'memory.system.used',
+      - 'memory.system.used_bytes',
+```
+
 # Contributing
 
 * Fork the project
