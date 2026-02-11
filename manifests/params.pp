@@ -72,6 +72,7 @@ class puppet::params {
       $server_ruby_load_paths     = []
       $server_jruby_gem_home      = undef
       $puppetconf_mode            = '0674'
+      $facter_config_dir          = 'C:/ProgramData/PuppetLabs/facter/etc'
     }
 
     /^(FreeBSD|DragonFly)$/ : {
@@ -92,6 +93,7 @@ class puppet::params {
       $server_ruby_load_paths     = [$facts['ruby']['sitedir'], "${ruby_gem_dir}/facter-${facts['facterversion']}/lib"]
       $server_jruby_gem_home      = '/var/puppet/server/data/puppetserver/jruby-gems'
       $puppetconf_mode            = '0644'
+      $facter_config_dir          = '/usr/local/etc/facter'
     }
 
     'Archlinux' : {
@@ -111,6 +113,7 @@ class puppet::params {
       $server_ruby_load_paths     = []
       $server_jruby_gem_home      = undef
       $puppetconf_mode            = '0644'
+      $facter_config_dir          = '/etc/puppetlabs/facter'
     }
 
     default : {
@@ -129,6 +132,7 @@ class puppet::params {
         $server_puppetserver_logdir = '/var/log/puppetlabs/puppetserver'
         $server_ruby_load_paths     = ['/opt/puppetlabs/puppet/lib/ruby/vendor_ruby']
         $server_jruby_gem_home      = '/opt/puppetlabs/server/data/puppetserver/jruby-gems'
+        $facter_config_dir          = '/etc/puppetlabs/facter'
       } else {
         $dir                        = '/etc/puppet'
         $codedir                    =  $facts['os']['family'] ? {
@@ -156,6 +160,7 @@ class puppet::params {
           $server_ruby_load_paths     = []
           $server_jruby_gem_home      = '/var/lib/puppet/jruby-gems'
         }
+        $facter_config_dir            = '/etc/facter'
       }
       $root_group = undef
       $puppetconf_mode = '0644'

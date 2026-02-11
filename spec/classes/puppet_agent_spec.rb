@@ -11,21 +11,25 @@ describe 'puppet' do
         client_package = "puppet#{puppet_major}"
         confdir = '/usr/local/etc/puppet'
         package_provider = nil
+        facter_config_dir = '/usr/local/etc/facter'
       when 'windows'
         bindir = 'C:/ProgramData/PuppetLabs/puppet/bin'
         client_package = 'puppet-agent'
         confdir = 'C:/ProgramData/PuppetLabs/puppet/etc'
         package_provider = 'chocolatey'
+        facter_config_dir = 'C:/ProgramData/PuppetLabs/facter/etc'
       when 'Archlinux'
         bindir = '/usr/bin'
         client_package = 'puppet'
         confdir = '/etc/puppetlabs/puppet'
         package_provider = nil
+        facter_config_dir = '/etc/puppetlabs/facter'
       else
         bindir = '/opt/puppetlabs/bin'
         client_package = 'puppet-agent'
         confdir = '/etc/puppetlabs/puppet'
         package_provider = nil
+        facter_config_dir = '/etc/puppetlabs/facter'
       end
 
       let(:facts) do
@@ -405,6 +409,23 @@ describe 'puppet' do
 
         it do
           is_expected.not_to contain_puppet__config__agent('environment')
+        end
+      end
+
+      context 'with facter_config set' do
+        let(:params) { super().merge(facter_config: { facts: { blocklist: ["EC2"] } }) }
+
+        it 'sets facter configuration properly' do
+          # Using get_content() helper from spec_helper.rb
+          json_text = get_content(catalogue, "#{facter_config_dir}/facter.conf")
+          parsed = JSON.parse(json_text.join("\n"))
+          expect(parsed).to eq({ 'facts' => { 'blocklist' => ["EC2"] } })
+        end
+
+        context 'with facter_config_dir set' do
+          let(:params) { super().merge(facter_config_dir: '/target/etc/puppetlabs/facter') }
+
+          it { is_expected.to contain_file('/target/etc/puppetlabs/facter/facter.conf') }
         end
       end
     end
