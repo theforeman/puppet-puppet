@@ -215,6 +215,7 @@ class puppet::params {
   $server_ca                       = true
   $server_ca_crl_sync              = false
   $server_reports                  = 'foreman'
+  $server_node_terminus            = 'exec'
   $server_external_nodes           = "${dir}/node.rb"
   $server_trusted_external_command = undef
   $server_request_timeout          = 60
