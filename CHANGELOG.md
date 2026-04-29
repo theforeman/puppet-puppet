@@ -1,5 +1,13 @@
 # Changelog
 
+## [22.2.0](https://github.com/theforeman/puppet-puppet/tree/22.2.0) (2026-04-30)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/22.1.0...22.2.0)
+
+**Implemented enhancements:**
+
+- Add facter/openfact configuration support [\#978](https://github.com/theforeman/puppet-puppet/pull/978) ([jay7x](https://github.com/jay7x))
+
 ## [22.1.0](https://github.com/theforeman/puppet-puppet/tree/22.1.0) (2026-01-27)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/22.0.1...22.1.0)
