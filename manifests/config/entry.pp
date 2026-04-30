@@ -29,14 +29,14 @@ define puppet::config::entry (
   # note the spaces at he end of the 'order' parameters,
   # they make sure that '1_main ' is ordered before '1_main_*'
   ensure_resource('concat::fragment', "puppet.conf_${section}", {
-      target  => "${puppet::dir}/puppet.conf",
-      content => "\n[${section}]",
-      order   => "${sectionorder}_${section} ",
+    target  => "${puppet::dir}/puppet.conf",
+    content => "\n[${section}]",
+    order   => "${sectionorder}_${section} ",
   })
   ensure_resource('concat::fragment', "puppet.conf_${section}_end", {
-      target  => "${puppet::dir}/puppet.conf",
-      content => "\n",
-      order   => "${sectionorder}_${section}~end",
+    target  => "${puppet::dir}/puppet.conf",
+    content => "\n",
+    order   => "${sectionorder}_${section}~end",
   })
 
   # this adds the '$key =' for the first value,
