@@ -1,5 +1,13 @@
 # Changelog
 
+## [22.3.0](https://github.com/theforeman/puppet-puppet/tree/22.3.0) (2026-05-11)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/22.2.0...22.3.0)
+
+**Implemented enhancements:**
+
+- puppet/extlib: Allow 8.x [\#988](https://github.com/theforeman/puppet-puppet/pull/988) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [22.2.0](https://github.com/theforeman/puppet-puppet/tree/22.2.0) (2026-04-30)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/22.1.0...22.2.0)
