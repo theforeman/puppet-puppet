@@ -1,5 +1,13 @@
 # Changelog
 
+## [22.4.0](https://github.com/theforeman/puppet-puppet/tree/22.4.0) (2026-05-25)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/22.3.0...22.4.0)
+
+**Implemented enhancements:**
+
+- puppetlabs/concat: Allow 10.x [\#990](https://github.com/theforeman/puppet-puppet/pull/990) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [22.3.0](https://github.com/theforeman/puppet-puppet/tree/22.3.0) (2026-05-11)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/22.2.0...22.3.0)
