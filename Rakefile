@@ -19,7 +19,7 @@ begin
 rescue LoadError
 else
   # We use fixtures in our modules, which is not the default
-  task :beaker => 'spec_prep'
+  task :beaker => 'fixtures:prep'
 end
 
 # blacksmith isn't always present, e.g. on Travis with --without development
