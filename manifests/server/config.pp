@@ -49,22 +49,11 @@ class puppet::server::config inherits puppet::config {
     }
     'console': {
       class { 'puppet::server::enc':
-        node_terminus => $server_node_terminus,
+        node_terminus => 'classifier',
       }
     }
     default: {
       fail('Invalid value of $server_node_terminus')
-    }
-  }
-
-  if $server_external_nodes and $server_external_nodes != '' {
-    class { 'puppet::server::enc':
-      node_terminus => $server_node_terminus,
-      enc_path      => $server_external_nodes,
-    }
-  } else {
-    class { 'puppet::server::enc':
-      node_terminus => $server_node_terminus,
     }
   }
 
