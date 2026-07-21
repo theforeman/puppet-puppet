@@ -47,7 +47,7 @@ class puppet::server::config inherits puppet::config {
         enc_path      => $server_external_nodes,
       }
     }
-    'console': {
+    'console', 'classifier': {
       class { 'puppet::server::enc':
         node_terminus => 'classifier',
       }
