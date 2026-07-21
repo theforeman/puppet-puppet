@@ -295,7 +295,7 @@ describe 'puppet' do
 
         it { should_not contain_class('puppetserver_foreman') }
         it { should contain_puppet__config__server('node_terminus').with_value('exec') }
-        it { should contain_puppet__config__server('external_nodes').with_value('/etc/puppetlabs/puppet/node.rb') }
+        it { should contain_puppet__config__server('external_nodes').with_value("#{etcdir}\/node.rb") }
       end
 
       describe 'without foreman, plain ENC' do
