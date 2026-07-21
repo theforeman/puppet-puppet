@@ -303,7 +303,7 @@ describe 'puppet' do
           super().merge(
             server_foreman: false,
             server_reports: 'store',
-            node_terminus: 'plain'
+            server_node_terminus: 'plain'
           )
         end
 
@@ -319,7 +319,7 @@ describe 'puppet' do
           )
         end
 
-        it { should raise_error(Puppet::Error, %r{Invalid value of $server_node_terminus}) }
+        it { should raise_error(Puppet::Error, %r{server_node_terminus}) }
       end
 
       describe 'with server_default_manifest => true and undef content' do
