@@ -29,7 +29,7 @@ describe 'puppet' do
         ssldir              = '/etc/puppetlabs/puppet/ssl'
         vardir              = '/opt/puppetlabs/puppet/cache'
         rubydir             = '/opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet'
-        puppetserver_pkg    = 'puppetserver'
+        puppetserver_pkg    = 'openvox-server'
         puppetcacmd         = '/opt/puppetlabs/bin/puppetserver ca setup'
       end
       conf_file           = "#{confdir}/puppet.conf"

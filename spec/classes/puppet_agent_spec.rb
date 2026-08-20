@@ -8,25 +8,25 @@ describe 'puppet' do
         puppet_major = facts[:puppetversion].to_i
 
         bindir = '/usr/local/bin'
-        client_package = "puppet#{puppet_major}"
+        client_package = "openvox#{puppet_major}"
         confdir = '/usr/local/etc/puppet'
         package_provider = nil
         facter_config_dir = '/usr/local/etc/facter'
       when 'windows'
         bindir = 'C:/ProgramData/PuppetLabs/puppet/bin'
-        client_package = 'puppet-agent'
+        client_package = 'openvox-agent'
         confdir = 'C:/ProgramData/PuppetLabs/puppet/etc'
         package_provider = 'chocolatey'
         facter_config_dir = 'C:/ProgramData/PuppetLabs/facter/etc'
       when 'Archlinux'
         bindir = '/usr/bin'
-        client_package = 'puppet'
+        client_package = 'openvox'
         confdir = '/etc/puppetlabs/puppet'
         package_provider = nil
         facter_config_dir = '/etc/puppetlabs/facter'
       else
         bindir = '/opt/puppetlabs/bin'
-        client_package = 'puppet-agent'
+        client_package = 'openvox-agent'
         confdir = '/etc/puppetlabs/puppet'
         package_provider = nil
         facter_config_dir = '/etc/puppetlabs/facter'
