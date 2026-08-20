@@ -15,7 +15,7 @@ describe 'puppet' do
         ssldir              = '/var/puppet/ssl'
         vardir              = '/var/puppet'
         rubydir             = %r{^/usr/local/lib/ruby/site_ruby/\d+\.\d+/puppet$}
-        puppetserver_pkg    = "puppetserver#{facts[:puppetversion].to_i}"
+        puppetserver_pkg    = "openvox-server#{facts[:puppetversion].to_i}"
         puppetcacmd         = '/usr/local/bin/puppetserver ca setup'
       else
         codedir             = '/etc/puppetlabs/code'
