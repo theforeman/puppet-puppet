@@ -4,9 +4,9 @@
 #   * `no-custom-facts`
 #   * `no-ruby`
 type Puppet::Facter::Config::Global = Struct[{
-    Optional['external-dir']      => Array[Stdlib::Absolutepath],
-    Optional['custom-dir']        => Array[Stdlib::Absolutepath],
-    Optional['no-external-facts'] => Boolean,
-    Optional['no-custom-facts']   => Boolean[false], # Cannot be true
-    Optional['no-ruby']           => Boolean[false], # Cannot be true
+  Optional['external-dir']      => Array[Stdlib::Absolutepath],
+  Optional['custom-dir']        => Array[Stdlib::Absolutepath],
+  Optional['no-external-facts'] => Boolean,
+  Optional['no-custom-facts']   => Boolean[false], # Cannot be true
+  Optional['no-ruby']           => Boolean[false], # Cannot be true
 }]

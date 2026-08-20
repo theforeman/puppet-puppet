@@ -618,7 +618,7 @@ class puppet (
   Boolean $usecacheonfailure = $puppet::params::usecacheonfailure,
   Enum['cron', 'service', 'systemd.timer', 'none', 'unmanaged'] $runmode = $puppet::params::runmode,
   Optional[Integer[0,23]] $run_hour = undef,
-  Variant[Integer[0,59], Array[Integer[0,59]], Undef] $run_minute = undef,
+  Optional[Variant[Integer[0,59], Array[Integer[0,59]]]] $run_minute = undef,
   Optional[String[1]] $run_timezone = undef,
   Array[Enum['cron', 'service', 'systemd.timer', 'none']] $unavailable_runmodes = $puppet::params::unavailable_runmodes,
   Optional[String] $cron_cmd = $puppet::params::cron_cmd,
