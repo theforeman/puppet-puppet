@@ -10,6 +10,6 @@ class puppet::agent {
     Class['puppet::agent::install'] -> Class['puppet::agent::facter']
   }
 
-  Class['puppet::agent::install'] ~> Class['puppet::agent::config', 'puppet::agent::service']
+  Class['puppet::agent::install'] -> Class['puppet::agent::config', 'puppet::agent::service']
   Class['puppet::config', 'puppet::agent::config'] ~> Class['puppet::agent::service']
 }
