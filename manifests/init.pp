@@ -1,6 +1,6 @@
 # == Class: puppet
 #
-# This class installs and configures the puppet agent.
+# This class installs and configures the OpenVox agent.
 #
 # === Parameters:
 #
@@ -36,7 +36,7 @@
 #                                           or years (5y).
 #
 # $runinterval::                            Set up the interval (in seconds) to run
-#                                           the puppet agent.
+#                                           the OpenVox agent.
 #
 # $autosign::                               If set to a boolean, autosign is enabled or disabled
 #                                           for all incoming requests. Otherwise this has to be
@@ -64,15 +64,15 @@
 # $usecacheonfailure::                      Switch to enable use of cached catalog on
 #                                           failure of run.
 #
-# $runmode::                                Select the mode to setup the puppet agent.
+# $runmode::                                Select the mode to setup the OpenVox agent.
 #
-# $run_hour::                               The hour at which to run the puppet agent
+# $run_hour::                               The hour at which to run the OpenVox agent
 #                                           when runmode is cron or systemd.timer.
 #
-# $run_minute::                             The minute at which to run the puppet agent
+# $run_minute::                             The minute at which to run the OpenVox agent
 #                                           when runmode is cron or systemd.timer.
 #
-# $run_timezone::                           The timezone for the run the puppet agent
+# $run_timezone::                           The timezone for the run the OpenVox agent
 #                                           when runmode is systemd.timer.
 #                                           Use `timedatectl list-timezones` to list accepted values
 #
@@ -88,7 +88,7 @@
 #
 # $module_repository::                      Use a different puppet module repository
 #
-# $ca_port::                                Puppet CA port
+# $ca_port::                                OpenVox CA port
 #
 # $ca_crl_filepath::                        Path to CA CRL file, dynamically resolves based on
 #                                           $::server_ca status.
@@ -106,7 +106,7 @@
 # $syslogfacility::                         Facility name to use when logging to syslog
 #
 # $use_srv_records::                        Whether DNS SRV records will be used to resolve
-#                                           the Puppet server
+#                                           the OpenVox server
 #
 # $srv_domain::                             Search domain for SRV records
 #
@@ -124,11 +124,11 @@
 #
 # $group::                                  Override the name of the puppet group.
 #
-# $dir::                                    Override the puppet directory.
+# $dir::                                    Override the OpenVox directory.
 #
-# $codedir::                                Override the puppet code directory.
+# $codedir::                                Override the OpenVox code directory.
 #
-# $vardir::                                 Override the puppet var directory.
+# $vardir::                                 Override the OpenVox var directory.
 #
 # $logdir::                                 Override the log directory.
 #
@@ -149,7 +149,7 @@
 #                                           required.
 # $package_install_options::                Flags that should be passed to the package manager
 #                                           during installation. Defaults to undef. May be
-#                                           a string, an array or a hash, see Puppet Package resource
+#                                           a string, an array or a hash, see OpenVox Package resource
 #                                           documentation for the provider matching your package manager
 #
 # $unavailable_runmodes::                   Runmodes that are not available for the
@@ -159,11 +159,11 @@
 #                                           Windows and ['systemd.timer'] on other
 #                                           systems.
 #
-# $pluginsource::                           URL to retrieve Puppet plugins from during pluginsync
+# $pluginsource::                           URL to retrieve OpenVox plugins from during pluginsync
 #
-# $pluginfactsource::                       URL to retrieve Puppet facts from during pluginsync
+# $pluginfactsource::                       URL to retrieve OpenVox facts from during pluginsync
 #
-# $classfile::                              The file in which puppet agent stores a list
+# $classfile::                              The file in which OpenVox agent stores a list
 #                                           of the classes associated with the retrieved
 #                                           configuration.
 #
@@ -172,18 +172,18 @@
 #
 # == puppet::agent parameters
 #
-# $agent::                                  Should a puppet agent be installed
+# $agent::                                  Should a OpenVox agent be installed
 #
 # $agent_noop::                             Run the agent in noop mode.
 #
-# $agent_server_hostname::                  Hostname of your puppetserver (server
+# $agent_server_hostname::                  Hostname of your OpenVox server (server
 #                                           directive in puppet.conf)
 #
-# $prerun_command::                         A command which gets executed before each Puppet run
+# $prerun_command::                         A command which gets executed before each OpenVox run
 #
-# $postrun_command::                        A command which gets executed after each Puppet run
+# $postrun_command::                        A command which gets executed after each OpenVox run
 #
-# $environment::                            Default environment of the Puppet agent
+# $environment::                            Default environment of the OpenVox agent
 #
 # $agent_default_schedules::                A boolean to enable/disable the default schedules
 #
@@ -195,43 +195,43 @@
 # $client_certname::                        The node's certificate name, and the unique
 #                                           identifier it uses when requesting catalogs.
 #
-# $report::                                 Send reports to the Puppet Master
+# $report::                                 Send reports to the OpenVox server
 #
 # == advanced agent parameters
 #
-# $service_name::                           The name of the puppet agent service.
+# $service_name::                           The name of the OpenVox agent service.
 #
-# $agent_restart_command::                  The command which gets executed on puppet service restart
+# $agent_restart_command::                  The command which gets executed on OpenVox service restart
 #
 # $client_package::                         Install a custom package to provide
-#                                           the puppet client
+#                                           the OpenVox client
 #
-# $systemd_unit_name::                      The name of the puppet systemd units.
+# $systemd_unit_name::                      The name of the OpenVox systemd units.
 #
-# $dir_owner::                              Owner of the base puppet directory, used when
+# $dir_owner::                              Owner of the base OpenVox directory, used when
 #                                           puppet::server is false.
 #
-# $dir_group::                              Group of the base puppet directory, used when
+# $dir_group::                              Group of the base OpenVox directory, used when
 #                                           puppet::server is false.
 #
 # == puppet::server parameters
 #
-# $server::                                 Should a puppet server be installed as well as the client
+# $server::                                 Should a OpenVox server be installed as well as the client
 #
-# $server_ip::                              Bind ip address of the puppetserver
+# $server_ip::                              Bind ip address of the OpenVox server
 #
-# $server_port::                            Puppet server port
+# $server_port::                            OpenVox server port
 #
-# $server_ca::                              Provide puppet CA
+# $server_ca::                              Provide OpenVox CA
 #
-# $server_ca_crl_sync::                     Sync puppet CA crl file to compilers, Puppet CA Must be the Puppetserver
+# $server_ca_crl_sync::                     Sync OpenVox CA crl file to compilers, OpenVox CA Must be the OpenVox server
 #                                           for the compilers. Defaults to false.
 #
 # $server_crl_enable::                      Turn on crl checking. Defaults to true when server_ca is true. Otherwise
 #                                           Defaults to false. Note unless you are using an external CA. It is recommended
-#                                           to set this to true. See $server_ca_crl_sync to enable syncing from CA Puppet Master
+#                                           to set this to true. See $server_ca_crl_sync to enable syncing from OpenVox CA
 #
-# $server_reports::                         List of report types to include on the puppetserver
+# $server_reports::                         List of report types to include on the OpenVox server
 #
 # $server_external_nodes::                  External nodes classifier executable
 #
@@ -259,7 +259,7 @@
 #
 # $server_git_repo_user::                   Git repository user
 #
-# $server_git_branch_map::                  Git branch to puppet env mapping for the
+# $server_git_branch_map::                  Git branch to openvox env mapping for the
 #                                           default post receive hook
 #
 # $server_storeconfigs::                    Whether to enable storeconfigs
@@ -276,18 +276,18 @@
 #
 # $server_manage_user::                     Whether to manage the server user resource
 #
-# $server_user::                            Username used for the puppetserver process
+# $server_user::                            Username used for the OpenVox server process
 #
-# $server_group::                           Group used for the puppetserver process
+# $server_group::                           Group used for the OpenVox server process
 #
-# $server_dir::                             Puppet configuration directory
+# $server_dir::                             OpenVox configuration directory
 #
-# $server_http::                            Should the puppet server listen on HTTP as well as HTTPS.
+# $server_http::                            Should the OpenVox server listen on HTTP as well as HTTPS.
 #                                           Useful for load balancer or reverse proxy scenarios.
 #
-# $server_http_port::                       Puppet server HTTP port; defaults to 8139.
+# $server_http_port::                       OpenVox server HTTP port; defaults to 8139.
 #
-# $server_foreman_facts::                   Should foreman receive facts from puppet
+# $server_foreman_facts::                   Should foreman receive facts from OpenVox
 #
 # $server_foreman::                         Should foreman integration be installed
 #
@@ -299,21 +299,21 @@
 #
 # $server_foreman_ssl_key::                 Key for authenticating against Foreman server
 #
-# $server_puppet_basedir::                  Where is the puppet code base located
+# $server_puppet_basedir::                  Where is the OpenVox code base located
 #
 # $server_request_timeout::                 Timeout in node.rb script for fetching
 #                                           catalog from Foreman (in seconds).
 #
 # $server_environment_timeout::             Timeout for cached compiled catalogs (10s, 5m, ...)
 #
-# $server_envs_dir::                        List of directories which hold puppet environments
+# $server_envs_dir::                        List of directories which hold OpenVox environments
 #
 # $server_envs_target::                     Indicates that $envs_dir should be
 #                                           a symbolic link to this target
 #
-# $server_jvm_java_bin::                    Set the default java to use. If unspecified, it will be derived from the Puppet version.
+# $server_jvm_java_bin::                    Set the default java to use. If unspecified, it will be derived from the OpenVox version.
 #
-# $server_jvm_config::                      Specify the puppetserver jvm configuration file.
+# $server_jvm_config::                      Specify the OpenVox server jvm configuration file.
 #
 # $server_jvm_min_heap_size::               Specify the minimum jvm heap space.
 #
@@ -324,13 +324,13 @@
 #                                           Java 8 to specify the max perm space to use:
 #                                           For example: '-XX:MaxPermSize=128m'.
 #
-# $server_jvm_cli_args::                    Java options to use when using puppetserver
+# $server_jvm_cli_args::                    Java options to use when using OpenVox server
 #                                           subcommands (eg puppetserver gem).
 #
-# $server_jruby_gem_home::                  Where jruby gems are located for puppetserver
+# $server_jruby_gem_home::                  Where jruby gems are located for OpenVox server
 #
 # $server_environment_vars::                A hash of environment variables and their values
-#                                           which the puppetserver is allowed to see.
+#                                           which the OpenVox server is allowed to see.
 #                                           To define literal values double quotes should be used:
 #                                           {'MYVAR': '"MYVALUE"'}. Omitting the inner quotes
 #                                           might lead to unexpected results since the HOCON
@@ -341,8 +341,8 @@
 #                                           To pass an existing variable use substitutions: {'MYVAR': '${MYVAR}'}.
 #
 # $allow_any_crl_auth::                     Allow any authentication for the CRL. This
-#                                           is needed on the puppet CA to accept clients
-#                                           from a the puppet CA proxy.
+#                                           is needed on the OpenVox CA to accept clients
+#                                           from a the OpenVox CA proxy.
 #
 # $auth_allowed::                           An array of authenticated nodes allowed to
 #                                           access all catalog and node endpoints.
@@ -356,9 +356,9 @@
 # $server_default_manifest_content::        A string to set the content of the default_manifest
 #                                           If set to '' it will not manage the file
 #
-# $server_package::                         Custom package name for puppet server
+# $server_package::                         Custom package name for OpenVox server
 #
-# $server_version::                         Custom package version for puppet server
+# $server_version::                         Custom package version for OpenVox server
 #
 # $server_ssl_dir::                         SSL directory
 #
@@ -370,20 +370,20 @@
 #                                           should be created with default user and group. This is used in
 #                                           the default Forman setup to reuse the key for TLS communication.
 #
-# $server_puppetserver_vardir::             The path of the puppetserver var dir
+# $server_puppetserver_vardir::             The path of the OpenVox server var dir
 #
-# $server_puppetserver_rundir::             The path of the puppetserver run dir
+# $server_puppetserver_rundir::             The path of the OpenVox server run dir
 #
-# $server_puppetserver_logdir::             The path of the puppetserver log dir
+# $server_puppetserver_logdir::             The path of the OpenVox server log dir
 #
-# $server_puppetserver_dir::                The path of the puppetserver config dir
+# $server_puppetserver_dir::                The path of the OpenVox server config dir
 #
-# $server_ca_dir::                          The path of the puppetserver CA dir
+# $server_ca_dir::                          The path of the OpenVox server CA dir
 #
-# $server_puppetserver_version::            The version of puppetserver installed (or being installed)
-#                                           Unfortunately, different versions of puppetserver need
+# $server_puppetserver_version::            The version of OpenVox server installed (or being installed)
+#                                           Unfortunately, different versions of OpenVox server need
 #                                           configuring differently. The default is derived from the
-#                                           installed puppet version. Generally it's not needed to
+#                                           installed OpenVox version. Generally it's not needed to
 #                                           override this but when upgrading it might be.
 #
 # $server_max_active_instances::            Max number of active jruby instances. Defaults to
@@ -408,7 +408,7 @@
 # $server_ssl_protocols::                   Array of SSL protocols to use.
 #                                           Defaults to [ 'TLSv1.3', 'TLSv1.2' ]
 #
-# $server_ssl_chain_filepath::              Path to certificate chain for puppetserver
+# $server_ssl_chain_filepath::              Path to certificate chain for OpenVox server
 #                                           Only used when $ca is true
 #                                           Defaults to "${ca_dir}/ca_crt.pem"
 #
@@ -437,7 +437,7 @@
 # $server_ca_client_self_delete::           Adds a rule to auth.conf, that allows a client to delete its own certificate
 #                                           Defaults to false
 #
-# $server_check_for_updates::               Should the puppetserver phone home to check for available updates?
+# $server_check_for_updates::               Should the OpenVox server phone home to check for available updates?
 #                                           Defaults to true
 #
 # $server_post_hook_content::               Which template to use for git post hook
@@ -455,14 +455,14 @@
 #                                           completed.
 #                                           Defaults to 30000, using the Jetty default of 30s
 #
-# $server_puppetserver_metrics::            Enable puppetserver http-client metrics
+# $server_puppetserver_metrics::            Enable OpenVox server http-client metrics
 #
 # $server_puppetserver_profiler::           Enable JRuby profiling.
 #                                           If set to false, compiler and function metrics will not be available, (eg. when enabling graphite metrics)
 #
 # $server_puppetserver_telemetry::          Enable Dropsonde telemetry.
 #                                           Undef means disabled while booleans are explicit opt-in or opt-out.
-#                                           This is different from Puppetserver's default values.
+#                                           This is different from OpenVox server's default values.
 #
 # $server_metrics_jmx_enable::              Enable or disable JMX metrics reporter. Defaults to true
 #
@@ -485,11 +485,11 @@
 #
 # $server_puppetserver_auth_template::      Template for generating /etc/puppetlabs/puppetserver/conf.d/auth.conf
 #
-# $server_puppetserver_trusted_agents::     Certificate names of puppet agents that are allowed to fetch *all* catalogs
+# $server_puppetserver_trusted_agents::     Certificate names of OpenVox agents that are allowed to fetch *all* catalogs
 #                                           Defaults to [] and all agents are only allowed to fetch their own catalogs.
 #
 # $server_puppetserver_trusted_certificate_extensions:: An array of hashes of certificate extensions and values to be used in auth.conf
-#                                           A puppet client certificate containing valid extension(s) will be allowed to fetch
+#                                           A OpenVox client certificate containing valid extension(s) will be allowed to fetch
 #                                           *any* catalog.
 #                                           Defaults to [] and no certificate extensions are recognised as being allowed
 #                                           to fetch *any* catalog.
@@ -544,7 +544,7 @@
 # $server_ca_allow_auth_extensions::        Allow CA to sign certificate requests that have authorization extensions
 #                                           Defaults to false
 #
-# $server_ca_enable_infra_crl::             Enable the separate CRL for Puppet infrastructure nodes
+# $server_ca_enable_infra_crl::             Enable the separate CRL for OpenVox infrastructure nodes
 #                                           Defaults to false
 #
 # $server_ca_allow_auto_renewal::           Enable the auto renewal for client certificates
@@ -553,13 +553,13 @@
 # $server_ca_allow_auto_renewal_cert_ttl::  Set the auto renewal interval for client certificates
 #                                           Defaults to 60d
 #
-# $server_max_open_files::                  Increase the max open files limit for Puppetserver.
+# $server_max_open_files::                  Increase the max open files limit for OpenVox server.
 #                                           Defaults to undef
 #
-# $server_versioned_code_id::               The path to an executable script that Puppet Server invokes to generate a code_id
+# $server_versioned_code_id::               The path to an executable script that OpenVox Server invokes to generate a code_id
 #                                           Defaults to undef
 #
-# $server_versioned_code_content::          Contains the path to an executable script that Puppet Server
+# $server_versioned_code_content::          Contains the path to an executable script that OpenVox Server
 #                                           invokes when on static_file_content requests.
 #                                           Defaults to undef
 #
