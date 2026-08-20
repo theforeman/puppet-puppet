@@ -563,12 +563,18 @@
 #                                           invokes when on static_file_content requests.
 #                                           Defaults to undef
 #
+# $server_jolokia_allow_unauthenticated::   Whether to allow unauthenticated access to metrics
+#                                           Defaults to false
+#
 # $server_jolokia_metrics_allowlist::       The allowlist of clients that
 #                                           can query the jolokia /metrics/v2 endpoint
 #
 # $facter_config_dir::                      Override Facter/Openfact configuration directory
 #
 # $facter_config::                          A hash representing Facter/Openfact configuration.
+#
+# $server_auth_extra::                      Additional rules for auth.conf
+#                                           Defaults to undef
 #
 # === Usage:
 #
@@ -775,6 +781,8 @@ class puppet (
   Optional[Stdlib::Absolutepath] $server_versioned_code_id = undef,
   Optional[Stdlib::Absolutepath] $server_versioned_code_content = undef,
   Array[String[1]] $server_jolokia_metrics_allowlist = [],
+  Optional[Boolean] $server_jolokia_allow_unauthenticated = undef,
+  Optional[String] $server_auth_extra = undef,
   Stdlib::Filemode $puppetconf_mode = $puppet::params::puppetconf_mode,
   Stdlib::Absolutepath $facter_config_dir = $puppet::params::facter_config_dir,
   Puppet::Facter::Config $facter_config = {},
