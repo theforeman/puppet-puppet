@@ -1,0 +1,58 @@
+{
+  "description": "Install the OpenVox agent package",
+  "parameters": {
+    "version": {
+      "description": "The version of openvox-agent to install (defaults to latest when no agent is installed)",
+      "type": "Optional[String[1]]"
+    },
+    "collection": {
+      "description": "The OpenVox collection to install from (defaults to openvox8, which maps to the latest collection released)",
+      "type": "Optional[Enum[openvox7, openvox8]]"
+    },
+    "absolute_source": {
+      "description": "The absolute source location to find the OpenVox agent package",
+      "type": "Optional[String[1]]"
+    },
+    "yum_source": {
+      "description": "The source location to find yum repos",
+      "type": "Optional[String[1]]",
+      "default": "http://yum.voxpupuli.org"
+    },
+    "apt_source": {
+      "description": "The source location to find apt repos",
+      "type": "Optional[String[1]]",
+      "default": "http://apt.voxpupuli.org"
+    },
+    "mac_source": {
+      "description": "The source location to find mac packages",
+      "type": "Optional[String[1]]",
+      "default": "http://downloads.voxpupuli.org"
+    },
+    "windows_source": {
+      "description": "The source location to find windows packages (defaults to downloads.voxpupuli.org)",
+      "type": "Optional[String[1]]"
+    },
+    "install_options": {
+      "description": "optional install arguments to the windows installer (defaults to REINSTALLMODE=\"amus\")",
+      "type": "Optional[String[1]]"
+    },
+    "stop_service": {
+      "description": "Whether to stop the openvox agent service after install",
+      "type": "Optional[Boolean]"
+    },
+    "retry": {
+      "description": "The number of retries in case of network connectivity failures",
+      "type": "Integer[0]",
+      "default": 5
+    }
+  },
+  "implementations": [
+    {
+      "name": "install_agent_shell.sh",
+      "requirements": ["shell"],
+      "files": ["facts/tasks/bash.sh"],
+      "input_method": "environment"
+      }
+  ],
+  "supports_noop": true
+}
