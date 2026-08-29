@@ -3,7 +3,8 @@
 #
 [Unit]
 Description=Systemd Timer Service for Puppet Agent
-After=network.target
+Wants=network.target network-online.target
+After=network.target network-online.target
 
 [Service]
 Type=oneshot
