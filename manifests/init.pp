@@ -179,6 +179,11 @@
 # $agent_server_hostname::                  Hostname of your puppetserver (server
 #                                           directive in puppet.conf)
 #
+# $agent_server_list::                      Ordered list of Puppet servers to try
+#                                           (server_list directive in puppet.conf).
+#                                           Each entry can include an optional port.
+#                                           Overrides agent_server_hostname.
+#
 # $prerun_command::                         A command which gets executed before each Puppet run
 #
 # $postrun_command::                        A command which gets executed after each Puppet run
@@ -655,6 +660,7 @@ class puppet (
   Boolean $report = $puppet::params::report,
   Variant[String, Boolean] $client_certname = $puppet::params::client_certname,
   Optional[String] $agent_server_hostname = $puppet::params::agent_server_hostname,
+  Optional[Array[String[1], 1]] $agent_server_list = undef,
   String $systemd_unit_name = $puppet::params::systemd_unit_name,
   String $service_name = $puppet::params::service_name,
   Optional[String] $syslogfacility = $puppet::params::syslogfacility,
