@@ -381,6 +381,20 @@ describe 'puppet' do
         end
       end
 
+      describe 'PrivateTmp' do
+        context 'on Non-systemd OSes', if facts[:service_provider] != 'systemd' do
+          it { is_expected.not_to contain contain_systemd__dropin_file('puppetserver.service-privatetmp.conf') }
+        end
+        context 'on legacy puppetserver' do
+          pending("rspec-puppet does not allow us to set $server_facts['serverimplementation']")
+          it { is_expected.to contain contain_systemd__dropin_file('puppetserver.service-privatetmp.conf').with_ensure('present') }
+        end
+        context 'on openvox' do
+          pending("rspec-puppet does not allow us to set $server_facts['serverimplementation']")
+          it { is_expected.to contain contain_systemd__dropin_file('puppetserver.service-privatetmp.conf').with_ensure('absent') }
+        end
+      end
+
       describe 'with extra_args parameter' do
         let(:params) { super().merge(server_jvm_extra_args: ['-XX:foo=bar', '-XX:bar=foo']) }
         if facts[:os]['family'] == 'FreeBSD'
