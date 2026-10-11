@@ -16,6 +16,7 @@ class puppet::params {
 
   # Not defined here as the commands depend on module parameter "dir"
   $cron_cmd            = undef
+  $cron_target         = undef
   $systemd_cmd         = undef
 
   $agent_noop          = false
