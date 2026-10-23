@@ -1,6 +1,27 @@
 # Changelog
 
-## [22.4.0](https://github.com/theforeman/puppet-puppet/tree/22.4.0) (2026-05-25)
+## [23.0.0](https://github.com/theforeman/puppet-puppet/tree/23.0.0) (2026-10-23)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/22.4.0...23.0.0)
+
+**Breaking changes:**
+
+- Drop testing on puppet [\#1000](https://github.com/theforeman/puppet-puppet/pull/1000) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- puppetlabs/stdlib: Allow 10.x & puppet/systemd: Allow 10.x [\#1006](https://github.com/theforeman/puppet-puppet/pull/1006) ([bastelfreak](https://github.com/bastelfreak))
+- permissions for openvox primary [\#1001](https://github.com/theforeman/puppet-puppet/pull/1001) ([marcusdots](https://github.com/marcusdots))
+
+**Fixed bugs:**
+
+- README: fix YAML syntax [\#1005](https://github.com/theforeman/puppet-puppet/pull/1005) ([kenyon](https://github.com/kenyon))
+
+**Closed issues:**
+
+- parameters not extrapolating via foreman-installer or from a post install deployment \(possibly not picking up defaults\) [\#943](https://github.com/theforeman/puppet-puppet/issues/943)
+
+## [22.4.0](https://github.com/theforeman/puppet-puppet/tree/22.4.0) (2026-05-26)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/22.3.0...22.4.0)
 
@@ -23,6 +44,10 @@
 **Implemented enhancements:**
 
 - Add facter/openfact configuration support [\#978](https://github.com/theforeman/puppet-puppet/pull/978) ([jay7x](https://github.com/jay7x))
+
+**Closed issues:**
+
+- Add basic facter.conf creation and management to module [\#947](https://github.com/theforeman/puppet-puppet/issues/947)
 
 ## [22.1.0](https://github.com/theforeman/puppet-puppet/tree/22.1.0) (2026-01-27)
 
