@@ -57,7 +57,7 @@ describe 'puppet' do
             .with_package_version('present')
             .with_package_provider(package_provider)
             .with_package_source(nil)
-            .that_notifies(['Class[puppet::agent::config]', 'Class[puppet::agent::service]'])
+            .that_comes_before(['Class[puppet::agent::config]', 'Class[puppet::agent::service]'])
         end
 
         it do
