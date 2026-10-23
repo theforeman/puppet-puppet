@@ -56,10 +56,10 @@ Then the `foreman_ssl_{ca,cert,key}` parameters are ignored and `certs::puppet` 
 
 ## PuppetDB integration
 
-The Puppet server can be configured to export catalogs and reports to a PuppetDB instance, using the puppetlabs/puppetdb module.
-Use its `puppetdb::server` class to install the PuppetDB server and this module to configure the Puppet server to connect to PuppetDB.
+The OpenVox-Server can be configured to export catalogs and reports to a OpenVoxDB instance, using the [puppet/openboxdb](https://forge.puppet.com/modules/puppet/openvoxdb/readme) module.
+Use its `openvoxdb::server` class to install the OpenVoxDB server and this module to configure the OpenVox-Server to connect to OpenVoxDB.
 
-Requires [puppetlabs/puppetdb](https://forge.puppetlabs.com/puppetlabs/puppetdb)
+**OpenVoxDB is the Open-Source PuppetDB successor, so some places still reference puppetdb**
 
 ```puppet
 class { 'puppet':
@@ -72,9 +72,9 @@ class { 'puppet::server::puppetdb':
 }
 ```
 
-Above example manages Puppetserver + PuppetDB integration.
-It won't install the PuppetDB.
-To do so, you also need the `puppetdb` class
+Above example manages Puppetserver + OpenVoxDB integration.
+It won't install the OpenVoxDB.
+To do so, you also need the `openvoxdb` module
 
 ```puppet
 class { 'puppet':
@@ -82,13 +82,13 @@ class { 'puppet':
   server_reports      => 'puppetdb,foreman',
   server_storeconfigs => true,
 }
-include puppetdb
+include openvoxdb
 class { 'puppet::server::puppetdb':
-  server => 'mypuppetdb.example.com',
+  server => 'myopenvoxdb.example.com',
 }
 ```
 
-Then the PuppetDB module will also configure postgresql and setup the database.
+Then the OpenVoxDB module will also configure postgresql and setup the database.
 If you want to manage postgresql installation on your own:
 
 ```puppet
@@ -106,11 +106,11 @@ postgresql::server::extension { 'pg_trgm':
   require  => Postgresql::Server::Db['puppetdb'],
   before   => Service['puppetdb'],
 }
-class { 'puppetdb':
+class { 'openvoxdb':
   manage_dbserver => false,
 }
 class { 'puppet::server::puppetdb':
-  server => 'mypuppetdb.example.com',
+  server => 'myopenvoxdb.example.com',
 }
 ```
 
@@ -118,11 +118,11 @@ Above code will install Puppetserver/PuppetDB/PostgreSQL on a single server.
 It will use the upstream postgresql repositories.
 It was tested on Ubuntu.
 
-Please also make sure your puppetdb ciphers are compatible with your puppet server ciphers, ie that the two following parameters match:
+Please also make sure your OpenVoxDB ciphers are compatible with your puppet server ciphers, ie that the two following parameters match:
 
 ```
 puppet::server::cipher_suites
-puppetdb::server::cipher_suites
+openvoxdb::server::cipher_suites
 ```
 
 By default, the Perforce packages are used.
