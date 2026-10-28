@@ -1,5 +1,14 @@
 # Changelog
 
+## [23.1.0](https://github.com/theforeman/puppet-puppet/tree/23.1.0) (2026-10-28)
+
+[Full Changelog](https://github.com/theforeman/puppet-puppet/compare/23.0.0...23.1.0)
+
+**Implemented enhancements:**
+
+- puppet/systemd: Allow 11.x [\#1008](https://github.com/theforeman/puppet-puppet/pull/1008) ([bastelfreak](https://github.com/bastelfreak))
+- Support ordered Puppet server fallback [\#1002](https://github.com/theforeman/puppet-puppet/pull/1002) ([jakduch](https://github.com/jakduch))
+
 ## [23.0.0](https://github.com/theforeman/puppet-puppet/tree/23.0.0) (2026-10-23)
 
 [Full Changelog](https://github.com/theforeman/puppet-puppet/compare/22.4.0...23.0.0)
