@@ -87,7 +87,10 @@ describe 'puppet' do
 
       describe 'when use_srv_records => true' do
         let :params do
-          super().merge(use_srv_records: true)
+          super().merge(
+            agent_server_list: ['ignored.example.org'],
+            use_srv_records: true,
+          )
         end
 
         context 'domain fact is defined' do
@@ -96,6 +99,7 @@ describe 'puppet' do
           it { is_expected.to contain_puppet__config__main('pluginsource').with_value('puppet:///plugins') }
           it { is_expected.to contain_puppet__config__main('pluginfactsource').with_value('puppet:///pluginfacts') }
           it { is_expected.not_to contain_puppet__config__main('server') }
+          it { is_expected.not_to contain_puppet__config__main('server_list') }
         end
 
         context 'domain fact is unset' do
@@ -161,6 +165,22 @@ describe 'puppet' do
             it { is_expected.to contain_puppet__config__main('server').with_value('myserver.example.com') }
           end
         end
+      end
+
+      context 'agent_server_list' do
+        let :params do
+          super().merge(
+            agent_server_hostname: 'ignored.example.com',
+            agent_server_list: ['local.example.com:8140', 'central.example.com'],
+          )
+        end
+
+        it do
+          is_expected.to contain_puppet__config__main('server_list')
+            .with_value(['local.example.com:8140', 'central.example.com'])
+        end
+
+        it { is_expected.not_to contain_puppet__config__main('server') }
       end
 
       describe 'with custom hostprivkey set' do

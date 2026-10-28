@@ -13,6 +13,7 @@ class puppet::config (
   $pluginfactsource      = $puppet::pluginfactsource,
   $puppet_dir            = $puppet::dir,
   $agent_server_hostname = $puppet::agent_server_hostname,
+  $agent_server_list     = $puppet::agent_server_list,
   $syslogfacility        = $puppet::syslogfacility,
   $srv_domain            = $puppet::srv_domain,
   $use_srv_records       = $puppet::use_srv_records,
@@ -54,6 +55,10 @@ class puppet::config (
     puppet::config::main {
       'use_srv_records': value => true;
       'srv_domain': value => $srv_domain;
+    }
+  } elsif $agent_server_list {
+    puppet::config::main {
+      'server_list': value => $agent_server_list;
     }
   } else {
     puppet::config::main {

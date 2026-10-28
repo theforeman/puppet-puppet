@@ -155,6 +155,11 @@ wrapper classes or even your ENC (if it supports param classes). For example:
 # Agent and cron (or daemon):
 class { 'puppet': runmode => 'cron', agent_server_hostname => 'hostname' }
 
+# Agent with an ordered list of Puppet servers:
+class { 'puppet':
+  agent_server_list => ['local.example.com:8140', 'central.example.com'],
+}
+
 # Agent and puppetserver:
 class { 'puppet': server => true }
 
