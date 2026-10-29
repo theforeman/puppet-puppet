@@ -285,17 +285,18 @@ describe 'puppet' do
         it { should contain_puppet__config__main('hiera_config').with_value('/etc/puppet/hiera/production/hiera.yaml') }
       end
 
-      describe 'without foreman, default external ENC' do
+      describe 'without foreman' do
         let(:params) do
           super().merge(
             server_foreman: false,
             server_reports: 'store',
+            server_external_noodes: '',
           )
         end
 
         it { should_not contain_class('puppetserver_foreman') }
         it { should contain_puppet__config__server('node_terminus').with_value('exec') }
-        it { should contain_puppet__config__server('external_nodes').with_value("#{etcdir}\/node.rb") }
+        it { should contain_puppet__config__server('external_nodes').with_value('') }
       end
 
       describe 'without foreman, plain ENC' do
@@ -310,16 +311,6 @@ describe 'puppet' do
         it { should_not contain_class('puppetserver_foreman') }
         it { should_not contain_puppet__config__server('node_terminus') }
         it { should_not contain_puppet__config__server('external_nodes') }
-      end
-
-      describe 'empty string node_terminus' do
-        let(:params) do
-          super().merge(
-            server_node_terminus: '',
-          )
-        end
-
-        it { should raise_error(Puppet::Error, %r{server_node_terminus}) }
       end
 
       describe 'invalid node_terminus' do
