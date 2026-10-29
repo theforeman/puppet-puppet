@@ -303,13 +303,23 @@ describe 'puppet' do
           super().merge(
             server_foreman: false,
             server_reports: 'store',
-            server_node_terminus: 'plain'
+            server_node_terminus: 'plain',
           )
         end
 
         it { should_not contain_class('puppetserver_foreman') }
         it { should_not contain_puppet__config__server('node_terminus') }
         it { should_not contain_puppet__config__server('external_nodes') }
+      end
+
+      describe 'empty string node_terminus' do
+        let(:params) do
+          super().merge(
+            server_node_terminus: '',
+          )
+        end
+
+        it { should raise_error(Puppet::Error, %r{server_node_terminus}) }
       end
 
       describe 'invalid node_terminus' do
