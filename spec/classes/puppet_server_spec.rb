@@ -285,7 +285,7 @@ describe 'puppet' do
         it { should contain_puppet__config__main('hiera_config').with_value('/etc/puppet/hiera/production/hiera.yaml') }
       end
 
-      describe 'without foreman' do
+      describe 'without foreman, empty server_external_nodes' do
         let(:params) do
           super().merge(
             server_foreman: false,
@@ -297,6 +297,43 @@ describe 'puppet' do
         it { should_not contain_class('puppetserver_foreman') }
         it { should_not contain_puppet__config__server('node_terminus') }
         it { should_not contain_puppet__config__server('external_nodes') }
+      end
+
+      describe 'without foreman, default external ENC' do
+        let(:params) do
+          super().merge(
+            server_foreman: false,
+            server_reports: 'store',
+          )
+        end
+
+        it { should_not contain_class('puppetserver_foreman') }
+        it { should contain_puppet__config__server('node_terminus').with_value('exec') }
+        it { should contain_puppet__config__server('external_nodes').with_value("#{etcdir}\/node.rb") }
+      end
+
+      describe 'without foreman, plain ENC' do
+        let(:params) do
+          super().merge(
+            server_foreman: false,
+            server_reports: 'store',
+            server_node_terminus: 'plain',
+          )
+        end
+
+        it { should_not contain_class('puppetserver_foreman') }
+        it { should contain_puppet__config__server('node_terminus').with_value('plain') }
+        it { should_not contain_puppet__config__server('external_nodes') }
+      end
+
+      describe 'invalid node_terminus' do
+        let(:params) do
+          super().merge(
+            server_node_terminus: 'loremIpsum',
+          )
+        end
+
+        it { should raise_error(Puppet::Error, %r{server_node_terminus}) }
       end
 
       describe 'with server_default_manifest => true and undef content' do
