@@ -5,7 +5,6 @@ class puppet::server::enc (
   Enum['plain', 'exec', 'classifier', 'console'] $node_terminus = $puppet::server::node_terminus,
 ) {
   case $node_terminus {
-    'plain': {}
     'exec': {
       if $enc_path and $enc_path != '' {
         puppet::config::server {
@@ -14,13 +13,10 @@ class puppet::server::enc (
         }
       }
     }
-    'console', 'classifier': {
+    default: {
       puppet::config::server {
         'node_terminus':  value => $node_terminus;
       }
-    }
-    default: {
-      fail('Invalid value of $node_terminus')
     }
   }
 }

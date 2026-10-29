@@ -322,7 +322,7 @@ describe 'puppet' do
         end
 
         it { should_not contain_class('puppetserver_foreman') }
-        it { should_not contain_puppet__config__server('node_terminus') }
+        it { should contain_puppet__config__server('node_terminus').with_value('plain') }
         it { should_not contain_puppet__config__server('external_nodes') }
       end
 
