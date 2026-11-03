@@ -1,7 +1,7 @@
 # @summary PuppetDB integration
 #
-# This class relies on the puppetlabs/puppetdb and essentially wraps
-# puppetdb::master::config with the proper resource chaining.
+# This class relies on the puppet/openvoxdb and essentially wraps
+# openvoxdb::master::config with the proper resource chaining.
 #
 # Note that this doesn't manage the server itself.
 #
@@ -33,7 +33,7 @@ class puppet::server::puppetdb (
   Boolean $soft_write_failure = false,
   Optional[String[1]] $terminus_package = undef,
 ) {
-  class { 'puppetdb::master::config':
+  class { 'openvoxdb::master::config':
     puppetdb_server             => $server,
     puppetdb_port               => $port,
     puppetdb_soft_write_failure => $soft_write_failure,
@@ -41,5 +41,5 @@ class puppet::server::puppetdb (
     restart_puppet              => false,
     terminus_package            => $terminus_package,
   }
-  Class['puppetdb::master::puppetdb_conf'] ~> Class['puppet::server::service']
+  Class['openvoxdb::master::puppetdb_conf'] ~> Class['puppet::server::service']
 }
